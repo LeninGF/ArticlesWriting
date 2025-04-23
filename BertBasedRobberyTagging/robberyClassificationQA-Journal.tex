@@ -237,8 +237,8 @@
 % incompatible with some LaTeX packages including fixltx2e. However,
 % subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
 % which will override IEEEtran.cls' handling of captions and this will result
-% in non-IEEE style figure/table captions. To prevent this problem, be sure
-% and invoke subfig.sty's "caption=false" package option (available since
+% in non-IEEE style figure/table captions. To prevent this problem, be sure and
+% invoke subfig.sty's "caption=false" package option (available since
 % subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
 % handling of captions.
 % Note that the Computer Society format requires a larger sans serif font
@@ -1070,7 +1070,22 @@ the sequence. The decoder is in charge of generating the output
 sequence (one token at a time). For this, the decoder uses masked
 self-attention to process the partially generated output. After that,
 the encoder-decoder attention layer is used to blend the information
-from the input. 
+from the input.
+
+The advent of \emph{Transformers} displaced the former
+state-of-the-art in NLP, RNN systems (e.g. LSTM: \emph{Long Short Term
+  Memory}) \cite{tunstall2022natural}. These models leverage the
+\emph{autoencoder: encoder-decoder} architecture, plus a
+self-attention mechanism and \emph{TL}. The adaptation of TL to
+natural language problems was achieved in the works proposed by:
+\cite{radford2019language}, \cite{Peters2018} in 2017 and 2018,
+culminating with the ULMFiT framework\cite{howard2018}. This framework
+consists of three stages: 1) pre-training, 2) domain adaptation, and
+3) \emph{FT} \cite{tunstall2022natural}. In the first stage, the model
+is trained on a large corpus of data for the task of predicting the
+next word given a previous one. Then, the model is adapted to the
+target dataset by predicting the next word in the new domain. Finally,
+a classification layer is added\cite{tunstall2022natural}.
 
 BERT was introduced in \cite{devlin2018bert} and leverages the
 Transformer encoder exclusively to produce deeply bidirectional
@@ -1366,105 +1381,185 @@ aspects:
 \section{Methodology}\label{chap:metodos}
 \subsection{Problem Formulation}
 
-La clasificación de texto consiste en obtener una función $f$ de mapeo
-entre un Dataset $D$, conformado por secuencias de texto
-$X_i \in D=\{X_1, X_2, \dots, X_N\}$ y $k$ categorías.  Cada documento
-$X_i$ está formado de $s$ número de oraciones y cada oración de $w_s$
-número de palabras que finalmente tienen $l_w$ número de letras; en
-donde se ha usado la notación presentada en \cite{Kowsari2019}. La
-operación de clasificación queda así representada por la Ecuación
-\ref{eq:clasificacion}.
+Text classification consists of obtaining a function $f$ that maps a
+Dataset $D$, composed of text sequences
+$X_i \in D=\{X_1, X_2, \dots, X_N\}$ to $k$ categories. Each document
+$X_i$ is composed of $s$ sentences and each sentence of $w_s$ words,
+which in turn have $l_w$ letters\footnote{We consider to use the
+  notation presented in \cite{Kowsari2019}}. The classification
+operation is thus represented by Equation \eqref{eq:clasificacion}.
 
 \begin{equation}\label{eq:clasificacion}
     f: D \longrightarrow \mathbb{Z}^k
 \end{equation}
 
-Sin embargo, para que el modelo sea procesado por un sistema de computo (i.e. inteligencia artificial), los diferentes documentos $X_i$ deben ser representados (\emph{encoding}) convenientemente, de tal manera que, la información textual sea representada de manera numérica. Por ello, que las cuatro etapas tradicionales de un sistema de clasificación de texto, tales como: extracción de características (\emph{Feature extraction}), reducción de dimensionalidad, clasificación, y evaluación, han sido simplificadas, gracias a las características del enfoque de DL. Pues, el uso de Redes Neuronales Recurrentes (RNN: \emph{Recurrent Neural Networks}) permite realizar la auto-extracción de características, mientras que la arquitectura de autoencoder, en su etapa de \emph{encoding}, permite representar la información y si se requiere, reducir la dimensionalidad.
+However, for the model to be processed by a computing system or AI,
+the different documents $X_i$ must be represented (\emph{encoding})
+appropriately, so that the textual information is represented
+numerically. Therefore, the four traditional stages of a text
+classification system, such as: feature extraction, dimensionality
+reduction, classification, and evaluation, have been simplified thanks
+to the characteristics of the DL approach that allow a automatic
+feature extraction as explained in \ref{sec:arch-fond-bert}.
 
-El advenimiento de los \emph{Transformers} desplazó a los otrora referentes del estado del arte de PNL, sistemas RNN (e.g. LSTM: \emph{Long Short Term Memory}) \cite{tunstall2022natural}. Éstos modelos aprovechan la arquitectura de \emph{autoencoder: encoder - decoder}, más un mecanismo de auto-atención y \emph{TL}. La adaptación de TL a los problemas de lenguaje natural se consigue en los trabajos propuestos por: \cite{radford2019language}, \cite{Peters2018} en los años 2017 y 2018, culminando con el framework ULMFiT\cite{howard2018}. Este framework consite de tres etapas: 1) pre-entrenamiento, 2) adaptación de dominio y 3) \emph{FT} \cite{tunstall2022natural}. En la primera etapa, se entrena el modelo en un corpus de gran cantidad de datos en el problema de predecir la siguiente palabra dada una anterior. Luego, el modelo se adapta al dataset objetivo realizando la predicción de la palabra siguiente en el nuevo dominio. Finalmente, se añade una capa de clasificación\cite{tunstall2022natural}. 
+% The use of Recurrent Neural Networks (RNN) allows for automatic
+% feature extraction, while the autoencoder architecture, in its
+% \emph{encoding} stage, allows for information representation and, if
+% required, dimensionality reduction.
 
 
-El problema a resolver consiste en clasificación de texto a partir del relato de las noticias del delito en las categorías señaladas de desagregación de robos. \eqref{eq:clasificacion} representa el modelo de clasificación general. Para ajustar el modelo pre-entrenado de distilbert-base-multilingual-cased en la tarea de clasificación mencionada, se requiere realizar TL y para esto es necesario convertir las secuencias de texto a una representación numérica. Para obtener dicha representación es necesario realizar la tokenización de los ejemplos $D^T$. Sea $\Tokenization$ una función que permite obtener la tokenización de las secuencias de texto, entonces la Ecuación \ref{eq:encoding} representa la codificación del dataset objetivo $D^T$.
-
-% Por tanto, el modelo pre-entrenado permite codificar la información textual. Sea $\ypredsource(\cdot)$ una función que representa al modelo pre-entrenado de Hugging Face en un dataset original, entonces, la Ecuación \ref{eq:encoding} representa la codificación del dataset objetivo$D^T$.
-
-% \begin{equation}\label{eq:encoding}
-%     \mathbf{embeddings} = \ypredsource(D^T)
-% \end{equation}
+The problem to be solved consists of text classification based on the
+narrative of crime reports into the specified robbery
+subcategories. \eqref{eq:clasificacion} represents the general
+classification model. To adapt the pre-trained
+distilbert-base-multilingual-cased model to the mentioned
+classification task, the pre-trained model must be adjusted to the
+specific task and the nuances of the new dataset. In this context, TL
+and FT are both explored and used to adapt BERT pre-trained model to
+the new task (classification) in the new dataset (crime reports). To
+convert the text sequences into a numerical representation,
+tokenization of the examples $D^T$ is necessary. Let $\Tokenization$
+be a function that allows obtaining the tokenization of text
+sequences, then Equation \ref{eq:encoding} represents the encoding of
+the target dataset $D^T$.
 
 \begin{equation}\label{eq:encoding}
     \mathbf{embeddings} = \Tokenization(D^T)
 \end{equation}
 
-La operación indicada en \eqref{eq:encoding} convierte las secuencias de texto a los vectores característicos  $\boldsymbol{\nu} \in \mathbb{Z}^{\lambda}$ y $\boldsymbol{\tau} \in \mathbb{Z}^\lambda$; que representan la codificación numérica y la máscara de atención, respectivamente. $\lambda$ es la longitud de la secuencia máxima del texto. Si $X_i \in D^T_{N}$ es una secuencia de texto de longitud $\lambda$ y $N$ el número de registros de $D^T$, entonces \eqref{eq:clasificacion} puede re-escribirse como
+The operation indicated in \eqref{eq:encoding} converts the text
+sequences into feature vectors
+$\boldsymbol{\nu} \in \mathbb{Z}^{\lambda}$ and
+$\boldsymbol{\tau} \in \mathbb{Z}^\lambda$; which represent the
+numerical encoding and the attention mask, respectively. $\lambda$ is
+the maximum sequence length of the text. If $X_i \in D^T_{N}$ is a
+text sequence of length $\lambda$ and $N$ is the number of records in
+$D^T$, then \eqref{eq:clasificacion} can be rewritten as
 
 \begin{equation}\label{eq: tensorflowin}
     \dot{f}: \mathbb{Z}^{(N,\lambda,2)} \longrightarrow \mathbb{Z}^k
 \end{equation}
 
-Donde la predicción de clasificación es también un vector $\boldsymbol{y}_i$ de tipo one-hot. 
+Where the classification prediction is also a one-hot vector
+$\boldsymbol{y}_i$.
 
-La operación de TL definida de acuerdo con \textcite{falconi2020transfer}, se enuncia como una operación funcional que tiene por objetivo guardar los pesos del modelo $\boldsymbol{W}^S$ pre-entrenado en un dataset original $D^S$ en un dominio similar y colocar a la salida de dicho modelo capas que adaptan la codificación del modelo entrenado y la ajustan a la tarea objetivo, en un dataset objetivo $D^T$; donde la cantidad de ejemplos del dataset original es significativamente mayor que la del dataset objetivo: $\Lambda(D^S) \ggg \Lambda(D^T)$ y $\Lambda$ devuelve el tamaño de registros en el dataset. Por tanto, se considera la siguiente definición de TL dada en \cite{falconi2020transfer}:
-
-% y se  cantidad de ejemplos de ; especializando de esta manera la red pre-entrenada en el Dataset original al Dataset objetivo por la aplicación de , como indica la Ecuación \ref{}.
+The TL operation defined according to \textcite{falconi2020transfer}
+is stated as a functional operation that aims to save the weights of
+the model $\boldsymbol{W}^S$ pre-trained on an original dataset $D^S$
+in a similar domain and place at the output of said model layers that
+adapt the encoding of the trained model and adjust it to the target
+task, in a target dataset $D^T$; where the number of examples in the
+original dataset is significantly greater than that of the target
+dataset: $\Lambda(D^S) \ggg \Lambda(D^T)$ and $\Lambda$ returns the
+size of records in the dataset. Therefore, the following definition of
+TL given in \cite{falconi2020transfer} is considered:
 
 \begin{definition}
-    Dado un dominio original $\mathcal{D}^{S}$ con una tarea de aprendizaje original $\mathcal{T}^{S}$, un dominio objetivo $\mathcal{D}^{T}$, con una tarea objetiva $\mathcal{T}^{T}$, la operación de TL busca mejorar el aprendizaje de una función de predicción $\ypredtarget(\cdot)$ en $\mathcal{D}^{T}$ usando el conocimiento adquirido en $\ypredsource(\cdot)$ en $\mathcal{T}^{S}$, a través de $\phi^S$; donde $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ o $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
+  Given an original domain $\mathcal{D}^{S}$ with an original learning
+  task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$, with a
+  target task $\mathcal{T}^{T}$, the TL operation seeks to improve the
+  learning of a prediction function $\ypredtarget(\cdot)$ in
+  $\mathcal{D}^{T}$ using the knowledge acquired in
+  $\ypredsource(\cdot)$ in $\mathcal{T}^{S}$, through $\phi^S$; where
+  $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ or
+  $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
 \end{definition}
 
-Considerando la definición mencionada de TL, \eqref{eq:Transfer2} representa la operación de TL aplicada al problema de clasificación de texto, partiendo de un modelo pre-entrenado de lenguaje natural; donde $L$ es el número de capas del modelo pre-entrenado.
+Considering the mentioned definition of TL, \eqref{eq:Transfer2}
+represents the TL operation applied to the text classification
+problem, starting from a pre-trained natural language model; where $L$
+is the number of layers of the pre-trained model.
 
 \begin{equation}
-    % \mathbb{T_{L}} \left< \ypredsource(I) \right> = \mathcal{A}\left (\ypredsource(I) \Bigr\rvert_{0}^{L} \right)
-    \mathbb{T_{L}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T}  \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{L} \right)
+  \mathbb{T_{L}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T}  \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{L} \right)
     \label{eq:Transfer2}
 \end{equation}
-En consecuencia, la obtención de predicciones queda representada por la Ecuación \ref{eq:Transfer3}
+
+Consequently, the prediction generation is represented by Equation
+\eqref{eq:Transfer3}
 \begin{equation}
     \mathcal{Y}^{T} = \mathbb{T_{L}} \left< \ypredsource(D^{S}), \mathcal{D}^{T} \right> = \ypredtarget(D^T) 
     \label{eq:Transfer3}
 \end{equation}
 
-\subsection{Generación del dataset}
-Para realizar el ajuste fino del modelo pre-entrenado de \modelohuggingface, se requiere la generación del dataset objetivo $D^T_{N}$ de $N$ registros. El procedimiento utilizado fue el siguiente:
+\subsection{Dataset Generation}
+To fine-tune the pre-trained \modelohuggingface model, the generation
+of the target dataset $D^T_{N}$ of $N$ records is required. The
+procedure used was as follows:
 
 \begin{enumerate}
-    \item Generación y actualización de la tabla SQL de robos de la CEESJCT, a la fecha 8 de junio de 2022. Se obtienen \numprint{671708} registros con 3 columnas: Noticia del Delito (Ndd), Tipo Delito y Delitos Seguimiento. La información queda almacenada en una estructura de datos de pandas dataframe: $robos\_df$
-    \item Generación de un script para la extracción del texto de la Ndd a los registros de la tabla SQL de robos usando como clave la Ndd. Se obtienen \numprint{671146} $X^T_i$ relatos. La información queda almacenda en una estructura de datos de pandas dataframe: $relatos\_df$
-    % La operación de union realizada asegura en el dataset que $N = 671708$.
-    \item Preprocesamiento y limpieza de las secuencias de texto obtenidas: consiste en la eliminación de signos de puntuación y otros caracteres que no sean texto o dígitos. El texto se pone por defecto en minúsculas. Sin embargo, se debe notar que el modelo \modelohuggingface\, tiene capacidad para distinguir entre mayúsculas y minúsculas. Se adiciona una columna con la cuenta de número de palabras para cada texto: $\forall \thinspace X^T_i \thinspace \exists \thinspace l_{w_{i}}: \xi(X^T_i)$; donde $\xi$ determina la cantidad de palabras en el texto $X^T_i$.
+\item Generation and update of the SQL table of robberies from the
+  Comisión Especial de Estadística de Seguridad, Justicia, Crimen y
+  Transparencia, as of June 8, 2022. \numprint{671708} records are
+  obtained with 3 columns: Noticia del Delito (Ndd), Tipo Delito, and
+  Delitos Seguimiento. The information is stored in a pandas dataframe
+  structure: $robos\_df$
+\item Generation of a script for extracting the text of the Ndd to the
+  records of the SQL table of robberies using the Ndd as the
+  key. \numprint{671146} $X^T_i$ narratives are obtained. The
+  information is stored in a pandas dataframe structure: $relatos\_df$
+\item Preprocessing and cleaning of the obtained text sequences:
+  consists of removing punctuation marks and other characters that are
+  not text or digits. The text is set to lowercase by
+  default. However, it should be noted that the \modelohuggingface
+  model can distinguish between uppercase and lowercase. A column with
+  the word count for each text is added:
+  $\forall \thinspace X^T_i \thinspace \exists \thinspace l_{w_{i}}:
+  \xi(X^T_i)$; where $\xi$ determines the number of words in the text
+  $X^T_i$.
+\item A statistical analysis of $l_w$ is performed, finding that the
+  mean and standard deviation of $l_w$ are $\mu = 98.34$ and
+  $\delta=77.38$. Figure \ref{fig:histogramalw} presents the histogram
+  of $l_w$. The histogram shows two modes, with a considerable number
+  of examples with $l_w< 30$. In fact, the curve shows peaks at
+  $l_w \in \{7, 100\}$. The maximum and minimum values: 0 and 914,
+  respectively. $\exists \, X^T_i:l_{w_{i}} = \xi(X^T_i)=0$. The
+  reference values and main quartiles are presented in Table \ref{tab:
+    metricasorig}.
+\item An outlier analysis is performed using a box plot (Figure
+  \ref{fig:boxplotlw}). From the diagram, it is observed that the
+  median is 52 words per $X_i$. Quartiles 1 and 3 have $q_1:33$,
+  $q_3:137$ words per $X_i$. The upper limit is $l_{w_sup} = 293$
+  words (i.e., if $l_{w_i} > 293$, $X_i$ is an outlier). Consequently,
+  $D^T$ will consist of $X_i:35< l_{w_i} \leq 300$.
+\item The union operation of $robos\_df \bigcup relatos\_df$ is
+  performed under the indicated conditions, obtaining a total of
+  $N = \numprint{671708}$ records.
+\item The column delitos\_seguimiento, which contains the
+  classification labels, is cleaned since the labels are written
+  differently. Finally, 6 categories are obtained, as indicated in
+  Figure \ref{fig:categorias}, which make up the set of labels $Y^T$
+  for supervised learning. Examples corresponding to the category
+  \emph{SIN INFORMACION} are removed from the dataset
+  $D^T$. Consequently, the total number of records is
+  $N = \numprint{431669}$. It is observed that the classes are not
+  balanced.
     
-    \item Se realiza un análisis estadístico de $l_w$, donde se encuentra que la media  y  desviación estándar de $l_w$ es $\mu = 98.34$ y $\delta=77.38$. En la Figura \ref{fig:histogramalw}, se presenta el histograma de $l_w$. Del histograma se observa dos modas, con una cantidad considerable de ejemplos con $l_w< 30$. De hecho, la curva presenta máximos en $l_w \in \{7, 100\}$. El valor máximo y mínimo: 0 y 914, respectivamente. $\exists \, X^T_i:l_{w_{i}} = \xi(X^T_i)=0$. Los valores referenciales y cuartiles principales, se presentan en la Tabla \ref{tab: metricasorig}.
-
-    \item Se realiza un análisis de datos atípicos por medio de un diagrama de caja (Figura \ref{fig:boxplotlw}). Del diagrama se observa que la mediana es de 52 palabras por $X_i$. Los cuartiles 1 y 3 tienen $q_1:33$, $q_3:137$ palabras por $X_i$. El límite superior es de $l_{w_sup} = 293$ palabras (i.e. Si $l_{w_i} > 293$ $X_i$ es un outlier). En consecuencia, $D^T$ estará conformado por los $X_i:35< l_{w_i} \leq 300$. 
-    \item Se realiza la operación de unión de $robos\_df \bigcup relatos\_df$ con las condiciones indicadas, obteniendo un total de $N = \numprint{671708}$ registros.
-    \item Se realiza la limpieza de la columna delitos\_seguimiento que contiene las etiquetas para la clasificación, dado que, las etiquetas están escritas de manera distinta. Finalmente, se obtienen 6 categorías, indicadas en la Figura \ref{fig:categorias}, que conforman el conjunto de etiquetas $Y^T$ para el aprendizaje supervisado. Del dataset $D^T$ se remueven los ejemplos que corresponden a la categoría \emph{SIN INFORMACION}. En consecuencia, se obtiene la cantidad de $N = \numprint{431669}$. Se observa que las clases no están balanceadas. 
-    
-    Para que el computador pueda entrenar el modelo, el texto $X^T_i$ es tokenizado para ser representado numéricamente. Por su parte las etiquetas se codifican en formato \emph{one-hot encoding}. Sin embargo, HuggingFace utiliza una representación de número entero de la etiqueta. Por esta razón, las etiquetas del dataset reciben números enteros del 0 al 5 (i.e. $y_i \in Y^T \in [0,5]$)
-    %(i.e. $y_i \in Y^T \in \mathbb{Z}$)
-    % \item  Generación de una columna denominada \emph{Labels} que contiene las etiquetas numéricas respecto de las categorías a clasificar, como indica la Tabla \ref{}.
-    % \item Análisis de la cantidad de palabras por relato. Se realiza la inspección utilizando diagrama de caja e histograma
+  For the computer to train the model, the text $X^T_i$ is tokenized
+  to be represented numerically. The labels are encoded in
+  \emph{one-hot encoding} format. However, HuggingFace uses an integer
+  representation of the label. For this reason, the dataset labels are
+  assigned integer numbers from 0 to 5 (i.e., $y_i \in Y^T \in [0,5]$)
 \end{enumerate}
-
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=2.5in]{imgs/histograma.eps}
-    \caption{Histograma de Cantidad de Palabras $l_w$ en Corpus $D^T$}
+    \includegraphics[width=\textwidth]{imgs/histograma.eps}
+    \caption{Histogram of Word Count $l_w$ in Corpus $D^T$}
     \label{fig:histogramalw}
 \end{figure}
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=2.5in]{imgs/boxplot.png}
-    \caption{Diagrama de caja de Cantidad de Palabras $l_w$ en Corpus $D^T$}
+    \includegraphics[width=\textwidth]{imgs/boxplot.png}
+    \caption{Box Plot of Word Count $l_w$ in Corpus $D^T$}
     \label{fig:boxplotlw}
 \end{figure}
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=2.5in]{imgs/categorias.png}
-    \caption{Categorías de Texto del Dataset $D^T$}
+    \includegraphics[width=\textwidth]{imgs/categorias.png}
+    \caption{Text Categories of Dataset $D^T$}
     \label{fig:categorias}
 \end{figure}
 
@@ -1473,51 +1568,51 @@ Para realizar el ajuste fino del modelo pre-entrenado de \modelohuggingface, se 
 \renewcommand{\arraystretch}{1.3}
 % if using array.sty, it might be a good idea to tweak the value of
 % \extrarowheight as needed to properly center the text within the cells
-\caption{Valores estadísticos del dataset}
+\caption{Statistical Values of the Dataset}
 \label{tab: metricasorig}
 \centering
 % Some packages, such as MDW tools, offer better commands for making tables
 % than the plain LaTeX2e tabular which is used here.
 \begin{tabular}{c c}
 \hline
-\textbf{métrica} & \textbf{valor} \\
+\textbf{Metric} & \textbf{Value} \\
 \hline
-cantidad &    \numprint{671146} \\ %count
-media     &   \numprint{98.34} \\ %mean
-std      &   \numprint{77.38} \\ %std
-min      &    \numprint{0} \\ %min
+Count &    \numprint{671146} \\ %count
+Mean     &   \numprint{98.34} \\ %mean
+Std      &   \numprint{77.38} \\ %std
+Min      &    \numprint{0} \\ %min
 25\%      &   \numprint{33.00} \\
 50\%      &   \numprint{92.00} \\
 75\%      &  \numprint{137.00} \\
-max      &  \numprint{914.00} \\
+Max      &  \numprint{914.00} \\
 \hline
 \end{tabular}
 \end{table}
 
+\subsubsection{Organization of the dataset into training, validation, and testing subsets}
 
-% Del análisis realizado respecto a la frecuencia de palabras en el texto de la Ndd, se observa que existe un mínimo de $\alpha$y un máximo de $\beta$ palabras. En el diagrama de caja se observa que la media de ejemplos dispone de una cantidad $\eta$ de palabras. De ahí que se seleccionó para la conformación del dataset sólo aquellos ejemplos que disponen de una cantidad de palabras $l_w$ según la Ecuación \ref{eq:limiterelato}
-
-% \begin{equation}\label{eq:limiterelato}
-%     \alpha   \leq l_w \leq \beta 
-% \end{equation}
-
-\subsubsection{Organización del dataset en subconjuntos de entrenamiento, validación y testeo}
-
-Para realizar el entrenamiento del modelo es necesario separar el dataset $D^T$ en subsets de entrenamiento $D^T_{train}$ (\numprint{273336} registros), validación $D^T_{valid}$ (\numprint{68333} registros) y testeo $D^T_{test}$ (\numprint{90000} registros). Los subsets se obtienen escogiendo ejemplos aleatorios del dataset $D^T$. El dataset de validación se obtuvo separando el dataset de entrenamiento en 80\%, 20\%. De esta manera el entrenamiento del modelo dispone de la cantidad de ejemplos presentada en la Tabla \ref{tab:datasplit}.
+To train the model, it is necessary to split the dataset $D^T$ into
+training subsets $D^T_{train}$ (\numprint{273336} records), validation
+$D^T_{valid}$ (\numprint{68333} records), and testing $D^T_{test}$
+(\numprint{90000} records). The subsets are obtained by randomly
+selecting examples from the dataset $D^T$. The validation dataset was
+obtained by splitting the training dataset into 80\%, 20\%. Thus, the
+model training uses the number of examples presented in Table
+\ref{tab:datasplit}.
 
 \begin{table}[!t]
 % increase table row spacing, adjust to taste
 \renewcommand{\arraystretch}{1.3}
 % if using array.sty, it might be a good idea to tweak the value of
 % \extrarowheight as needed to properly center the text within the cells
-\caption{Generación de Datasets de Entrenamiento Validación y Testeo}
+\caption{Generation of Training, Validation, and Testing Datasets}
 \label{tab:datasplit}
 \centering
 % Some packages, such as MDW tools, offer better commands for making tables
 % than the plain LaTeX2e tabular which is used here.
 \begin{tabular}{ccc}
 \hline
-Tipo Set & Registros & \%\\
+Dataset Type & Records & \%\\
 \hline
 $D_{train}^T$ & \numprint{273336} & \numprint{63.32}\%\\
 $D_{valid}^T$ & \numprint{68333} & \numprint{15.83}\%\\
@@ -1526,61 +1621,97 @@ $D_{test}^T$ & \numprint{90000} & \numprint{20.85}\%\\
 \end{tabular}
 \end{table}
 
+Each dataset consists of the text corresponding to the narrative of
+the event and a numerical label that is an integer from 0 to 5,
+corresponding to each of the labels. Although the prepared dataset has
+the quantities shown, for this first stage of model training, a subset
+of data from each of the datasets was used due to hardware constraints
+for training the model.
 
-Cada dataset está conformado por el texto correspondiente al relato del hecho y una etiqueta numérica que es un número entero desde el 0 al 5, correspondiente a cada una de las etiquetas. Si bien el dataset elaborado dispone de las cantidades mostradas, para esta primera etapa de entrenamiento del modelo se utilizo un subconjunto de datos de cada uno de los datasets debido a las restricciones de hardware para llevar a acabo el entrenamiento del modelo.
-
-%% Poner una tabla de relacion de numero y etiqueta
-
-\subsection{Modelo de Transfer Learning}
-Transferlearning, como indica las Ecuaciones \ref{eq:Transfer2} y \ref{eq:Transfer3}, permite ajustar el entrenamiento original $\ypredsource(\cdot)$ adaptándolo a la tarea objetivo $\ypredtarget(\cdot)$. Para esto, se usa una serie de capas representadas por operaciones funcionales $\mathcal{A}$, que permitirán el ajuste del modelo. Durante, el entrenamiento, los pesos del modelo pre-entrenado de \emph{\modelohuggingface} $\ypredsource(\cdot)$, denominados $\mathcal{W}^S$, no son modificados y se usan a modo de \emph{feature extractor} (extractor de características). El modelo pre-entrenado contiene una cantidad de parámetros de $\mathcal{W}^S = \numprint{134734080}$, que no serán entrenados. La salida del modelo pre-entrenado es un tensor $\mathbb{R}^{(N \times 300 \times 768)}$. Usando Global Max Pooling $GMP$, el tensor se transforma a uno de dimensión $\mathbb{R}^{(N \times 768)}$. La aplicación de las operaciones $\mathcal{A}$, descritas en la Ecuación  \ref{eq:finetuning} generan una matriz de pesos $\mathcal{W}^T$ que corresponden a las distintas capas añadidas para este fin. Éstas capas están representadas de manera operacional en la Ecuación \ref{eq:finetuning} y consisten en: Batch Normalization $BN$, Full Connecting Layer con 512 neuronas $FC_{512}$, Drop Out de 0.1 $Dro_{0.1}$, 2 juegos de capas de Full Connecting Layer de 128 $FC_{128}$ y Drop Out de 0.1 $Dro_{0.1}$ y finalmente una capa de salida de 6 neuronas $Fc_{6}$. En consecuencia, no es necesario entrenar la totalidad del modelo final $\mathcal{W}^S+\mathcal{W}^T$, sino únicamente las capas de salida $\mathcal{W}^T$ que corresponde a $\mathcal{W}^T = \numprint{478214}$.
-
-% En el caso de esta investigación, el modelo pre-entrenado  devuelve un vector de 769 componentes luego de aplicar la operación de \emph{max pooling}.  A la salida de este modelo se aplican las siguientes operaciones representadas en manera funcional:
-
-% \begin{align}\label{eq:finetuning}
-%     \mathcal{A} = FC_{6} \circ Dro_{0.1} \circ FC_{128}  \circ Dro_{0.1} \circ FC_{128} \circ Dro_{0.1} \\ 
-%     \circ FC_{512} \circ BN \circ GMP
-% \end{align}
+\subsection{Transfer Learning Model}
+Transfer learning, as indicated by Equations \ref{eq:Transfer2} and
+\ref{eq:Transfer3}, allows adjusting the original training
+$\ypredsource(\cdot)$ to adapt it to the target task
+$\ypredtarget(\cdot)$. For this, a series of layers represented by
+functional operations $\mathcal{A}$ are used, which will allow the
+model to be adjusted. During training, the weights of the pre-trained
+\emph{\modelohuggingface} model $\ypredsource(\cdot)$, denoted as
+$\mathcal{W}^S$, are not modified and are used as a \emph{feature
+  extractor}. The pre-trained model contains a total of
+$\mathcal{W}^S = \numprint{134734080}$ parameters, which will not be
+trained. The output of the pre-trained model is a tensor
+$\mathbb{R}^{(N \times 300 \times 768)}$. Using Global Max Pooling
+$GMP$, the tensor is transformed into one of dimension
+$\mathbb{R}^{(N \times 768)}$. The application of the operations
+$\mathcal{A}$, described in Equation \ref{eq:finetuning}, generates a
+weight matrix $\mathcal{W}^T$ corresponding to the different layers
+added for this purpose. These layers are operationally represented in
+Equation \ref{eq:finetuning} and consist of: Batch Normalization $BN$,
+Fully Connected Layer with 512 neurons $FC_{512}$, Drop Out of 0.1
+$Dro_{0.1}$, 2 sets of Fully Connected Layers with 128 neurons
+$FC_{128}$ and Drop Out of 0.1 $Dro_{0.1}$, and finally an output
+layer with 6 neurons $Fc_{6}$. Consequently, it is not necessary to
+train the entire final model $\mathcal{W}^S+\mathcal{W}^T$, but only
+the output layers $\mathcal{W}^T$, which corresponds to
+$\mathcal{W}^T = \numprint{478214}$.
 
 \begin{IEEEeqnarray}{lCr}\label{eq:finetuning}
     \mathcal{A} = FC_{6} \circ Dro_{0.1} \circ FC_{128}  \circ Dro_{0.1} \circ FC_{128} \\ 
     \circ Dro_{0.1} \circ FC_{512} \circ BN \circ GMP \nonumber
 \end{IEEEeqnarray}
 
+\subsection{Model Training}
+The model training consists of using \emph{TL} to fine-tune a
+pre-trained model for the desired classification task. In this way, it
+will be possible to predict the category to which a robbery text
+belongs, choosing among the 6 previously indicated categories (Figure
+\ref{fig:categorias}). The pre-trained model used is
+\emph{\modelohuggingface}. Although the pre-trained model and the
+generated dataset were loaded using the HuggingFace
+\emph{transformers} API, the model training was performed in
+\emph{Tensorflow}. The steps followed during training are as follows:
 
-\subsection{Entrenamiento del modelo}
-El entrenamiento del modelo consiste en utilizar \emph{TL} para afinar un modelo pre-entrenado en la tarea de clasificación deseada. De esta manera se podrá predecir la categoría a la que pertenece un texto de robo, escogiendo entre las 6 características antes indicadas (Figura \ref{fig:categorias}). El modelo pre-entrenado utilizado es \emph{\modelohuggingface}. Si bien para obtener el modelo pre-entrenado y la carga del dataset generado se utilizaron las funcionalidades del API de \emph{transformers} de HuggingFace, el entrenamiento del modelo fue realizado en \emph{Tensorflow}. Las etapas para seguidas en el entrenamiento son las siguientes:
-
-
-% sustituir por gráfico o añadir gráfico
 \begin{enumerate}
-    \item Carga de los datasets $D^T_{train}$, $D^T_{valid}$, $D^T_{test}$
-    \item Tokenización de los datasets
-    \item Resampling de los datasets (debido a limitaciones de hardware)
-    \item Obtención de los tensores de entrada, máscara y los tensores de clasificación en one-hot encoding.
-    \item Carga del modelo pre-entrenado $\ypredsource(\cdot)$
-    \item Se obtiene el modelo de ajuste fino aplicando $\mathcal{A}$: $y^T = \ypredtarget(\mathbf{\mathcal{X}}^T) =  \mathcal{A}(\ypredsource(\mathbf{\mathcal{X}}^T))$
-    \item Se compila el modelo con los parámetros de entrenamiento presentados en la Tabla \ref{tab:trainingParam}.
-    \item Se ejecuta el entrenamiento en Google Colab.
-    \item Respaldo de los pesos de entrenamiento.
+    \item Loading of the datasets $D^T_{train}$, $D^T_{valid}$, $D^T_{test}$
+    \item Tokenization of the datasets
+    \item Resampling of the datasets (due to hardware limitations)
+    \item Obtaining the input tensors, mask, and classification
+      tensors in one-hot encoding.
+    \item Loading the pre-trained model $\ypredsource(\cdot)$
+    \item The fine-tuning model is obtained by applying $\mathcal{A}$: $y^T = \ypredtarget(\mathbf{\mathcal{X}}^T) =  \mathcal{A}(\ypredsource(\mathbf{\mathcal{X}}^T))$
+    \item The model is compiled with the training parameters presented
+      in Table \ref{tab:trainingParam}.
+    \item Training is executed in Google Colab.
+    \item Backup of the training weights.
 \end{enumerate}
 
-La tokenización permite convertir el texto a una representación tensorial que es aprovechada por el computador para el entrenamiento del modelo de Machine Learning. Para el caso estudiado, dado que el histograma de la cantidad de palabras por documento indica una secuencia de longitud máxima de $\lambda = 300$ palabras, los tensores de máscara y entrada son de $\mathbf{\mathcal{X}}^{N\times300}$;donde $N$ es la cantidad de ejemplos.
+Tokenization allows converting the text into a tensor representation
+that is used by the computer for training the Machine Learning
+model. For the studied case, since the histogram of the number of
+words per document indicates a maximum sequence length of
+$\lambda = 300$ words, the mask and input tensors are of
+$\mathbf{\mathcal{X}}^{N\times300}$; where $N$ is the number of
+examples.
 
-Debido a las limitaciones en el hardware utilizado para el entrenamiento (Google Colab), los ejemplos reducidos a $d^T_{train}:\numprint{20000} \subset D^T_{train}$, $d^T_{valid}:\numprint{4000} \subset D^T_{valid}$, $d^T_{test}:\numprint{4000} \subset D^T_{test}$.
+Due to hardware limitations used for training (Google Colab), the
+examples were reduced to
+$d^T_{train}:\numprint{20000} \subset D^T_{train}$,
+$d^T_{valid}:\numprint{4000} \subset D^T_{valid}$,
+$d^T_{test}:\numprint{4000} \subset D^T_{test}$.
 
 \begin{table}[!t]
 % increase table row spacing, adjust to taste
 \renewcommand{\arraystretch}{1.3}
 % if using array.sty, it might be a good idea to tweak the value of
 % \extrarowheight as needed to properly center the text within the cells
-\caption{Parámetros de Entrenamiento}
+\caption{Training Parameters}
 \label{tab:trainingParam}
 \centering
 % Some packages, such as MDW tools, offer better commands for making tables
 % than the plain LaTeX2e tabular which is used here.
 \begin{tabular}{cc}
 \hline
-Parámetro & Valor\\
+Parameter & Value\\
 \hline
  Loss & Categorical Cross Entropy\\
 Metrics & Categorical Accuracy \\
@@ -1592,30 +1723,36 @@ callback & 5 epochs \\
 \end{tabular}
 \end{table}
 
-\section{Resultados Experimentales}\label{chap:resultados}
-Los resultados del entrenamiento se muestran en la Figura \ref{fig:loss80} y \ref{fig:train80} para la función de optimización y la métrica de rendimiento respectivamente. El modelo ajustado obtuvo un \emph{accuracy} de \numprint{0.8248}, en el dataset de entrenamiento, \numprint{0.8048}, en el dataset de validación y \numprint{0.8045} para el dataset de prueba. 
-
+\section{Experimental Results}\label{chap:resultados}
+The training results are shown in Figure \ref{fig:loss80} and
+\ref{fig:train80} for the optimization function and the performance
+metric, respectively. The adjusted model obtained an \emph{accuracy}
+of \numprint{0.8248} on the training dataset, \numprint{0.8048} on the
+validation dataset, and \numprint{0.8045} on the test dataset.
 
 \begin{figure*}[!t]
 \centering
-\subfloat[Loss]{\includegraphics[width=2.5in]{imgs/losstrainacc80.png}
+\subfloat[Loss]{\includegraphics[width=\textwidth]{imgs/losstrainacc80.png}
 \label{fig:loss80}}
 \hfil
-\subfloat[Accuracy]{\includegraphics[width=2.5in]{imgs/trainacc80.png}
+\subfloat[Accuracy]{\includegraphics[width=\textwidth]{imgs/trainacc80.png}
 \label{fig:train80}}
-\caption{Entrenamiento del Modelo de Machine Learning Clasificación de Texto}
+\caption{Training of the Machine Learning Text Classification Model}
 \label{fig: results}
 \end{figure*}
 
-En cuanto a la métrica de $f_1score$ se obtuvo en promedio 0.80; en donde el resultado más bajo se obtiene para la clase 0 con un valor de 0.45 y el más alto de 0.87 en la clase 1. Los resultados del clasificador sobre el dataset de pruebas se presentan en la Tabla \ref{tab:fscore}, donde se observa el rendimiento del recall y el f-score.
-
+Regarding the $f_1score$ metric, an average of 0.80 was obtained;
+where the lowest result is for class 0 with a value of 0.45 and the
+highest of 0.87 in class 1. The classifier results on the test dataset
+are presented in Table \ref{tab:fscore}, showing the recall and
+f-score performance.
 
 \begin{table}[!t]
 % increase table row spacing, adjust to taste
 \renewcommand{\arraystretch}{1.3}
 % if using array.sty, it might be a good idea to tweak the value of
 % \extrarowheight as needed to properly center the text within the cells
-\caption{Rendimiento del clasificador}
+\caption{Classifier Performance}
 \label{tab:fscore}
 \centering
 % Some packages, such as MDW tools, offer better commands for making tables
@@ -1641,159 +1778,51 @@ En cuanto a la métrica de $f_1score$ se obtuvo en promedio 0.80; en donde el re
 \end{tabular}
 \end{table}
 
+\section{Conclusions}\label{chap:conclusion}
+Transformer-based models have achieved improved performance in natural
+language processing problems; currently being the state of the art. In
+this article, fine-tuning of a pre-trained model for the
+classification of robbery narratives into 6 categories has been
+carried out.
 
- 
- 
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
+The results show that, despite the dataset not being balanced among
+the examples of each class (with the class robo a personas having the
+most examples), the use of \emph{TL} from the pre-trained
+\modelohuggingface model allows obtaining very good performance to
+start pilot tests in the prediction of new cases. The f-score results
+also indicate that, except for the low performance in class 0, an
+average performance of 80\% is obtained.
 
-% Note that the IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
+As a result of the research, it is concluded that the field of law is
+very suitable for the development of artificial intelligence models,
+which, supported by the state of the art, can generate new services,
+automate tasks, and improve the quality of work carried out in
+strategically important institutions such as the Fiscalía General del
+Estado.
 
+\section{Future Work}\label{chap:futuro}
 
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command,
-% and the \label for the overall figure must come after \caption.
-% \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
-% line do not exceed the text width or a line break will occur.
-%
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat[]), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
-% labels, the optional argument to \subfloat must be present. If a
-% subcaption is not desired, just leave its contents blank,
-% e.g., \subfloat[].
-
-
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table and, given that table
-% captions serve much like titles, are usually capitalized except for words
-% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
-% and up, which are usually not capitalized unless they are the first or
-% last word of the caption. Table text will default to \footnotesize as
-% the IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
-
-
-% Note that the IEEE does not put floats in the very first column
-% - or typically anywhere on the first page for that matter. Also,
-% in-text middle ("here") positioning is typically not used, but it
-% is allowed and encouraged for Computer Society conferences (but
-% not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively. 
-% Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the
-% \fnbelowfloat command of the stfloats package.
-
-
-
-
-\section{Conclusiones}\label{chap:conclusion}
-Los modelos basados en \emph{Transformers} han obtenido un desempeño mejorado en los problemas de procesamiento de lenguaje natural; siendo hoy por hoy el estado del arte. En este artículo se ha realizado el ajuste fino de un modelo pre-entrenado para la clasificación de relatos de robos en 6 categorías. 
-
-Los resultados muestran que a pesar de que el dataset no tiene un balance de los ejemplos de cada clase (siendo la clase Robo a Personas la que más ejemplos dispone), la utilización de \emph{TL} desde el modelo pre-entrenado de \modelohuggingface\, permite obtener un rendimiento muy bueno para iniciar las pruebas piloto en la predicción de nuevos casos. Los resultados en f-score también indican que a excepción del bajo performance en la clase 0, se obtiene en promedio un rendimiento del 80\%.
-
-Como resultado de la investigación se concluye que el campo de las leyes es muy propicio para el desarrollo de modelos de inteligencia artificial, que apoyados en el estado del arte, pueden generar nuevos servicios, automatizar tareas, y mejorar la calidad del trabajo realizado en instituciones de importancia estratégica como la Fiscalía General del Estado.
-
-
-\section{Trabajos Futuros}\label{chap:futuro}
-
-Como trabajo futuro se plantea realizar el entrenamiento del modelo en dos escenarios: 
+As future work, it is proposed to train the model in two scenarios:
 
 \begin{enumerate}
-    \item Entrenamiento con subconjunto de datos $d^T$ con balanceo de registros por clase.
-    \item Entrenamiento con el conjunto total de datos $D^T$ sin balanceo de clases.
-    \item Entrenamiento con el conjunto total de datos $D^T$ con balanceo de clases.
+\item Training with a data subset $d^T$ with balanced records per
+  class.
+\item Training with the total dataset $D^T$ without class balancing.
+\item Training with the total dataset $D^T$ with class balancing.
 \end{enumerate}
 
-Adicionalmente se iniciará una etapa de pruebas del modelo actualmente entrenados que serán contrastadas con la clasificación manual realizada en la Comisión.
+Additionally, a testing phase will begin for the currently trained
+model, which will be contrasted with the manual classification carried
+out by the Comisión.
 
+\section*{Acknowledgments}
 
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-
-% \appendices
-% \section{Proof of the First Zonklar Equation}
-% Appendix one text goes here.
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-% \section{}
-% Appendix two text goes here.
-
-
-% use section* for acknowledgment
-\section*{Agradecimientos}
-
-
-% The authors would like to thank...
-Los autores desean agradecer a la Fiscalía General del Estado por permitir realizar investigación en la realización de modelos de \emph{machine learning} en problemas de procesamiento de lenguaje natural aplicados a tareas propias de la institución. Se agradece el apoyo de la Dirección de Estadística y Sistemas de información que generó el dataset para la investigación realizada. 
-
+The authors wish to thank the Fiscalía General del Estado for allowing
+research in the development of machine learning models for natural
+language processing problems applied to tasks specific to the
+institution. Thanks are also due to the Dirección de Estadística y
+Sistemas de información for generating the dataset used in this
+research.
 
 % Can use something like this to put references on a page
 % by themselves when using endfloat and the captionsoff option.
@@ -1882,10 +1911,6 @@ Los autores desean agradecer a la Fiscalía General del Estado por permitir real
 
 % that's all folks
 \end{document}
-
-
-
-
 
 %%% Local Variables:
 %%% mode: LaTeX
