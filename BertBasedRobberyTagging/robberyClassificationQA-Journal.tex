@@ -227,11 +227,11 @@
 
 
 % *** SUBFIGURE PACKAGES ***
-%\ifCLASSOPTIONcompsoc
-%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-%\else
-%  \usepackage[caption=false,font=footnotesize]{subfig}
-%\fi
+\ifCLASSOPTIONcompsoc
+ \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\else
+ \usepackage[caption=false,font=footnotesize]{subfig}
+\fi
 % subfig.sty, written by Steven Douglas Cochran, is the modern replacement
 % for subfigure.sty, the latter of which is no longer maintained and is
 % incompatible with some LaTeX packages including fixltx2e. However,
@@ -362,24 +362,64 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-\newcommand{\printnombrecomision}{Comisión Especial de Estadística de Seguridad, Justicia, Crimen y Transparencia}
+\newcommand{\printnombrecomision}{Comisión Especial de Estadística de
+  Seguridad, Justicia, Crimen y Transparencia}
+\newcommand{\printInicialesComision}{CEESJCT}
 \newcommand{\modelohuggingface}{distilbert-base-multilingual-cased}
 \usepackage{numprint}
 \usepackage{dirtytalk}
-\usepackage{tabularx}
+
+% ==================== packages from reporteFiscalia.tex
+\usepackage{tabularx, booktabs}
+\usepackage{xltabular}
+\usepackage{longtable}
+\usepackage{tabulary}
+\usepackage{ltablex}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{pdflscape}
+\usepackage{ragged2e}
+\usepackage{rotating}
+\usepackage{datetime}
+\usepackage{wrapfig}
+\usepackage{lscape}
+\usepackage{tabu}
+% \usepackage[toc]{glossaries}
+\usepackage{amsmath, bm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+
+% ====================
+\lstset{linewidth=\textwidth}
+\lstset{breaklines=true}
+\lstset{postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}}
+
 \DeclareMathOperator{\ypred}{\phi}  %options \hslash
 \DeclareMathOperator{\ypredtarget}{\phi^{T}}
 \DeclareMathOperator{\ypredsource}{\phi^{S}}
 \DeclareMathOperator{\ConvNetOut}{\mathcal{A}}
 \DeclareMathOperator{\Tokenization}{\Gamma}
+\DeclareMathOperator{\Tokenize}{Tokenize}
 
+\newcommand{\bertmodel}{\textsc{BERT}}
 
 
 \usepackage{amsthm}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
 % \usepackage{IEEEtrantools}
-\usepackage{subfig}
+% \usepackage{subfig} % esta declarado en IEEE Journal descomentar si
+% se cambia de IEEEtran a Article por ejemplo
+
+% ensuring outline is generated in pdf
+\usepackage[bookmarks=True]{hyperref}
+\setcounter{tocdepth}{3}  % Show up to subsubsections in TOC/bookmarks
+\setcounter{secnumdepth}{3}  % Number up to subsubsections
 
 \begin{document}
 %
@@ -600,7 +640,7 @@ where digital information can be leveraged to develop tools that
 optimize legal workflows. In Ecuador, document digitization is
 regulated by the \emph{Dirección Nacional de Registro de Datos
   Públicos} (DINARDAP) \cite{dinardap2020}. This trend aligns with
-global efforts to integrate \textit{Artificial Intelligence (AI)} into legal
+gloal efforts to integrate \textit{Artificial Intelligence (AI)} into legal
 systems. For instance, an advanced Google Scholar search with all the
 words: \emph{\say{deep learning} \say{natural language processing}
   \say{document classification} legal law} and the exact phrase
@@ -1378,114 +1418,26 @@ aspects:
 % \subsubsection{Subsubsection Heading Here}
 % Subsubsection text here.
 
-\section{Methodology}\label{chap:metodos}
-\subsection{Problem Formulation}
+\section{Datasets Generation}
+\label{sec:datasets-generation}
 
-Text classification consists of obtaining a function $f$ that maps a
-Dataset $D$, composed of text sequences
-$X_i \in D=\{X_1, X_2, \dots, X_N\}$ to $k$ categories. Each document
-$X_i$ is composed of $s$ sentences and each sentence of $w_s$ words,
-which in turn have $l_w$ letters\footnote{We consider to use the
-  notation presented in \cite{Kowsari2019}}. The classification
-operation is thus represented by Equation \eqref{eq:clasificacion}.
+In this section we describe the dataset generation procedures. The
+datasets were generated from robbery narratives provided by Ecuador’s
+FGE (prosecutor's office), with labels aligned to the CEESJCT
+taxonomy. The initial dataset, \(D_{\kappa=6}\), included 6 broad
+categories for operational tracking (also known as \textit{delitos
+  seguimiento}). To improve granularity, we expanded to
+\(D_{\kappa=11}\) by adding 5 subcategories validated by legal
+experts, ensuring semantic precision.
 
-\begin{equation}\label{eq:clasificacion}
-    f: D \longrightarrow \mathbb{Z}^k
-\end{equation}
+\subsection{Basic Taxonomy (\(D_{\kappa=6}\)): Initial Crime
+  Categories}
+\label{sec:basic-taxon-d_seguimiento}
+In order to fine-tune the pre-trained \modelohuggingface{} model, it
+is necessary to construct the target dataset $D^T_{\kappa=6, N}$, consisting of
+$N$ records and $\kappa=6$ classification categories. The procedure
+employed for the generation of this dataset was as follows:
 
-However, for the model to be processed by a computing system or AI,
-the different documents $X_i$ must be represented (\emph{encoding})
-appropriately, so that the textual information is represented
-numerically. Therefore, the four traditional stages of a text
-classification system, such as: feature extraction, dimensionality
-reduction, classification, and evaluation, have been simplified thanks
-to the characteristics of the DL approach that allow a automatic
-feature extraction as explained in \ref{sec:arch-fond-bert}.
-
-% The use of Recurrent Neural Networks (RNN) allows for automatic
-% feature extraction, while the autoencoder architecture, in its
-% \emph{encoding} stage, allows for information representation and, if
-% required, dimensionality reduction.
-
-
-The problem to be solved consists of text classification based on the
-narrative of crime reports into the specified robbery
-subcategories. \eqref{eq:clasificacion} represents the general
-classification model. To adapt the pre-trained
-distilbert-base-multilingual-cased model to the mentioned
-classification task, the pre-trained model must be adjusted to the
-specific task and the nuances of the new dataset. In this context, TL
-and FT are both explored and used to adapt BERT pre-trained model to
-the new task (classification) in the new dataset (crime reports). To
-convert the text sequences into a numerical representation,
-tokenization of the examples $D^T$ is necessary. Let $\Tokenization$
-be a function that allows obtaining the tokenization of text
-sequences, then Equation \ref{eq:encoding} represents the encoding of
-the target dataset $D^T$.
-
-\begin{equation}\label{eq:encoding}
-    \mathbf{embeddings} = \Tokenization(D^T)
-\end{equation}
-
-The operation indicated in \eqref{eq:encoding} converts the text
-sequences into feature vectors
-$\boldsymbol{\nu} \in \mathbb{Z}^{\lambda}$ and
-$\boldsymbol{\tau} \in \mathbb{Z}^\lambda$; which represent the
-numerical encoding and the attention mask, respectively. $\lambda$ is
-the maximum sequence length of the text. If $X_i \in D^T_{N}$ is a
-text sequence of length $\lambda$ and $N$ is the number of records in
-$D^T$, then \eqref{eq:clasificacion} can be rewritten as
-
-\begin{equation}\label{eq: tensorflowin}
-    \dot{f}: \mathbb{Z}^{(N,\lambda,2)} \longrightarrow \mathbb{Z}^k
-\end{equation}
-
-Where the classification prediction is also a one-hot vector
-$\boldsymbol{y}_i$.
-
-The TL operation defined according to \textcite{falconi2020transfer}
-is stated as a functional operation that aims to save the weights of
-the model $\boldsymbol{W}^S$ pre-trained on an original dataset $D^S$
-in a similar domain and place at the output of said model layers that
-adapt the encoding of the trained model and adjust it to the target
-task, in a target dataset $D^T$; where the number of examples in the
-original dataset is significantly greater than that of the target
-dataset: $\Lambda(D^S) \ggg \Lambda(D^T)$ and $\Lambda$ returns the
-size of records in the dataset. Therefore, the following definition of
-TL given in \cite{falconi2020transfer} is considered:
-
-\begin{definition}
-  Given an original domain $\mathcal{D}^{S}$ with an original learning
-  task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$, with a
-  target task $\mathcal{T}^{T}$, the TL operation seeks to improve the
-  learning of a prediction function $\ypredtarget(\cdot)$ in
-  $\mathcal{D}^{T}$ using the knowledge acquired in
-  $\ypredsource(\cdot)$ in $\mathcal{T}^{S}$, through $\phi^S$; where
-  $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ or
-  $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
-\end{definition}
-
-Considering the mentioned definition of TL, \eqref{eq:Transfer2}
-represents the TL operation applied to the text classification
-problem, starting from a pre-trained natural language model; where $L$
-is the number of layers of the pre-trained model.
-
-\begin{equation}
-  \mathbb{T_{L}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T}  \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{L} \right)
-    \label{eq:Transfer2}
-\end{equation}
-
-Consequently, the prediction generation is represented by Equation
-\eqref{eq:Transfer3}
-\begin{equation}
-    \mathcal{Y}^{T} = \mathbb{T_{L}} \left< \ypredsource(D^{S}), \mathcal{D}^{T} \right> = \ypredtarget(D^T) 
-    \label{eq:Transfer3}
-\end{equation}
-
-\subsection{Dataset Generation}
-To fine-tune the pre-trained \modelohuggingface model, the generation
-of the target dataset $D^T_{N}$ of $N$ records is required. The
-procedure used was as follows:
 
 \begin{enumerate}
 \item Generation and update of the SQL table of robberies from the
@@ -1628,7 +1580,383 @@ the quantities shown, for this first stage of model training, a subset
 of data from each of the datasets was used due to hardware constraints
 for training the model.
 
-\subsection{Transfer Learning Model}
+\subsection{Expanded Taxonomy (\(D_{\kappa=11}\)): Validated Crime
+  Categories}
+\label{sec:expand-taxon-d_validados}
+Para el entrenamiento del modelo de \emph{delitos validados} se
+realiza la generación de un dataset que integra los relatos del parte
+de la policía nacional así como los registros del SIAF. De esta manera
+se entrena al modelo con textos diferentes para cada Noticia del
+Delito NDD. El dataset obtenido tiene un total de \numprint{1109335}
+registros con 6 variables: NDD, Presunto Delito, Relato, delitos
+seguimiento y delitos validados.
+
+\begin{enumerate}
+\item Lectura de registros de \printInicialesComision\, de 2014 a 2022
+  donde Tipo Penal es Robo con las columnas NDD, Tipo Delito PJ,
+  delitos seguimiento y delitos validados i.e.
+  $\mathbb{D}_{735045 \times 4}^A$
+        \item Obtención de relatos fiscalía y policía
+          $\forall NDD_i \in \mathbb{D}_{735045\times4}^{A}$ desde la
+          base de relatos $\mathbb{D}^{FGE\cup PN\cup CE}$:
+          $\mathbb{D}_{725079 \times 8}^B$
+        \item Se excluyen tipos penales diferentes de robo i.e. $\mathbb{D}_{723435 \times 8}^{B'} \subset \mathbb{D}_{725079 \times 8}^B$
+        \item Se realiza el inner join segun los números de Noticia
+          del Delito: \\
+          $\mathbb{D}^{robos}_{723435\times 11} = \mathbb{D}_{735045
+            \times 4}^A \bowtie_\theta \mathbb{D}_{723435 \times
+            8}^{B'} $
+        \item Formateo de relato: texto a minúsculas y retirar
+          caracteres que no sean letras o números.
+        \item Integrar la columna $relato_{pn}$ y $relato_{fge}$ en
+          una sola columna de relato y conservando las columnas de
+          NDD, Presunto Delito, Relato, delitos seguimiento y delitos
+          validados i.e.
+          $\mathbb{D}^{robos}_{1446870 \times 5} =
+          \mathbb{D}^{robos_{pn}}_{723435\times 5} \cup
+          \mathbb{D}^{robos_{fge}}_{723435\times 5}$
+        \item Ordenar ascendente según valor de NDD a $\mathbb{D}^{robos}_{1446870 \times 5}$
+        \item Analizar la estadística de la cantidad de palabras de
+          los relatos de policía y fiscalía. Se conserva los relatos
+          tales que: $50 \leq len(relato_i) \leq 400$. Pues, límite
+          superior (\emph{upper fence}) del $q_3$ del relato de
+          policía es $\numprint{389.5}$
+          i.e. $\mathbb{D}^{robos}_{(1140728 \times 6)}$
+          % \item Las columnas RelatoPolicia y RelatoFiscalia se
+          %   concatenan y forman una sola columna denominada
+          %   \emph{relato}
+        \item Corregir etiquetas de delitos seguimiento: se sustituye
+          las letras tildadas por sus equivalentes sin tilde
+          e.g. económicas $\rightarrow$ economicas
+        \item Delitos validados presenta un total de 48 categorías que
+          no pertenecen a las 14 aceptadas. Por esta razón se: a)
+          conserva aquellas con la etiqueta \say{OTROS ROBOS} y
+          aquellas que no pertenezcan a las 14 aceptadas son
+          descartadas, b) las categorías de \say{ROBO A INSTITUCIONES
+            DE SALUD}, \say{ROBO EN EJES VIALES O CARRETERAS}, y
+          \say{ROBO A ENTIDADES FINANCIERAS} se renombran como
+          \say{OTROS ROBOS}. Se obtiene, entonces,
+          $\mathbb{D}^{robos}_{(1109335 \times 6)}$ con las categorías
+          definidas en Tabla \ref{tab:listofRobberiesValidados}.
+        \item Las filas del dataset se orden aleatoriamente
+        \item Se salva los datos en sql:
+            \begin{lstlisting}[language=Python]
+                from src.utils import save_df_in_sql
+                save_df_in_sql(dataf=dataset_out,name_table='dataset_RobosDesagregation06122023')
+            \end{lstlisting}
+    \end{enumerate}
+
+\textbf{Notación:}\\
+$\bowtie_\theta$: Inner Join donde $\theta:\mathbb{D}^A.NDD=\mathbb{D}^B.NDD$ 
+
+
+La Tabla \ref{tab:GeneracionDataset} presenta las cantidades de
+registro según categoría de \emph{delitos validados} obtenidas en la
+generación del dataset. Se puede obsevar que la categoría de \emph{SIN
+  INFORMACION} de \emph{delitos seguimiento} corresponde a categorías
+diferentes a las 6 que se usaron en el modelo \emph{delitos
+  seguimiento}. También se debe observar que la categoría \emph{OTROS
+  ROBOS} será ahora predicha por el modelo.
+
+\begin{table}[htbp]
+        \centering
+        \caption{Categorías de Delitos Validados y Seguimiento en el Dataset}
+        \label{tab:GeneracionDataset}
+        \scriptsize
+        \begin{tabularx}{\textwidth}{p{0.4\textwidth}p{0.4\textwidth}X}
+            \toprule
+            delitos\_seguimiento & delitos\_validados & Total \\ \hline
+            ROBO A DOMICILIO & ROBO A DOMICILIO & 172264 \\
+            ROBO A PERSONAS & ROBO A PERSONAS & 421497 \\ ROBO A UNIDADES ECONOMICAS & ROBO A UNIDADES ECONOMICAS & 74088 \\ 
+            ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS & ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS & 154546 \\
+            ROBO DE CARROS & ROBO DE CARROS & 90038 \\ 
+            ROBO DE MOTOS & ROBO DE MOTOS & 119128 \\ \hline 
+            \multirow{4}{*}{SIN INFORMACION}  & OTROS ROBOS & 43468 \\ 
+            {} & ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS & 9407 \\ 
+            {} & ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES & 3087 \\ 
+            {} & ROBO A INSTITUCIONES EDUCATIVAS & 17252 \\
+            {} & ROBO EN INSTITUCIONES PUBLICAS &  4560 \\ \hline
+            \multicolumn{2}{c}{Total} & \numprint{1109335} \\
+            \bottomrule
+        \end{tabularx}
+        % \caption{Categorías de Delitos Validados y Seguimiento en el Dataset}
+        % \label{tab:groupbycategorias}
+    \end{table}
+
+\subsubsection{Organización de Dataset para Entrenamiento, Validación y Test}
+
+Una de las técnicas más comunes para el entremaniento de modelos de
+aprendizaje profundo (\emph{deeplearning}) consiste en separar el
+dataset en subconjuntos de entrenamiento, validación y prueba. La idea
+de esto es poder probar la capacidad de generación del modelo
+entrenado. Recuérdese, también que la técnica de \emph{Fine Tuning}
+permite reducir el número de ejemplos con los que se entrena el
+modelo, reduciendo de los millones de ejemplos iniciales con los que
+son entrenados los modelos a utilizar datasets con cientos de miles de
+datos, obteniendo resultados adecuados.
+
+\begin{enumerate}
+        \item Los datos se organizan de la siguiente manera:
+        \begin{itemize}
+            \item Entrenamiento: \numprint{807468} $\approx$ 72\%
+            \item Validación: \numprint{201867} $\approx$ 18\%
+            \item Test: \numprint{100000} $\approx$ 10\%
+        \end{itemize}
+        \item El dataset se separa en dos subconjuntos dependiendo si las etiquetas corresponden a delitos seguimiento o delitos validados
+        \item Se conserva únicamente el relato y la etiqueta (i.e. delitos\_validados) que se renombra como \emph{labels}.
+        \item Los datos se guardan en la base de datos de \emph{Machine Learning}:
+            \scriptsize
+            \begin{lstlisting}[language=Python]
+                from src.utils import save_df_in_sql
+                save_df_in_sql(
+                     dataf=train_delitos_validados_huggingface,
+                    database="machinelearning",
+                    name_table="train_delitos_validados_hf",
+                )            
+                save_df_in_sql(
+                    dataf=valid_delitos_validados_huggingface,
+                    database="machinelearning",
+                    name_table="valid_delitos_validados_hf",
+                )
+                save_df_in_sql(
+                    dataf=test_delitos_validados_huggingface,
+                    database="machinelearning",
+                    name_table="test_delitos_validados_hf",
+                )
+            \end{lstlisting}
+        
+    \end{enumerate}
+
+\section{Methodology}\label{chap:metodos}
+\subsection{Problem Formulation}
+
+Text classification consists of obtaining a function $f$ that maps a
+Dataset $D$, composed of text sequences
+$X_i \in D=\{X_1, X_2, \dots, X_N\}$ to $k$ categories. Each document
+$X_i$ is composed of $s$ sentences and each sentence of $w_s$ words,
+which in turn have $l_w$ letters\footnote{We consider to use the
+  notation presented in \cite{Kowsari2019}}. The classification
+operation is thus represented by Equation \eqref{eq:clasificacion}.
+
+\begin{equation}\label{eq:clasificacion}
+    f: D \longrightarrow \mathbb{Z}^k
+\end{equation}
+
+However, for the model to be processed by a computing system or AI,
+the different documents $X_i$ must be represented (\emph{encoding})
+appropriately, so that the textual information is represented
+numerically. Therefore, the four traditional stages of a text
+classification system, such as: feature extraction, dimensionality
+reduction, classification, and evaluation, have been simplified thanks
+to the characteristics of the DL approach that allow a automatic
+feature extraction as explained in \ref{sec:arch-fond-bert}.
+
+% The use of Recurrent Neural Networks (RNN) allows for automatic
+% feature extraction, while the autoencoder architecture, in its
+% \emph{encoding} stage, allows for information representation and, if
+% required, dimensionality reduction.
+% ==================== original ====================
+% The problem consists of classifying crime report narratives into
+% specified robbery subcategories. As represented in Equation
+% \ref{eq:clasificacion}, this is a supervised text classification
+% task. To adapt the pre-trained `distilbert-base-multilingual-cased`
+% model, both transfer learning (TL) and fine-tuning (FT) were employed
+% to specialize the model for this domain-specific task. The
+% classification task requires converting text sequences into numerical
+% representations through a multi-step process. Let
+% $\Tokenize: \mathcal{X} \rightarrow \mathbb{Z}^\lambda$ be the
+% tokenization function that maps text sequences to token IDs, where
+% $\mathcal{X}$ is the text space and $\lambda$ is the maximum sequence
+% length. For each input sequence $X_i \in D^T_N$, BERT's tokenizer
+% produces:
+
+% \begin{equation}
+%     (\boldsymbol{\nu}_i, \boldsymbol{\tau}_i) = \Tokenize(X_i)
+% \end{equation}
+
+% where $\boldsymbol{\nu}_i \in \mathbb{Z}^\lambda$ are the token IDs
+% and $\boldsymbol{\tau}_i \in \{0,1\}^\lambda$ is the attention
+% mask. These are then processed by BERT's embedding layer to generate
+% contextual representations:
+
+% \begin{equation}
+%   \mathbf{H} = \text{BERT}((\boldsymbol{\nu}_i, \boldsymbol{\tau}_i)) \in \mathbb{R}^{\lambda \times d}
+% \end{equation}
+
+% where $d$ is the hidden dimension size. The classification head then
+% maps the [CLS] token representation to label space:
+
+% \begin{equation}
+%     \hat{\boldsymbol{y}}_i = f(\mathbf{h}_{[\text{CLS}]}) \in \mathbb{R}^k
+% \end{equation}
+
+% To
+% convert the text sequences into a numerical representation,
+% tokenization of the examples $D^T$ is necessary. Let $\Tokenization$
+% be a function that allows obtaining the tokenization of text
+% sequences, then Equation \ref{eq:encoding} represents the encoding of
+% the target dataset $D^T$.
+
+% \begin{equation}\label{eq:encoding}
+%     \mathbf{embeddings} = \Tokenization(D^T)
+% \end{equation}
+
+% The operation indicated in \eqref{eq:encoding} converts the text
+% sequences into feature vectors
+% $\boldsymbol{\nu} \in \mathbb{Z}^{\lambda}$ and
+% $\boldsymbol{\tau} \in \mathbb{Z}^\lambda$; which represent the
+% numerical encoding and the attention mask, respectively. $\lambda$ is
+% the maximum sequence length of the text. If $X_i \in D^T_{N}$ is a
+% text sequence of length $\lambda$ and $N$ is the number of records in
+% $D^T$, then \eqref{eq:clasificacion} can be rewritten as
+
+% \begin{equation}\label{eq: tensorflowin}
+%     \dot{f}: \mathbb{Z}^{(N,\lambda,2)} \longrightarrow \mathbb{Z}^k
+% \end{equation}
+
+% Where the classification prediction is also a one-hot vector
+% $\boldsymbol{y}_i$.
+
+
+The problem consists of classifying crime report narratives into
+specified robbery subcategories. To adapt the pre-trained
+\texttt{distilbert-base-multilingual-cased} model, both transfer
+learning (TL) and fine-tuning (FT) were employed to specialize the
+model for this domain-specific task.
+
+The classification process involves converting text sequences into
+numerical representations through several stages. The processing
+pipeline consists of:
+
+\begin{enumerate}
+    \item \textbf{Tokenization}: Converting raw text to token IDs
+    \item \textbf{Embedding}: Mapping tokens to vector representations
+    \item \textbf{Contextual Encoding}: Generating sequence-aware representations
+    \item \textbf{Classification}: Predicting labels from [CLS] token
+\end{enumerate}
+
+Which can be written as:
+
+\begin{equation*}
+\text{Raw Text} \xrightarrow{\Tokenize} \text{Token IDs} \xrightarrow{\text{Embedding}} \text{Vectors} \xrightarrow{\bertmodel} \text{Contextual Representations} \xrightarrow{\text{Head}} \text{Predictions}
+\end{equation*}
+
+Let $\Tokenize: \mathcal{X} \rightarrow \mathbb{Z}^\lambda$ be the
+tokenization function that maps text sequences to token IDs, where
+$\mathcal{X}$ is the text space and $\lambda$ is the maximum sequence
+length. For each input sequence $X_i \in D^T_N$, the tokenizer
+produces:
+
+\begin{equation}\label{eq:tokenization}
+    (\boldsymbol{\nu}_i, \boldsymbol{\tau}_i) = \Tokenize(X_i)
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\boldsymbol{\nu}_i \in \mathbb{Z}^\lambda$ are the token IDs
+    \item $\boldsymbol{\tau}_i \in \{0,1\}^\lambda$ is the attention mask
+\end{itemize}
+
+These token IDs are then passed through the embedding layer:
+
+\begin{equation}\label{eq:embedding}
+    \mathbf{E} = \text{Embedding}(\boldsymbol{\nu}_i) \in \mathbb{R}^{\lambda \times d}
+\end{equation}
+
+where $d$ is the embedding dimension. The complete \bertmodel{} model
+processes these embeddings to produce contextual representations:
+
+\begin{equation}\label{eq:encoding}
+    \mathbf{H} = \bertmodel{}(\mathbf{E}, \boldsymbol{\tau}_i) \in \mathbb{R}^{\lambda \times d}
+\end{equation}
+
+The classification head uses the [CLS] token representation
+($\mathbf{h}_{[\text{CLS}]} \in \mathbb{R}^d$) to predict the label:
+
+\begin{equation}\label{eq:classification}
+  \hat{\boldsymbol{y}}_i = \text{softmax}(\mathbf{W}\mathbf{h}_{[\text{CLS}]} + \mathbf{b}) \in \mathbb{R}^k
+\end{equation}
+
+where:
+\begin{itemize}
+  \item $\mathbf{W} \in \mathbb{R}^{k \times d}$ is the classification weight matrix
+  \item $\mathbf{b} \in \mathbb{R}^k$ is the bias term
+  \item $k$ is the number of target categories
+\end{itemize}
+
+
+Consequently, for a text sequence $X_i \in D^T_{\kappa, N}$ of length
+$\lambda$ where $N$ is the number of records, and $\kappa$ the number
+of categories, in the target dataset $D^T$, the classification
+function from Equation \eqref{eq:clasificacion} can be formally
+expressed as:
+
+\begin{equation}\label{eq:tensor_mapping}
+    f: \mathbb{Z}^{N \times \lambda \times 2} \to \mathbb{R}^k
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\mathbb{Z}^{N \times \lambda \times 2}$ represents the batched input tensor containing:
+    \begin{itemize}
+        \item Token IDs $\boldsymbol{\nu}_i \in \mathbb{Z}^\lambda$
+        \item Attention masks $\boldsymbol{\tau}_i \in \{0,1\}^\lambda$
+    \end{itemize}
+    \item $\mathbb{R}^k$ denotes the probability distribution over $k$ categories (with softmax activation)
+    \item The dot notation ($\dot{f}$) is replaced with standard function notation for clarity
+\end{itemize}
+
+
+% Consequently, If $X_i \in D^T_{N}$ is a
+% text sequence of length $\lambda$ and $N$ is the number of records in
+% $D^T$, then \eqref{eq:clasificacion} can be rewritten as
+
+% \begin{equation}\label{eq: tensorflowin}
+%     \dot{f}: \mathbb{Z}^{(N,\lambda,2)} \longrightarrow \mathbb{Z}^k
+% \end{equation}
+  
+The TL operation defined according to \textcite{falconi2020transfer}
+is stated as a functional operation that aims to save the weights of
+the model $\boldsymbol{W}^S$ pre-trained on an original dataset $D^S$
+in a similar domain and place at the output of said model layers that
+adapt the encoding of the trained model and adjust it to the target
+task, in a target dataset $D^T$; where the number of examples in the
+original dataset is significantly greater than that of the target
+dataset: $\Lambda(D^S) \ggg \Lambda(D^T)$ and $\Lambda$ returns the
+size of records in the dataset. Therefore, the following definition of
+TL given in \cite{falconi2020transfer} is considered:
+
+\begin{definition}
+  Given an original domain $\mathcal{D}^{S}$ with an original learning
+  task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$, with a
+  target task $\mathcal{T}^{T}$, the TL operation seeks to improve the
+  learning of a prediction function $\ypredtarget(\cdot)$ in
+  $\mathcal{D}^{T}$ using the knowledge acquired in
+  $\ypredsource(\cdot)$ in $\mathcal{T}^{S}$, through $\phi^S$; where
+  $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ or
+  $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
+\end{definition}
+
+Considering the mentioned definition of TL, \eqref{eq:Transfer2}
+represents the TL operation applied to the text classification
+problem, starting from a pre-trained natural language model; where $L$
+is the number of layers of the pre-trained model.
+
+\begin{equation}
+  \mathbb{T_{L}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T}  \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{L} \right)
+    \label{eq:Transfer2}
+\end{equation}
+
+Consequently, the prediction generation is represented by Equation
+\eqref{eq:Transfer3}
+\begin{equation}
+    \mathcal{Y}^{T} = \mathbb{T_{L}} \left< \ypredsource(D^{S}), \mathcal{D}^{T} \right> = \ypredtarget(D^T) 
+    \label{eq:Transfer3}
+\end{equation}
+
+
+
+\subsection{Phase 1: Baseline Transfer Learning}\label{sec:phase-1:-baseline}
 Transfer learning, as indicated by Equations \ref{eq:Transfer2} and
 \ref{eq:Transfer3}, allows adjusting the original training
 $\ypredsource(\cdot)$ to adapt it to the target task
@@ -1660,7 +1988,7 @@ $\mathcal{W}^T = \numprint{478214}$.
     \circ Dro_{0.1} \circ FC_{512} \circ BN \circ GMP \nonumber
 \end{IEEEeqnarray}
 
-\subsection{Model Training}
+\subsubsection{Model Training}\label{sec:phase1-model-training}
 The model training consists of using \emph{TL} to fine-tune a
 pre-trained model for the desired classification task. In this way, it
 will be possible to predict the category to which a robbery text
@@ -1723,7 +2051,509 @@ callback & 5 epochs \\
 \end{tabular}
 \end{table}
 
+\subsection{Phase 2: Fine-Tuning on Dataset $D_{\kappa=6}$}
+\label{sec:phase-2:-finetuningBert}
+La técnica de TL utiliza los pesos entrenados de un modelo de Deep
+Learning en otro $\mathcal{D}^{S}$ con una tarea de aprendizaje
+original $\mathcal{T}^{S}$. En la Sección \ref{sec:phase-1:-baseline} se
+presentó la arquitectura utilizada para adaptar la clasificación
+original $\mathcal{T}^{S}$ a fin de obtener el Modelo $\phi^T(\cdot)$
+que permita realizar la clasificación de las etiquetas de de
+\textbf{delito seguimiento} para las noticias del delito de robos. En
+este sentido, como expresa \eqref{eq:Transfer2}, los pesos entrenados
+en la tarea original $\mathcal{W}^S$ no son adaptados de ninguna forma
+en la nueva tarea $\mathcal{W}^T$. En consecuencia, el Modelo
+$\phi^S(\cdot)$ se usa como un extractor de características. En la
+Sección \ref{chap:resultados} se observó que el rendimiento del
+clasificador, entrenado por TL para predecir la etiqueta de delitos
+seguimiento, alcanzó un 80\% en promedio de accuracy.
+
+De acuerdo a \textcite{tunstall2022natural} el realizar la operación
+de \emph{Fine Tuning} (ajuste fino) de todos los pesos originales del
+modelo permite adaptar los estados ocultos (\emph{hidden states})
+durante el entrenamiento para disminuir la pérdida del modelo e
+incrementar, por tanto, el desempeño del clasificador en la nueva
+tarea $\phi^T(\cdot)$. \textcite{falconi2020transfer} define a FT como
+el proceso que mejora el aprendizaje de una función objetivo
+$\mathcal{Y}^T = \ypredtarget(\mathcal{I}^T)$ en un dominio objetivo
+$\mathcal{D}^T$ con respecto a una tarea objetivo $\mathcal{T}^T$ a
+través del re-entrenamiento de $r$ capas del modelo original
+$\mathcal{Y}^S = \ypredsource(\mathcal{I}^S)$ de $L$ capas entrenado
+en un dominio original $\mathcal{D}^S$, en una tarea original
+$\mathcal{T}^S$.
+
+\begin{equation}
+    \mathbb{F_{T}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right> = \ConvNetOut \left( \ypredsource \left (\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{\gamma -1} \right)\Bigr\rvert_{\gamma}^{L}\right) 
+    % \gamma = L-r \nonumber
+    \label{eq:finetuningLenin}
+\end{equation}
+
+En \eqref{eq:finetuningLenin} se representa la definición de FT de
+manera simbólica. Donde $\mathcal{A}$ representa el proceso de FT
+sobre el modelo original de $L$ capas y $\gamma = L-r$ es la capa
+desde donde se procede a realizar el ajuste fino del modelo. Un caso
+particular sería el ajuste completo del modelo: $r=L$ y por tanto
+$\gamma=0$. Este es el caso planteado por
+\citeauthor{tunstall2022natural} y recomendado en su texto
+\citetitle{tunstall2022natural}. Si bien la definición presentada por
+\textcite{falconi2020transfer} permite ajustar sólo algunas de las
+capas del modelo original, una consecuencia de hacer $r=L$ es que no
+se requiere la adición de capas a la salida del modelo para ajustar su
+respuesta. En consecuencia sólo se afecta la cantidad de neuronas que
+corresponden con las clases a predecir por el nuevo modelo. Por tanto,
+considerando que \textcite{tunstall2022natural} afirman que se puede
+mejorar el desempeño del clasificador con realizar el ajuste de los
+estados ocultos del modelo completo, la operación de FT usada será
+
+\begin{equation}\label{eq: finetuningTunstall}
+    \mathbb{F_{T}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T})\right)
+\end{equation}
+
+Donde la omisión de $\Bigr\rvert_{0}^{L}$ implica que el modelo
+$\ypredsource$ es ajustado en su totalidad. Es decir, que la
+inicialización de los pesos parte con los valores $\mathcal{W}^S$ y
+por tanto $\mathcal{W}^S\rightarrow \mathcal{W}^T$. Además se tendría
+que
+
+\begin{align}\label{eq:finetuningOut}
+    \mathcal{A} = FC_{6}
+\end{align}
+
+
+A fin de mejorar el aprendizaje del modelo sobre los datos de las
+denuncias de robo y su relación con las etiquetas de delito
+seguimiento, usadas por la Comisión, se realizan las siguientes
+operaciones. Estas operaciones se basan en la hipótesis planteada por
+\textcite{tunstall2022natural} de que el FT aplicado al modelo debe
+mejorar los resultados de clasificación con respecto del TL antes
+aplicado.
+
+\begin{enumerate}
+    \item Carga de los datasets $D^T_{train}$, $D^T_{valid}$, $D^T_{test}$
+    \item Tokenización de los datasets considerando una secuencia
+      máxima de \numprint{300} y utilizando el modelo tokenizador
+      \emph{distilbert-base-multilingual-cased}
+    \item Resampling de los datasets (debido a limitaciones de hardware): Para el entrenamiento se utilizan $|d_{train}^T| = \numprint{20000}$ muestras, la validación $|d_{valid}^T| = \numprint{4000}$ y el testeo $|d_{test}^T| = \numprint{4000}$.
+    \item Obtención de los tensores de entrada, máscara y los tensores
+      de clasificación en one-hot encoding.
+    \item Carga del modelo pre-entrenado $\ypredsource(\cdot)$
+    \item Se obtiene el modelo de ajuste fino aplicando \eqref{eq:
+        finetuningTunstall}
+    \item Se compila el modelo con los parámetros de entrenamiento
+      presentados en la Tabla \ref{tab:trainingParam2}.
+    \item Se ejecuta el entrenamiento en Google Colab.
+    \item Respaldo de los pesos de entrenamiento.
+\end{enumerate}
+
+\begin{table}
+    \caption{Parámetros de Entrenamiento Mejora del Modelo}
+    \label{tab:trainingParam2}
+    \centering
+    \begin{tabular}{cc}
+    \hline
+    Parámetro & Valor\\
+    \hline
+     Loss & Sparse Categorical Cross Entropy\\
+    Metrics & Sparse Categorical Accuracy \\
+    Optimizer & Adam \\
+    Learning rate & $5 \times 10^{-5}$ \\
+    epochs & 10 \\
+    callback & No \\
+    \hline
+    \end{tabular}
+  \end{table}
+
+  
+\subsection{Phase 3: Scaling to Dataset $D_{\kappa=11}$}
+\label{sec:phase-3:-scaling-fullmodel}
+
+El trabajo descrito en la Sección \ref{sec:phase-2:-finetuningBert}
+indica que la técnica de \emph{Fine Tuning} permite mejorar el
+rendimiento del clasificador. Partiendo de este fundamento, se plantea
+ahora la necesidad de automatizar la predicción de la etiqueta de
+\emph{delitos validados}. Esta etiqueta propuesta por la
+\printInicialesComision\, dispone de una cantidad mayor de
+desagregaciones de robo. Sin embargo, no han sido estandarizadas. Por
+esta razón, en reuniones sostenidas con el INEC se llegó al consenso
+presentado en la Tabla \ref{tab:listofRobberiesValidados} al respecto
+de las categorías que utilizará delitos validados para el modelo de
+machine learning.
+
+En esta sección se describe la Metodología y los resultados obtenidos
+para la realización de las mejoras al modelo de predicción de
+desagregaciones de Robo con respecto de la etiqueta de \emph{delitos
+  validados}. Para esto fue necesario realizar la generación de un
+nuevo dataset con relatos tanto del parte policial como los
+registrados en Fiscalía. Esto permitió incrementar la variabilidad de
+datos con los cuales entrenar al modelo. También se procedió a
+analizar la similitud computacional a nivel de \emph{embeddings}
+(i.e. representaciones vectoriales) del texto del parte policial y el
+registrado en SIAF. A fin de maximizar el entrenamiento sobre la mayor
+cantidad posible de datos se recurrió a utilizar \emph{Tensor
+  Processing Units}(TPU). Estas acciones han permitido incrementar las
+categorías a predecir e inclusive mejorar la precisión de la
+predicción del modelo.
+
+\subsubsection{Delitos Validados}
+Conforme a las reuniones mantenidas entre Fiscalía y el INEC, se
+definen las categorías indicadas en la Tabla
+\ref{tab:listofRobberiesValidados} para la predicción de delitos
+validados; donde la categoría de \say{OTROS ROBOS} contendrá las
+categorías anteriores de: ROBO A INSTITUCIONES DE SALUD, ROBO EN EJES
+VIALES O CARRETERAS, ROBO A ENTIDADES FINANCIERAS.
+
+    \begin{table}[htbp]
+    \centering
+    \scriptsize
+    \begin{tabularx}{\textwidth}{|c|X|c|X|}
+        \hline
+        \textbf{Idx} & \textbf{Tipo de Robo} & \textbf{idx} & \textbf{Tipo de Robo} \\
+        \hline
+        0 & ROBO A INSTITUCIONES EDUCATIVAS & 6 & ROBO A UNIDADES ECONOMICAS \\
+        1 & ROBO DE MOTOS & 7 & ROBO A DOMICILIO \\
+        2 & ROBO EN INSTITUCIONES PUBLICAS & 8 & ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS \\
+        3 & ROBO DE CARROS & 9 & ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS \\
+        4 & ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES & 10 & OTROS ROBOS \\
+        5 & ROBO A PERSONAS & & \\
+        \hline
+    \end{tabularx}
+    \caption{Delitos Validados}
+    \label{tab:listofRobberiesValidados}
+\end{table}
+
+
+Se debe notar que en un reporte anterior denominado \say{Delitos
+  Validados}, redactado el 03/10/2023 y socializado a las autoridades
+relacionadas se indicó que:
+
+\say{
+\begin{enumerate}
+\item Se observa que \emph{delitos\_validados} posiblemente contiene
+  más categorías que las definidas en los manuales respectivos.
+    \item Existen categorías ambiguas tales como: \emph{VARIOS},
+      \emph{NO APLICA}, \emph{ELIMINAR(DUPLICADOS)}, \emph{ELIMINAR},
+      \emph{OTROS ROBOS}
+    \item Existen tipos penales dentro de las categorías de
+      desagregación de delitos\_validados e.g. \emph{Estafa, Hurto,
+        Asesinato, Extorsión, Violación, etc.}
+    \item Existen valores que no se corresponden con el Código
+      Integral Penal Ecuatoriano (COIP) e.g. \emph{Plagio o Secuestro
+        personas}
+    \item Al ser \emph{delitos\_validados} una desagragegación del
+      Robo, porque el COIP no contiene dichas desagregaciones y las
+      mismas obedecen o encuentran su razón en el marco de la
+      Comisión, no es coherente que la misma contenga tipos penales.
+\end{enumerate}
+}
+
+En el mismo reporte se manifiesta que \say{se partió de asumir que las
+  clasificaciones entregadas por la Comisión son el valor verdadero
+  con respecto del cual se evalúa el modelo} y que \say{la calidad del
+  modelo depende de la calidad de sus datos de entrenamiento}, por lo
+que en las reuniones, se ha indicado que es \say{deseable que los
+  datos etiquetados estén verificados}; sobre todo en las categorías
+ambiguas y en etiquetas que no tienen sentido o justificación
+(e.g. ELIMINAR (DUPLICADOS), ELIMINAR, OTROS ROBOS, NO APLICA,
+VARIOS). De igual manera, se debe observar que el disponer de modelos
+de machine learning exige el planteamiento de Operaciones de Machine
+Learning (i.e. MLOPs por sus siglas en inglés), que permitan
+actualizar los modelos y su continuo mejoramiento y adecuación a los
+datos cambiantes.
+
+Es importante notar que no se ha realizado una revisión de la etiqueta
+\say{OTROS ROBOS} de las noticias del delito anteriores al acuerdo que
+estipula que las categorías de La categoría de \say{Otros Robos}
+contendrá las categorías ROBO A INSTITUCIONES DE SALUD, ROBO EN EJES
+VIALES O CARRETERAS, ROBO A ENTIDADES FINANCIERAS, por lo que por
+parte de Fiscalía se ha indicado que se recomienda la revisión de la
+etiqueta \emph{OTROS ROBOS}.
+
+
+\subsubsection{Formulación del Problema}
+Se propone entrenar un modelo de Machine Learning que permita
+\emph{aproximar} una función paramétrica $f_\theta$ que a partir de un
+dato de entrada $\mathbf{x}_i \in \mathbf{\mathcal{X}}$ devuelva la
+categoría $k_j$ a la que pertenece dicho dato. Donde
+$k_j \in \mathcal{Y}$ y $\mathcal{Y} \in \mathbb{R}^{11}$
+
+\begin{equation}\label{eq:clasificacion}
+  f_\theta: \mathbf{\mathcal{X}} \longrightarrow \mathbf{\mathcal{Y}}
+\end{equation}
+
+Sobre el relato se aplica la Tokenización (i.e. \emph{encoding}) del
+modelo pre-entrenado
+
+\begin{equation}
+  \mathbf{x}_i = \Gamma(relato_i)
+\end{equation}
+
+Y $k_j$ pertenece a las categorías indicadas en la Tabla \ref{tab: metricasorig}.
+
+Para el resto del documento se asume la siguiente nomenclatura:
+
+\begin{itemize}
+      \item $\mathbb{D}^{PN}$: Dataset conformado por relatos de la Policía Nacional
+
+      \item $\mathbb{D}^{FGE}$: Datset conformado por relatos de la
+      Fiscalía General del Estado obtenidos desde SIAF
+ \end{itemize}
+
+\subsubsection{Análisis de Similitud de Texto}
+Debido a la cantidad de información reunida para las mejoras para el
+modelo de predicción de las desagregaciones de \emph{delitos
+  validados}, hace falta poder de cómputo para calcular la similitud
+documental entre todos los registros obtenidos (más de 700 mil). Por
+esta razón se toma una muestra de \numprint{6000}, como se detalla en
+la metodología. La Figura \ref{fig:metodologiaSimilitudTexto} muestra
+un resumen de la metodología aplicada para la comparación documental
+
+\begin{enumerate}
+\item Analizar la similitud documental de una muestra de relatos de
+  policía $\mathbb{D}^{PN}$ wrt. al relato de fiscalía
+  $\mathbb{D}^{FGE}$.
+\item Utilizar al menos dos técnicas distintas en naturaleza: 1)
+  word2vec, 2) Transformers
+\item Calcular el coseno de la similitud entre los embeddings i.e.:
+       
+\end{enumerate}
+
+\begin{equation}\label{eq:cosinesimilarity}         
+        \cos(\Gamma(x_i^{PN}), \Gamma(x_i^{FGE})) = \frac{\Gamma(x_i^{PN})\cdot\Gamma(x_i^{FGE})}{\lVert \Gamma(x_i^{PN}) \rVert\lVert \Gamma(x_i^{FGE}) \rVert}
+\end{equation}
+
+Donde $x_i^{PN} \in \mathbb{D}^{PN}$ y $x_i^{FGE} \in \mathbb{D}^{FGE}$
+
+\paragraph{Metodología}
+\begin{figure}
+    \centering
+    \includegraphics[scale=.75]{imgs/CosenoSimilitud.drawio.pdf}
+    \caption{Metodología para el cálculo de Similitud de Texto}
+    \label{fig:metodologiaSimilitudTexto}
+\end{figure}
+
+\begin{enumerate}
+        \item Calcular la muestra $n$ a utilizar.
+        \item Tomar $n$ elementos aleatorios desde el conjunto de
+          datos de relatos $N$, si la cantidad de palabras es al menos
+          50: $E(w)\geq50$.
+        \item Definir los modelos o técnicas para el análisis del
+          texto: 1) word2vec, 2) Transformers
+        \item Obtener los \emph{embeddings} para cada par de relatos
+          de policía y fiscalía i.e.
+          $\Gamma(x_i^{PN}), \Gamma(x_i^{FGE})$ de acuerdo a cada
+          técnica seleccionar.
+        \item Obtener el coseno de similitud de acuerdo a \eqref{eq:cosinesimilarity}
+        \item Comparar resultados estadísticamente
+        \item Realizar comparación de las predicciones del Modelo
+          entrenado en \emph{delitos seguimiento} sobre relatos de
+          policía y fiscalía y comparar resultados de clasificación en
+          función de las métricas de clasificación.
+\end{enumerate}
+
+\paragraph{Cálculo de la Muestra}
+\begin{equation*}
+        n =\frac{z^2p(1-p) }{\epsilon^2N+z^2p(1-p)}N
+\end{equation*}
+
+Donde:\\
+$N = \numprint{785513}$ \\
+$p = \numprint{0.5}$ \\
+$z = \numprint{1.65}$  \\
+$\epsilon = \numprint{1.06}$\% \\
+$n = \numprint{6012} \approx \numprint{6000}$
+
+Los resultados del cálculo de la muestra con las variables obtenidas
+se pueden consultar en línea en el
+\href{https://www.calculator.net/sample-size-calculator.html?type=1&cl=90&ci=1.06&pp=50&ps=785513&x=Calculate}{Enlace
+  a la Calculadora de la Muestra}. En consecuencia, se requiere de una
+muestra de \numprint{6000} registros para presentar resultados con una
+confianza del \numprint{90}\% de un total de \numprint{785513}.
+
+\paragraph{Obtención de Embeddings}
+A fin de que los sistemas computacionales puedan procesar texto, es
+necesario convertir el texto en una representación numérica vectorial
+(i.e. \emph{embedding}). La ecuación \eqref{eq:encoding} representa
+este proceso. A fin de dotar de objetividad a este experimento, se
+plantea utilizar dos técnicas diferentes en naturaleza. Siendo las
+elegidas: \emph{word2vec} y \emph{transformers}.
+
+
+\begin{itemize}
+\item Word2vec: es una técnica de procesamiento de lenguaje natural
+  que permite la representación vectorial de las palabras en un
+  corpus. Utiliza una red neuronal de 3 capas que se entrena sobre el
+  corpus.Así, las palabras que comparten contextos similares tendrán
+  vectores cercanos en el espacio vectorial. De esta manera Word2vec
+  permite representar palabras como vectores numéricos en un espacio
+  de baja dimensión.
+  \item Transformers: Los transformers son modelos de aprendizaje
+      profundo que utilizan la atención para capturar las relaciones
+      entre las palabras de un texto. Para obtener embeddings con
+      transformers, se puede usar una capa de salida que proyecte las
+      salidas de la atención a un espacio de menor dimensión. Así, se
+      obtienen embeddings que reflejan las características semánticas
+      y sintácticas de las palabras en el texto. En este caso
+      particular se ha utilizado el modelo de \modelohuggingface.
+
+\end{itemize}
+
+\paragraph{Resultados de Similitud de Texto}
+En la Tabla \ref{tab:resultadosCosSim} se presentan los resultados
+estadísticos obtenidos del cómputo del coseno de similitud de las
+representaciones vectoriales de los relatos de policía y fiscalía
+usando dos técnicas diferentes (word2vec y transformers). Se puede
+observar que la media supera el 95\% de similitud.
+
+\begin{table}[htbp]
+\caption{Resultados de Similitud de Documentos}
+\label{tab:resultadosCosSim}
+\centering
+    \begin{tabular}{l l l}   
+    \toprule
+     & word2vec & bert-transformer \\ \hline
+    count & \numprint{6000} & \numprint{6000} \\ 
+    mean & \numprint{0.957418} & \numprint{0.987899} \\
+    std & \numprint{0.073233} & \numprint{0.023865} \\
+    min & \numprint{0.310206} & \numprint{0.780015} \\
+    25\% & \numprint{0.961602} & \numprint{0.990691} \\
+    50\% & \numprint{0.975714} & \numprint{0.995396} \\
+    75\% & \numprint{0.984985} & \numprint{0.997255} \\
+    max & 1 & 1 \\
+    \bottomrule
+    \end{tabular}
+    
+\end{table}
+
+\subsubsection{Predicción de Etiquetas con Modelo Delitos Seguimiento}
+Adicionalmente, para analizar la similitud entre los relatos de
+policía y los de fiscalía se realizó la predicción del modelo antes
+entrenado de \emph{delitos seguimiento} independientemente sobre los
+diferentes conjuntos de relatos de acuerdo a
+\eqref{eq:prediccionRelatoPolicia} y
+\eqref{eq:prediccionRelatoFGE}. Los resultados de la evaluación de
+desempeño del clasificador indica que el modelo realiza una
+generalización adecuada de la comprensión del texto y no se ve
+afectado por el origen del relato. De ahí que los modelos basados en
+\emph{Transformers} adquieren un conocimiento de la semántica del
+texto y sus resultados son coherentes. De esta manera presunciones
+tales como que el rendimiento de los modelos entrenados por las
+técnicas aquí utilizadas se vean afectados si el relato es el parte
+policial o el registro SIAF quedan descartadas. La Figura
+\ref{fig:comparacionDelitosSeguimientoRelatos} muestra que las
+categorías predichas cumplen una tendencia similar. Con ínfima
+diferencia numérica, pues la diferencia global entre las predicciones
+del modelo de \emph{delitos seguimiento} $f_\theta$ sobre los relatos
+de policía y fiscalía es de \numprint{0.16}\%.
+
+\begin{equation}\label{eq:prediccionRelatoPolicia}
+    y^{PN} = f_\theta(\mathbf{\mathcal{X}}^{PN})
+\end{equation}
+
+\begin{equation}\label{eq:prediccionRelatoFGE}
+    y^{FGE} = f_\theta(\mathbf{\mathcal{X}}^{FGE})
+\end{equation}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/prediccionDelitosSeguimientoPoliciaVsFiscalia.png}
+    \caption{Comparación de predicciones sobre relato de policía y fiscalía}
+    \label{fig:comparacionDelitosSeguimientoRelatos}
+\end{figure}
+
+Para el entrenamiento del modelo con la totalidad de los datos
+obtenidos se utilizó las ventajas del hardware de TPU (unidad de
+procesamiento tensorial), que es un tipo de procesador diseñado por
+Google para el aprendizaje automático con redes neuronales
+artificiales, especialmente con frameworks de \emph{deeplearning} como
+\emph{TensorFlow} o \emph{PyTorch}. La ventaja principal de este
+hardware es realizar operaciones matemáticas complejas en paralelo,
+con una memoria de alta velocidad y ancho de banda, y con una
+precisión mixta que optimiza el rendimiento y la eficiencia
+\parencite{torx2023, wikipedia_tpu}. La Figura
+\ref{fig:diagramaCajaRelatoTrainValidados} presenta un diagrama de
+cajas de la cantidad de palabras del relato según las distintas
+categorías de \emph{delitos validados}. Esta Figura permite tener una
+idea de los valores típicos y atípicos del conjunto de datos.
+
+
+La Metodología seguida en el entrenamiento es la siguiente:
+
+% : https://es.wikipedia.org/wiki/Unidad_de_procesamiento_tensorial
+% : https://tensorprocessingunit.com/que-es-una-unidad-de-procesamiento-tensorial-y-como-funciona/
+
+
+\begin{enumerate}
+  
+\item Carga de los datos de entrenamiento
+  $\mathbf{\mathcal{X}}^{Train}_{807468\times 2}$, validación,
+  $\mathbf{\mathcal{X}}^{Valid}_{201867\times 2}$ y testeo
+  $\mathbf{\mathcal{X}}^{Test}_{100000 \times 2}$
+  \item Tokenización de los relatos con una secuencia máxima de
+    \numprint{400} y empleando el modelo \modelohuggingface
+  \item Habilitación de Tensor Processing Unit
+  \item Configuración de earlystopping con $patience=10$, con
+    monitoreo del \emph{accuracy} de validación y retorno de los
+    mejores pesos.
+  \item Configuración de Hiperparámetros:
+            \begin{itemize}
+            \item
+              $Batch\_size = NumeroReplicas \times 16 = 8 \times 16 =
+              128$
+                \item El número de épocas se configura en 12
+                \item El optimizador a usar es Adam con \emph{learning rate} de $3\times 10^{-6}$
+            \end{itemize}
+    \end{enumerate}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=.8]{imgs/cantidadPalabrasTrainDelitosValidadosBoxPlot.png}
+    \caption{Diagrama de Caja de Cantidad de Palabras por Categorías de Delitos Validados}
+    \label{fig:diagramaCajaRelatoTrainValidados}
+\end{figure}
+
+La Figura \ref{fig:ModelosDelitosValidadosAccxEpoch} presenta las
+características del \emph{accuracy} (precisión) y la función de costo
+(\emph{loss}) en función del número de épocas de entrenamiento. Se
+observa que no existe un \emph{overfitting} del modelo a pesar del
+desbalance entre las distintas clases.
+
+% ==================== se desactiva porque no es compatible con subfig
+% ==================== de la IEEE
+% \begin{figure}[h!]
+%       \begin{subfigure}[b]{0.8\textwidth}
+%         \includegraphics[width=\textwidth]{imgs/DelitosValidadosModeloEntrenamientoAccxEpoch.png} % replace with your first image file
+%         \caption{Accuracy por Época}
+%       \end{subfigure}
+%       \hfill
+%       \begin{subfigure}[b]{0.8\textwidth}
+%         \includegraphics[width=\textwidth]{imgs/DelitosValidadosModeloEntrenamientoLossxEpoch.png} % replace with your second image file
+%         \caption{Loss por Época}
+%       \end{subfigure}
+%       \caption{Accuracy y Loss de entrenamiento y validación}
+%       \label{fig:ModelosDelitosValidadosAccxEpoch}
+% \end{figure}
+% ==================== descomentar si se usa en un contexto diferente
+% ==================== a IEEE
+
+\begin{figure}[h!]
+    \centering
+    \subfloat[Accuracy por Época]{%
+        \includegraphics[width=0.8\textwidth]{imgs/DelitosValidadosModeloEntrenamientoAccxEpoch.png}%
+        \label{fig:accuracy_epoch}}
+    \hfill
+    \subfloat[Loss por Época]{%
+        \includegraphics[width=0.8\textwidth]{imgs/DelitosValidadosModeloEntrenamientoLossxEpoch.png}%
+        \label{fig:loss_epoch}}
+    \caption{Accuracy y Loss de entrenamiento y validación}
+    \label{fig:ModelosDelitosValidadosAccxEpoch}
+\end{figure}
+    
+
 \section{Experimental Results}\label{chap:resultados}
+
+\subsection{Phase 1 Transfer Learning on Basic Taxonomy Dataset Results}
+\label{sec:phase-1-dataset-results-tl}
+
 The training results are shown in Figure \ref{fig:loss80} and
 \ref{fig:train80} for the optimization function and the performance
 metric, respectively. The adjusted model obtained an \emph{accuracy}
@@ -1731,14 +2561,14 @@ of \numprint{0.8248} on the training dataset, \numprint{0.8048} on the
 validation dataset, and \numprint{0.8045} on the test dataset.
 
 \begin{figure*}[!t]
-\centering
-\subfloat[Loss]{\includegraphics[width=\textwidth]{imgs/losstrainacc80.png}
-\label{fig:loss80}}
-\hfil
-\subfloat[Accuracy]{\includegraphics[width=\textwidth]{imgs/trainacc80.png}
-\label{fig:train80}}
-\caption{Training of the Machine Learning Text Classification Model}
-\label{fig: results}
+  \centering
+  \subfloat[Loss]{\includegraphics[width=\textwidth]{imgs/losstrainacc80.png}
+    \label{fig:loss80}}
+  \hfil
+  \subfloat[Accuracy]{\includegraphics[width=\textwidth]{imgs/trainacc80.png}
+    \label{fig:train80}}
+  \caption{Training of the Machine Learning Text Classification Model}
+  \label{fig: results}
 \end{figure*}
 
 Regarding the $f_1score$ metric, an average of 0.80 was obtained;
@@ -1778,6 +2608,144 @@ f-score performance.
 \end{tabular}
 \end{table}
 
+\subsection{Phase 2 Fine Tuning on Basic Taxonomy Dataset Results}
+\label{sec:phase-2-dataset-results-ft}
+
+El desempeño durante el entrenamiento del modelo de FT, en las
+métricas de accuracy y loss,  se muestra en las Figuras
+\ref{fig:train92} y  \ref{fig:loss92}, respectivamente. Considerando
+un límite del 10\% para \emph{overfitting}, se puede observar que el
+modelo alcanza un \emph{accuracy} de 90\%. Sobre $d_{train}^T$, el
+accuracy obtenido es de \numprint{0.9922}; mientras que en
+$d_{valid}^T$ se obtiene \numprint{0.9068}. Con respecto al
+$d_{test}^T$ se obtiene \numprint{0.9028}. En este contexto, el modelo
+entrenado en FT incrementa su desempeño en un 10\% con respecto al
+modelo entrenado en TL; confirmando la hipotésis manifestada en
+\textcite{tunstall2022natural}.
+
+Sin embargo, el desempeño de un clasificador multicategórico, como es
+el caso de la predicción de la etiqueta de delitos seguimiento, no
+puede basarse únicamente en la medida de \emph{accuracy}; por cuanto,
+la práctica ha demostrado la conocida paradoja de la precisión
+(\emph{accuracy paradox}) \parencite{accuracyParadoxWikipedia2022}: en
+donde, si una de las clases es dominante, un modelo de bajo desempeño
+tiende a predecir según la clase dominante; incurriendo en un error
+que no es detectado por esta métrica. De ahí que se prefiere utilizar
+otras métricas tales como \emph{precision}, \emph{recall} o la matriz
+de confusión. La Tabla \ref{tab:fscoreModel2} presenta el reporte de
+clasificación sobre el dataset de testeo (i.e. es decir sobre datos
+que el modelo no recibió en el entrenamiento) utilizando las métricas
+de \emph{accuracy}, \emph{precisión} y \emph{recall}.
+
+Finalmente, la Figura \ref{fig:matconfusion} muestra la matriz de
+confusión normalizada. Se puede observar que la diagonal presenta un
+carácter distintivo correspondiente a un clasificador que sí puede
+diferenciar entre clases múltiples. La categoría que tiene el menor
+desempeño en la clasificación corresponde a \emph{Robo a Unidades
+  Económicas}, que obtiene el 0.79. Es decir que 79 de cada 100 casos
+se clasifican correctamente. Su principal confusión es con \emph{Robo
+  a Domicilio} en un valor de 0.10 (i.e. 10 de cada 100 casos se
+confunden con Robo a Domicilio pero son en realidad Robo a Unidades
+económicas)
+
+
+
+\begin{figure*}[!t]
+\centering
+\subfloat[Loss]{\includegraphics[width=\textwidth]{imgs/secondModelLoss.png}
+\label{fig:loss92}}
+\hfil
+\subfloat[Accuracy]{\includegraphics[width=\textwidth]{imgs/secondModelFineTuningTrain.png}
+\label{fig:train92}}
+\caption{Entrenamiento del Modelo de Machine Learning Clasificación de Texto en Modalidad Fine Tuning}
+\label{fig: results}
+\end{figure*}
+
+\begin{table}[!t]
+% increase table row spacing, adjust to taste
+\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+\caption{Rendimiento del clasificador}
+\label{tab:fscoreModel2}
+\centering
+% Some packages, such as MDW tools, offer better commands for making tables
+% than the plain LaTeX2e tabular which is used here.
+\begin{tabular}{ccccc}
+
+\hline
+         class &  precision  &  recall & f1-score &  support \\ \hline
+
+           Robo a Unidades Económicas        &  \numprint{0.78}    &  \numprint{0.79}    &  \numprint{0.78}  &  \numprint{297} \\ 
+           Robo de Carros                    &   \numprint{0.95}    &  \numprint{0.88}    &  \numprint{0.92}  &  \numprint{363} \\
+           Robo de Motos                     &   \numprint{0.95}    &  \numprint{0.93}    &  \numprint{0.94}  &  \numprint{392} \\
+           Robo de Bienes, Accesorios y \dots &   \numprint{0.85}    &  \numprint{0.92}    &  \numprint{0.88}  & \numprint{663} \\
+           Robo a Domicilio                  &   \numprint{0.87}    &  \numprint{0.89}    &  \numprint{0.88}  &  \numprint{663} \\
+           Robo a Personas                   &   \numprint{0.94}    &  \numprint{0.92}    &  \numprint{0.93}  &  \numprint{1671} \\ \hline
+
+          accuracy                           &     {} &    {}   &  \numprint{0.90}  &   \numprint{4000} \\ 
+          macro avg                          &     \numprint{0.89} &    \numprint{0.89}   &  \numprint{0.89}  &   \numprint{4000} \\ 
+          weighted avg                       &   \numprint{0.90}    &  \numprint{0.90} & \numprint{0.90}     & \numprint{4000} \\ \hline
+%  samples avg       0.80      0.80      0.80      4000
+
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/FineTuning10_epochs.png}
+    \caption{Matriz de Confusión del modelo FT}
+    \label{fig:matconfusion}
+  \end{figure}
+  
+\subsection{Phase 3 Fine Tuning on Extended Taxonomy Dataset Results}
+\label{sec:phase-3-extended-dataset-results-ft}
+
+Sobre el conjunto de datos de prueba se realiza el cómputo de las
+métricas de desempeño del clasificador según los valores de
+\emph{precision}, \emph{recall}, \emph{accuracy} y \emph{f1-score},
+resultados que se presentan en la Tabla
+\ref{tab:reporteClasificacionModeloDelitosValidados}. También se
+computa la \emph{matriz de confusión normalizada}, misma que se
+presenta en la Figura \ref{fig:matConfDelitosValidados}.
+
+\subsubsection{Reporte del Clasificador}
+\begin{table}[htbp]
+    \caption{Rendimiento del clasificador de Delitos Validados}
+    \label{tab:reporteClasificacionModeloDelitosValidados}
+    \centering
+    \scriptsize
+    \begin{tabularx}{\textwidth}{p{0.4\textwidth}XXXX}
+        \toprule
+         & precision & recall & f1-score & support \\
+        \midrule
+        ROBO A INSTITUCIONES EDUCATIVAS & 0.925995 & 0.946599 & 0.936184 & 1573 \\
+        ROBO DE MOTOS & 0.985211 & 0.988317 & 0.986762 & 10785 \\
+        ROBO EN INSTITUCIONES PUBLICAS & 0.724528 & 0.474074 & 0.573134 & 405 \\
+        ROBO DE CARROS & 0.967669 & 0.980198 & 0.973893 & 7878 \\
+        ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES & 0.750000 & 0.752688 & 0.751342 & 279 \\
+        ROBO A PERSONAS & 0.969847 & 0.972298 & 0.971071 & 37976 \\
+        ROBO A UNIDADES ECONOMICAS & 0.878871 & 0.893877 & 0.886311 & 6794 \\
+        ROBO A DOMICILIO & 0.944779 & 0.952335 & 0.948542 & 15504 \\
+        ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS & 0.977752 & 0.968340 & 0.973023 & 14024 \\
+        ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS & 0.965197 & 0.983452 & 0.974239 & 846\\
+        OTROS ROBOS & 0.817738 & 0.766006 & 0.791027 & 3936 \\ \hline
+        accuracy & {} & {} & 0.954610 & 100000 \\
+        macro avg & 0.900690 & 0.879835 & 0.887775 & 100000 \\
+        weighted avg & 0.954050 & 0.954610 & 0.954175 & 100000 \\
+        \bottomrule
+    \end{tabularx}
+    
+\end{table}
+% \subsubsection{Matriz de Confusión Normalizada}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{imgs/Matriz de Confusion Normalizada DelitosValidados2.png}
+    \caption{Matriz de Confusión Modelo Delitos Validados}
+    \label{fig:matConfDelitosValidados}
+\end{figure}
+
 \section{Conclusions}\label{chap:conclusion}
 Transformer-based models have achieved improved performance in natural
 language processing problems; currently being the state of the art. In
@@ -1800,20 +2768,90 @@ automate tasks, and improve the quality of work carried out in
 strategically important institutions such as the Fiscalía General del
 Estado.
 
-\section{Future Work}\label{chap:futuro}
+% phase 2 conclusions
+La utilización de FT permitió mejorar el rendimiento del modelo
+anterior en un 10\%. No obstante, se observa que existe un margen
+cercano al sobre-ajuste del modelo. Esto es consecuencia de que el
+mismo fue entrenado con una cantidad menor de datos debido a las
+limitaciones del hardware disponible. Los resultados muestran que el
+modelo, si bien entrenado en una cantidad menor de datos
+$|d_{train}^T|<|D_{train}^T|$, obtiene resultados razonables. En
+efecto, el modelo no presenta predicciones basadas en el desbalance de
+las categorías; observando que no se ha realizado el balance de
+categorías en ninguno de los entrenamientos todavía. Es más, la
+aplicación sobre el dataset del mes de junio, que contiene información
+que el modelo no ha usado para ser entrenado, muestra un desempeño
+similar al obtenido en el entrenamiento.
 
-As future work, it is proposed to train the model in two scenarios:
+De aquí que se puede estimar que el modelo puede ser utilizado a fin
+de facilitar las actividades tanto de la \printInicialesComision\,
+como de un usuario SAI. Sin embargo, hay interrogantes que se pueden
+seguir investigando a fin de mejorar el modelo: ¿qué incidencia tiene
+en el error de clasificación la incorrecta digitación por parte del
+usuario SAI? ¿se puede entrenar un tokenizador ajustado a la
+literatura de la Fiscalía General del Estado? ¿existe equivocación en
+las etiquetas obtenidas por la \printInicialesComision? En machine
+learning, en general se ha observado que las predicciones dadas por el
+modelo corrigen la clasificación manual realizada y debida al error
+humano que es pre-existente y no descartable. Pues, por su parte el
+modelo, al fundamentarse en redes neuronales convolucionales, se
+convierte en un extractor de componentes y un identificador de
+patrones.
 
-\begin{enumerate}
-\item Training with a data subset $d^T$ with balanced records per
-  class.
-\item Training with the total dataset $D^T$ without class balancing.
-\item Training with the total dataset $D^T$ with class balancing.
-\end{enumerate}
+La posibilidad de utilizar un modelo de machine learning en el
+procesamiento de lenguaje natural para la Fiscalía General del Estado
+permitirá optimizar recursos de tiempo y administrativos; pues, por su
+parte la tarea de etiquetar manualmente la variable delito
+seguimiento, puede reformularse en cuanto a su frecuencia o cantidad
+de registros analizados. De igual manera, se presenta en el informe el
+desarrollo de una Aplicación Web que permite obtener la predicción de
+la etiqueta consultando el modelo entrenado. Esto abre la posibilidad
+de desarrollar un API para el consumo del modelo por parte del
+funcionario SAI.
+% phase 3
+\begin{itemize}
+    \item El nuevo modelo de \emph{delitos validados} mejora el
+desempeño de precisión alcanzando un valor de \numprint{0.9546}. En
+consequencia, tiene un mejor rendimiento que el modelo de
+\emph{delitos seguimiento}
+    \item A nivel computacional se ha probado con dos técnicas
+diferentes y los textos del parte policial y del relato siaf son
+similares.
+    \item El desempeño mejorado del modelo de \emph{delitos
+validados}, que predice 11 categorías, se debe a, como se había
+señalado, que se pudo entrenar con una mayor cantidad de
+ejemplos. Gracias al uso de TPU.
+    \item Entre las diferentes métricas de \emph{precision},
+\emph{recall} y \emph{f1-score} se observa que existe un rendimiento
+adecuado del clasificador en las distintas categorías.
+    \item La categoría con el desempeño más bajo corresponde a
+\say{ROBO EN INSTITUCIONES PUBLICAS}. Sin embargo, como puede
+observarse en Tabla \ref{tab:GeneracionDataset}, es la segunda menor
+en frecuencia con \numprint{4560} registros luego de \say{ROBO A
+ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES} que tiene
+\numprint{3087}.
+    \item De la Matriz de Confusión puede observarse que existe una
+confusión aproximadamente del \numprint{29}\% entre \say{ROBO EN
+INSTITUCIONES PUBLICAS} y \say{OTROS ROBOS}. Sin embargo, esta puede
+ser evidencia de que se deba revisar manualmente la categoría de
+\say{OTROS ROBOS} o en su defecto eliminar esta categoría e integrarla
+en \emph{OTROS ROBOS}.
+\end{itemize}
 
-Additionally, a testing phase will begin for the currently trained
-model, which will be contrasted with the manual classification carried
-out by the Comisión.
+% \section{Future Work}\label{chap:futuro}
+
+% As future work, it is proposed to train the model in two scenarios:
+
+% \begin{enumerate}
+% \item Training with a data subset $d^T$ with balanced records per
+%   class.
+% \item Training with the total dataset $D^T$ without class balancing.
+% \item Training with the total dataset $D^T$ with class balancing.
+% \end{enumerate}
+
+% Additionally, a testing phase will begin for the currently trained
+% model, which will be contrasted with the manual classification carried
+% out by the Comisión.
 
 \section*{Acknowledgments}
 
