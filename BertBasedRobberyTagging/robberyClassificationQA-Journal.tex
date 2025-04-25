@@ -2041,7 +2041,7 @@ $d^T_{test}:\numprint{4000} \subset D^T_{test}$.
 \hline
 Parameter & Value\\
 \hline
- Loss & Categorical Cross Entropy\\
+Loss & Categorical Cross Entropy\\
 Metrics & Categorical Accuracy \\
 Optimizer & Adam \\
 Learning rate & $2 \times 10^{-4}$ \\
@@ -2053,33 +2053,30 @@ callback & 5 epochs \\
 
 \subsection{Phase 2: Fine-Tuning on Dataset $D_{\kappa=6}$}
 \label{sec:phase-2:-finetuningBert}
-La técnica de TL utiliza los pesos entrenados de un modelo de Deep
-Learning en otro $\mathcal{D}^{S}$ con una tarea de aprendizaje
-original $\mathcal{T}^{S}$. En la Sección \ref{sec:phase-1:-baseline} se
-presentó la arquitectura utilizada para adaptar la clasificación
-original $\mathcal{T}^{S}$ a fin de obtener el Modelo $\phi^T(\cdot)$
-que permita realizar la clasificación de las etiquetas de de
-\textbf{delito seguimiento} para las noticias del delito de robos. En
-este sentido, como expresa \eqref{eq:Transfer2}, los pesos entrenados
-en la tarea original $\mathcal{W}^S$ no son adaptados de ninguna forma
-en la nueva tarea $\mathcal{W}^T$. En consecuencia, el Modelo
-$\phi^S(\cdot)$ se usa como un extractor de características. En la
-Sección \ref{chap:resultados} se observó que el rendimiento del
-clasificador, entrenado por TL para predecir la etiqueta de delitos
-seguimiento, alcanzó un 80\% en promedio de accuracy.
+The TL technique uses the trained weights of a Deep Learning model on
+another $\mathcal{D}^{S}$ with an original learning task
+$\mathcal{T}^{S}$. Section \ref{sec:phase-1:-baseline} presented the
+architecture used to adapt the original classification
+$\mathcal{T}^{S}$ to obtain Model $\phi^T(\cdot)$ for classifying
+\textbf{delito seguimiento} (follow-up crime) labels in robbery news
+articles. As expressed in \eqref{eq:Transfer2}, the weights trained on
+the original task $\mathcal{W}^S$ are not adapted in any way for the
+new task $\mathcal{W}^T$. Consequently, Model $\phi^S(\cdot)$ is used
+as a feature extractor. Section \ref{chap:resultados} shows that the
+classifier's performance, trained via TL to predict follow-up crime
+labels, achieved an average accuracy of 80\%.
 
-De acuerdo a \textcite{tunstall2022natural} el realizar la operación
-de \emph{Fine Tuning} (ajuste fino) de todos los pesos originales del
-modelo permite adaptar los estados ocultos (\emph{hidden states})
-durante el entrenamiento para disminuir la pérdida del modelo e
-incrementar, por tanto, el desempeño del clasificador en la nueva
-tarea $\phi^T(\cdot)$. \textcite{falconi2020transfer} define a FT como
-el proceso que mejora el aprendizaje de una función objetivo
-$\mathcal{Y}^T = \ypredtarget(\mathcal{I}^T)$ en un dominio objetivo
-$\mathcal{D}^T$ con respecto a una tarea objetivo $\mathcal{T}^T$ a
-través del re-entrenamiento de $r$ capas del modelo original
-$\mathcal{Y}^S = \ypredsource(\mathcal{I}^S)$ de $L$ capas entrenado
-en un dominio original $\mathcal{D}^S$, en una tarea original
+According to \textcite{tunstall2022natural},
+performing \emph{Fine Tuning} (FT) of all the model's original weights
+allows adaptation of the hidden states during training to reduce loss
+and thereby increase classifier performance in the new task
+$\phi^T(\cdot)$. \textcite{falconi2020transfer} defines FT as the
+process that improves the learning of a target function
+$\mathcal{Y}^T = \ypredtarget(\mathcal{I}^T)$ in a target domain
+$\mathcal{D}^T$ for a target task $\mathcal{T}^T$ by retraining $r$
+layers of the original model
+$\mathcal{Y}^S = \ypredsource(\mathcal{I}^S)$ with $L$ layers, trained
+on an original domain $\mathcal{D}^S$ and original task
 $\mathcal{T}^S$.
 
 \begin{equation}
@@ -2088,70 +2085,57 @@ $\mathcal{T}^S$.
     \label{eq:finetuningLenin}
 \end{equation}
 
-En \eqref{eq:finetuningLenin} se representa la definición de FT de
-manera simbólica. Donde $\mathcal{A}$ representa el proceso de FT
-sobre el modelo original de $L$ capas y $\gamma = L-r$ es la capa
-desde donde se procede a realizar el ajuste fino del modelo. Un caso
-particular sería el ajuste completo del modelo: $r=L$ y por tanto
-$\gamma=0$. Este es el caso planteado por
-\citeauthor{tunstall2022natural} y recomendado en su texto
-\citetitle{tunstall2022natural}. Si bien la definición presentada por
-\textcite{falconi2020transfer} permite ajustar sólo algunas de las
-capas del modelo original, una consecuencia de hacer $r=L$ es que no
-se requiere la adición de capas a la salida del modelo para ajustar su
-respuesta. En consecuencia sólo se afecta la cantidad de neuronas que
-corresponden con las clases a predecir por el nuevo modelo. Por tanto,
-considerando que \textcite{tunstall2022natural} afirman que se puede
-mejorar el desempeño del clasificador con realizar el ajuste de los
-estados ocultos del modelo completo, la operación de FT usada será
+Equation \eqref{eq:finetuningLenin} symbolically represents the FT
+definition, where $\mathcal{A}$ denotes the FT process on the original
+$L$-layer model, and $\gamma = L-r$ is the layer from which
+fine-tuning starts. A special case is full model tuning: $r=L$ implies
+$\gamma=0$, as recommended by \citeauthor{tunstall2022natural} in
+\citetitle{tunstall2022natural}. While
+\textcite{falconi2020transfer}'s definition allows tuning only some
+layers, setting $r=L$ eliminates the need for additional output
+layers, affecting only the neurons corresponding to the new
+classes. Thus, following \textcite{tunstall2022natural}'s assertion
+that tuning all hidden states improves performance, the FT operation
+used is:
+
 
 \begin{equation}\label{eq: finetuningTunstall}
     \mathbb{F_{T}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T})\right)
 \end{equation}
 
-Donde la omisión de $\Bigr\rvert_{0}^{L}$ implica que el modelo
-$\ypredsource$ es ajustado en su totalidad. Es decir, que la
-inicialización de los pesos parte con los valores $\mathcal{W}^S$ y
-por tanto $\mathcal{W}^S\rightarrow \mathcal{W}^T$. Además se tendría
-que
+Here, omitting $\Bigr\rvert_{0}^{L}$ implies full model adjustment,
+initializing weights with $\mathcal{W}^S$ values (i.e.,
+$\mathcal{W}^S\rightarrow \mathcal{W}^T$). Additionally:
 
 \begin{align}\label{eq:finetuningOut}
     \mathcal{A} = FC_{6}
 \end{align}
 
 
-A fin de mejorar el aprendizaje del modelo sobre los datos de las
-denuncias de robo y su relación con las etiquetas de delito
-seguimiento, usadas por la Comisión, se realizan las siguientes
-operaciones. Estas operaciones se basan en la hipótesis planteada por
-\textcite{tunstall2022natural} de que el FT aplicado al modelo debe
-mejorar los resultados de clasificación con respecto del TL antes
-aplicado.
+To improve model learning on robbery complaint data and their relation
+to follow-up crime labels used by the Comisión, the following steps
+were taken, based on \textcite{tunstall2022natural}'s hypothesis that
+FT improves classification over TL:
 
 \begin{enumerate}
-    \item Carga de los datasets $D^T_{train}$, $D^T_{valid}$, $D^T_{test}$
-    \item Tokenización de los datasets considerando una secuencia
-      máxima de \numprint{300} y utilizando el modelo tokenizador
-      \emph{distilbert-base-multilingual-cased}
-    \item Resampling de los datasets (debido a limitaciones de hardware): Para el entrenamiento se utilizan $|d_{train}^T| = \numprint{20000}$ muestras, la validación $|d_{valid}^T| = \numprint{4000}$ y el testeo $|d_{test}^T| = \numprint{4000}$.
-    \item Obtención de los tensores de entrada, máscara y los tensores
-      de clasificación en one-hot encoding.
-    \item Carga del modelo pre-entrenado $\ypredsource(\cdot)$
-    \item Se obtiene el modelo de ajuste fino aplicando \eqref{eq:
-        finetuningTunstall}
-    \item Se compila el modelo con los parámetros de entrenamiento
-      presentados en la Tabla \ref{tab:trainingParam2}.
-    \item Se ejecuta el entrenamiento en Google Colab.
-    \item Respaldo de los pesos de entrenamiento.
+    \item Loading datasets $D^T_{train}$, $D^T_{valid}$, $D^T_{test}$
+    \item Tokenizing datasets with a maximum sequence length of 300 using the \emph{distilbert-base-multilingual-cased} tokenizer
+    \item Resampling datasets (due to hardware constraints): Training uses $|d_{train}^T| = \numprint{20000}$ samples, validation $|d_{valid}^T| = \numprint{4000}$, and testing $|d_{test}^T| = \numprint{4000}$.
+    \item Generating input tensors, masks, and one-hot encoded classification tensors.
+    \item Loading the pre-trained model $\ypredsource(\cdot)$
+    \item Applying FT via \eqref{eq: finetuningTunstall}
+    \item Compiling the model with parameters in Table \ref{tab:trainingParam2}
+    \item Training on Google Colab
+    \item Backing up trained weights
 \end{enumerate}
 
 \begin{table}
-    \caption{Parámetros de Entrenamiento Mejora del Modelo}
+    \caption{Improved Model Training Parameters}
     \label{tab:trainingParam2}
     \centering
     \begin{tabular}{cc}
     \hline
-    Parámetro & Valor\\
+    Parameter & Value\\
     \hline
      Loss & Sparse Categorical Cross Entropy\\
     Metrics & Sparse Categorical Accuracy \\
@@ -2167,245 +2151,168 @@ aplicado.
 \subsection{Phase 3: Scaling to Dataset $D_{\kappa=11}$}
 \label{sec:phase-3:-scaling-fullmodel}
 
-El trabajo descrito en la Sección \ref{sec:phase-2:-finetuningBert}
-indica que la técnica de \emph{Fine Tuning} permite mejorar el
-rendimiento del clasificador. Partiendo de este fundamento, se plantea
-ahora la necesidad de automatizar la predicción de la etiqueta de
-\emph{delitos validados}. Esta etiqueta propuesta por la
-\printInicialesComision\, dispone de una cantidad mayor de
-desagregaciones de robo. Sin embargo, no han sido estandarizadas. Por
-esta razón, en reuniones sostenidas con el INEC se llegó al consenso
-presentado en la Tabla \ref{tab:listofRobberiesValidados} al respecto
-de las categorías que utilizará delitos validados para el modelo de
-machine learning.
+The results in Section \ref{sec:phase-2:-finetuningBert} show that FT
+improves classifier performance. Building on this, we now automate the
+prediction of \emph{delitos validados} (validated crimes) labels
+proposed by the \printInicialesComision, which include more robbery
+subcategories. The new categories are presented in Table
+\ref{tab:listofRobberiesValidados}. A total of 11 categories were
+established. Among those categories, the previous 6 categories used
+are present. % improve this writing
 
-En esta sección se describe la Metodología y los resultados obtenidos
-para la realización de las mejoras al modelo de predicción de
-desagregaciones de Robo con respecto de la etiqueta de \emph{delitos
-  validados}. Para esto fue necesario realizar la generación de un
-nuevo dataset con relatos tanto del parte policial como los
-registrados en Fiscalía. Esto permitió incrementar la variabilidad de
-datos con los cuales entrenar al modelo. También se procedió a
-analizar la similitud computacional a nivel de \emph{embeddings}
-(i.e. representaciones vectoriales) del texto del parte policial y el
-registrado en SIAF. A fin de maximizar el entrenamiento sobre la mayor
-cantidad posible de datos se recurrió a utilizar \emph{Tensor
-  Processing Units}(TPU). Estas acciones han permitido incrementar las
-categorías a predecir e inclusive mejorar la precisión de la
-predicción del modelo.
+This section describes the methodology and results for improving
+robbery subcategory prediction under \emph{delitos validados}. A new
+dataset was created using police reports and Fiscalía General del
+Estado (FGE) records from SIAF to increase data variability. Textual
+similarity analysis at the embedding level between police and SIAF
+reports was performed. Training utilized \emph{Tensor Processing
+  Units} (TPUs) to handle increased categories and improve
+precision. Dataset generation is described in Section
+\ref{sec:expand-taxon-d_validados}.
 
-\subsubsection{Delitos Validados}
-Conforme a las reuniones mantenidas entre Fiscalía y el INEC, se
-definen las categorías indicadas en la Tabla
-\ref{tab:listofRobberiesValidados} para la predicción de delitos
-validados; donde la categoría de \say{OTROS ROBOS} contendrá las
-categorías anteriores de: ROBO A INSTITUCIONES DE SALUD, ROBO EN EJES
-VIALES O CARRETERAS, ROBO A ENTIDADES FINANCIERAS.
+\subsubsection{Validated Crimes Categories}
+
+Per agreements between Fiscalía and INEC, Table
+\ref{tab:listofRobberiesValidados} defines the validated crime
+categories. The \say{OTROS ROBOS} (Other Robberies) category includes:
+ROBO A INSTITUCIONES DE SALUD (Healthcare Institution Robbery), ROBO
+EN EJES VIALES O CARRETERAS (Road/Highway Robbery), and ROBO A
+ENTIDADES FINANCIERAS (Financial Institution Robbery).
 
     \begin{table}[htbp]
     \centering
     \scriptsize
     \begin{tabularx}{\textwidth}{|c|X|c|X|}
         \hline
-        \textbf{Idx} & \textbf{Tipo de Robo} & \textbf{idx} & \textbf{Tipo de Robo} \\
+        \textbf{Idx} & \textbf{Robbery Type} & \textbf{idx} & \textbf{Robbery Type} \\
         \hline
-        0 & ROBO A INSTITUCIONES EDUCATIVAS & 6 & ROBO A UNIDADES ECONOMICAS \\
-        1 & ROBO DE MOTOS & 7 & ROBO A DOMICILIO \\
-        2 & ROBO EN INSTITUCIONES PUBLICAS & 8 & ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS \\
-        3 & ROBO DE CARROS & 9 & ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS \\
-        4 & ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES & 10 & OTROS ROBOS \\
-        5 & ROBO A PERSONAS & & \\
+        0 & ROBO A INSTITUCIONES EDUCATIVAS\footnote{Educational Institution Robbery} & 6 & ROBO A UNIDADES ECONOMICAS\footnote{Economic Unit Robbery} \\
+        1 & ROBO DE MOTOS\footnote{Motorcycle Robbery} & 7 & ROBO A DOMICILIO\footnote{Home Robbery} \\
+        2 & ROBO EN INSTITUCIONES PUBLICAS\footnote{Public Institution Robbery} & 8 & ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS\footnote{Vehicle Goods/Accessories Robbery} \\
+        3 & ROBO DE CARROS\footnote{Car Robbery} & 9 & ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS\footnote{Watercraft Robbery} \\
+        4 & ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES\footnote{Collective/Organization Robbery} & 10 & OTROS ROBOS\footnote{Other Robberies} \\
+        5 & ROBO A PERSONAS\footnote{Person Robbery} & & \\
         \hline
     \end{tabularx}
-    \caption{Delitos Validados}
+    \caption{Validated Crimes}
     \label{tab:listofRobberiesValidados}
 \end{table}
 
 
-Se debe notar que en un reporte anterior denominado \say{Delitos
-  Validados}, redactado el 03/10/2023 y socializado a las autoridades
-relacionadas se indicó que:
-
-\say{
-\begin{enumerate}
-\item Se observa que \emph{delitos\_validados} posiblemente contiene
-  más categorías que las definidas en los manuales respectivos.
-    \item Existen categorías ambiguas tales como: \emph{VARIOS},
-      \emph{NO APLICA}, \emph{ELIMINAR(DUPLICADOS)}, \emph{ELIMINAR},
-      \emph{OTROS ROBOS}
-    \item Existen tipos penales dentro de las categorías de
-      desagregación de delitos\_validados e.g. \emph{Estafa, Hurto,
-        Asesinato, Extorsión, Violación, etc.}
-    \item Existen valores que no se corresponden con el Código
-      Integral Penal Ecuatoriano (COIP) e.g. \emph{Plagio o Secuestro
-        personas}
-    \item Al ser \emph{delitos\_validados} una desagragegación del
-      Robo, porque el COIP no contiene dichas desagregaciones y las
-      mismas obedecen o encuentran su razón en el marco de la
-      Comisión, no es coherente que la misma contenga tipos penales.
-\end{enumerate}
-}
-
-En el mismo reporte se manifiesta que \say{se partió de asumir que las
-  clasificaciones entregadas por la Comisión son el valor verdadero
-  con respecto del cual se evalúa el modelo} y que \say{la calidad del
-  modelo depende de la calidad de sus datos de entrenamiento}, por lo
-que en las reuniones, se ha indicado que es \say{deseable que los
-  datos etiquetados estén verificados}; sobre todo en las categorías
-ambiguas y en etiquetas que no tienen sentido o justificación
-(e.g. ELIMINAR (DUPLICADOS), ELIMINAR, OTROS ROBOS, NO APLICA,
-VARIOS). De igual manera, se debe observar que el disponer de modelos
-de machine learning exige el planteamiento de Operaciones de Machine
-Learning (i.e. MLOPs por sus siglas en inglés), que permitan
-actualizar los modelos y su continuo mejoramiento y adecuación a los
-datos cambiantes.
-
-Es importante notar que no se ha realizado una revisión de la etiqueta
-\say{OTROS ROBOS} de las noticias del delito anteriores al acuerdo que
-estipula que las categorías de La categoría de \say{Otros Robos}
-contendrá las categorías ROBO A INSTITUCIONES DE SALUD, ROBO EN EJES
-VIALES O CARRETERAS, ROBO A ENTIDADES FINANCIERAS, por lo que por
-parte de Fiscalía se ha indicado que se recomienda la revisión de la
-etiqueta \emph{OTROS ROBOS}.
 
 
-\subsubsection{Formulación del Problema}
-Se propone entrenar un modelo de Machine Learning que permita
-\emph{aproximar} una función paramétrica $f_\theta$ que a partir de un
-dato de entrada $\mathbf{x}_i \in \mathbf{\mathcal{X}}$ devuelva la
-categoría $k_j$ a la que pertenece dicho dato. Donde
-$k_j \in \mathcal{Y}$ y $\mathcal{Y} \in \mathbb{R}^{11}$
+\subsubsection{Problem Formulation}
+We aim to train an ML model to approximate a parametric function
+$f_\theta$ mapping input $\mathbf{x}_i \in \mathbf{\mathcal{X}}$ to
+category $k_j \in \mathcal{Y}$, where
+$\mathcal{Y} \in \mathbb{R}^{11}$ (see Table \ref{tab:
+  metricasorig}). Text is tokenized using the pre-trained model:
 
 \begin{equation}\label{eq:clasificacion}
   f_\theta: \mathbf{\mathcal{X}} \longrightarrow \mathbf{\mathcal{Y}}
 \end{equation}
 
-Sobre el relato se aplica la Tokenización (i.e. \emph{encoding}) del
-modelo pre-entrenado
+For a narrative $relato_i \in \mathbb{D}^{PN}$ (or
+$\mathbb{D}^{FGE}$), the tokenization step produces:
 
 \begin{equation}
-  \mathbf{x}_i = \Gamma(relato_i)
+(\boldsymbol{\nu}_i, \boldsymbol{\tau}_i) = \Tokenize(relato_i)
 \end{equation}
 
-Y $k_j$ pertenece a las categorías indicadas en la Tabla \ref{tab: metricasorig}.
+where the notation follows Equations \ref{eq:tokenization}-\ref{eq:encoding} in Section \ref{chap:metodos}. The final classification assigns $relato_i$ to category $k_j$ from Table \ref{tab: metricasorig}.
 
-Para el resto del documento se asume la siguiente nomenclatura:
+For the rest of the section consider the following nomenclature:
 
 \begin{itemize}
-      \item $\mathbb{D}^{PN}$: Dataset conformado por relatos de la Policía Nacional
+\item $\mathbb{D}^{PN}$: Dataset from Policía Nacional narratives
+\item $\mathbb{D}^{FGE}$: Dataset from Fiscalía General del Estado narratives 
+\end{itemize}
 
-      \item $\mathbb{D}^{FGE}$: Datset conformado por relatos de la
-      Fiscalía General del Estado obtenidos desde SIAF
- \end{itemize}
-
-\subsubsection{Análisis de Similitud de Texto}
-Debido a la cantidad de información reunida para las mejoras para el
-modelo de predicción de las desagregaciones de \emph{delitos
-  validados}, hace falta poder de cómputo para calcular la similitud
-documental entre todos los registros obtenidos (más de 700 mil). Por
-esta razón se toma una muestra de \numprint{6000}, como se detalla en
-la metodología. La Figura \ref{fig:metodologiaSimilitudTexto} muestra
-un resumen de la metodología aplicada para la comparación documental
+\subsubsection{Text Similarity Analysis}
+Due to computational limits (over 700K records), a sample of 6,000 reports was analyzed. Figure \ref{fig:metodologiaSimilitudTexto} outlines the methodology:
 
 \begin{enumerate}
-\item Analizar la similitud documental de una muestra de relatos de
-  policía $\mathbb{D}^{PN}$ wrt. al relato de fiscalía
-  $\mathbb{D}^{FGE}$.
-\item Utilizar al menos dos técnicas distintas en naturaleza: 1)
-  word2vec, 2) Transformers
-\item Calcular el coseno de la similitud entre los embeddings i.e.:
-       
+    \item Compare document similarity between $\mathbb{D}^{PN}$ and $\mathbb{D}^{FGE}$ samples
+    \item Use two techniques: word2vec and Transformers
+    \item Compute cosine similarity between embeddings:
 \end{enumerate}
 
 \begin{equation}\label{eq:cosinesimilarity}         
-        \cos(\Gamma(x_i^{PN}), \Gamma(x_i^{FGE})) = \frac{\Gamma(x_i^{PN})\cdot\Gamma(x_i^{FGE})}{\lVert \Gamma(x_i^{PN}) \rVert\lVert \Gamma(x_i^{FGE}) \rVert}
+        \cos(\Gamma(x_i^{PN}), \Gamma(x_i^{FGE})) = \frac{\Gamma(x_i^{PN})\cdot\Gamma(x_i^{FGE})}{\|\Gamma(x_i^{PN})\|\|\Gamma(x_i^{FGE})\|}
 \end{equation}
+where $x_i^{PN} \in \mathbb{D}^{PN}$ and $x_i^{FGE} \in \mathbb{D}^{FGE}$
 
-Donde $x_i^{PN} \in \mathbb{D}^{PN}$ y $x_i^{FGE} \in \mathbb{D}^{FGE}$
-
-\paragraph{Metodología}
+\paragraph{Methodology}
 \begin{figure}
     \centering
     \includegraphics[scale=.75]{imgs/CosenoSimilitud.drawio.pdf}
-    \caption{Metodología para el cálculo de Similitud de Texto}
+    \caption{Text Similarity Calculation Methodology}
     \label{fig:metodologiaSimilitudTexto}
 \end{figure}
 
+Steps:
 \begin{enumerate}
-        \item Calcular la muestra $n$ a utilizar.
-        \item Tomar $n$ elementos aleatorios desde el conjunto de
-          datos de relatos $N$, si la cantidad de palabras es al menos
-          50: $E(w)\geq50$.
-        \item Definir los modelos o técnicas para el análisis del
-          texto: 1) word2vec, 2) Transformers
-        \item Obtener los \emph{embeddings} para cada par de relatos
-          de policía y fiscalía i.e.
-          $\Gamma(x_i^{PN}), \Gamma(x_i^{FGE})$ de acuerdo a cada
-          técnica seleccionar.
-        \item Obtener el coseno de similitud de acuerdo a \eqref{eq:cosinesimilarity}
-        \item Comparar resultados estadísticamente
-        \item Realizar comparación de las predicciones del Modelo
-          entrenado en \emph{delitos seguimiento} sobre relatos de
-          policía y fiscalía y comparar resultados de clasificación en
-          función de las métricas de clasificación.
+    \item Calculate sample size $n=6000$ (90\% confidence, 1.06\% margin of error)
+    \item Randomly select $n$ reports with $E(w)\geq50$ words
+    \item Generate embeddings using word2vec and Transformers
+    \item Compute cosine similarity via \eqref{eq:cosinesimilarity}
+    \item Statistically compare results
+    \item Compare classifier predictions on police vs. fiscal reports
 \end{enumerate}
 
-\paragraph{Cálculo de la Muestra}
+\paragraph{Sample Size Calculation}
 \begin{equation*}
         n =\frac{z^2p(1-p) }{\epsilon^2N+z^2p(1-p)}N
 \end{equation*}
 
-Donde:\\
+Where:\\
 $N = \numprint{785513}$ \\
 $p = \numprint{0.5}$ \\
 $z = \numprint{1.65}$  \\
-$\epsilon = \numprint{1.06}$\% \\
+$\epsilon = \numprint{1.06}\%$ \\
 $n = \numprint{6012} \approx \numprint{6000}$
 
-Los resultados del cálculo de la muestra con las variables obtenidas
-se pueden consultar en línea en el
-\href{https://www.calculator.net/sample-size-calculator.html?type=1&cl=90&ci=1.06&pp=50&ps=785513&x=Calculate}{Enlace
-  a la Calculadora de la Muestra}. En consecuencia, se requiere de una
-muestra de \numprint{6000} registros para presentar resultados con una
-confianza del \numprint{90}\% de un total de \numprint{785513}.
+The results of the sample size calculation with the obtained variables
+can be consulted online at the
+\href{https://www.calculator.net/sample-size-calculator.html?type=1&cl=90&ci=1.06&pp=50&ps=785513&x=Calculate}{Sample
+  Calculator Link}. Consequently, a sample of \numprint{6000} records
+is required to present results with \numprint{90}\% confidence from a
+total of \numprint{785513}.
 
-\paragraph{Obtención de Embeddings}
-A fin de que los sistemas computacionales puedan procesar texto, es
-necesario convertir el texto en una representación numérica vectorial
-(i.e. \emph{embedding}). La ecuación \eqref{eq:encoding} representa
-este proceso. A fin de dotar de objetividad a este experimento, se
-plantea utilizar dos técnicas diferentes en naturaleza. Siendo las
-elegidas: \emph{word2vec} y \emph{transformers}.
-
+\paragraph{Obtaining Embeddings}  
+For computational systems to process text, it is necessary to convert
+the text into a numerical vector representation (i.e.,
+\emph{embedding}). Equation \eqref{eq:encoding} represents this
+process. To ensure objectivity in this experiment, two fundamentally
+different techniques are proposed: \emph{word2vec} and
+\emph{transformers}.
 
 \begin{itemize}
-\item Word2vec: es una técnica de procesamiento de lenguaje natural
-  que permite la representación vectorial de las palabras en un
-  corpus. Utiliza una red neuronal de 3 capas que se entrena sobre el
-  corpus.Así, las palabras que comparten contextos similares tendrán
-  vectores cercanos en el espacio vectorial. De esta manera Word2vec
-  permite representar palabras como vectores numéricos en un espacio
-  de baja dimensión.
-  \item Transformers: Los transformers son modelos de aprendizaje
-      profundo que utilizan la atención para capturar las relaciones
-      entre las palabras de un texto. Para obtener embeddings con
-      transformers, se puede usar una capa de salida que proyecte las
-      salidas de la atención a un espacio de menor dimensión. Así, se
-      obtienen embeddings que reflejan las características semánticas
-      y sintácticas de las palabras en el texto. En este caso
-      particular se ha utilizado el modelo de \modelohuggingface.
+\item \textbf{Word2vec}: A natural language processing technique that
+  enables vector representation of words in a corpus. It uses a
+  3-layer neural network trained on the corpus. Words that share
+  similar contexts will have vectors close to each other in the vector
+  space. Thus, Word2vec allows representing words as numerical vectors
+  in a low-dimensional space.
 
+\item \textbf{Transformers}: Transformers are deep learning models
+  that use attention mechanisms to capture relationships between words
+  in a text. To obtain embeddings with transformers, the hidden states
+  from the final layer of the model are typically used (or pooled), as
+  these encode contextualized semantic and syntactic features. In this
+  specific case, the \modelohuggingface model has been utilized.
 \end{itemize}
 
-\paragraph{Resultados de Similitud de Texto}
-En la Tabla \ref{tab:resultadosCosSim} se presentan los resultados
-estadísticos obtenidos del cómputo del coseno de similitud de las
-representaciones vectoriales de los relatos de policía y fiscalía
-usando dos técnicas diferentes (word2vec y transformers). Se puede
-observar que la media supera el 95\% de similitud.
+\paragraph{Text Similarity Results}
+Table \ref{tab:resultadosCosSim} presents the statistical results
+obtained from computing the cosine similarity of vector
+representations of police reports (relatos de policía) and Fiscalía
+General del Estado (FGE) reports using two different techniques
+(word2vec and transformers). It can be observed that the mean
+similarity exceeds 95\%.
 
 \begin{table}[htbp]
-\caption{Resultados de Similitud de Documentos}
+\caption{Document Similarity Results}
 \label{tab:resultadosCosSim}
 \centering
     \begin{tabular}{l l l}   
@@ -2424,26 +2331,22 @@ observar que la media supera el 95\% de similitud.
     
 \end{table}
 
-\subsubsection{Predicción de Etiquetas con Modelo Delitos Seguimiento}
-Adicionalmente, para analizar la similitud entre los relatos de
-policía y los de fiscalía se realizó la predicción del modelo antes
-entrenado de \emph{delitos seguimiento} independientemente sobre los
-diferentes conjuntos de relatos de acuerdo a
-\eqref{eq:prediccionRelatoPolicia} y
-\eqref{eq:prediccionRelatoFGE}. Los resultados de la evaluación de
-desempeño del clasificador indica que el modelo realiza una
-generalización adecuada de la comprensión del texto y no se ve
-afectado por el origen del relato. De ahí que los modelos basados en
-\emph{Transformers} adquieren un conocimiento de la semántica del
-texto y sus resultados son coherentes. De esta manera presunciones
-tales como que el rendimiento de los modelos entrenados por las
-técnicas aquí utilizadas se vean afectados si el relato es el parte
-policial o el registro SIAF quedan descartadas. La Figura
-\ref{fig:comparacionDelitosSeguimientoRelatos} muestra que las
-categorías predichas cumplen una tendencia similar. Con ínfima
-diferencia numérica, pues la diferencia global entre las predicciones
-del modelo de \emph{delitos seguimiento} $f_\theta$ sobre los relatos
-de policía y fiscalía es de \numprint{0.16}\%.
+\paragraph{Text similarity through Label Prediction with the Phase 2 Model}
+Additionally, to analyze the similarity between police reports and FGE
+reports, predictions were made using a pre-trained \emph{delitos
+  seguimiento} model independently on both report sets according to
+\eqref{eq:prediccionRelatoPolicia} and
+\eqref{eq:prediccionRelatoFGE}. The classifier's performance
+evaluation indicates that the model adequately generalizes text
+comprehension and is not affected by the report's origin. Thus,
+transformer-based models acquire knowledge of text semantics, and
+their results are coherent. This disproves assumptions that model
+performance would degrade depending on whether the input is a police
+report (parte policial) or an SIAF registry. Figure
+\ref{fig:comparacionDelitosSeguimientoRelatos} shows that predicted
+categories follow similar trends, with a minimal numerical difference:
+the global disparity between predictions on police and FGE reports is
+\numprint{0.16}\%.
 
 \begin{equation}\label{eq:prediccionRelatoPolicia}
     y^{PN} = f_\theta(\mathbf{\mathcal{X}}^{PN})
@@ -2456,67 +2359,70 @@ de policía y fiscalía es de \numprint{0.16}\%.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{imgs/prediccionDelitosSeguimientoPoliciaVsFiscalia.png}
-    \caption{Comparación de predicciones sobre relato de policía y fiscalía}
+    \caption{Prediction comparison between police reports and FGE reports}
     \label{fig:comparacionDelitosSeguimientoRelatos}
 \end{figure}
 
-Para el entrenamiento del modelo con la totalidad de los datos
-obtenidos se utilizó las ventajas del hardware de TPU (unidad de
-procesamiento tensorial), que es un tipo de procesador diseñado por
-Google para el aprendizaje automático con redes neuronales
-artificiales, especialmente con frameworks de \emph{deeplearning} como
-\emph{TensorFlow} o \emph{PyTorch}. La ventaja principal de este
-hardware es realizar operaciones matemáticas complejas en paralelo,
-con una memoria de alta velocidad y ancho de banda, y con una
-precisión mixta que optimiza el rendimiento y la eficiencia
-\parencite{torx2023, wikipedia_tpu}. La Figura
-\ref{fig:diagramaCajaRelatoTrainValidados} presenta un diagrama de
-cajas de la cantidad de palabras del relato según las distintas
-categorías de \emph{delitos validados}. Esta Figura permite tener una
-idea de los valores típicos y atípicos del conjunto de datos.
+For full-data training, we leveraged TPU (Tensor Processing Unit)
+hardware advantages. TPUs, designed by Google for machine learning
+with neural networks (especially \emph{deep learning} frameworks like
+\emph{TensorFlow} or \emph{PyTorch}), excel at parallelized complex
+mathematical operations, high-speed memory bandwidth, and
+mixed-precision optimization
+\cite{wang2019benchmarkingtpugpucpu}\cite{carrion2023explorationtpusaiapplications}. Figure
+\ref{fig:diagramaCajaRelatoTrainValidados} shows a boxplot of word
+counts per category for \emph{delitos validados}, providing insight
+into typical and atypical data distributions.
+
+% **Conceptual Feedback**:  
+% 1. **High Cosine Similarity**: The reported mean similarities (95.7\% for word2vec, 98.8\% for BERT) are unusually high. While transformers generally outperform word2vec, values this extreme may suggest:
+%    - Overly similar text pairs (e.g., templated reports with repetitive content).
+%    - Suboptimal embedding normalization or preprocessing.  
+%    *Suggestion*: Validate with a baseline (e.g., random embeddings) and report similarity distributions per category.
+
+% 2. **Performance Generalization Claim**: Stating that the model "is not affected by the report's origin" based on a 0.16\% prediction difference requires rigorous statistical testing (e.g., paired t-test) to confirm significance.
+
+% 3. **Citation Quality**: References to Wikipedia and unspecified sources (torx2023) weaken credibility. Replace with peer-reviewed publications or official technical documentation (e.g., Google's TPU whitepapers).
+
+% 4. **Evaluation Completeness**: Cosine similarity alone is
+% insufficient for assessing semantic equivalence. Complement with
+% task-specific metrics (e.g., accuracy/F1-score on a downstream task)
+% and qualitative examples.
 
 
-La Metodología seguida en el entrenamiento es la siguiente:
-
-% : https://es.wikipedia.org/wiki/Unidad_de_procesamiento_tensorial
-% : https://tensorprocessingunit.com/que-es-una-unidad-de-procesamiento-tensorial-y-como-funciona/
-
+The Methodology followed during training is as follows:
 
 \begin{enumerate}
   
-\item Carga de los datos de entrenamiento
-  $\mathbf{\mathcal{X}}^{Train}_{807468\times 2}$, validación,
-  $\mathbf{\mathcal{X}}^{Valid}_{201867\times 2}$ y testeo
+\item Loading of training data
+  $\mathbf{\mathcal{X}}^{Train}_{807468\times 2}$, validation data
+  $\mathbf{\mathcal{X}}^{Valid}_{201867\times 2}$, and test data
   $\mathbf{\mathcal{X}}^{Test}_{100000 \times 2}$
-  \item Tokenización de los relatos con una secuencia máxima de
-    \numprint{400} y empleando el modelo \modelohuggingface
-  \item Habilitación de Tensor Processing Unit
-  \item Configuración de earlystopping con $patience=10$, con
-    monitoreo del \emph{accuracy} de validación y retorno de los
-    mejores pesos.
-  \item Configuración de Hiperparámetros:
+\item Tokenization of narratives with a maximum sequence length of
+  \numprint{400} using the \modelohuggingface model
+\item Enabling Tensor Processing Unit (TPU)
+\item Early stopping configuration with $patience=10$, monitoring
+  validation \emph{accuracy}, and restoring the best weights
+\item Hyperparameter Configuration:
             \begin{itemize}
             \item
-              $Batch\_size = NumeroReplicas \times 16 = 8 \times 16 =
+              $Batch\_size = Replications \times 16 = 8 \times 16 =
               128$
-                \item El número de épocas se configura en 12
-                \item El optimizador a usar es Adam con \emph{learning rate} de $3\times 10^{-6}$
+                \item Number of epochs set to 12
+                \item Optimizer: Adam with a \emph{learning rate} of $3\times 10^{-6}$
             \end{itemize}
     \end{enumerate}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=.8]{imgs/cantidadPalabrasTrainDelitosValidadosBoxPlot.png}
-    \caption{Diagrama de Caja de Cantidad de Palabras por Categorías de Delitos Validados}
+    \caption{Box Plot of Word Count per Validated Crime Categories (e.g., Robo a personas, robo a unidades económicas, etc.)}
     \label{fig:diagramaCajaRelatoTrainValidados}
 \end{figure}
 
-La Figura \ref{fig:ModelosDelitosValidadosAccxEpoch} presenta las
-características del \emph{accuracy} (precisión) y la función de costo
-(\emph{loss}) en función del número de épocas de entrenamiento. Se
-observa que no existe un \emph{overfitting} del modelo a pesar del
-desbalance entre las distintas clases.
-
+Figure \ref{fig:ModelosDelitosValidadosAccxEpoch} shows the
+\emph{accuracy} and \emph{loss} as functions of training epochs. It is
+observed that there is no overfitting despite the class imbalance.
 % ==================== se desactiva porque no es compatible con subfig
 % ==================== de la IEEE
 % \begin{figure}[h!]
@@ -2537,17 +2443,17 @@ desbalance entre las distintas clases.
 
 \begin{figure}[h!]
     \centering
-    \subfloat[Accuracy por Época]{%
+    \subfloat[Accuracy per Epoch]{%
         \includegraphics[width=0.8\textwidth]{imgs/DelitosValidadosModeloEntrenamientoAccxEpoch.png}%
         \label{fig:accuracy_epoch}}
     \hfill
-    \subfloat[Loss por Época]{%
+    \subfloat[Loss per Epoch]{%
         \includegraphics[width=0.8\textwidth]{imgs/DelitosValidadosModeloEntrenamientoLossxEpoch.png}%
         \label{fig:loss_epoch}}
-    \caption{Accuracy y Loss de entrenamiento y validación}
+    \caption{Training and Validation Accuracy and Loss}
     \label{fig:ModelosDelitosValidadosAccxEpoch}
 \end{figure}
-    
+
 
 \section{Experimental Results}\label{chap:resultados}
 
@@ -2611,43 +2517,36 @@ f-score performance.
 \subsection{Phase 2 Fine Tuning on Basic Taxonomy Dataset Results}
 \label{sec:phase-2-dataset-results-ft}
 
-El desempeño durante el entrenamiento del modelo de FT, en las
-métricas de accuracy y loss,  se muestra en las Figuras
-\ref{fig:train92} y  \ref{fig:loss92}, respectivamente. Considerando
-un límite del 10\% para \emph{overfitting}, se puede observar que el
-modelo alcanza un \emph{accuracy} de 90\%. Sobre $d_{train}^T$, el
-accuracy obtenido es de \numprint{0.9922}; mientras que en
-$d_{valid}^T$ se obtiene \numprint{0.9068}. Con respecto al
-$d_{test}^T$ se obtiene \numprint{0.9028}. En este contexto, el modelo
-entrenado en FT incrementa su desempeño en un 10\% con respecto al
-modelo entrenado en TL; confirmando la hipotésis manifestada en
-\textcite{tunstall2022natural}.
+The training performance of the FT model in terms of accuracy and loss
+metrics is shown in Figures \ref{fig:train92} and \ref{fig:loss92},
+respectively. Considering a 10\% threshold for \emph{overfitting}, the
+model achieves an accuracy of 90\%. On $d_{train}^T$, the obtained
+accuracy is \numprint{0.9922}, while on $d_{valid}^T$, it reaches
+\numprint{0.9068}. For $d_{test}^T$, the accuracy is
+\numprint{0.9028}. In this context, the FT-trained model improves its
+performance by 10\% compared to the TL-trained model, confirming the
+hypothesis posited in \textcite{tunstall2022natural}.
 
-Sin embargo, el desempeño de un clasificador multicategórico, como es
-el caso de la predicción de la etiqueta de delitos seguimiento, no
-puede basarse únicamente en la medida de \emph{accuracy}; por cuanto,
-la práctica ha demostrado la conocida paradoja de la precisión
-(\emph{accuracy paradox}) \parencite{accuracyParadoxWikipedia2022}: en
-donde, si una de las clases es dominante, un modelo de bajo desempeño
-tiende a predecir según la clase dominante; incurriendo en un error
-que no es detectado por esta métrica. De ahí que se prefiere utilizar
-otras métricas tales como \emph{precision}, \emph{recall} o la matriz
-de confusión. La Tabla \ref{tab:fscoreModel2} presenta el reporte de
-clasificación sobre el dataset de testeo (i.e. es decir sobre datos
-que el modelo no recibió en el entrenamiento) utilizando las métricas
-de \emph{accuracy}, \emph{precisión} y \emph{recall}.
+However, the performance of a multiclass classifier, such as the one
+used for predicting crime labels in this case, cannot rely solely on
+\emph{accuracy}. Practice has demonstrated the well-known
+\emph{accuracy paradox} \cite{abma2009evaluation}: when
+one class dominates the dataset, a poorly performing model tends to
+predict the dominant class, introducing errors undetected by this
+metric. Therefore, other metrics like \emph{precision}, \emph{recall},
+or the confusion matrix are preferred. Table \ref{tab:fscoreModel2}
+presents the classification report on the test dataset (i.e., data not
+seen during training) using accuracy, precision, and recall.
 
-Finalmente, la Figura \ref{fig:matconfusion} muestra la matriz de
-confusión normalizada. Se puede observar que la diagonal presenta un
-carácter distintivo correspondiente a un clasificador que sí puede
-diferenciar entre clases múltiples. La categoría que tiene el menor
-desempeño en la clasificación corresponde a \emph{Robo a Unidades
-  Económicas}, que obtiene el 0.79. Es decir que 79 de cada 100 casos
-se clasifican correctamente. Su principal confusión es con \emph{Robo
-  a Domicilio} en un valor de 0.10 (i.e. 10 de cada 100 casos se
-confunden con Robo a Domicilio pero son en realidad Robo a Unidades
-económicas)
-
+Finally, Figure \ref{fig:matconfusion} shows the normalized confusion
+matrix. The diagonal displays distinctive values corresponding to a
+classifier capable of differentiating between multiple classes. The
+category with the lowest classification performance is \emph{Robo a
+  Unidades Económicas}, achieving 0.79. This means 79 out of 100 cases
+are correctly classified. Its primary confusion occurs with \emph{Robo
+  a Domicilio} at a value of 0.10 (i.e., 10 out of 100 cases are
+misclassified as Robo a Domicilio when they actually belong to Robo a
+Unidades Económicas).
 
 
 \begin{figure*}[!t]
@@ -2657,8 +2556,8 @@ económicas)
 \hfil
 \subfloat[Accuracy]{\includegraphics[width=\textwidth]{imgs/secondModelFineTuningTrain.png}
 \label{fig:train92}}
-\caption{Entrenamiento del Modelo de Machine Learning Clasificación de Texto en Modalidad Fine Tuning}
-\label{fig: results}
+\caption{Training of the Machine Learning Model for Text Classification in Fine-Tuning Mode}
+\label{fig:results}
 \end{figure*}
 
 \begin{table}[!t]
@@ -2666,7 +2565,7 @@ económicas)
 \renewcommand{\arraystretch}{1.3}
 % if using array.sty, it might be a good idea to tweak the value of
 % \extrarowheight as needed to properly center the text within the cells
-\caption{Rendimiento del clasificador}
+\caption{FT Classifier Performance}
 \label{tab:fscoreModel2}
 \centering
 % Some packages, such as MDW tools, offer better commands for making tables
@@ -2683,9 +2582,9 @@ económicas)
            Robo a Domicilio                  &   \numprint{0.87}    &  \numprint{0.89}    &  \numprint{0.88}  &  \numprint{663} \\
            Robo a Personas                   &   \numprint{0.94}    &  \numprint{0.92}    &  \numprint{0.93}  &  \numprint{1671} \\ \hline
 
-          accuracy                           &     {} &    {}   &  \numprint{0.90}  &   \numprint{4000} \\ 
-          macro avg                          &     \numprint{0.89} &    \numprint{0.89}   &  \numprint{0.89}  &   \numprint{4000} \\ 
-          weighted avg                       &   \numprint{0.90}    &  \numprint{0.90} & \numprint{0.90}     & \numprint{4000} \\ \hline
+          Accuracy                           &     {} &    {}   &  \numprint{0.90}  &   \numprint{4000} \\ 
+          Macro Avg                          &     \numprint{0.89} &    \numprint{0.89}   &  \numprint{0.89}  &   \numprint{4000} \\ 
+          Weighted Avg                       &   \numprint{0.90}    &  \numprint{0.90} & \numprint{0.90}     & \numprint{4000} \\ \hline
 %  samples avg       0.80      0.80      0.80      4000
 
 \hline
@@ -2695,24 +2594,23 @@ económicas)
 \begin{figure}[!t]
     \centering
     \includegraphics[width=\textwidth]{imgs/FineTuning10_epochs.png}
-    \caption{Matriz de Confusión del modelo FT}
+    \caption{Confusion Matrix of the FT Model}
     \label{fig:matconfusion}
   \end{figure}
   
 \subsection{Phase 3 Fine Tuning on Extended Taxonomy Dataset Results}
 \label{sec:phase-3-extended-dataset-results-ft}
 
-Sobre el conjunto de datos de prueba se realiza el cómputo de las
-métricas de desempeño del clasificador según los valores de
-\emph{precision}, \emph{recall}, \emph{accuracy} y \emph{f1-score},
-resultados que se presentan en la Tabla
-\ref{tab:reporteClasificacionModeloDelitosValidados}. También se
-computa la \emph{matriz de confusión normalizada}, misma que se
-presenta en la Figura \ref{fig:matConfDelitosValidados}.
+On the test dataset, we compute the performance metrics of the
+classifier based on the values of \emph{precision}, \emph{recall},
+\emph{accuracy}, and \emph{f1-score}. These results are presented in
+Table \ref{tab:reporteClasificacionModeloDelitosValidados}. We also
+compute the \emph{normalized confusion matrix}, shown in Figure
+\ref{fig:matConfDelitosValidados}.
 
-\subsubsection{Reporte del Clasificador}
+% \subsubsection{Extended Classifier Report}
 \begin{table}[htbp]
-    \caption{Rendimiento del clasificador de Delitos Validados}
+    \caption{Performance of the Validated Crimes Classifier}
     \label{tab:reporteClasificacionModeloDelitosValidados}
     \centering
     \scriptsize
@@ -2738,107 +2636,134 @@ presenta en la Figura \ref{fig:matConfDelitosValidados}.
     \end{tabularx}
     
 \end{table}
-% \subsubsection{Matriz de Confusión Normalizada}
+% \subsubsection{Normalized Confusion Matrix}
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{imgs/Matriz de Confusion Normalizada DelitosValidados2.png}
-    \caption{Matriz de Confusión Modelo Delitos Validados}
+    \caption{Confusion Matrix for the Validated Crimes Model}
     \label{fig:matConfDelitosValidados}
 \end{figure}
 
 \section{Conclusions}\label{chap:conclusion}
-Transformer-based models have achieved improved performance in natural
-language processing problems; currently being the state of the art. In
-this article, fine-tuning of a pre-trained model for the
-classification of robbery narratives into 6 categories has been
-carried out.
+Transformer-based models have demonstrated enhanced efficacy in
+natural language processing tasks, establishing themselves as
+state-of-the-art solutions. This study implemented fine-tuning of a
+pre-trained model for categorizing robbery narratives into six
+distinct classes. Despite class imbalance within the
+dataset—particularly the over-representation of \emph{ROBO A
+  PERSONAS}—transfer learning from the \modelohuggingface model
+yielded sufficient performance to initiate pilot testing for
+real-world case predictions. The macro-average f1-score of 80\%
+reflects robust classification capability, though class 0 exhibited
+comparatively diminished performance.
 
-The results show that, despite the dataset not being balanced among
-the examples of each class (with the class robo a personas having the
-most examples), the use of \emph{TL} from the pre-trained
-\modelohuggingface model allows obtaining very good performance to
-start pilot tests in the prediction of new cases. The f-score results
-also indicate that, except for the low performance in class 0, an
-average performance of 80\% is obtained.
+The integration of fine-tuning techniques improved model accuracy by
+10\% relative to baseline approaches, albeit with marginal overfitting
+risks attributable to hardware constraints that limited training data
+volume ($|d_{\text{train}}^T| < |D_{\text{train}}^T|$). Notably, the
+model demonstrated resilience to class imbalance despite the absence
+of explicit balancing strategies during training. These findings
+underscore the viability of deploying machine learning systems within
+legal institutions such as the Fiscalía General del Estado, where
+automated narrative classification could optimize resource allocation
+and operational workflows. A complementary web application framework
+further enables practical model utilization through API integration,
+facilitating seamless adoption by legal personnel.
 
-As a result of the research, it is concluded that the field of law is
-very suitable for the development of artificial intelligence models,
-which, supported by the state of the art, can generate new services,
-automate tasks, and improve the quality of work carried out in
-strategically important institutions such as the Fiscalía General del
-Estado.
+Subsequent model iterations focusing on \emph{delitos validados}
+(validated crimes) achieved enhanced precision metrics, attaining
+\numprint{0.9546} and surpassing the performance of the \emph{delitos
+  seguimiento} (monitored crimes) framework. Computational experiments
+confirmed semantic similarity between police reports and SIAF
+narratives, while expanded training datasets enabled by TPU
+acceleration improved the 11-class classifier's efficacy. Evaluation
+metrics—precision, recall, and f1-score—collectively indicate
+consistent cross-category performance, with the exception of \say{ROBO
+  EN INSTITUCIONES PÚBLICAS} (Theft in Public Institutions) and
+\say{ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES}
+(Theft in Collective/Social Organizations). These classes, comprising
+\numprint{4560} and \numprint{3087} instances respectively, exhibited
+lower frequency and predictive performance. Confusion matrix analysis
+revealed approximately \numprint{29}\% misclassification between
+\say{ROBO EN INSTITUCIONES PÚBLICAS} and \say{OTROS ROBOS} (Other
+Thefts), suggesting potential benefits from manual taxonomy refinement
+or category consolidation, as evidenced in Table
+\ref{tab:GeneracionDataset}.
 
-% phase 2 conclusions
-La utilización de FT permitió mejorar el rendimiento del modelo
-anterior en un 10\%. No obstante, se observa que existe un margen
-cercano al sobre-ajuste del modelo. Esto es consecuencia de que el
-mismo fue entrenado con una cantidad menor de datos debido a las
-limitaciones del hardware disponible. Los resultados muestran que el
-modelo, si bien entrenado en una cantidad menor de datos
-$|d_{train}^T|<|D_{train}^T|$, obtiene resultados razonables. En
-efecto, el modelo no presenta predicciones basadas en el desbalance de
-las categorías; observando que no se ha realizado el balance de
-categorías en ninguno de los entrenamientos todavía. Es más, la
-aplicación sobre el dataset del mes de junio, que contiene información
-que el modelo no ha usado para ser entrenado, muestra un desempeño
-similar al obtenido en el entrenamiento.
+Collectively, this research affirms the transformative potential of
+artificial intelligence in legal domains, where state-of-the-art NLP
+models can drive service innovation, task automation, and operational
+quality enhancement. Future work should prioritize dataset expansion,
+computational resource allocation, and ontological refinements to
+address residual classification ambiguities.
+% ==================== orginal conclusiones ====================
+% Transformer-based models have achieved improved performance in natural
+% language processing problems; currently being the state of the art. In
+% this article, fine-tuning of a pre-trained model for the
+% classification of robbery narratives into 6 categories has been
+% carried out.
 
-De aquí que se puede estimar que el modelo puede ser utilizado a fin
-de facilitar las actividades tanto de la \printInicialesComision\,
-como de un usuario SAI. Sin embargo, hay interrogantes que se pueden
-seguir investigando a fin de mejorar el modelo: ¿qué incidencia tiene
-en el error de clasificación la incorrecta digitación por parte del
-usuario SAI? ¿se puede entrenar un tokenizador ajustado a la
-literatura de la Fiscalía General del Estado? ¿existe equivocación en
-las etiquetas obtenidas por la \printInicialesComision? En machine
-learning, en general se ha observado que las predicciones dadas por el
-modelo corrigen la clasificación manual realizada y debida al error
-humano que es pre-existente y no descartable. Pues, por su parte el
-modelo, al fundamentarse en redes neuronales convolucionales, se
-convierte en un extractor de componentes y un identificador de
-patrones.
+% The results show that, despite the dataset not being balanced among
+% the examples of each class (with the class robo a personas having the
+% most examples), the use of \emph{TL} from the pre-trained
+% \modelohuggingface model allows obtaining very good performance to
+% start pilot tests in the prediction of new cases. The f-score results
+% also indicate that, except for the low performance in class 0, an
+% average performance of 80\% is obtained.
 
-La posibilidad de utilizar un modelo de machine learning en el
-procesamiento de lenguaje natural para la Fiscalía General del Estado
-permitirá optimizar recursos de tiempo y administrativos; pues, por su
-parte la tarea de etiquetar manualmente la variable delito
-seguimiento, puede reformularse en cuanto a su frecuencia o cantidad
-de registros analizados. De igual manera, se presenta en el informe el
-desarrollo de una Aplicación Web que permite obtener la predicción de
-la etiqueta consultando el modelo entrenado. Esto abre la posibilidad
-de desarrollar un API para el consumo del modelo por parte del
-funcionario SAI.
-% phase 3
-\begin{itemize}
-    \item El nuevo modelo de \emph{delitos validados} mejora el
-desempeño de precisión alcanzando un valor de \numprint{0.9546}. En
-consequencia, tiene un mejor rendimiento que el modelo de
-\emph{delitos seguimiento}
-    \item A nivel computacional se ha probado con dos técnicas
-diferentes y los textos del parte policial y del relato siaf son
-similares.
-    \item El desempeño mejorado del modelo de \emph{delitos
-validados}, que predice 11 categorías, se debe a, como se había
-señalado, que se pudo entrenar con una mayor cantidad de
-ejemplos. Gracias al uso de TPU.
-    \item Entre las diferentes métricas de \emph{precision},
-\emph{recall} y \emph{f1-score} se observa que existe un rendimiento
-adecuado del clasificador en las distintas categorías.
-    \item La categoría con el desempeño más bajo corresponde a
-\say{ROBO EN INSTITUCIONES PUBLICAS}. Sin embargo, como puede
-observarse en Tabla \ref{tab:GeneracionDataset}, es la segunda menor
-en frecuencia con \numprint{4560} registros luego de \say{ROBO A
-ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES} que tiene
-\numprint{3087}.
-    \item De la Matriz de Confusión puede observarse que existe una
-confusión aproximadamente del \numprint{29}\% entre \say{ROBO EN
-INSTITUCIONES PUBLICAS} y \say{OTROS ROBOS}. Sin embargo, esta puede
-ser evidencia de que se deba revisar manualmente la categoría de
-\say{OTROS ROBOS} o en su defecto eliminar esta categoría e integrarla
-en \emph{OTROS ROBOS}.
-\end{itemize}
+% As a result of the research, it is concluded that the field of law is
+% very suitable for the development of artificial intelligence models,
+% which, supported by the state of the art, can generate new services,
+% automate tasks, and improve the quality of work carried out in
+% strategically important institutions such as the Fiscalía General del
+% Estado.
 
-% \section{Future Work}\label{chap:futuro}
+% % phase 2 conclusions
+% The use of FT (Fine-Tuning) allowed improving the performance of the
+% previous model by 10\%. However, there is a margin close to model
+% overfitting. This is a consequence of the model being trained with a
+% smaller amount of data due to hardware limitations. The results show
+% that the model, although trained on a reduced dataset
+% $|d_{train}^T|<|D_{train}^T|$, achieves reasonable results. Indeed,
+% the model does not exhibit predictions based on category imbalance; it
+% is noted that category balancing has not been performed in any of the
+% trainings yet. 
+
+% The possibility of using a machine learning model for natural language
+% processing at the Fiscalía General del Estado will optimize time and
+% administrative resources. Similarly, the development of a Web
+% Application that obtains label predictions by querying the trained
+% model, opens the possibility of developing an API for model
+% consumption by prosecutor's office staff.
+
+% % Phase 3
+% \begin{itemize}
+% \item The new model for \emph{delitos validados} (validated crimes)
+%   improves precision performance reaching a value of
+%   \numprint{0.9546}. Consequently, it outperforms the \emph{delitos
+%     seguimiento} (monitored crimes) model.
+% \item Computationally, it has been tested with two different
+%   techniques, and the police report texts and SIAF narratives are
+%   similar.
+% \item The improved performance of the \emph{delitos validados} model,
+%   which predicts 11 categories, is due to being trained with more
+%   examples, enabled by TPU usage.
+% \item Among the metrics of \emph{precision}, \emph{recall}, and
+%   \emph{f1-score}, adequate classifier performance is observed across
+%   categories.
+% \item The lowest-performing category is \say{ROBO EN INSTITUCIONES
+%     PUBLICAS} (Theft in Public Institutions). As shown in Table
+%   \ref{tab:GeneracionDataset}, it has the second-lowest frequency with
+%   \numprint{4560} records, followed by \say{ROBO A ESTABLECIMIENTOS DE
+%     COLECTIVOS U ORGANIZACIONES SOCIALES} (Theft in Collective/Social
+%   Organizations) with \numprint{3087}.
+% \item The confusion matrix reveals an approximate \numprint{29}\%
+%   confusion between \say{ROBO EN INSTITUCIONES PUBLICAS} and
+%   \say{OTROS ROBOS} (Other Thefts). This suggests the need to manually
+%   review or merge the \say{OTROS ROBOS} category.
+% \end{itemize}
+% ==================== original conclusiones ====================
+\section{Future Works}\label{chap:futuro}
 
 % As future work, it is proposed to train the model in two scenarios:
 
@@ -2852,6 +2777,99 @@ en \emph{OTROS ROBOS}.
 % Additionally, a testing phase will begin for the currently trained
 % model, which will be contrasted with the manual classification carried
 % out by the Comisión.
+
+Building upon the findings of this study, several avenues for future
+research emerge to address current limitations and expand the
+practical applicability of the proposed framework. First, dataset
+augmentation and/or class-balancing strategies should be prioritized to
+mitigate performance disparities among underrepresented categories
+such as \say{ROBO EN INSTITUCIONES PÚBLICAS}. Synthetic data
+generation or targeted data collection could alleviate biases induced
+by imbalanced training samples, potentially reducing the observed
+\numprint{29}\% misclassification rate between semantically adjacent
+categories. Additionally, expanding computational resources to
+leverage full-scale datasets ($|D_{\text{train}}^T|$) rather than
+subsets ($|d_{\text{train}}^T|$) would enable more robust model
+training, minimizing overfitting risks while improving
+generalizability.
+
+From an operational perspective, deploying the developed web
+application in controlled pilot environments at the Fiscalía General
+del Estado would validate its real-world efficacy and user
+acceptance. As a matter of fact, current model is being used by
+\textit{Departamento de Estadística y Sistemas de Información} at
+Fiscalía General del Estado. It helps to predict robbery categories
+using the registered narratives. However, extending its use to other
+departments could be studied. Moreover, longitudinal studies assessing the
+model’s performance drift over time could inform maintenance protocols
+for periodic retraining. Furthermore, extending the taxonomy to
+encompass broader criminal typologies or interlinked legal processes
+(e.g., sentencing recommendations or case prioritization) would
+amplify the system’s utility. Collaborative efforts with legal experts
+to refine category definitions and annotation guidelines are essential
+to ensure algorithmic fairness and jurisdictional compliance,
+particularly in high-stakes decision-making contexts.
+
+A promising direction for future work involves the development of an
+abstractive transformer-based question-answering (QA) model to enhance
+case analysis by retrieving and synthesizing relevant details from
+robbery narratives. Such a model could assist legal practitioners by
+automatically extracting key facts (e.g., modus operandi, stolen
+items, or suspect descriptions) from unstructured reports, thereby
+improving efficiency in case review and evidence
+compilation. Leveraging architectures like BERT \cite{devlin2018bert}
+or T5 \cite{raffel2023T5} could enable the system to generate concise,
+context-aware summaries while preserving factual accuracy—a critical
+requirement in legal applications. As a matter of fact, we present a
+preliminary work on the mater of Question Answering from robbery
+narratives stating potential outcomes in Section
+\ref{sec:an-abstr-qa-model}.
+
+Finally, ethical and
+transparency considerations warrant dedicated investigation, including
+the development of explainability interfaces to demystify model
+predictions for legal practitioners. Establishing audit frameworks to
+monitor algorithmic biases and performance disparities across
+demographic or geographic variables will be critical for maintaining
+public trust in AI-driven judicial tools. These interdisciplinary
+efforts would position such systems not merely as technical artifacts,
+but as scalable, accountable solutions for modernizing legal
+workflows.
+
+\subsection{An Abstractive Question Answering Model}
+\label{sec:an-abstr-qa-model}
+
+Extractive question answering (QA) systems hold significant potential
+for automating information retrieval in specialized domains such as
+legal and criminal justice. While transformer-based models (e.g., BERT
+and its variants) have shown strong performance in general NLP tasks,
+their adaptation to domain-specific contexts—particularly legal
+document analysis—remains an open challenge requiring further
+investigation. In criminal justice systems, efficient extraction of
+structured information from unstructured crime reports could
+significantly improve case handling, resource allocation, and
+decision-making processes. This exploratory work will focus on robbery
+cases processed by the Fiscalía General del Estado in Ecuador, where
+the high volume of reports and the complexity of legal language
+present substantial barriers to manual analysis. By leveraging and
+fine-tuning transformer-based models, we aim to assess their
+effectiveness in enhancing information retrieval from legal texts. If
+successful, this approach could support legal practitioners by
+reducing processing time and improving accuracy, ultimately
+contributing to more efficient judicial workflows and better public
+service delivery. Future research will involve dataset curation, model
+adaptation, and rigorous evaluation to determine the feasibility and
+limitations of this application.
+
+\subsubsection{An Introduction to Legal Question Answering}
+\label{sec:an-intr-legal-qa-paper}
+
+
+
+
+
+
+
 
 \section*{Acknowledgments}
 
