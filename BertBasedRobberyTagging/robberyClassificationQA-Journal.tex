@@ -418,6 +418,8 @@
 
 % ensuring outline is generated in pdf
 \usepackage[bookmarks=True]{hyperref}
+% \usepackage{tablefootnote}
+\usepackage{threeparttable}
 \setcounter{tocdepth}{3}  % Show up to subsubsections in TOC/bookmarks
 \setcounter{secnumdepth}{3}  % Number up to subsubsections
 
@@ -441,9 +443,23 @@
 % was not built to handle multiple paragraphs
 %
 
-\author{Lenin G. Falconí,%~\IEEEmembership{Member,~IEEE,}
+\author{
+    Lenin G. Falconi\thanks{Lenin G. Falconí is with the Departamento
+      de Informática y Ciencias de la Computación, Escuela Politécnica
+      Nacional, Quito, Ecuador (email: lenin.falconi@epn.edu.ec).}
+    \and
+    Myriam Hernandez-Alvarez\thanks{Myriam Hernandez-Alvareaz is with
+      the Departamento de Informática y Ciencias de la Computación,
+      Escuela Politécnica Nacional, Quito, Ecuador (email:myriam.hernandez@epn.edu.ec).}
+    \and
+    David Villacis\thanks{David Villacis is with the Quantitative
+      Methods Department, Universidad Loyola, Andalucia, Spain (email: davillacis@uloyola.es).}
+}
+% ==================== original ====================
+% \author{Lenin G. Falconí,%~\IEEEmembership{Member,~IEEE,}
         % John~Doe,~\IEEEmembership{Fellow,~OSA,}
-        % and~Jane~Doe,~\IEEEmembership{Life~Fellow,~IEEE}
+%  and Miriam Hernández,~\IEEEmembership{Life~Fellow,~IEEE}
+%  and David Villacís,
         % <-this % stops a space
 % \thanks{M. Shell was with the Department
 % of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
@@ -452,7 +468,7 @@
 % \thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
 % \thanks{Manuscript received April 19, 2005; revised August 26, 2015.}
 }
-
+% ==================== original ====================
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
 % and the end of the author line. i.e., if you had this:
@@ -557,7 +573,13 @@
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
 % IEEE, IEEEtran, journal, \LaTeX, paper, template.
-Procesamiento de Lenguaje Natural Legal, PLN, transformers, fine tuning, transfer learning, Natural Language Processing, NLP
+% Procesamiento de Lenguaje Natural Legal, PLN, transformers, fine
+% tuning, transfer learning, Natural Language Processing, NLP
+
+% Legal Natural Language Processing, NLP, Natural Language Processing,
+% transformers, fine tuning, transfer learning
+
+Legal Natural Language Processing, NLP, Natural Language Processing, transformers, fine-tuning, transfer learning
 \end{IEEEkeywords}
 
 
@@ -602,7 +624,7 @@ tasks, such as sentiment analysis, news categorization,
 question-answering, and natural language inference, DL has outperformed
 traditional \emph{Machine Learning (ML)}  methods\cite{Minaee2021}, a
 testament primarily to its inherent generalization and
-robustness\parencite{Zahangir2018}. However, depending on the problem
+robustness\cite{Zahangir2018}. However, depending on the problem
 to be solved, designing a DL architecture demands a substantial volume
 of data to attain the desired generalization performance. For example,
 in image processing and computer vision, datasets such as ImageNet
@@ -827,7 +849,7 @@ process diverse languages within unified frameworks
 DeBERTa, ELECTRA, BigBIrd, XLNet, have been evaluated for their
 performance in legal judgment prediction and text classification
 tasks, demonstrating significant accuracy improvements over
-traditional methods \cite{10725043}.
+traditional methods \cite{Gosh_Kumar_2024}.
 
 The inherent complexity, substantial length, and specialized
 terminology characteristic of legal texts present significant
@@ -1639,11 +1661,11 @@ seguimiento y delitos validados.
           $\mathbb{D}^{robos}_{(1109335 \times 6)}$ con las categorías
           definidas en Tabla \ref{tab:listofRobberiesValidados}.
         \item Las filas del dataset se orden aleatoriamente
-        \item Se salva los datos en sql:
-            \begin{lstlisting}[language=Python]
-                from src.utils import save_df_in_sql
-                save_df_in_sql(dataf=dataset_out,name_table='dataset_RobosDesagregation06122023')
-            \end{lstlisting}
+        % \item Se salva los datos en sql:
+        %     \begin{lstlisting}[language=Python]
+        %         from src.utils import save_df_in_sql
+        %         save_df_in_sql(dataf=dataset_out,name_table='dataset_RobosDesagregation06122023')
+        %     \end{lstlisting}
     \end{enumerate}
 
 \textbf{Notación:}\\
@@ -1705,25 +1727,25 @@ datos, obteniendo resultados adecuados.
         \item El dataset se separa en dos subconjuntos dependiendo si las etiquetas corresponden a delitos seguimiento o delitos validados
         \item Se conserva únicamente el relato y la etiqueta (i.e. delitos\_validados) que se renombra como \emph{labels}.
         \item Los datos se guardan en la base de datos de \emph{Machine Learning}:
-            \scriptsize
-            \begin{lstlisting}[language=Python]
-                from src.utils import save_df_in_sql
-                save_df_in_sql(
-                     dataf=train_delitos_validados_huggingface,
-                    database="machinelearning",
-                    name_table="train_delitos_validados_hf",
-                )            
-                save_df_in_sql(
-                    dataf=valid_delitos_validados_huggingface,
-                    database="machinelearning",
-                    name_table="valid_delitos_validados_hf",
-                )
-                save_df_in_sql(
-                    dataf=test_delitos_validados_huggingface,
-                    database="machinelearning",
-                    name_table="test_delitos_validados_hf",
-                )
-            \end{lstlisting}
+            % \scriptsize
+            % \begin{lstlisting}[language=Python]
+            %     from src.utils import save_df_in_sql
+            %     save_df_in_sql(
+            %          dataf=train_delitos_validados_huggingface,
+            %         database="machinelearning",
+            %         name_table="train_delitos_validados_hf",
+            %     )            
+            %     save_df_in_sql(
+            %         dataf=valid_delitos_validados_huggingface,
+            %         database="machinelearning",
+            %         name_table="valid_delitos_validados_hf",
+            %     )
+            %     save_df_in_sql(
+            %         dataf=test_delitos_validados_huggingface,
+            %         database="machinelearning",
+            %         name_table="test_delitos_validados_hf",
+            %     )
+            % \end{lstlisting}
         
     \end{enumerate}
 
@@ -2179,23 +2201,57 @@ ROBO A INSTITUCIONES DE SALUD (Healthcare Institution Robbery), ROBO
 EN EJES VIALES O CARRETERAS (Road/Highway Robbery), and ROBO A
 ENTIDADES FINANCIERAS (Financial Institution Robbery).
 
-    \begin{table}[htbp]
+%     \begin{table}[htbp]
+%     \centering
+%     \scriptsize
+%     \begin{tabularx}{\textwidth}{|c|X|c|X|}
+%         \hline
+%         \textbf{Idx} & \textbf{Robbery Type} & \textbf{idx} & \textbf{Robbery Type} \\
+%         \hline
+%         0 & ROBO A INSTITUCIONES EDUCATIVAS\footnote{Educational Institution Robbery} & 6 & ROBO A UNIDADES ECONOMICAS\footnote{Economic Unit Robbery} \\
+%         1 & ROBO DE MOTOS\footnote{Motorcycle Robbery} & 7 & ROBO A DOMICILIO\footnote{Home Robbery} \\
+%         2 & ROBO EN INSTITUCIONES PUBLICAS\footnote{Public Institution Robbery} & 8 & ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS\footnote{Vehicle Goods/Accessories Robbery} \\
+%         3 & ROBO DE CARROS\footnote{Car Robbery} & 9 & ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS\footnote{Watercraft Robbery} \\
+%         4 & ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES\footnote{Collective/Organization Robbery} & 10 & OTROS ROBOS\footnote{Other Robberies} \\
+%         5 & ROBO A PERSONAS\footnote{Person Robbery} & & \\
+%         \hline
+%     \end{tabularx}
+%     \caption{Validated Crimes}
+%     \label{tab:listofRobberiesValidados}
+%   \end{table}
+
+\begin{table}[htbp]
     \centering
     \scriptsize
-    \begin{tabularx}{\textwidth}{|c|X|c|X|}
-        \hline
-        \textbf{Idx} & \textbf{Robbery Type} & \textbf{idx} & \textbf{Robbery Type} \\
-        \hline
-        0 & ROBO A INSTITUCIONES EDUCATIVAS\footnote{Educational Institution Robbery} & 6 & ROBO A UNIDADES ECONOMICAS\footnote{Economic Unit Robbery} \\
-        1 & ROBO DE MOTOS\footnote{Motorcycle Robbery} & 7 & ROBO A DOMICILIO\footnote{Home Robbery} \\
-        2 & ROBO EN INSTITUCIONES PUBLICAS\footnote{Public Institution Robbery} & 8 & ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS\footnote{Vehicle Goods/Accessories Robbery} \\
-        3 & ROBO DE CARROS\footnote{Car Robbery} & 9 & ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS\footnote{Watercraft Robbery} \\
-        4 & ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES\footnote{Collective/Organization Robbery} & 10 & OTROS ROBOS\footnote{Other Robberies} \\
-        5 & ROBO A PERSONAS\footnote{Person Robbery} & & \\
-        \hline
-    \end{tabularx}
+    \begin{threeparttable}
     \caption{Validated Crimes}
     \label{tab:listofRobberiesValidados}
+    \begin{tabularx}{\linewidth}{|c|X|c|X|}
+        \hline
+        \textbf{Idx} & \textbf{Robbery Type} & \textbf{Idx} & \textbf{Robbery Type} \\
+        \hline
+        0 & ROBO A INSTITUCIONES EDUCATIVAS\tnote{a} & 6 & ROBO A UNIDADES ECONOMICAS\tnote{f} \\
+        1 & ROBO DE MOTOS\tnote{b} & 7 & ROBO A DOMICILIO\tnote{g} \\
+        2 & ROBO EN INSTITUCIONES PUBLICAS\tnote{c} & 8 & ROBO DE BIENES, ACCESORIOS Y AUTOPARTES DE VEHICULOS\tnote{h} \\
+        3 & ROBO DE CARROS\tnote{d} & 9 & ROBO A EMBARCACIONES DE ESPACIOS ACUATICOS\tnote{i} \\
+        4 & ROBO A ESTABLECIMIENTOS DE COLECTIVOS U ORGANIZACIONES SOCIALES\tnote{e} & 10 & OTROS ROBOS\tnote{j} \\
+        5 & ROBO A PERSONAS\tnote{k} & & \\
+        \hline
+    \end{tabularx}
+    \begin{tablenotes}[flushleft]
+        \item[a] Educational Institution Robbery
+        \item[b] Motorcycle Robbery
+        \item[c] Public Institution Robbery
+        \item[d] Car Robbery
+        \item[e] Collective/Organization Robbery
+        \item[f] Economic Unit Robbery
+        \item[g] Home Robbery
+        \item[h] Vehicle Goods/Accessories Robbery
+        \item[i] Watercraft Robbery
+        \item[j] Other Robberies
+        \item[k] Person Robbery
+    \end{tablenotes}
+    \end{threeparttable}
 \end{table}
 
 
@@ -2441,7 +2497,7 @@ observed that there is no overfitting despite the class imbalance.
 % ==================== descomentar si se usa en un contexto diferente
 % ==================== a IEEE
 
-\begin{figure}[h!]
+\begin{figure}[!t]
     \centering
     \subfloat[Accuracy per Epoch]{%
         \includegraphics[width=0.8\textwidth]{imgs/DelitosValidadosModeloEntrenamientoAccxEpoch.png}%
@@ -2466,16 +2522,16 @@ metric, respectively. The adjusted model obtained an \emph{accuracy}
 of \numprint{0.8248} on the training dataset, \numprint{0.8048} on the
 validation dataset, and \numprint{0.8045} on the test dataset.
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
   \centering
-  \subfloat[Loss]{\includegraphics[width=\textwidth]{imgs/losstrainacc80.png}
+  \subfloat[Loss]{\includegraphics[width=.8\textwidth, height=.5\textheight]{imgs/losstrainacc80.png}
     \label{fig:loss80}}
   \hfil
-  \subfloat[Accuracy]{\includegraphics[width=\textwidth]{imgs/trainacc80.png}
+  \subfloat[Accuracy]{\includegraphics[width=.8\textwidth, height=.5\textheight]{imgs/trainacc80.png}
     \label{fig:train80}}
   \caption{Training of the Machine Learning Text Classification Model}
   \label{fig: results}
-\end{figure*}
+\end{figure}
 
 Regarding the $f_1score$ metric, an average of 0.80 was obtained;
 where the lowest result is for class 0 with a value of 0.45 and the
@@ -2548,17 +2604,17 @@ are correctly classified. Its primary confusion occurs with \emph{Robo
 misclassified as Robo a Domicilio when they actually belong to Robo a
 Unidades Económicas).
 
-
-\begin{figure*}[!t]
+% figure* for two column
+\begin{figure}[!t]
 \centering
-\subfloat[Loss]{\includegraphics[width=\textwidth]{imgs/secondModelLoss.png}
+\subfloat[Loss]{\includegraphics[width=.8\textwidth, height=.5\textheight]{imgs/secondModelLoss.png}
 \label{fig:loss92}}
 \hfil
-\subfloat[Accuracy]{\includegraphics[width=\textwidth]{imgs/secondModelFineTuningTrain.png}
+\subfloat[Accuracy]{\includegraphics[width=.8\textwidth, height=.5\textheight]{imgs/secondModelFineTuningTrain.png}
 \label{fig:train92}}
 \caption{Training of the Machine Learning Model for Text Classification in Fine-Tuning Mode}
 \label{fig:results}
-\end{figure*}
+\end{figure}
 
 \begin{table}[!t]
 % increase table row spacing, adjust to taste
@@ -2593,7 +2649,7 @@ Unidades Económicas).
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=\textwidth]{imgs/FineTuning10_epochs.png}
+    \includegraphics[width=.8\textwidth]{imgs/FineTuning10_epochs.png}
     \caption{Confusion Matrix of the FT Model}
     \label{fig:matconfusion}
   \end{figure}
@@ -2639,7 +2695,7 @@ compute the \emph{normalized confusion matrix}, shown in Figure
 % \subsubsection{Normalized Confusion Matrix}
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{imgs/Matriz de Confusion Normalizada DelitosValidados2.png}
+    \includegraphics[width=.8\textwidth]{imgs/Matriz de Confusion Normalizada DelitosValidados2.png}
     \caption{Confusion Matrix for the Validated Crimes Model}
     \label{fig:matConfDelitosValidados}
 \end{figure}
@@ -2864,8 +2920,304 @@ limitations of this application.
 \subsubsection{An Introduction to Legal Question Answering}
 \label{sec:an-intr-legal-qa-paper}
 
+Transformer models have emerged as powerful tools in natural language
+processing, enabling more accurate and efficient extraction of
+relevant information from complex texts such as criminal
+reports. These models utilize self-attention mechanisms to weigh the
+importance of different words in a sentence, allowing for better
+context understanding and improved performance in tasks like question
+answering. By fine-tuning these models on domain-specific datasets,
+researchers can enhance their ability to discern pertinent details and
+provide precise answers to inquiries related to criminal incidents.
+
+The implementation of extractive question answering systems in legal
+contexts not only enhances the efficiency of information retrieval but
+also addresses challenges related to data variability and complexity
+inherent in criminal reports. As these models are fine-tuned on
+diverse datasets, they can improve their generalizability across
+different types of legal documents, ensuring that critical details are
+accurately captured regardless of nuances in language or structure
+\cite{jha2022extractive}. Moreover, recent advancements in model
+architectures, such as the integration of dynamic masking techniques,
+have shown promise in further refining performance by enabling models
+to better adapt to varying levels of difficulty in questions posed
+about complex narratives \cite{Pearce_Zhan_Komanduri_Zhan_2021}. This
+evolution highlights the potential for transformer-based models to
+facilitate more informed decision-making processes within the justice
+system, ultimately contributing to enhanced outcomes for legal
+practitioners and stakeholders alike.
+
+The Fiscalía General del Estado, which is the Prosecutor’s Office in
+Ecuador, handles cases ranging from criminal investigations to public
+safety concerns, aiming to uphold justice and protect the rights of
+citizens. In this context, crimes of robbery are highly prevalent and
+present significant challenges for law enforcement
+agencies. Understanding the patterns and motivations behind these
+crimes can lead to more effective prevention strategies and better
+resource allocation, ultimately fostering a safer community for all
+citizens. Additionally, it is important to analyze all the information
+gathered through crime reports. Many users also rely on this
+information to access insurance coverage for items lost during theft
+(e.g., cell phones, computers, automobiles, automobile parts,
+etc.). The volume of cases that need to be reviewed by prosecutors is
+substantial. Consequently, it is of interest to explore the use of
+artificial intelligence in designing and training models that can help
+reduce the high demand and improve public service.
+
+\subsubsection{Legal Question Answering Related Works}
+\label{sec:legal-quest-answ-literature}
+
+There is a significant interest within both the scientific community
+and legal institutions in studying the applications of AI in this
+expansive field. The current state of the art in Natural Language
+Processing (NLP) with Deep Learning (DL) primarily focuses on the use
+of transformer-based architectures, which have demonstrated superior
+performance across various NLP tasks.
+
+In \cite{Vold_Conrad_2021} the deployment of a RoBERTa Base
+question-answer classification model specifically for legal questions
+is discussed.  It compares the performance of this transformer model
+against a traditional linear SVM in the legal domain, using the
+PRIVACYQA dataset. The results indicate that RoBERTa significantly
+outperforms the SVM, achieving a 31\% improvement in F1-score and a 41\%
+improvement in Mean Reciprocal Rank, demonstrating the effectiveness
+of transformers in enhancing answer retrieval for legal inquiries. In
+\cite{Shao_Guo_Chen_Zepeng_2019}, the researchers focus on a
+Transformer-based neural network for answer selection in general
+question answering (QA) systems, not specifically in the legal
+domain. While Transformers are effective in extracting global
+information and improving answer selection, the research does not
+address their application in law-related question answering. For
+insights on using Transformers in legal contexts, further research
+specific to legal NLP applications would be necessary. For information
+retrieval, \cite{Kim_Rabelo_Babiker_Rahman_Goebel_2024} discuss the
+use of transformer-based approaches for legal information retrieval
+and entailment, specifically in the context of the COLIEE
+competition. For case law retrieval (Task 1), a sentence-transformer
+model was employed to create numeric representations of case
+paragraphs, facilitating similarity assessments. In entailment (Task
+4), a fine-tuned DeBERTa large language model was utilized, achieving
+third place among eight teams. These methods demonstrate the
+effectiveness of transformers in addressing legal question answering
+challenges. Another area of interest is to predict legal judgments. In
+\cite{Gosh_Kumar_2024} six transformer-based models (BERT, XLNet,
+RoBERTa, DeBERTa, ELECTRA, and BigBird) are evaluated in predicting
+legal judgments using the ILDC dataset. It highlights the potential of
+these models in automating legal decision-making, with newer models
+achieving up to 80\% accuracy compared to 76\% for older models. This
+comparative analysis underscores the advancements in NLP technology
+and its applicability in the legal domain, suggesting a promising
+future for question answering in law through transformer
+models. Finally, in \cite{Peric_Mijic_Stammbach_Ash_2020} the use of
+transformers to generate legal text is addressed, indicating their
+potential to assist in legal practice. The findings suggest that these
+models can effectively generate judicial opinions and help
+differentiate between human and machine-generated legal texts, which
+could be beneficial for tasks like drafting contracts and briefs,
+although direct application to question answering is not discussed.
+
+\subsubsection{Robbery Model for LQA}
+\label{sec:robbery-model-lqa}
+
+In order to address LQA, we propose a specialized question-answering
+model based on the architecture of
+mrm8488/bert-base-spanish-wwm-cased-finetuned-spa-squad2-es. The model
+needs to be adapted for legal domain applications, specifically those
+of the Fiscalía General del Estado in processing robbery case
+documentation. The implementation methodology will be structured as
+follows:
+
+\begin{enumerate}
+    \item \textbf{Dataset Preparation}: Curating and annotating domain-specific legal documents to construct a robust training corpus.
+    \item \textbf{Prompt Engineering}: Designing optimized query formulations to enhance model performance on legal text comprehension tasks.
+    \item \textbf{Dataset Preprocessing}: Implementing text normalization and feature extraction pipelines tailored for legal domain data.
+    \item \textbf{Model Fine-tuning}: Adapting the pre-trained architecture through domain-specific optimization techniques.
+    \end{enumerate}
+
+\paragraph{Dataset Preparation with aid of Generative AI}
+
+To prepare the dataset for this task, Generative Artificial
+Intelligence (GAI) will be employed to extract answers for a
+predefined set of common questions in robbery cases. The proposed
+model for this purpose is
+\texttt{meta-llama/Meta-Llama-3-8B-Instruct}. An initial analysis of
+word count distribution per crime report will be conducted to
+establish quality thresholds. Preliminary observations suggest a mean
+length of 112 words, with an expected range between 82 and 150
+words. Reports falling outside this range will be excluded as
+potential outliers. Consequently, the final dataset will comprise only
+those crime reports \(w\) where the word count \(\Gamma(w)\) satisfies
+\(82 \leq \Gamma(w) \leq 150\). The original dataset contains 174,594
+samples, which will serve as the foundation for this filtering
+process.
+
+A LLM would be used to generate responses for a predefined set of
+common questions (Table \ref{tab:org640ecfb}). The LLM is configured
+to operate as a specialized data science assistant with the objective
+of creating a Spanish-language dataset formatted according to the
+SQuAD (Stanford Question Answering Dataset) framework. The
+implementation involves providing the LLM with two key inputs: (1) the
+full text of the crime report serving as the \texttt{context}, and (2)
+individual questions from Table \ref{tab:org640ecfb} as the
+\texttt{question} component. The model is specifically instructed to
+return its output in JSON format, containing the following fields:
+\texttt{context}, \texttt{question}, \texttt{answer\_text},
+\texttt{answer\_start}, \texttt{answer\_end}, and
+\texttt{impossible\_find\_answer}.
+
+The span indices (\texttt{answer\_start} and \texttt{answer\_end}) are
+automatically derived by locating the \texttt{answer\_text} within the
+provided context. In instances where the system either cannot identify
+a valid answer or fails to generate an appropriate response, the
+boolean flag \texttt{impossible\_find\_answer} is set to
+\texttt{True}, providing a mechanism for tracking unsuccessful
+extraction attempts. This approach facilitates both answer validation
+and subsequent analysis of model performance.
+
+\begin{table}[htbp]
+\caption{\label{tab:org640ecfb}Common questions}
+\centering
+\begin{tabular}{l}
+\hline
+Question\\
+\hline
+¿Qué objetos fueron robados?\\
+¿En qué fecha ocurrió el incidente?\\
+¿A qué hora sucedió el robo?\\
+¿En qué dirección o entre qué calles sucedió el robo, suceso incidente?\\
+¿Qué valor en dólares tenían los objetos sustraídos o robados?\\
+\hline
+\end{tabular}
+\end{table}
+
+After conducting preliminary experiments using the Hugging Face
+Inference Client, we estimate that 1,544 samples would take over a
+4-hour period to be processed; representing approximately 1\% of the
+complete dataset. Initial analysis of the results revealed two notable
+limitations: (1) instances where the LLM may fail to generate
+appropriate responses, and (2) cases where the model produced
+irrelevant content. These observations highlight the necessity for
+implementing a manual verification protocol to ensure data
+quality. Future work will focus on optimizing the processing
+pipeline to improve both efficiency and output reliability.
+
+\paragraph{LQA Model Fine Tuning}
+
+Here, we outline the methodological framework to be employed for
+training a question-answering model designed to process robbery
+reports from Ecuador's Fiscalía General del Estado. The procedure may
+consist of of the following key steps:
+
+\begin{itemize}
+\item \textbf{Dataset Train and Test split:} An initial dataset to
+  analyze model's capabilities would be of 4572 samples, according to
+  our expected results from our research. the dataset was divided into
+  training and testing sets, with 20\% of the cases allocated for
+  performance evaluation. Table \ref{tab:org06f9053} displays the
+  number of samples in each set.
+\item \textbf{Pre-trained Model Loading:}The
+  \texttt{mrm8488/bert-base-spanish-wwm-cased-finetuned-spa-squad2-es}
+  model was selected for fine-tuning due to its specialized
+  architecture for Spanish language processing and demonstrated
+  effectiveness in QA tasks. This selection was further justified by
+  preliminary evaluations conducted on the base model, which achieved
+  an F1-score of 81.70 without additional training, indicating strong
+  baseline performance for the target application.
+\item \textbf{Preprocessing:}To fine-tune the model, both the question
+  and the answer must undergo tokenization and embedding
+  representation. Following this process, the indices marking the
+  start and end positions of the answer require recalibration based on
+  the tokenized embeddings. For lengthy textual contexts, truncation
+  is selectively applied to the context segment, while a sliding
+  window of 128 tokens is implemented to preserve answer integrity
+  during truncation. Although the majority of samples in the current
+  dataset contain contexts with fewer than 100 words—rendering this
+  scenario improbable—the methodology has been systematically
+  incorporated into the implementation as a precautionary
+  measure. This approach ensures robustness while maintaining
+  computational efficiency during model training.
+\item \textbf{Evaluation Metrics:}The evaluation framework will employ
+  the \texttt{squad\_v2} benchmark metrics, which incorporate both
+  F1-score and exact match measurements. These metrics will be
+  implemented through a custom evaluation function compatible with the
+  Hugging Face Trainer class, allowing for standardized performance
+  assessment during model development.
+\item \textbf{Training Protocol:} The training regimen will utilize
+  the hyperparameters specified in Table \ref{tab:org4204959}, with
+  particular emphasis on employing a conservative learning rate. This
+  approach aligns with established fine-tuning best practices, as it
+  preserves the pre-trained model's knowledge while facilitating
+  domain adaptation. Preliminary results suggest that domain-specific
+  fine-tuning yields marginal improvements over the base model's
+  performance, though this observation may be partially attributable
+  to dataset size constraints in the current experimental
+  setup. Further investigation with complete datasets will be
+  necessary to fully validate these findings.
+\end{itemize}
 
 
+\begin{table}[htbp]
+\caption{\label{tab:org06f9053}Dataset Train and Test Split}
+\centering
+\begin{tabular}{lr}
+Partition & \# Samples\\
+\hline
+Train & 3657\\
+Test & 915\\
+Total & 4572\\
+\end{tabular}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{\label{tab:org4204959}Training Parameters}
+\centering
+\begin{tabular}{ll}
+Parameter & Value2\\
+\hline
+Strategy & epoch\\
+Learning rate & \(2 \times 10^{-5}\)\\
+batch & 64\\
+epochs & 10\\
+weight decay & 0.01\\
+fp16 & True\\
+metric for best model & F1 (eval)\\
+\end{tabular}
+\end{table}
+
+\paragraph{Expected Results}
+
+This study is expected to demonstrate measurable improvements in model
+performance through domain-specific fine-tuning. The evaluation will
+compare two key metrics:
+
+\begin{enumerate}
+\item Baseline performance using the pre-trained model
+\item Anticipated performance after
+fine-tuning
+\end{enumerate}
+
+Based on preliminary experiments and similar studies in the
+literature, we project that the fine-tuned model will achieve:
+
+\begin{itemize}
+\item An F1-score improvement of approximately 1-3 percentage points
+  over the baseline
+\item A target F1-score of 82-84 on the evaluation dataset
+\item Enhanced exact match accuracy for domain-specific terminology
+\end{itemize}
+
+The performance gains are expected to be particularly noticeable for:
+\begin{itemize}
+\item Questions involving legal terminology specific to robbery cases
+\item Longer, more complex narratives that benefit from domain adaptation
+\item Low-frequency answer types that require specialized knowledge
+\end{itemize}
+
+These projected improvements will be validated through comprehensive
+testing once the full dataset processing is complete. The final
+evaluation will include both quantitative metrics and qualitative
+analysis of answer quality.
 
 
 
