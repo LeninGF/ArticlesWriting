@@ -802,6 +802,78 @@ involved the following steps:
 
 \subsection{Model Training}
 \label{sec:model-training}
+\subsubsection{Problem Formulation}
+
+In this research, the problem consists of classifying crime reports
+narratives about robbery into specified $k$ categories. A language
+model is a mathematical function that estimates the conditional
+probability of the next token given a token sequence. In this context,
+TC can be defined as in \eqref{eq:classification-prob}, where given a
+sequence of words $\mathbf{x}$, the model predicts the corresponding
+label $y$. Training the TC model consists of approximating a function
+$f$ that maps a Dataset $D$, composed of text sequences
+$X_i \in D=\{X_1, X_2, \dots, X_N\}$ to $k$ categories as in
+\eqref{eq:clasificacion}; where each document $X_i$ is composed of $s$
+sentences and each sentence of $w_s$ words\footnote{We consider to use
+  the notation presented in \cite{Kowsari2019}}.
+
+\begin{equation}
+  \label{eq:classification-prob}
+  \hat{y} = \underset{y\in\{1,\dots, k\}}{\text{argmax}}P(y|w_1,w_2,\dots, w_i)
+\end{equation}
+
+
+\begin{equation}\label{eq:clasificacion}
+    f: D \longrightarrow \mathbb{Z}^k
+\end{equation}
+
+To enable processing by a language model, textual sequences must first
+undergo tokenization and be transformed into numerical
+representations. This involves segmenting the text into discrete
+tokens and subsequently mapping these tokens to vector embeddings.
+
+Let $\Tokenize: \mathcal{X} \rightarrow \mathbb{Z}^\lambda$ be the
+tokenization function that maps text sequences to token IDs, where
+$\mathcal{X}$ is the text space and $\lambda$ is the maximum sequence
+length. For each input sequence $X_i \in D^T_N$, the tokenizer
+produces:
+
+\begin{equation}\label{eq:tokenization}
+    (\boldsymbol{\nu}_i, \boldsymbol{\tau}_i) = \Tokenize(X_i)
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\boldsymbol{\nu}_i \in \mathbb{Z}^\lambda$ are the token IDs
+    \item $\boldsymbol{\tau}_i \in \{0,1\}^\lambda$ is the attention mask
+\end{itemize}
+
+These token IDs are then passed through the embedding layer:
+
+\begin{equation}\label{eq:embedding}
+    \mathbf{E} = \text{Embedding}(\boldsymbol{\nu}_i) \in \mathbb{R}^{\lambda \times d}
+\end{equation}
+
+where $d$ is the embedding dimension. The complete \bertmodel{} model
+processes these embeddings to produce contextual representations:
+
+\begin{equation}\label{eq:encoding}
+    \mathbf{H} = \bertmodel{}(\mathbf{E}, \boldsymbol{\tau}_i) \in \mathbb{R}^{\lambda \times d}
+\end{equation}
+
+The classification head uses the [CLS] token representation
+($\mathbf{h}_{[\text{CLS}]} \in \mathbb{R}^d$) to predict the label:
+
+\begin{equation}\label{eq:classification}
+  \hat{\boldsymbol{y}}_i = \text{softmax}(\mathbf{W}\mathbf{h}_{[\text{CLS}]} + \mathbf{b}) \in \mathbb{R}^k
+\end{equation}
+
+where:
+\begin{itemize}
+  \item $\mathbf{W} \in \mathbb{R}^{k \times d}$ is the classification weight matrix
+  \item $\mathbf{b} \in \mathbb{R}^k$ is the bias term
+  \item $k$ is the number of target categories
+\end{itemize}
 
   
 % \section{First Section}
@@ -876,22 +948,22 @@ involved the following steps:
 % \cite{ref_article1,ref_lncs1,ref_book1},
 % \cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
 
-% \begin{credits}
-% \subsubsection{\ackname} A bold run-in heading in small font size at the end of the paper is
-% used for general acknowledgments, for example: This study was funded
-% by X (grant number Y).
+\begin{credits}
+\subsubsection{\ackname} A bold run-in heading in small font size at the end of the paper is
+used for general acknowledgments, for example: This study was funded
+by X (grant number Y).
 
-% \subsubsection{\discintname}
-% It is now necessary to declare any competing interests or to specifically
-% state that the authors have no competing interests. Please place the
-% statement with a bold run-in heading in small font size beneath the
-% (optional) acknowledgments\footnote{If EquinOCS, our proceedings submission
-% system, is used, then the disclaimer can be provided directly in the system.},
-% for example: The authors have no competing interests to declare that are
-% relevant to the content of this article. Or: Author A has received research
-% grants from Company W. Author B has received a speaker honorarium from
-% Company X and owns stock in Company Y. Author C is a member of committee Z.
-% \end{credits}
+\subsubsection{\discintname}
+It is now necessary to declare any competing interests or to specifically
+state that the authors have no competing interests. Please place the
+statement with a bold run-in heading in small font size beneath the
+(optional) acknowledgments\footnote{If EquinOCS, our proceedings submission
+system, is used, then the disclaimer can be provided directly in the system.},
+for example: The authors have no competing interests to declare that are
+relevant to the content of this article. Or: Author A has received research
+grants from Company W. Author B has received a speaker honorarium from
+Company X and owns stock in Company Y. Author C is a member of committee Z.
+\end{credits}
 % %
 % ---- Bibliography ----
 %
