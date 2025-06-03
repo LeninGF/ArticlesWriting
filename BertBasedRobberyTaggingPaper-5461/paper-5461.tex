@@ -49,8 +49,8 @@
 
 % You are computer science PhD professional. Your task is to assist me
 % to improve the writing of scientific articles. This may involve
-% summarize and re-phrase. The article is written in Latex so mastery in
-% the use of Latex is expected.
+% summarize and re-phrase. The article is written in Latex so mastery
+% in  the use of Latex is expected.
 
 \begin{document}
 %
@@ -804,35 +804,42 @@ involved the following steps:
 \label{sec:model-training}
 \subsubsection{Problem Formulation}
 
-In this research, the problem consists of classifying crime reports
-narratives about robbery into specified $k$ categories. A language
-model is a mathematical function that estimates the conditional
-probability of the next token given a token sequence. In this context,
-TC can be defined as in \eqref{eq:classification-prob}, where given a
-sequence of words $\mathbf{x}$, the model predicts the corresponding
-label $y$. Training the TC model consists of approximating a function
-$f$ that maps a Dataset $D$, composed of text sequences
-$X_i \in D=\{X_1, X_2, \dots, X_N\}$ to $k$ categories as in
-\eqref{eq:clasificacion}; where each document $X_i$ is composed of $s$
-sentences and each sentence of $w_s$ words\footnote{We consider to use
-  the notation presented in \cite{Kowsari2019}}.
+In this study, we address the task of classifying crime report
+narratives of robbery into $k$ predefined categories. A language model
+estimates the conditional probability of the next token given a
+preceding sequence of tokens. Within this framework, TC can be
+formalized as in~\eqref{eq:classification-prob}: given a sequence of
+words $\mathbf{x}$, the goal is to predict its corresponding label
+$\hat{y}$. Training a TC model thus involves learning a function $f$
+that maps a target dataset $D^T$, consisting of text sequences
+$X_i \in D = \{X_1, X_2, \dots, X_N\}$ each formed by $s$ sentences and
+$w_s$ words\footnote{We adopt the notation presented
+  in~\cite{Kowsari2019}.}, to one of $k$ categories, as shown
+in~\eqref{eq:clasificacion}.
+
+For this work, we selected the \modelohuggingface
+model~\cite{Sanh2019DistilBERTAD}, a distilled version of BERT, which
+retains 97\% of BERT's language understanding capabilities while
+significantly reducing the number of parameters. Moreover, it supports
+multilingual tasks, including Spanish, aligning well with the
+linguistic requirements of our dataset.
 
 \begin{equation}
   \label{eq:classification-prob}
-  \hat{y} = \underset{y\in\{1,\dots, k\}}{\text{argmax}}P(y|w_1,w_2,\dots, w_i)
+  \hat{y} = \underset{y\in\{1,\dots, k\}}{\text{argmax}}P(y\mid w_1,w_2,\dots, w_i)
 \end{equation}
 
 
 \begin{equation}\label{eq:clasificacion}
-    f: D \longrightarrow \mathbb{Z}^k
+  f: D \longrightarrow \mathbb{Z}^k
 \end{equation}
 
-To enable processing by a language model, textual sequences must first
-undergo tokenization and be transformed into numerical
-representations. This involves segmenting the text into discrete
-tokens and subsequently mapping these tokens to vector embeddings.
-
-Let $\Tokenize: \mathcal{X} \rightarrow \mathbb{Z}^\lambda$ be the
+To enable processing by a transformer-based language model, textual
+sequences must first undergo tokenization and be transformed into
+numerical representations. This involves segmenting the text into
+discrete tokens and subsequently mapping these tokens to vector
+embeddings. Let
+$\Tokenize: \mathcal{X} \rightarrow \mathbb{Z}^\lambda$ be the
 tokenization function that maps text sequences to token IDs, where
 $\mathcal{X}$ is the text space and $\lambda$ is the maximum sequence
 length. For each input sequence $X_i \in D^T_N$, the tokenizer
@@ -845,34 +852,49 @@ produces:
 where:
 \begin{itemize}
     \item $\boldsymbol{\nu}_i \in \mathbb{Z}^\lambda$ are the token IDs
-    \item $\boldsymbol{\tau}_i \in \{0,1\}^\lambda$ is the attention mask
+    \item $\boldsymbol{\tau}_i \in \{0,1\}^\lambda$ is the attention
+      mask
+    \item $\lambda = 512$ for \modelohuggingface
+
 \end{itemize}
 
-These token IDs are then passed through the embedding layer:
+The token IDs are passed through the embedding layer, which maps each
+token to a $d=768$ dimensional vector representation. The embedding
+matrix $W_{embedding}\in \mathbb{R}^{119547\times 768}$ uses a
+$V=119547$ vocabulary, where each row corresponds to a unique token,
+thereby providing dense vector representations.
 
 \begin{equation}\label{eq:embedding}
     \mathbf{E} = \text{Embedding}(\boldsymbol{\nu}_i) \in \mathbb{R}^{\lambda \times d}
 \end{equation}
 
-where $d$ is the embedding dimension. The complete \bertmodel{} model
-processes these embeddings to produce contextual representations:
+The encoded numerical representations of the text are then processed by
+\modelohuggingface{}:
 
 \begin{equation}\label{eq:encoding}
     \mathbf{H} = \bertmodel{}(\mathbf{E}, \boldsymbol{\tau}_i) \in \mathbb{R}^{\lambda \times d}
 \end{equation}
 
-The classification head uses the [CLS] token representation
-($\mathbf{h}_{[\text{CLS}]} \in \mathbb{R}^d$) to predict the label:
+The classification layer comprises a feedforward layer that maps the
+hidden state vector output from the encoder (or CLS embedding)
+$\mathbf{h}_{[\text{CLS}]}$ to the $k$ categories:
 
 \begin{equation}\label{eq:classification}
   \hat{\boldsymbol{y}}_i = \text{softmax}(\mathbf{W}\mathbf{h}_{[\text{CLS}]} + \mathbf{b}) \in \mathbb{R}^k
 \end{equation}
 
 where:
-\begin{itemize}
-  \item $\mathbf{W} \in \mathbb{R}^{k \times d}$ is the classification weight matrix
-  \item $\mathbf{b} \in \mathbb{R}^k$ is the bias term
+\begin{itemize} 
+  \item $\mathbf{h}_{[\text{CLS}]} \in \mathbb{R}^d$ is the input
+    feature vector of $d=768$ 
+  \item $\mathbf{W} \in \mathbb{R}^{k \times d}$ is the classification
+    weight matrix, mapping from embedding space to $k$ classes.
+  \item $\mathbf{b} \in \mathbb{R}^k$ is the bias vector
   \item $k$ is the number of target categories
+  \item A softmax activation to obtain probabilities
+    \(p_i = \frac{\exp(y_i)}{\sum_{j=1}^{k} \exp(y_j)} \), where \(
+    p_i \) is the probability of class \( i \)
+
 \end{itemize}
 
   
