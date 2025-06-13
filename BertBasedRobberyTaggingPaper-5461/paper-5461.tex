@@ -52,6 +52,15 @@
 % summarize and re-phrase. The article is written in Latex so mastery
 % in  the use of Latex is expected.
 
+% You are computer science PhD professional. Your task are:
+% 1. assist me to improve the writing of scientific articles.
+% 2. Summarize and re-phrase the provided content.
+% 3. Use Latex notation
+% 4. Acronyms are not to be defined since they are defined elsewhere
+% 5. Assist me with questions I have regarding machine learning, deep
+% learning, transformers, natural language processing and latex.
+
+
 \begin{document}
 %
 \title{BERT-Based Fine-Tuning for Automated Tagging of Robbery Crime  Narratives}
@@ -157,16 +166,14 @@ approaches \cite{liu2022legal}, particularly for low-resource
 languages \cite{savelka2021cross}.
 
 In Ecuador’s penal code (COIP), robbery is defined in Article
-189. However, subclassifications such as home robbery\footnote{robo a
-  domicilio}, street robbery\footnote{robo a personas}, robbery of
-businesses\footnote{robo a unidades económicas}, vehicle part
-theft\footnote{robo de bienes, accesorios y autopartes de vehículos},
-car theft\footnote{robo de automóviles}, and motorcycle
-theft\footnote{robo de motocicletas} are used primarily for public
-security analytics and manually identified by the
+189. However, for public security analytics, this is further
+classified into specific subtypes including, but not limited to: home
+robbery, street robbery, businesses robbery, vehicle parts and
+accessories theft, car theft, and motorcycle theft. These
+classifications are manually identified by the
 \textit{\printnombrecomision}\ (CEESJCT) using \textit{crime incident
-  reports}\footnote{Noticia del Delito}. To automate this, we propose
-a transformer-based classifier that uses multilingual DistilBERT
+  reports}. To automate this, we propose a transformer-based
+classifier that uses multilingual DistilBERT
 \cite{Sanh2019DistilBERTAD}.  We implemented a three-phase approach:
 \textbf{Phase 1: Classification with transfer learning} the
 transformer model is used as a feature extractor followed of full
@@ -177,42 +184,63 @@ semantic relationships in crime narratives, particularly when some
 words remain misspelled and uncorrected for legal reasons protecting
 the victim's statement, it struggled with minority
 classes. \textbf{Phase 2: Fine-Tuning for Contextual Adaptation} Using
-a learning rate $5 \times 10^{-5}$) improved accuracy to 90.3\% (F1:
+a learning rate $3 \times 10^{-6}$) improved accuracy to 90.3\% (F1:
 0.90) by resolving semantic ambiguities and achieving significant
-gains for less frequent categories. Additionally, a Flask web
-application was deployed for real-time predictions, which demonstrated
-an accuracy of 89\% on unseen CEESJCT data. Stages 1 and 2 used a
-dataset of 431,669 robbery reports (2014–2022), tokenized into
-sequences of up to 300 words, and split into training (63\%),
-validation (16\%), and test (21\%) sets. \textbf{Phase 3: Scaling to
-  Complex Taxonomies} model is fine tuned to predict a total of 11
-categories, extending the original 6. A merged validated dataset of
-1.1 million narratives was developed by combining police reports with
-criminal complaints filed in the prosecutor's office. The model was
-trained using TPU to process the entire dataset. A notable improvement
-in accuracy performance was achieved (95.5\% accuracy with an F1-score
-of 0.95).
+gains for less frequent categories. Stages 1 and 2 used a dataset of
+431,669 robbery reports (2014–2022), tokenized into sequences of up to
+300 words, and split into training (63\%), validation (16\%), and test
+(21\%) sets. \textbf{Phase 3: Scaling to Complex Taxonomies} model is
+fine tuned to predict a total of 11 categories, extending the original
+6. A merged validated dataset of 1.1 million narratives was developed
+by combining police reports with criminal complaints filed in the
+prosecutor's office. The model was trained using a Tensor Processing
+Unit (TPU) to process the entire dataset. A notable improvement in
+accuracy performance was achieved (95.5\% accuracy with an F1-score of
+0.95).
 
-% Notably, the baseline TL model achieved moderate accuracy (80.5\%) but
-% struggled with semantically overlapping categories. FT resolved many
-% of these issues, improving minority-class recall by up to 30\%. The
-% final scaled model demonstrated high robustness (95.5\% accuracy) on
-% 11 categories. Challenges persisted for low-frequency classes with
-% limited training samples. However, it could suggest new grouping rules
-% for the commission to consider. What is more, Semantic similarity
-% analysis revealed near-identical embeddings (98.7\% cosine similarity)
-% between police and prosecutor's reports, validating the model’s
-% consistency across different data sources.
+% In Ecuador’s penal code (COIP), robbery is defined in Article
+% 189. However, subclassifications such as home robbery\footnote{robo a
+%   domicilio}, street robbery\footnote{robo a personas}, robbery of
+% businesses\footnote{robo a unidades económicas}, vehicle part
+% theft\footnote{robo de bienes, accesorios y autopartes de vehículos},
+% car theft\footnote{robo de automóviles}, and motorcycle
+% theft\footnote{robo de motocicletas} are used primarily for public
+% security analytics and manually identified by the
+% \textit{\printnombrecomision}\ (CEESJCT) using \textit{crime incident
+%   reports}\footnote{Noticia del Delito}. To automate this, we propose
+% a transformer-based classifier that uses multilingual DistilBERT
+% \cite{Sanh2019DistilBERTAD}.  We implemented a three-phase approach:
+% \textbf{Phase 1: Classification with transfer learning} the
+% transformer model is used as a feature extractor followed of full
+% connecting layers and dropout achieving 80.5\% accuracy (F1:
+% 0.80). Even though the model’s bidirectional attention mechanism and
+% subword tokenization (WordPiece) proved essential for capturing
+% semantic relationships in crime narratives, particularly when some
+% words remain misspelled and uncorrected for legal reasons protecting
+% the victim's statement, it struggled with minority
+% classes. \textbf{Phase 2: Fine-Tuning for Contextual Adaptation} Using
+% a learning rate $3 \times 10^{-6}$) improved accuracy to 90.3\% (F1:
+% 0.90) by resolving semantic ambiguities and achieving significant
+% gains for less frequent categories. Stages 1 and 2 used a
+% dataset of 431,669 robbery reports (2014–2022), tokenized into
+% sequences of up to 300 words, and split into training (63\%),
+% validation (16\%), and test (21\%) sets. \textbf{Phase 3: Scaling to
+%   Complex Taxonomies} model is fine tuned to predict a total of 11
+% categories, extending the original 6. A merged validated dataset of
+% 1.1 million narratives was developed by combining police reports with
+% criminal complaints filed in the prosecutor's office. The model was
+% trained using a Tensor Processing Unit (TPU) to process the entire
+% dataset. A notable improvement in accuracy performance was achieved
+% (95.5\% accuracy with an F1-score of 0.95).
 
-The structure of this article is organized as follows. Section
-\ref{chap:literatura} provides a comprehensive literature review on
-text classification challenges, along with theoretical foundations of
-\emph{Transformers}, TL and FT. Section
-\ref{sec:methods} describes the methodology developed for dataset
-construction and model training. Experimental results are presented in
-Section \ref{chap:resultados}. Finally, Section \ref{chap:conclusion}
-discusses the findings while Section \ref{chap:futuro} outlines future
-research directions.
+The remainder of this article is structured as
+follows. Section~\ref{chap:literatura} reviews foundational concepts
+and surveys related work. The proposed methodology, including dataset
+generation, is detailed in
+Section~\ref{sec:methods}. Section~\ref{sec:experimental-results}
+presents the experimental results. Finally,
+Section~\ref{sec:conclusions} discusses the main findings,
+conclusions, and directions for future work.
 
 \section{Foundational Concepts and Related Works}\label{chap:literatura}
 In this research, we propose a transformer-based model for robbery
@@ -897,7 +925,289 @@ where:
 
 \end{itemize}
 
+
+In this work, we experiment with TL and FT to adapt the weights of a
+pre-trained model from a large source dataset $D^S$ to the
+characteristics of a target dataset $D^T$. We adopt the TL definition
+provided by \cite{falconi2020transfer}:
+
+\begin{definition}[Transfer Learning]
+  Given an original domain $\mathcal{D}^{S}$ with an original learning
+  task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$, with a
+  target task $\mathcal{T}^{T}$, the TL operation seeks to improve the
+  learning of a prediction function $\ypredtarget(\cdot)$ in
+  $\mathcal{D}^{T}$ using the knowledge acquired in
+  $\ypredsource(\cdot)$ in $\mathcal{T}^{S}$, through $\phi^S$; where
+  $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ or
+  $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
+\end{definition}
+
+Considering the mentioned definition of TL, \eqref{eq:Transfer2}
+represents the TL operation applied to the text classification
+problem, starting from a pre-trained natural language model; where $L$
+is the number of layers of the pre-trained model.
+
+\begin{equation}
+  \mathbb{T_{L}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T}  \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{L} \right)
+    \label{eq:Transfer2}
+\end{equation}
+
+Consequently, the prediction generation is represented by Equation
+\eqref{eq:Transfer3}
+\begin{equation}
+    \mathcal{Y}^{T} = \mathbb{T_{L}} \left< \ypredsource(D^{S}), \mathcal{D}^{T} \right> = \ypredtarget(D^T) 
+    \label{eq:Transfer3}
+\end{equation}
+
+Similarly, we use the definition of FT as presented
+in~\cite{falconi2020transfer}:
+
+\begin{definition}[Fine Tuning]
+  Given an original domain $\mathcal{D}^{S}$ with an original learning
+  task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$, with a
+  target task $\mathcal{T}^{T}$, the FT procedure enhances the
+  learning of a target function
+  $\mathcal{Y}^T = \ypredtarget(\mathcal{I}^T)$ by retraining $r$
+  layers of the original model
+  $\mathcal{Y}^S = \ypredsource(\mathcal{I}^S)$ with $L$ layers and
+  $\gamma = L-r$
+\end{definition}
+
+The definition for FT is provided in~\eqref{eq:finetuningLenin},
+whereas the special case $\gamma=0$, where $L=r$, is given
+in~\eqref{eq:finetuningTunstall} and corresponds to full model tuning.
+
+
+\begin{equation}
+    \mathbb{F_{T}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right> = \ConvNetOut \left( \ypredsource \left (\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{\gamma -1} \right)\Bigr\rvert_{\gamma}^{L}\right) 
+    % \gamma = L-r \nonumber
+    \label{eq:finetuningLenin}
+\end{equation}
+
+
+\begin{equation}\label{eq:finetuningTunstall}
+    \mathbb{F_{T}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T})\right)
+  \end{equation}
   
+\subsubsection{Phase 1: Baseline Transfer Learning}
+\label{sec:phase-1:-baseline}
+
+In this stage, TL is employed to adapt a pre-trained
+\emph{\modelohuggingface} model $\ypredsource(\cdot)$ for the target
+task $\ypredtarget(\cdot)$ by applying transformations $\mathcal{A}$
+to its outputs, while keeping the original weights
+$\mathcal{W}^S = \numprint{134735616}$ fixed. Input samples are
+encoded by the feature extractor, yielding tensors in
+$\mathbb{R}^{N \times 300 \times 768}$, where $N$ represents the batch
+size. Global Max Pooling ($\mathrm{GMP}$) condenses these to
+$\mathbb{R}^{N \times 768}$. The adaptation block, with
+$\mathcal{W}^T = \numprint{104294}$ trainable parameters, consists of
+Batch Normalization ($\mathrm{BN}$), a fully connected layer of 512
+units ($\mathrm{FC}_{512}$), Dropout ($\mathrm{Dro}_{0.1}$), two fully
+connected layers of 128 units each ($\mathrm{FC}_{128}$), another
+Dropout layer, and an output layer of $\kappa = 6$ units
+($\mathrm{FC}_\kappa$). During training, only $\mathcal{W}^T$ is
+updated, as detailed in Equations~\eqref{eq:Transfer2},
+\eqref{eq:Transfer3}, and \eqref{eq:finetuning}.
+
+
+\begin{equation}
+  \label{eq:finetuning}
+    \mathcal{A} = FC_{6} \circ Dro_{0.1} \circ FC_{128}  \circ Dro_{0.1} \circ FC_{128} \\ 
+    \circ Dro_{0.1} \circ FC_{512} \circ BN \circ GMP 
+\end{equation}
+
+Due to hardware constraints, a reduced subset of the data was employed
+in this phase:
+$d^T_{\text{train}}:\numprint{20000} \subset D^T_{\text{train}}$,
+$d^T_{\text{valid}}:\numprint{4000} \subset D^T_{\text{valid}}$, and
+$d^T_{\text{test}}:\numprint{4000} \subset D^T_{\text{test}}$. The
+training parameters utilized in this stage are summarized in
+Table \ref{tab:trainingParamsCombined} Phase 1.
+
+
+
+\subsubsection{Phase 2: Fine-Tuning on Dataset $D_{\kappa=6}$}
+\label{sec:phase2-finetuning}
+
+In this phase, we adopt FT all the pre-trained model's weights
+approach as represented in \eqref{eq:finetuningTunstall}, leveraging the
+inherent advantage that full FT does not necessitate supplementary
+output layers. As stated in \cite{tunstall2022natural}, this procedure
+reduces loss and increases classification performance on the new
+task. Table \ref{tab:trainingParamsCombined} details the training hyperparameters
+utilized to FT the model in the basic taxonomy dataset in the Phase 2 column.
+
+
+
+
+\subsubsection{Phase 3: Scaling to Dataset $D_{\kappa=11}$}
+\label{sec:phase-3-scaling}
+In this phase, we extend the scope of the FT model to the
+$D_{\kappa=11}$ dataset, which expands to a total of 11
+categories. Procedures in building the aforementioned dataset were
+described in Section \ref{sec:extended-dataset}. Dataset was split in
+training, validation, and testing sets with \numprint{807468},
+\numprint{201867}, and \numprint{100000} samples, respectively. To FT
+the model using such large dataset, we used a TPU
+v2\cite{jouppi2020domain}. The hyperparameters settings for this phase
+are presented in Phase 3 of Table \ref{tab:trainingParamsCombined}.
+
+\begin{table}[!t]
+\renewcommand{\arraystretch}{1.3}
+\caption{Training Parameters Across Phases}
+\label{tab:trainingParamsCombined}
+\centering
+\scriptsize
+\begin{tabularx}{\linewidth}{lXXX}
+\hline
+Parameter & Phase 1 (TL) & Phase 2 (FT) & Phase 3 (FT-extended) \\
+\hline
+Loss & Categorical Cross Entropy & Sparse Categorical Cross Entropy & Sparse Categorical Cross Entropy \\
+Metrics & Categorical Accuracy & Sparse Categorical Accuracy & Sparse Categorical Accuracy \\
+Optimizer & Adam & Adam & Adam \\
+Learning rate & $2 \times 10^{-4}$ & $3 \times 10^{-6}$ & $3 \times 10^{-6}$ \\
+Epochs & 20 & 10 & 12 \\
+Early stopping & 5 epochs & 10 epochs & 10 epochs \\
+Batch size & 16 & 16 & 128 \\
+\hline
+\end{tabularx}
+\end{table}
+
+\section{Experimental Results}
+\label{sec:experimental-results}
+Tables~\ref{tab:phase1-score},~\ref{tab:phase2-ft-score},
+and~\ref{tab:phase3-ft-score} report the model’s performance across
+Phases~1, 2, and 3, respectively. Fine-tuning the model on the
+extended dataset with TPU acceleration led to improved performance and
+enabled the prediction of a broader range of robbery categories. The
+observed discrepancies in support counts between Phase~1 and Phase~2
+are attributed to changes in category labeling introduced by
+\printInicialesComision. It is also evident that the distribution of
+samples across categories is imbalanced, reflecting the underlying
+social circumstances surrounding criminal activity. Consequently, we
+opted not to employ synthetic data augmentation for this study. The
+results further suggest that the \textit{Public Institution Robbery}
+category should be merged into the \textit{Other Robberies} category,
+due to the limited number of available samples.
+
+\begin{table}[!t]
+% increase table row spacing, adjust to taste
+\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+\caption{Phase 1 TL Classifier Performance on \(D_{\kappa=6}\)}
+\label{tab:phase1-score}
+\centering
+\scriptsize
+% Some packages, such as MDW tools, offer better commands for making tables
+% than the plain LaTeX2e tabular which is used here.
+\begin{tabular}{ccccc}
+
+\hline
+         class &  precision  &  recall & f1-score &  support \\ \hline
+
+          Car Theft  &  \numprint{0.58}    &  \numprint{0.36}    &  \numprint{0.45}  &  \numprint{285} \\ 
+    Motorcycle Theft &   \numprint{0.90}    &  \numprint{0.84}    &  \numprint{0.87}  &  \numprint{457} \\
+    Vehicle Parts And Accessories Theft &   \numprint{0.79}    &  \numprint{0.79}    &  \numprint{0.79}  &  \numprint{613} \\
+    Street Robbery &   \numprint{0.82}    &  \numprint{0.91}    &  \numprint{0.86}  & \numprint{1666} \\
+   Business Robbery &   \numprint{0.82}    &  \numprint{0.70}    &  \numprint{0.75}  &  \numprint{328} \\
+     Home Robbery &   \numprint{0.76}    &  \numprint{0.77}    &  \numprint{0.77}  &  \numprint{651} \\ \hline
+
+   micro avg &     \numprint{0.80} &    \numprint{0.80}   &  \numprint{0.80}  &   \numprint{4000} \\ 
+   macro avg &     \numprint{0.78} &    \numprint{0.73}   &  \numprint{0.75}  &   \numprint{4000} \\ 
+weighted avg &     \numprint{0.80} &     \numprint{0.80} &
+                                                           \numprint{0.80}
+                                                           & \numprint{4000} \\
+ % samples avg &      \numprint{0.80} &      \numprint{0.80} &
+ %                                                             \numprint{0.80}
+ %                                                             & \numprint{4000} \\
+
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!t]
+% increase table row spacing, adjust to taste
+\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+\caption{Phase 2 FT Classifier Performance on \(D_{\kappa=6}\)}
+\label{tab:phase2-ft-score}
+\centering
+\scriptsize
+% Some packages, such as MDW tools, offer better commands for making tables
+% than the plain LaTeX2e tabular which is used here.
+\begin{tabular}{ccccc}
+
+\hline
+         class &  precision  &  recall & f1-score &  support \\ \hline
+
+           Business Robbery        &  \numprint{0.78}    &  \numprint{0.79}    &  \numprint{0.78}  &  \numprint{297} \\ 
+           Car Theft                    &   \numprint{0.95}    &  \numprint{0.88}    &  \numprint{0.92}  &  \numprint{363} \\
+           Motorcycle Theft                     &   \numprint{0.95}    &  \numprint{0.93}    &  \numprint{0.94}  &  \numprint{392} \\
+           Vehicle Parts \& Accessories  &   \numprint{0.85}    &  \numprint{0.92}    &  \numprint{0.88}  & \numprint{663} \\
+           Home Robbery                  &   \numprint{0.87}    &  \numprint{0.89}    &  \numprint{0.88}  &  \numprint{663} \\
+           Street Robbery                   &   \numprint{0.94}    &  \numprint{0.92}    &  \numprint{0.93}  &  \numprint{1671} \\ \hline
+
+          Accuracy                           &     {} &    {}   &  \numprint{0.90}  &   \numprint{4000} \\ 
+          Macro Avg                          &     \numprint{0.89} &    \numprint{0.89}   &  \numprint{0.89}  &   \numprint{4000} \\ 
+          Weighted Avg                       &   \numprint{0.90}    &  \numprint{0.90} & \numprint{0.90}     & \numprint{4000} \\ \hline
+%  samples avg       0.80      0.80      0.80      4000
+
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+    \caption{Phase 3 FT Classifier Performance on \(D_{\kappa=11}\)}
+    \label{tab:phase3-ft-score}
+    \centering
+    \scriptsize
+    \begin{tabularx}{\textwidth}{p{0.4\textwidth}XXXX}
+        \toprule
+         & precision & recall & f1-score & support \\
+        \midrule
+        Educational Institution Robbery & 0.925995 & 0.946599 & 0.936184 & 1573 \\
+        Motorcycle Theft & 0.985211 & 0.988317 & 0.986762 & 10785 \\
+        Public Institution Robbery & 0.724528 & 0.474074 & 0.573134 & 405 \\
+        Car Theft & 0.967669 & 0.980198 & 0.973893 & 7878 \\
+        Social Organization Robbery & 0.750000 & 0.752688 & 0.751342 & 279 \\
+        Street Robbery & 0.969847 & 0.972298 & 0.971071 & 37976 \\
+        Business Robbery & 0.878871 & 0.893877 & 0.886311 & 6794 \\
+        Home Robbery & 0.944779 & 0.952335 & 0.948542 & 15504 \\
+        Vehicle Parts \& Accessories Theft & 0.977752 & 0.968340 & 0.973023 & 14024 \\
+        Water Vessel Robbery & 0.965197 & 0.983452 & 0.974239 & 846\\
+        Other Robberies & 0.817738 & 0.766006 & 0.791027 & 3936 \\ \hline
+        accuracy & {} & {} & 0.954610 & 100000 \\
+        macro avg & 0.900690 & 0.879835 & 0.887775 & 100000 \\
+        weighted avg & 0.954050 & 0.954610 & 0.954175 & 100000 \\
+        \bottomrule
+    \end{tabularx}
+    
+  \end{table}
+  
+\section{Conclusions and Future Works}
+\label{sec:conclusions}
+
+Transformer-based models have achieved state-of-the-art performance
+across a range of NLP tasks. In this work, we employed FT to address
+text classification for legal documents. The proposed methodology,
+based on FT, demonstrates that transformer architectures can be
+effectively adapted to the legal domain. Notably, our model exhibits
+robustness to class imbalance, even in the absence of explicit
+balancing techniques during training. The utilization of TPU hardware
+was pivotal for processing the expanded dataset, enabling both an
+increase in the number of target categories and overall model
+performance. These results highlight the practical potential of
+deploying machine learning solutions within legal institutions such as
+the Fiscalía General del Estado, where automated narrative
+classification may facilitate more efficient resource allocation and
+optimized operational workflows. Future research should focus on
+adapting new NLP tasks addressed by transformer-based models to
+LNLP. These tasks include, but are not limited to, legal question
+answering, legal named entity recognition, and legal judgment
+prediction.
 % \section{First Section}
 % \subsection{A Subsection Sample}
 % Please note that the first paragraph of a section or subsection is
@@ -971,20 +1281,13 @@ where:
 % \cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
 
 \begin{credits}
-\subsubsection{\ackname} A bold run-in heading in small font size at the end of the paper is
-used for general acknowledgments, for example: This study was funded
-by X (grant number Y).
+\subsubsection{\ackname} The authors would like to thank Fiscalía
+General del Estado and INEC for their cooperation in the development
+of this research.
 
 \subsubsection{\discintname}
-It is now necessary to declare any competing interests or to specifically
-state that the authors have no competing interests. Please place the
-statement with a bold run-in heading in small font size beneath the
-(optional) acknowledgments\footnote{If EquinOCS, our proceedings submission
-system, is used, then the disclaimer can be provided directly in the system.},
-for example: The authors have no competing interests to declare that are
-relevant to the content of this article. Or: Author A has received research
-grants from Company W. Author B has received a speaker honorarium from
-Company X and owns stock in Company Y. Author C is a member of committee Z.
+The authors have no competing interests to declare that are relevant
+to the content of this article.
 \end{credits}
 % %
 % ---- Bibliography ----
