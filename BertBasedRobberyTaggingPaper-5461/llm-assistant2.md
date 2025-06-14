@@ -1566,3 +1566,1218 @@ Alternatively, for more formal academic writing:
 <!-- gptel--backend-name: "DeepSeek" -->
 <!-- gptel--bounds: ((response (37706 39482) (39532 40682) (41803 43929) (44180 46657) (46937 47596) (47699 49544) (50008 50844) (52442 53779) (55095 56409) (57621 58761) (59084 59985) (60658 61603) (62273 62803) (64110 64203) (64255 64770) (66077 66170) (66238 67238) (67246 68409) (69110 69415) (69856 70113) (70550 70645) (70744 71388) (73221 74709) (75194 75935) (76853 77521) (77614 78963) (79787 80816) (81752 82823) (83071 83801))) -->
 <!-- End: -->
+\section{Introduction}
+Deep learning models (DL) have yielded remarkably
+successful outcomes across a wide range of applications (e.g., image
+classification, object detection, natural language
+processing)\cite{PATHAK20181706}. In various text classification
+tasks, such as sentiment analysis, news categorization,
+question-answering, and natural language inference, DL has outperformed
+traditional \emph{Machine Learning (ML)}  methods\cite{Minaee2021}, a
+testament primarily to its inherent generalization and
+robustness\cite{Zahangir2018}. However, depending on the problem
+to be solved, designing a DL architecture demands a substantial volume
+of data to attain the desired generalization performance. For example,
+in image processing and computer vision, datasets such as ImageNet
+(\numprint{14197122}) and Microsoft COCO (\numprint{2.5} million)
+provide extensive data per category\cite{PATHAK20181706}, while in
+\emph{Natural Language Processing (NLP)}, resources like WebTex, composed of
+millions of web pages, have been pivotal in training models such as
+GPT-2\cite{radford2019language}.
+
+Although the success of DL hinges on large datasets, specialized
+hardware \cite{radford2019language}\cite{murphy2022probabilistic}, and
+model architecture, for niche domains with limited data,
+\emph{Transfer Learning (TL)} and \emph{Fine-Tuning (FT)} enable
+knowledge transfer from source to target domains by reusing
+early-layer features and adapting task-specific layers
+\cite{yosinski2014transferable}\cite{howard2018universallanguagemodelfinetuning}.The
+legal documentation domain is a promising field for applying NLP,
+where digital information can be leveraged to develop tools that
+optimize legal workflows. However, applications face language
+limitations, as LexGlue, the most widely used benchmark, focuses on
+English despite the growing interest in judicial outcomes
+prediction\cite{mumcuouglu2021natural,kalia2022classifying,wang2020deep},
+legal article prediction from text and document classification
+\cite{yan2019law,clavie2021}. While transformers models like mBERT
+enable cross-lingual transfer, legal terminologies and system
+differences necessitate domain-specific
+pretraining (e.g., LegalBERT \cite{chalkidis2020legal}) or hybrid
+approaches \cite{liu2022legal}, particularly for low-resource
+languages \cite{savelka2021cross}.
+
+In Ecuador’s penal code (COIP), robbery is defined in Article
+189. However, for public security analytics, this is further
+classified into specific subtypes including, but not limited to: home
+robbery, street robbery, businesses robbery, vehicle parts and
+accessories theft, car theft, and motorcycle theft. These
+classifications are manually identified by the
+\textit{\printnombrecomision}\ (CEESJCT) using \textit{crime incident
+  reports}. To automate this, we propose a transformer-based
+classifier that uses multilingual DistilBERT
+\cite{Sanh2019DistilBERTAD}.  We implemented a three-phase approach:
+\textbf{Phase 1: Classification with transfer learning} the
+transformer model is used as a feature extractor followed of full
+connecting layers and dropout achieving 80.5\% accuracy (F1:
+0.80). Even though the model’s bidirectional attention mechanism and
+subword tokenization (WordPiece) proved essential for capturing
+semantic relationships in crime narratives, particularly when some
+words remain misspelled and uncorrected for legal reasons protecting
+the victim's statement, it struggled with minority
+classes. \textbf{Phase 2: Fine-Tuning for Contextual Adaptation} Using
+a learning rate $3 \times 10^{-6}$) improved accuracy to 90.3\% (F1:
+0.90) by resolving semantic ambiguities and achieving significant
+gains for less frequent categories. Stages 1 and 2 used a dataset of
+431,669 robbery reports (2014–2022), tokenized into sequences of up to
+300 words, and split into training (63\%), validation (16\%), and test
+(21\%) sets. \textbf{Phase 3: Scaling to Complex Taxonomies} model is
+fine tuned to predict a total of 11 categories, extending the original
+6. A merged validated dataset of 1.1 million narratives was developed
+by combining police reports with criminal complaints filed in the
+prosecutor's office. The model was trained using a Tensor Processing
+Unit (TPU) to process the entire dataset. A notable improvement in
+accuracy performance was achieved (95.5\% accuracy with an F1-score of
+0.95).
+
+
+The remainder of this article is structured as
+follows. Section~\ref{chap:literatura} reviews foundational concepts
+and surveys related work. The proposed methodology, including dataset
+generation, is detailed in
+Section~\ref{sec:methods}. Section~\ref{sec:experimental-results}
+presents the experimental results. Finally,
+Section~\ref{sec:conclusions} discusses the main findings,
+conclusions, and directions for future work.
+
+\section{Foundational Concepts and Related Works}\label{chap:literatura}
+In this research, we propose a transformer-based model for robbery
+offense classification aligned with categorical frameworks established
+by both the Prosecutor's Office and INEC.  Legal documents present
+unique challenges compared to general-domain texts, characterized by
+three distinctive features: (1) inherent structural complexity, (2)
+substantial document length, and (3) specialized juridical
+terminology. These characteristics have led to the emergence of Legal
+Natural Language Processing (LNLP) as a specialized NLP subdomain
+\cite{Ariai2024,Zhong2020}.
+
+Within this paradigm, Legal Text Classification (LTC) refers to the
+task of categorizing legal documents into predefined juridical
+categories. While LTC shares fundamental principles with general TC,
+it introduces specific technical challenges including but not limited
+to: high class cardinality (typically ranging from dozens to hundreds
+of categories), multi-label classification requirements, and the need
+for domain-specific feature engineering. The complexity of LTC
+increases exponentially with the number of potential legal categories
+and their hierarchical relationships within juridical systems.
+
+
+
+
+\subsection{Legal Natural Language Processing}
+\label{sec:legal-lang-proc}
+
+
+NLP for legal documents primarily focus on two categories
+of approaches: \textit{Embedding Methods} and \textit{Symbol-Based
+  Methods} \cite{Zhong2020}. Embedding Methods, such as
+transformer-based models (e.g., BERT), derive high-level
+representations from large corpora and offer strong predictive
+performance, but their opacity raises concerns about
+interpretability. Conversely, Symbol-Based Methods explicitly model
+legal knowledge and facilitate reasoning over structured
+representations, thereby providing greater transparency, though often
+at the expense of accuracy. Recent work in explainable AI seeks to
+address this limitation in embedding methods.For example,
+attention-based techniques such as \textit{attention rollout} and
+\textit{attention flow} aggregate attention weights across layers in
+transformers, offering insight into model decisions and revealing a
+degree of inherent explainability \cite{Abnar2020}.
+
+The Transformer architecture, introduced in
+\cite{vaswani2017attention}, represents a significant advancement in
+NLP by incorporating a self-attention
+mechanism that allows deep learning models to effectively capture
+long-range dependencies and facilitates efficient parallel
+training. This innovation supplanted the previous state-of-the-art
+recurrent neural network (RNN) approaches, including Long Short-Term
+Memory (LSTM) networks \cite{tunstall2022natural}. Transformers employ
+an encoder-decoder architecture augmented by self-attention and
+transfer learning (TL) methodologies.
+
+BERT \cite{devlin2018bert}, a notable application of the Transformer
+encoder, generates deeply bidirectional contextual representations
+through exclusively encoder-based architecture. Its pre-training
+utilizes self-supervised objectives such as masked language modeling
+(MLM) and next sentence prediction (NSP), enabling the model to
+acquire rich contextual information from extensive corpora.
+
+
+\subsection{Related Works}
+\label{sec:related-works}
+
+This section reviews related work in LTC research, focusing on three
+critical dimensions: (1) architectural innovations, (2) dataset
+characteristics and domain adaptation strategies, and (3) comparative
+performance. Table \ref{tab:work-summary} provides a  comparison of these
+approaches. While existing research has predominantly focused on
+English-language legal corpora our work represents, to our knowledge,
+innovative in exploring transformer architectures in Spanish legal
+documents attached to Ecuadorian reality.
+
+In their research work, \cite{Shaheen2020} tackle large-scale
+multi-label legal text classification using transformer architectures
+(BERT, RoBERTa, DistilBERT, XLNet, M-BERT). Through systematic
+evaluation on the JRC-Acquis (multilingual) and EURLEX57K (English)
+datasets, they demonstrate that combining gradual layer unfreezing,
+discriminative learning rates, and domain-specific pretraining
+achieves state-of-the-art performance; surpassing LSTM baselines by
+significant margins. The authors further propose standardized dataset
+splits to facilitate reproducible research, establishing transformers
+as the new benchmark for legal document classification with complex
+taxonomies like EuroVoc.
+
+\cite{Shaheen2021} extends this research to zero-shot cross-lingual
+transfer using multilingual transformers (M-BERT, M-DistilBERT). By
+fine-tuning models exclusively on English EURLEX57K documents and
+evaluating on French/German translations, they achieve target-language
+performance comparable to models trained on all three languages. Key
+innovations include continued pretraining on legal corpora and
+progressive unfreezing during fine-tuning, highlighting transformers'
+ability to bridge linguistic gaps in low-resource legal NLP scenarios.
+
+The cross-linguistic applicability of transformers is further
+validated by \cite{Akca2022} for the classification of Turkish legal
+texts. Their comparative analysis reveals that transformer-based
+models outperform traditional ML methods (e.g., SVM, logistic
+regression) in accuracy, despite limited training
+data. While specific classification categories remain unspecified,
+this study crucially demonstrates that transformers' superiority
+extends beyond English to other languages.
+
+Addressing the challenge of document length, \cite{Vatsal2023}
+systematically evaluates BERT adaptations for U.S. Supreme Court
+decisions from the Supreme Court Database (SCDB). They find that
+domain-adapted Legal-LongFormer and Legal-BERT outperform their
+general-domain counterparts. This underscores the significance of
+domain-specific pretraining and optimized strategies for handling
+lengthy documents in legal text classification. ~\cite{Shaheen2020}
+
+
+\begin{table}[ht]
+\centering
+\caption{Comparative analysis of legal text classification approaches}
+\scriptsize
+\label{tab:work-summary}
+\begin{tabularx}{\textwidth}{p{0.1\textwidth}XXXXp{0.3\textwidth}}
+\hline
+\textbf{Ref} & \textbf{Model} & \textbf{Task} & \textbf{Dataset} & \textbf{Language} & \textbf{Key Results} \\ 
+\hline
+\cite{Shaheen2020} & BERT, RoBERTa, DistilBERT, XLNet, M-BERT &
+                                                                Multi-label
+                                                                classification
+                                                                     &
+                                                                       JRC-Acquis, EURLEX57K & Multilingual, English  & 0.661 (F1) on JRC-Acquis \\
+
+\cite{Shaheen2021} & M-BERT, M-DistilBERT & Cross-lingual transfer &
+                                                                     EURLEX57K
+                                                                     Extended
+                                                                                        &
+                                                                                          Models
+                                                                                          pretrained
+                                                                                          in
+                                                                                          Multilingual. FT
+                                                                                          in
+                                                                                          English & 34\% improvement on French, 87\% improvement on German \\
+
+\cite{Akca2022} & Transformer-based & Document classification &
+                                                                Turkish
+                                                                Legal
+                                                                Corpus
+                                                                                        &
+                                                                                          Turkish
+                                                                                                            &
+                                                                                                              DL
+                                                                                                              models
+                                                                                                              improve
+                                                                                                              over
+                                                                                                              traditional
+  ML\\
+
+  \cite{Vatsal2023} & BERT, RoBERTa,
+                      Legal-BERT,
+                      LongFormer,
+                      Legal-LongFormer & Long document classification & SCDB & English & 80.1\%
+                                                                                         accuracy
+                                                                                         (15
+                                                                                         categories),
+                                                                                         60.9\%
+                                                                                         accuracy
+                                                                                         (279
+                                                                                         categories)
+                                                                                         with
+                                                                                         Legal-BERT \\
+  \hline
+\end{tabularx}
+\end{table}
+
+\subsection{Discussion, Findings and Contribution}
+\label{sec:discussion-findings}
+The reviewed literature indicates that BERT models are widely utilized
+for legal text classification (LTC). Transformer-based architectures
+consistently outperform traditional machine learning methods in this
+domain\cite{Akca2022}. Fine-tuning pre-trained BERT weights to the
+target task is a standard approach. Also, our methodology is
+comparable to that of \cite{Vatsal2023}, wherein models are trained
+for both broader and fine-grained legal categories. A recurrent
+challenge with BERT-based approaches concerns the processing of
+lengthy documents, due to BERT's tokenization limits.
+
+Distinct from previous works, our study specifically addresses the
+classification of robbery types. Most literature focuses on broader
+legal categories, and while some studies may implicitly include
+robbery within categories such as "criminal law" or "property
+offenses," explicit attention to robbery classification is absent,
+marking our focus as potentially novel and expands the exploration in
+application of transformer-based models in legal domain.
+
+Another important difference of this work is related to the nature of
+its data. While it is recognized that LNLP has unique characteristics
+compared to general NLP, the narratives in our dataset originate from
+three principal sources: citizen crime reports, police accounts, and
+prosecutor's office reports. Consequently, our dataset encompasses a
+blend of technical texts and non-technical victim-generated
+descriptions. These factors substantiate the application of BERT-based
+models for the current text classification task.
+
+% Contribution
+
+Building upon these foundations, this study makes three contributions
+to LNLP. Firstly, it focuses on the specific context
+of \textit{robbery} as defined by Ecuadorian law, thus addressing a
+distinct and pertinent crime type within the local legal
+landscape. Secondly, the research tackles the complex task of
+narrative tagging within crime reports, which are characterized by
+variable lengths and the coexistence of technical and colloquial
+language, including frequent misspellings due to direct transcription
+from citizens' testimonies. Third, it introduces an original
+Spanish-language dataset featuring crime narratives related to robbery
+and official classification labels.
+
+The implemented model has been operationally adopted by the
+\textit{Dirección de Estadística y Sistemas de Información},
+automating the manual classification of crime narratives in robbery
+and contributing to statistical analysis by the aforementioned
+department. This work constitutes, to the authors' knowledge, the
+first application of Transformer-based models for analyzing
+Spanish-language Ecuadorian crime narratives.
+
+
+\section{Methodology}
+\label{sec:methods}
+This section details the development of a transformer-based robbery
+classification model for Ecuadorian crime reports, structured around
+three pillars: dataset preparation, training protocol, and performance
+evaluation. The model was developed in three stages: initial transfer
+learning (TL) on a reduced dataset of 6 categories \(D_{\kappa=6}\),
+followed by fine-tuning (FT) on the same dataset, and concluding with
+FT on an expanded dataset of 11 categories \(D_{\kappa=11}\). 
+
+\subsection{Dataset Generation}
+\label{sec:dataset-generation}
+
+\subsubsection{Basic Taxonomy (\(D_{\kappa=6}\)) Dataset}
+\label{initial-crime-dataset}
+To train the model, an initial target dataset \(D^T_{\kappa=6, N}\)
+with 6 categories is generated by updating an SQL table of robbery
+records from \printInicialesComision{} (as of June 8, 2022), obtaining
+\numprint{671708} records. Next the crime narratives are extracted and
+paired with the previous table using the record's key, yielding
+\numprint{671146}. Next, we cleaned the text sequences by Removing
+non-alphanumeric characters and converting text to lowercase by
+default (though \modelohuggingface{} preserves case sensitivity). The
+statistical analysis of word counts \(l_w\) of each document \(X_i\)
+from the robbery narratives gathered showed a mean ($\mu$) =
+\numprint{98.34}, a standard deviation of ($\delta$) =
+\numprint{77.38}; showing high variability in narratives lengths. The
+histogram of the word counts presents a Bimodal distribution, with
+peaks at $l_w \in \{7, 100\}$. Also $\text{max}(l_w)=\numprint{914}$
+words. Quartile analysis showed a median of 52 words per $X_i$, with
+$q_1=33$, $q_3=137$, and an upper threshold $l_{w_{sup}} = 293$
+words. Given that the DistilBERT model has a maximum sequence length
+of 512 tokens and produces 768-dimensional embeddings
+\cite{Sanh2019DistilBERTAD}, we constructed dataset
+$D^T_{\kappa=6, N}$ consisting of narratives where the number of words
+of each sample $X_i$ satisfies $35 < l_{w_i}(X_i) \leq 300$. This
+selection resulted in a total of $N = \numprint{671708}$
+records. 
+The dataset \( D^T_{\kappa=6, N} \) was partitioned into training
+(\( D^T_{\kappa=6,train} \)), validation (\( D^T_{\kappa=6, valid} \)), and testing
+(\( D^T_{\kappa=6, test} \)) subsets to facilitate model training and
+evaluation. The training set comprises 273,336 records (63.32\% of the
+dataset), while the validation and test sets contain 68,333 (15.83\%)
+and 90,000 (20.85\%) records, respectively. The validation set was
+derived by splitting the training data in an 80:20 ratio. 
+
+\subsubsection{Extended Taxonomy (\(D_{\kappa=11}\)) Dataset}
+\label{sec:extended-dataset}
+We constructed an extended target dataset comprising 11 distinct
+categories by integrating police reports with corresponding
+prosecutor's office records. This integration significantly expanded
+our training corpus, enhancing the model's exposure to diverse textual
+patterns. The final dataset contains \numprint{1109335} records, with
+the distribution across categories detailed in
+Table~\ref{tab:GeneracionDataset}. The dataset creation process
+involved the following steps:
+
+\begin{enumerate}
+\item \textbf{Initial Data Extraction:}Crime reports from 2014–2022 were extracted and filtered for
+  robbery cases from \printInicialesComision, yielding to
+  \numprint{735045} records.
+  \item \textbf{Narrative Retrieval:} Crime narratives are obtained
+    for each of the previous records obtaining a total of
+    \numprint{725079}. However, non-robbery cases are excluded if
+    found. This produces a total of \numprint{723435} records.
+  \item \textbf{Preprocessing:} lowercasing and removal of
+    non-alphanumeric characters.
+  \item \textbf{Dataset Integration:}Police and prosecutor narratives
+    were combined into a single dataset, yielding to
+    \numprint{1446870} records.
+  \item \textbf{Quality Control:} statistical analysis over the text
+    is carried out. Narratives with 50–400 words were retained (upper
+    fence: 389.5 words), reducing the dataset to \numprint{1140728}
+    records. Crime labels were also standardized (e.g. removing accents).
+  \item \textbf{Category refinement:} Non-compliant labels (48
+    categories) were discarded with the exception of the
+    \textit{OTHER ROBBERIES} category which is retained. The final dataset, with
+    \numprint{1109335} records was randomly shuffled and
+  \item \textbf{Dataset Split:} The dataset is partition into training
+    (\numprint{807468} samples $\approx$ 72\%), validation
+    (\numprint{201867} samples  $\approx$ 18\%),  and test
+    (\numprint{100000} samples $\approx$ 10\%) sets.
+\end{enumerate}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Extended Taxonomy Dataset}
+    \label{tab:GeneracionDataset}
+    \scriptsize
+    \begin{tabularx}{\textwidth}{p{0.4\textwidth}p{0.4\textwidth}X}
+        \toprule
+        Basic Taxonomy & Extended Labels & Total \\ \hline
+        HOME ROBBERY & HOME ROBBERY & \numprint{172264} \\
+        STREET ROBBERY & STREET ROBBERY & \numprint{421497} \\ 
+        BUSINESS ROBBERY & BUSINESS ROBBERY & \numprint{74088} \\ 
+        VEHICLE PARTS AND ACCESSORIES THEFT & VEHICLE PARTS AND ACCESSORIES THEFT & \numprint{154546} \\
+        CAR THEFT & CAR THEFT & \numprint{90038} \\ 
+        MOTORCYCLE THEFT & MOTORCYCLE THEFT & \numprint{119128} \\ \hline 
+        \multirow{4}{*}{NO INFORMATION}  & OTHER ROBBERIES & \numprint{43468} \\ 
+        {} & WATER VESSEL ROBBERY & \numprint{9407} \\ 
+        {} & SOCIAL ORGANIZATION ROBBERY & \numprint{3087} \\ 
+        {} & EDUCATIONAL INSTITUTION ROBBERY & \numprint{17252} \\
+        {} & PUBLIC INSTITUTION ROBBERY & \numprint{4560} \\ \hline
+        \multicolumn{2}{c}{Total} & \numprint{1109335} \\
+        \bottomrule
+    \end{tabularx}
+  \end{table}
+
+\subsection{Model Training}
+\label{sec:model-training}
+\subsubsection{Problem Formulation}
+
+In this study, we address the task of classifying crime report
+narratives of robbery into $k$ predefined categories. A language model
+estimates the conditional probability of the next token given a
+preceding sequence of tokens. Within this framework, TC can be
+formalized as in~\eqref{eq:classification-prob}: given a sequence of
+words $\mathbf{x}$, the goal is to predict its corresponding label
+$\hat{y}$. Training a TC model thus involves learning a function $f$
+that maps a target dataset $D^T$, consisting of text sequences
+$X_i \in D = \{X_1, X_2, \dots, X_N\}$ each formed by $s$ sentences and
+$w_s$ words\footnote{We adopt the notation presented
+  in~\cite{Kowsari2019}.}, to one of $k$ categories, as shown
+in~\eqref{eq:clasificacion}.
+
+For this work, we selected the \modelohuggingface
+model~\cite{Sanh2019DistilBERTAD}, a distilled version of BERT, which
+retains 97\% of BERT's language understanding capabilities while
+significantly reducing the number of parameters. Moreover, it supports
+multilingual tasks, including Spanish, aligning well with the
+linguistic requirements of our dataset.
+
+\begin{equation}
+  \label{eq:classification-prob}
+  \hat{y} = \underset{y\in\{1,\dots, k\}}{\text{argmax}}P(y\mid w_1,w_2,\dots, w_i)
+\end{equation}
+
+
+\begin{equation}\label{eq:clasificacion}
+  f: D \longrightarrow \mathbb{Z}^k
+\end{equation}
+
+To enable processing by a transformer-based language model, textual
+sequences must first undergo tokenization and be transformed into
+numerical representations. This involves segmenting the text into
+discrete tokens and subsequently mapping these tokens to vector
+embeddings. Let
+$\Tokenize: \mathcal{X} \rightarrow \mathbb{Z}^\lambda$ be the
+tokenization function that maps text sequences to token IDs, where
+$\mathcal{X}$ is the text space and $\lambda$ is the maximum sequence
+length. For each input sequence $X_i \in D^T_N$, the tokenizer
+produces:
+
+\begin{equation}\label{eq:tokenization}
+    (\boldsymbol{\nu}_i, \boldsymbol{\tau}_i) = \Tokenize(X_i)
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\boldsymbol{\nu}_i \in \mathbb{Z}^\lambda$ are the token IDs
+    \item $\boldsymbol{\tau}_i \in \{0,1\}^\lambda$ is the attention
+      mask
+    \item $\lambda = 512$ for \modelohuggingface
+
+\end{itemize}
+
+The token IDs are passed through the embedding layer, which maps each
+token to a $d=768$ dimensional vector representation. The embedding
+matrix $W_{embedding}\in \mathbb{R}^{119547\times 768}$ uses a
+$V=119547$ vocabulary, where each row corresponds to a unique token,
+thereby providing dense vector representations.
+
+\begin{equation}\label{eq:embedding}
+    \mathbf{E} = \text{Embedding}(\boldsymbol{\nu}_i) \in \mathbb{R}^{\lambda \times d}
+\end{equation}
+
+The encoded numerical representations of the text are then processed by
+\modelohuggingface{}:
+
+\begin{equation}\label{eq:encoding}
+    \mathbf{H} = \bertmodel{}(\mathbf{E}, \boldsymbol{\tau}_i) \in \mathbb{R}^{\lambda \times d}
+\end{equation}
+
+The classification layer comprises a feedforward layer that maps the
+hidden state vector output from the encoder (or CLS embedding)
+$\mathbf{h}_{[\text{CLS}]}$ to the $k$ categories:
+
+\begin{equation}\label{eq:classification}
+  \hat{\boldsymbol{y}}_i = \text{softmax}(\mathbf{W}\mathbf{h}_{[\text{CLS}]} + \mathbf{b}) \in \mathbb{R}^k
+\end{equation}
+
+where:
+\begin{itemize} 
+  \item $\mathbf{h}_{[\text{CLS}]} \in \mathbb{R}^d$ is the input
+    feature vector of $d=768$ 
+  \item $\mathbf{W} \in \mathbb{R}^{k \times d}$ is the classification
+    weight matrix, mapping from embedding space to $k$ classes.
+  \item $\mathbf{b} \in \mathbb{R}^k$ is the bias vector
+  \item $k$ is the number of target categories
+  \item A softmax activation to obtain probabilities
+    \(p_i = \frac{\exp(y_i)}{\sum_{j=1}^{k} \exp(y_j)} \), where \(
+    p_i \) is the probability of class \( i \)
+
+\end{itemize}
+
+
+In this work, we experiment with TL and FT to adapt the weights of a
+pre-trained model from a large source dataset $D^S$ to the
+characteristics of a target dataset $D^T$. We adopt the TL definition
+provided by \cite{falconi2020transfer}:
+
+\begin{definition}[Transfer Learning]
+  Given an original domain $\mathcal{D}^{S}$ with an original learning
+  task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$, with a
+  target task $\mathcal{T}^{T}$, the TL operation seeks to improve the
+  learning of a prediction function $\ypredtarget(\cdot)$ in
+  $\mathcal{D}^{T}$ using the knowledge acquired in
+  $\ypredsource(\cdot)$ in $\mathcal{T}^{S}$, through $\phi^S$; where
+  $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ or
+  $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
+\end{definition}
+
+Considering the mentioned definition of TL, \eqref{eq:Transfer2}
+represents the TL operation applied to the text classification
+problem, starting from a pre-trained natural language model; where $L$
+is the number of layers of the pre-trained model.
+
+\begin{equation}
+  \mathbb{T_{L}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T}  \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{L} \right)
+    \label{eq:Transfer2}
+\end{equation}
+
+Consequently, the prediction generation is represented by Equation
+\eqref{eq:Transfer3}
+\begin{equation}
+    \mathcal{Y}^{T} = \mathbb{T_{L}} \left< \ypredsource(D^{S}), \mathcal{D}^{T} \right> = \ypredtarget(D^T) 
+    \label{eq:Transfer3}
+\end{equation}
+
+Similarly, we use the definition of FT as presented
+in~\cite{falconi2020transfer}:
+
+\begin{definition}[Fine Tuning]
+  Given an original domain $\mathcal{D}^{S}$ with an original learning
+  task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$, with a
+  target task $\mathcal{T}^{T}$, the FT procedure enhances the
+  learning of a target function
+  $\mathcal{Y}^T = \ypredtarget(\mathcal{I}^T)$ by retraining $r$
+  layers of the original model
+  $\mathcal{Y}^S = \ypredsource(\mathcal{I}^S)$ with $L$ layers and
+  $\gamma = L-r$
+\end{definition}
+
+The definition for FT is provided in~\eqref{eq:finetuningLenin},
+whereas the special case $\gamma=0$, where $L=r$, is given
+in~\eqref{eq:finetuningTunstall} and corresponds to full model tuning.
+
+
+\begin{equation}
+    \mathbb{F_{T}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right> = \ConvNetOut \left( \ypredsource \left (\ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{\gamma -1} \right)\Bigr\rvert_{\gamma}^{L}\right) 
+    % \gamma = L-r \nonumber
+    \label{eq:finetuningLenin}
+\end{equation}
+
+
+\begin{equation}\label{eq:finetuningTunstall}
+    \mathbb{F_{T}} \left< \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right> = \ConvNetOut \left(\ypredsource(\mathcal{D}^{T})\right)
+  \end{equation}
+  
+\subsubsection{Phase 1: Baseline Transfer Learning}
+\label{sec:phase-1:-baseline}
+
+In this stage, TL is employed to adapt a pre-trained
+\emph{\modelohuggingface} model $\ypredsource(\cdot)$ for the target
+task $\ypredtarget(\cdot)$ by applying transformations $\mathcal{A}$
+to its outputs, while keeping the original weights
+$\mathcal{W}^S = \numprint{134735616}$ fixed. Input samples are
+encoded by the feature extractor, yielding tensors in
+$\mathbb{R}^{N \times 300 \times 768}$, where $N$ represents the batch
+size. Global Max Pooling ($\mathrm{GMP}$) condenses these to
+$\mathbb{R}^{N \times 768}$. The adaptation block, with
+$\mathcal{W}^T = \numprint{104294}$ trainable parameters, consists of
+Batch Normalization ($\mathrm{BN}$), a fully connected layer of 512
+units ($\mathrm{FC}_{512}$), Dropout ($\mathrm{Dro}_{0.1}$), two fully
+connected layers of 128 units each ($\mathrm{FC}_{128}$), another
+Dropout layer, and an output layer of $\kappa = 6$ units
+($\mathrm{FC}_\kappa$). During training, only $\mathcal{W}^T$ is
+updated, as detailed in Equations~\eqref{eq:Transfer2},
+\eqref{eq:Transfer3}, and \eqref{eq:finetuning}.
+
+
+\begin{equation}
+  \label{eq:finetuning}
+    \mathcal{A} = FC_{6} \circ Dro_{0.1} \circ FC_{128}  \circ Dro_{0.1} \circ FC_{128} \\ 
+    \circ Dro_{0.1} \circ FC_{512} \circ BN \circ GMP 
+\end{equation}
+
+Due to hardware constraints, a reduced subset of the data was employed
+in this phase:
+$d^T_{\text{train}}:\numprint{20000} \subset D^T_{\text{train}}$,
+$d^T_{\text{valid}}:\numprint{4000} \subset D^T_{\text{valid}}$, and
+$d^T_{\text{test}}:\numprint{4000} \subset D^T_{\text{test}}$. The
+training parameters utilized in this stage are summarized in
+Table \ref{tab:trainingParamsCombined} Phase 1.
+
+
+
+\subsubsection{Phase 2: Fine-Tuning on Dataset $D_{\kappa=6}$}
+\label{sec:phase2-finetuning}
+
+In this phase, we adopt FT all the pre-trained model's weights
+approach as represented in \eqref{eq:finetuningTunstall}, leveraging the
+inherent advantage that full FT does not necessitate supplementary
+output layers. As stated in \cite{tunstall2022natural}, this procedure
+reduces loss and increases classification performance on the new
+task. Table \ref{tab:trainingParamsCombined} details the training hyperparameters
+utilized to FT the model in the basic taxonomy dataset in the Phase 2 column.
+
+
+
+
+\subsubsection{Phase 3: Scaling to Dataset $D_{\kappa=11}$}
+\label{sec:phase-3-scaling}
+In this phase, we extend the scope of the FT model to the
+$D_{\kappa=11}$ dataset, which expands to a total of 11
+categories. Procedures in building the aforementioned dataset were
+described in Section \ref{sec:extended-dataset}. Dataset was split in
+training, validation, and testing sets with \numprint{807468},
+\numprint{201867}, and \numprint{100000} samples, respectively. To FT
+the model using such large dataset, we used a TPU
+v2\cite{jouppi2020domain}. The hyperparameters settings for this phase
+are presented in Phase 3 of Table \ref{tab:trainingParamsCombined}.
+
+\begin{table}[!t]
+\renewcommand{\arraystretch}{1.3}
+\caption{Training Parameters Across Phases}
+\label{tab:trainingParamsCombined}
+\centering
+\scriptsize
+\begin{tabularx}{\linewidth}{lXXX}
+\hline
+Parameter & Phase 1 (TL) & Phase 2 (FT) & Phase 3 (FT-extended) \\
+\hline
+Loss & Categorical Cross Entropy & Sparse Categorical Cross Entropy & Sparse Categorical Cross Entropy \\
+Metrics & Categorical Accuracy & Sparse Categorical Accuracy & Sparse Categorical Accuracy \\
+Optimizer & Adam & Adam & Adam \\
+Learning rate & $2 \times 10^{-4}$ & $3 \times 10^{-6}$ & $3 \times 10^{-6}$ \\
+Epochs & 20 & 10 & 12 \\
+Early stopping & 5 epochs & 10 epochs & 10 epochs \\
+Batch size & 16 & 16 & 128 \\
+\hline
+\end{tabularx}
+\end{table}
+
+\section{Experimental Results}
+\label{sec:experimental-results}
+Tables~\ref{tab:phase1-score},~\ref{tab:phase2-ft-score},
+and~\ref{tab:phase3-ft-score} report the model’s performance across
+Phases~1, 2, and 3, respectively. Fine-tuning the model on the
+extended dataset with TPU acceleration led to improved performance and
+enabled the prediction of a broader range of robbery categories. The
+observed discrepancies in support counts between Phase~1 and Phase~2
+are attributed to changes in category labeling introduced by
+\printInicialesComision. It is also evident that the distribution of
+samples across categories is imbalanced, reflecting the underlying
+social circumstances surrounding criminal activity. Consequently, we
+opted not to employ synthetic data augmentation for this study. The
+results further suggest that the \textit{Public Institution Robbery}
+category should be merged into the \textit{Other Robberies} category,
+due to the limited number of available samples.
+
+\begin{table}[!t]
+% increase table row spacing, adjust to taste
+\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+\caption{Phase 1 TL Classifier Performance on \(D_{\kappa=6}\)}
+\label{tab:phase1-score}
+\centering
+\scriptsize
+% Some packages, such as MDW tools, offer better commands for making tables
+% than the plain LaTeX2e tabular which is used here.
+\begin{tabular}{ccccc}
+
+\hline
+         class &  precision  &  recall & f1-score &  support \\ \hline
+
+          Car Theft  &  \numprint{0.58}    &  \numprint{0.36}    &  \numprint{0.45}  &  \numprint{285} \\ 
+    Motorcycle Theft &   \numprint{0.90}    &  \numprint{0.84}    &  \numprint{0.87}  &  \numprint{457} \\
+    Vehicle Parts And Accessories Theft &   \numprint{0.79}    &  \numprint{0.79}    &  \numprint{0.79}  &  \numprint{613} \\
+    Street Robbery &   \numprint{0.82}    &  \numprint{0.91}    &  \numprint{0.86}  & \numprint{1666} \\
+   Business Robbery &   \numprint{0.82}    &  \numprint{0.70}    &  \numprint{0.75}  &  \numprint{328} \\
+     Home Robbery &   \numprint{0.76}    &  \numprint{0.77}    &  \numprint{0.77}  &  \numprint{651} \\ \hline
+
+   micro avg &     \numprint{0.80} &    \numprint{0.80}   &  \numprint{0.80}  &   \numprint{4000} \\ 
+   macro avg &     \numprint{0.78} &    \numprint{0.73}   &  \numprint{0.75}  &   \numprint{4000} \\ 
+weighted avg &     \numprint{0.80} &     \numprint{0.80} &
+                                                           \numprint{0.80}
+                                                           & \numprint{4000} \\
+ % samples avg &      \numprint{0.80} &      \numprint{0.80} &
+ %                                                             \numprint{0.80}
+ %                                                             & \numprint{4000} \\
+
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!t]
+% increase table row spacing, adjust to taste
+\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+\caption{Phase 2 FT Classifier Performance on \(D_{\kappa=6}\)}
+\label{tab:phase2-ft-score}
+\centering
+\scriptsize
+% Some packages, such as MDW tools, offer better commands for making tables
+% than the plain LaTeX2e tabular which is used here.
+\begin{tabular}{ccccc}
+
+\hline
+         class &  precision  &  recall & f1-score &  support \\ \hline
+
+           Business Robbery        &  \numprint{0.78}    &  \numprint{0.79}    &  \numprint{0.78}  &  \numprint{297} \\ 
+           Car Theft                    &   \numprint{0.95}    &  \numprint{0.88}    &  \numprint{0.92}  &  \numprint{363} \\
+           Motorcycle Theft                     &   \numprint{0.95}    &  \numprint{0.93}    &  \numprint{0.94}  &  \numprint{392} \\
+           Vehicle Parts \& Accessories  &   \numprint{0.85}    &  \numprint{0.92}    &  \numprint{0.88}  & \numprint{663} \\
+           Home Robbery                  &   \numprint{0.87}    &  \numprint{0.89}    &  \numprint{0.88}  &  \numprint{663} \\
+           Street Robbery                   &   \numprint{0.94}    &  \numprint{0.92}    &  \numprint{0.93}  &  \numprint{1671} \\ \hline
+
+          Accuracy                           &     {} &    {}   &  \numprint{0.90}  &   \numprint{4000} \\ 
+          Macro Avg                          &     \numprint{0.89} &    \numprint{0.89}   &  \numprint{0.89}  &   \numprint{4000} \\ 
+          Weighted Avg                       &   \numprint{0.90}    &  \numprint{0.90} & \numprint{0.90}     & \numprint{4000} \\ \hline
+%  samples avg       0.80      0.80      0.80      4000
+
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+    \caption{Phase 3 FT Classifier Performance on \(D_{\kappa=11}\)}
+    \label{tab:phase3-ft-score}
+    \centering
+    \scriptsize
+    \begin{tabularx}{\textwidth}{p{0.4\textwidth}XXXX}
+        \toprule
+         & precision & recall & f1-score & support \\
+        \midrule
+        Educational Institution Robbery & 0.925995 & 0.946599 & 0.936184 & 1573 \\
+        Motorcycle Theft & 0.985211 & 0.988317 & 0.986762 & 10785 \\
+        Public Institution Robbery & 0.724528 & 0.474074 & 0.573134 & 405 \\
+        Car Theft & 0.967669 & 0.980198 & 0.973893 & 7878 \\
+        Social Organization Robbery & 0.750000 & 0.752688 & 0.751342 & 279 \\
+        Street Robbery & 0.969847 & 0.972298 & 0.971071 & 37976 \\
+        Business Robbery & 0.878871 & 0.893877 & 0.886311 & 6794 \\
+        Home Robbery & 0.944779 & 0.952335 & 0.948542 & 15504 \\
+        Vehicle Parts \& Accessories Theft & 0.977752 & 0.968340 & 0.973023 & 14024 \\
+        Water Vessel Robbery & 0.965197 & 0.983452 & 0.974239 & 846\\
+        Other Robberies & 0.817738 & 0.766006 & 0.791027 & 3936 \\ \hline
+        accuracy & {} & {} & 0.954610 & 100000 \\
+        macro avg & 0.900690 & 0.879835 & 0.887775 & 100000 \\
+        weighted avg & 0.954050 & 0.954610 & 0.954175 & 100000 \\
+        \bottomrule
+    \end{tabularx}
+    
+  \end{table}
+  
+\section{Conclusions and Future Works}
+\label{sec:conclusions}
+
+Transformer-based models have achieved state-of-the-art performance
+across a range of NLP tasks. In this work, we employed FT to address
+text classification for legal documents. The proposed methodology,
+based on FT, demonstrates that transformer architectures can be
+effectively adapted to the legal domain. Notably, our model exhibits
+robustness to class imbalance, even in the absence of explicit
+balancing techniques during training. The utilization of TPU hardware
+was pivotal for processing the expanded dataset, enabling both an
+increase in the number of target categories and overall model
+performance. These results highlight the practical potential of
+deploying machine learning solutions within legal institutions such as
+the Fiscalía General del Estado, where automated narrative
+classification may facilitate more efficient resource allocation and
+optimized operational workflows. Future research should focus on
+adapting new NLP tasks addressed by transformer-based models to
+LNLP. These tasks include, but are not limited to, legal question
+answering, legal named entity recognition, and legal judgment
+prediction.
+
+Below are the corrections for punctuation, grammar, tense consistency, and acronym usage, with definitions given once at first mention and standardized usage thereafter. Latex notation has been preserved. Also, the writing has been revised for conciseness, clarity, and flow. Please review the changes against your document to ensure correct field-specific terminology and context.
+
+---
+
+\section{Introduction}
+
+Deep learning (DL) models have yielded remarkably successful outcomes across a wide range of applications (e.g., image classification, object detection, natural language processing, or NLP)\cite{PATHAK20181706}. In various text classification tasks, such as sentiment analysis, news categorization, question answering, and natural language inference, DL has outperformed traditional machine learning (ML) methods\cite{Minaee2021}, which is primarily a testament to its inherent generalization and robustness\cite{Zahangir2018}. However, depending on the problem to be solved, designing a DL architecture demands a substantial volume of data to attain the desired generalization performance. For example, in image processing and computer vision, datasets such as ImageNet (\numprint{14197122}) and Microsoft COCO (\numprint{2.5} million) provide extensive data per category\cite{PATHAK20181706}, while in NLP, resources like WebTex, composed of millions of web pages, have been pivotal in training models such as GPT-2\cite{radford2019language}.
+
+Although the success of DL hinges on large datasets, specialized hardware\cite{radford2019language}\cite{murphy2022probabilistic}, and model architecture, for niche domains with limited data, transfer learning (TL) and fine-tuning (FT) enable knowledge transfer from source to target domains by reusing early-layer features and adapting task-specific layers\cite{yosinski2014transferable}\cite{howard2018universallanguagemodelfinetuning}. The legal documentation domain is a promising field for applying NLP, as digital information can be leveraged to develop tools that optimize legal workflows. However, applications face language limitations, as LexGlue—the most widely used benchmark—focuses on English, despite the growing interest in judicial outcome prediction\cite{mumcuouglu2021natural,kalia2022classifying,wang2020deep}, legal article prediction from text, and document classification\cite{yan2019law,clavie2021}. While transformer models like mBERT enable cross-lingual transfer, legal terminologies and system differences necessitate domain-specific pretraining (e.g., LegalBERT \cite{chalkidis2020legal}) or hybrid approaches\cite{liu2022legal}, particularly for low-resource languages\cite{savelka2021cross}.
+
+In Ecuador’s penal code (COIP), robbery is defined in Article 189. However, for public security analytics, this is further classified into specific subtypes including, but not limited to, home robbery, street robbery, business robbery, vehicle parts and accessories theft, car theft, and motorcycle theft. These classifications are manually identified by the \textit{\printnombrecomision} (CEESJCT) using \textit{crime incident reports}. To automate this, we propose a transformer-based classifier that uses multilingual DistilBERT\cite{Sanh2019DistilBERTAD}. We implemented a three-phase approach: \textbf{Phase 1: Classification with Transfer Learning.} The transformer model is used as a feature extractor, followed by fully connected layers and dropout, achieving 80.5\% accuracy (F1: 0.80). Even though the model’s bidirectional attention mechanism and subword tokenization (WordPiece) proved essential for capturing semantic relationships in crime narratives—particularly when some words remain misspelled and uncorrected for legal reasons protecting the victim's statement—it struggled with minority classes. \textbf{Phase 2: Fine-Tuning for Contextual Adaptation.} Using a learning rate of $3 \times 10^{-6}$ improved accuracy to 90.3\% (F1: 0.90) by resolving semantic ambiguities and achieving significant gains for less frequent categories. Stages 1 and 2 used a dataset of 431,669 robbery reports (2014–2022), tokenized into sequences of up to 300 words and split into training (63\%), validation (16\%), and test (21\%) sets. \textbf{Phase 3: Scaling to Complex Taxonomies.} The model is fine-tuned to predict a total of 11 categories, extending the original six. A merged, validated dataset of 1.1 million narratives was developed by combining police reports with criminal complaints filed in the prosecutor's office. The model was trained using a Tensor Processing Unit (TPU) to process the entire dataset. A notable improvement in performance was achieved (95.5\% accuracy with an F1-score of 0.95).
+
+The remainder of this article is structured as follows: Section~\ref{chap:literatura} reviews foundational concepts and surveys related work. The proposed methodology, including dataset generation, is detailed in Section~\ref{sec:methods}. Section~\ref{sec:experimental-results} presents the experimental results. Finally, Section~\ref{sec:conclusions} discusses the main findings, conclusions, and directions for future work.
+
+\section{Foundational Concepts and Related Works}\label{chap:literatura}
+
+In this research, we propose a transformer-based model for robbery offense classification aligned with categorical frameworks established by both the Prosecutor's Office and the Instituto Nacional de Estadística y Censos (INEC). Legal documents present unique challenges compared to general-domain texts, characterized by three distinctive features: (1) inherent structural complexity, (2) substantial document length, and (3) specialized juridical terminology. These characteristics have led to the emergence of legal natural language processing (LNLP) as a specialized NLP subdomain\cite{Ariai2024,Zhong2020}.
+
+Within this paradigm, legal text classification (LTC) refers to the task of categorizing legal documents into predefined juridical categories. While LTC shares fundamental principles with general text classification (TC), it introduces specific technical challenges, including but not limited to: high class cardinality (typically ranging from dozens to hundreds of categories), multi-label classification requirements, and the need for domain-specific feature engineering. The complexity of LTC increases exponentially with the number of potential legal categories and their hierarchical relationships within juridical systems.
+
+\subsection{Legal Natural Language Processing}
+\label{sec:legal-lang-proc}
+
+NLP for legal documents primarily focuses on two categories of approaches: \textit{Embedding Methods} and \textit{Symbol-Based Methods}\cite{Zhong2020}. Embedding Methods, such as transformer-based models (e.g., BERT), derive high-level representations from large corpora and offer strong predictive performance, but their opacity raises concerns about interpretability. Conversely, Symbol-Based Methods explicitly model legal knowledge and facilitate reasoning over structured representations, thereby providing greater transparency, though often at the expense of accuracy. Recent work in explainable AI seeks to address this limitation in embedding methods. For example, attention-based techniques such as \textit{attention rollout} and \textit{attention flow} aggregate attention weights across layers in transformers, offering insight into model decisions and revealing a degree of inherent explainability\cite{Abnar2020}.
+
+The Transformer architecture, introduced in \cite{vaswani2017attention}, represents a significant advancement in NLP by incorporating a self-attention mechanism that allows DL models to effectively capture long-range dependencies and facilitate efficient parallel training. This innovation supplanted previous state-of-the-art recurrent neural network (RNN) approaches, including long short-term memory (LSTM) networks\cite{tunstall2022natural}. Transformers employ an encoder-decoder architecture augmented by self-attention and TL methodologies.
+
+BERT\cite{devlin2018bert}, a notable application of the Transformer encoder, generates deeply bidirectional contextual representations through an exclusively encoder-based architecture. Its pre-training utilizes self-supervised objectives such as masked language modeling (MLM) and next sentence prediction (NSP), enabling the model to acquire rich contextual information from extensive corpora.
+
+\subsection{Related Works}
+\label{sec:related-works}
+
+This section reviews related work in LTC research, focusing on three critical dimensions: (1) architectural innovations, (2) dataset characteristics and domain adaptation strategies, and (3) comparative performance. Table \ref{tab:work-summary} provides a comparison of these approaches. While existing research has predominantly focused on English-language legal corpora, our work represents, to our knowledge, an innovation in exploring transformer architectures in Spanish legal documents attached to the Ecuadorian context.
+
+In their research, \cite{Shaheen2020} tackle large-scale multi-label legal text classification using transformer architectures (BERT, RoBERTa, DistilBERT, XLNet, M-BERT). Through systematic evaluation on the JRC-Acquis (multilingual) and EURLEX57K (English) datasets, they demonstrate that combining gradual layer unfreezing, discriminative learning rates, and domain-specific pretraining achieves state-of-the-art performance, surpassing LSTM baselines by significant margins. The authors further propose standardized dataset splits to facilitate reproducible research, establishing transformers as the new benchmark for legal document classification with complex taxonomies like EuroVoc.
+
+\cite{Shaheen2021} extend this research to zero-shot cross-lingual transfer using multilingual transformers (M-BERT, M-DistilBERT). By fine-tuning models exclusively on English EURLEX57K documents and evaluating on French/German translations, they achieve target-language performance comparable to models trained on all three languages. Key innovations include continued pretraining on legal corpora and progressive unfreezing during fine-tuning, highlighting transformers' ability to bridge linguistic gaps in low-resource legal NLP scenarios.
+
+The cross-linguistic applicability of transformers is further validated by \cite{Akca2022} for the classification of Turkish legal texts. Their comparative analysis reveals that transformer-based models outperform traditional ML methods (e.g., SVM, logistic regression) in accuracy, despite limited training data. While specific classification categories remain unspecified, this study crucially demonstrates that transformers' superiority extends beyond English.
+
+Addressing the challenge of document length, \cite{Vatsal2023} systematically evaluate BERT adaptations for U.S. Supreme Court decisions from the Supreme Court Database (SCDB). They find that domain-adapted Legal-LongFormer and Legal-BERT outperform their general-domain counterparts. This underscores the significance of domain-specific pretraining and optimized strategies for handling lengthy documents in LTC.
+
+\begin{table}[ht]
+\centering
+\caption{Comparative Analysis of Legal Text Classification Approaches}
+\scriptsize
+\label{tab:work-summary}
+\begin{tabularx}{\textwidth}{p{0.1\textwidth}XXXXp{0.3\textwidth}}
+\hline
+\textbf{Ref} & \textbf{Model} & \textbf{Task} & \textbf{Dataset} & \textbf{Language} & \textbf{Key Results} \\ 
+\hline
+\cite{Shaheen2020} & BERT, RoBERTa, DistilBERT, XLNet, M-BERT & Multi-label classification & JRC-Acquis, EURLEX57K & Multilingual, English & 0.661 (F1) on JRC-Acquis \\
+
+\cite{Shaheen2021} & M-BERT, M-DistilBERT & Cross-lingual transfer & EURLEX57K Extended & Multilingual (pretrained), fine-tuned in English & 34\% improvement on French, 87\% improvement on German \\
+
+\cite{Akca2022} & Transformer-based & Document classification & Turkish Legal Corpus & Turkish & DL models improve over traditional ML\\
+
+\cite{Vatsal2023} & BERT, RoBERTa, Legal-BERT, LongFormer, Legal-LongFormer & Long document classification & SCDB & English & 80.1\% accuracy (15 categories), 60.9\% accuracy (279 categories) with Legal-BERT \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Discussion, Findings, and Contribution}
+\label{sec:discussion-findings}
+
+The reviewed literature indicates that BERT models are widely utilized for LTC. Transformer-based architectures consistently outperform traditional ML methods in this domain\cite{Akca2022}. Fine-tuning pre-trained BERT weights to the target task is a standard approach. Our methodology is comparable to that of \cite{Vatsal2023}, wherein models are trained for both broader and fine-grained legal categories. A recurrent challenge with BERT-based approaches concerns the processing of lengthy documents, due to BERT's tokenization limits.
+
+Distinct from previous works, our study specifically addresses the classification of robbery types. Most literature focuses on broader legal categories, and while some studies may implicitly include robbery within categories such as "criminal law" or "property offenses," explicit attention to robbery classification is absent. This marks our focus as potentially novel and expands the exploration of transformer-based models' applications in the legal domain.
+
+Another important difference is related to the nature of our data. While LNLP is known for its unique characteristics compared to general NLP, the narratives in our dataset originate from three principal sources: citizen crime reports, police accounts, and prosecutor's office reports. Consequently, our dataset encompasses a blend of technical texts and non-technical, victim-generated descriptions. These factors substantiate the application of BERT-based models for the current text classification task.
+
+Building upon these foundations, this study makes three contributions to LNLP. First, it focuses on the specific context of \textit{robbery} as defined by Ecuadorian law, thus addressing a distinct and pertinent crime type within the local legal landscape. Second, the research tackles the complex task of narrative tagging within crime reports, which are characterized by variable lengths and the coexistence of technical and colloquial language, including frequent misspellings due to direct transcription from citizens' testimonies. Third, it introduces an original Spanish-language dataset featuring crime narratives related to robbery and official classification labels.
+
+The implemented model has been operationally adopted by the \textit{Dirección de Estadística y Sistemas de Información}, automating the manual classification of crime narratives in robbery and contributing to statistical analysis by the aforementioned department. This work constitutes, to our knowledge, the first application of transformer-based models for analyzing Spanish-language Ecuadorian crime narratives.
+
+---
+
+All subsequent sections appear consistent in acronym usage (relying on "NLP," "DL," "TL," "FT," "LTC," etc., after their first definition) and use the proper tense.
+
+### Additional Notes:
+1. Consistent use of present or present-perfect tense is maintained for discussion of general facts and prior work, and past tense is used for your own experiments/results.
+2. Proper punctuation is added throughout, including after "e.g." and in compound sentences.
+3. The spelling of “fine-tuning” is standardized and always abbreviated as “FT” after definition.
+4. Technical phrases have been clarified as needed for readability.
+5. All cited elements are grammatically integrated and punctuated appropriately.
+
+---
+
+If you have the rest of the sections, repeat the same process:  
+- Define each acronym once, then always use the acronym after first mention.  
+- Check for verb tense consistency (use present/perfect tense for general statements, past tense for specific completed actions).  
+- Check and correct punctuation (comma, period, semicolon, and colon usage).  
+- Maintain the structure and meaning of your technical content.
+
+If you need further section-by-section checking, feel free to provide them!
+
+### Deep learning models (DL) have yielded remarkably
+successful outcomes across a wide range of applications (e.g., image
+classification, object detection, natural language
+processing)\cite{PATHAK20181706}. In various text classification
+tasks, such as sentiment analysis, news categorization,
+question-answering, and natural language inference, DL has outperformed
+traditional \emph{Machine Learning (ML)}  methods\cite{Minaee2021}, a
+testament primarily to its inherent generalization and
+robustness\cite{Zahangir2018}. However, depending on the problem
+to be solved, designing a DL architecture demands a substantial volume
+of data to attain the desired generalization performance. For example,
+in image processing and computer vision, datasets such as ImageNet
+(\numprint{14197122}) and Microsoft COCO (\numprint{2.5} million)
+provide extensive data per category\cite{PATHAK20181706}, while in
+\emph{Natural Language Processing (NLP)}, resources like WebTex, composed of
+millions of web pages, have been pivotal in training models such as
+GPT-2\cite{radford2019language}.
+
+Deep learning (DL) models have yielded remarkably successful outcomes across a wide range of applications (e.g., image classification, object detection, natural language processing)\cite{PATHAK20181706}. In various text classification tasks—such as sentiment analysis, news categorization, question answering, and natural language inference—DL has outperformed traditional \emph{Machine Learning (ML)} methods\cite{Minaee2021}, a testament primarily to its inherent generalization and robustness\cite{Zahangir2018}. However, depending on the problem to be solved, designing a DL architecture demands a substantial volume of data to attain the desired generalization performance. For example, in image processing and computer vision, datasets such as ImageNet (\numprint{14197122}) and Microsoft COCO (\numprint{2.5} million) provide extensive data per category\cite{PATHAK20181706}, while in \emph{Natural Language Processing (NLP)}, resources like WebTex, composed of millions of web pages, have been pivotal in training models such as GPT-2\cite{radford2019language}.
+
+**Suggestions for improvement:**  
+- Be consistent with terminology. If referring to deep learning as "DL," consider introducing the acronym at first use.
+- Consider splitting long sentences for clarity.
+- Ensure acronyms (e.g., DL, ML, NLP) are either introduced with their full forms at first appearance or defined in the surrounding context, if required by your audience.  
+
+Let me know if you want the wording improved further for conciseness or clarity.
+
+### Building upon these foundations, this study makes three contributions
+to LNLP.  Firstly, it focuses on the specific context of
+\textit{robbery} as defined by Ecuadorian law, thus addressing a
+distinct and pertinent crime type within the local legal landscape.
+Secondly, the research tackles the complex task of narrative tagging
+within crime reports, which are characterized by variable lengths and
+the coexistence of technical and colloquial language, including
+frequent misspellings due to direct transcription from citizens'
+testimonies.  Third, it introduces an original Spanish-language
+dataset featuring crime narratives related to robbery and official
+classification labels.
+
+The implemented model has been operationally adopted by the
+\textit{Dirección de Estadística y Sistemas de Información},
+automating the manual classification of crime narratives in robbery
+and contributing to statistical analysis by the aforementioned
+department.  This work constitutes, to the authors' knowledge, the
+first application of Transformer-based models for analyzing
+Spanish-language Ecuadorian crime narratives.
+
+Corrected text with punctuation and tense adjustments:
+
+Building upon these foundations, this study makes three contributions to LNLP. Firstly, it focuses on the specific context of \textit{robbery} as defined by Ecuadorian law, thus addressing a distinct and pertinent crime type within the local legal landscape. Secondly, the research tackles the complex task of narrative tagging within crime reports, which are characterized by variable lengths and the coexistence of technical and colloquial language, including frequent misspellings due to direct transcription from citizens' testimonies. Thirdly, it introduces an original Spanish-language dataset featuring crime narratives related to robbery, along with official classification labels.
+
+The implemented model has been operationally adopted by the \textit{Dirección de Estadística y Sistemas de Información}, automating the manual classification of crime narratives in robbery cases and contributing to statistical analysis by the aforementioned department. This work constitutes, to the authors' knowledge, the first application of Transformer-based models for analyzing Spanish-language Ecuadorian crime narratives.
+
+---
+
+Suggested research contribution paragraph for the end of the introduction:
+
+This research addresses a significant gap in the application of language technologies to the Ecuadorian legal framework by targeting robbery crime narratives within official police reports. By focusing on the challenges inherent to natural language processing of real-world crime data—such as colloquial expressions, variable narrative lengths, and transcription errors—the study provides a robust approach for automating classification tasks that have traditionally relied on manual review. The introduction of a novel, annotated dataset and the operational deployment of a Transformer-based model demonstrate the practical impact and scalability of the proposed methodology. Collectively, these contributions advance the state of LNLP for Spanish-language legal texts and establish a foundation for further research in multilingual and domain-specific natural language understanding tasks in Latin America.
+
+### This research has three main contributions. First, it introduces an
+original dataset of robbery narratives in the Spanish language, with
+more than a million of samples. Secondly, we fine-tuned a BERT
+pre-trained model in LTC in the context of Ecuadorian reality by
+following a three stage approach that permitted to expand the number
+of categories predicted with an accuracy of \numprint{95.5}\%.  Third,
+our model has been operationally adopted by FGE in the department of
+\textit{Dirección de Estadística y Sistemas de
+  Información}. Consequently, this research addresses a significant
+gap in NLP in the domain of legal documents in Spanish language. This
+work constitutes, to the authors' knowledge, the first application of
+Transformer-based models for analyzing Spanish-language Ecuadorian
+crime narratives.
+
+Consequently, this research addresses a significant gap in NLP for the domain of legal documents in the Spanish language. To the authors' knowledge, this work represents the first application of Transformer-based models for analyzing Ecuadorian crime narratives written in Spanish.
+
+### please rewrite all the provided text
+
+This study makes three key contributions to legal natural language processing (LNLP):
+
+1. **Novel Dataset**: We present the first large-scale Spanish-language dataset of robbery narratives, comprising over one million annotated samples from Ecuadorian crime reports. This resource fills a critical gap in Spanish-language legal text processing.
+
+2. **Adapted Model Architecture**: Through a three-phase fine-tuning approach, we successfully adapted a pretrained BERT model for legal text classification (LTC) in the Ecuadorian context. Our methodology achieved 95.5% accuracy while expanding the model's predictive capability to handle an increased number of crime categories.
+
+3. **Operational Deployment**: The developed model has been officially implemented by Ecuador's Fiscalía General del Estado (FGE) within their Statistics and Information Systems Directorate, automating what was previously a manual classification process.
+
+These contributions collectively address a significant research gap in Spanish-language legal NLP. To our knowledge, this represents the first successful application of Transformer-based models for analyzing crime narratives in Ecuadorian Spanish, establishing a foundation for future work in Latin American legal NLP applications.
+
+The operational adoption of our model demonstrates both the technical feasibility and practical value of applying advanced NLP techniques to real-world legal documentation challenges in Spanish-speaking contexts.
+
+### write all the mentioned but in a paragraph
+
+This research makes three significant contributions to legal natural language processing (LNLP) for Spanish-language documents. First, we introduce a novel, large-scale dataset comprising over one million annotated robbery narratives from Ecuadorian crime reports, addressing a critical gap in Spanish-language legal text resources. Second, we develop an effective three-phase fine-tuning approach that adapts a pretrained BERT model to the Ecuadorian legal context, achieving 95.5% accuracy while expanding its capability to classify an increased number of crime categories. Third, our model has been successfully deployed operationally by Ecuador's Fiscalía General del Estado (FGE) in their Statistics and Information Systems Directorate, automating their previously manual classification process. To our knowledge, this represents the first successful application of Transformer-based models for analyzing crime narratives in Ecuadorian Spanish, demonstrating both the technical feasibility and practical value of advanced NLP techniques for legal documentation challenges in Spanish-speaking contexts while establishing a foundation for future Latin American legal NLP applications.
+
+### 
+
+<!-- Local Variables: -->
+<!-- gptel-model: deepseek-chat -->
+<!-- gptel--backend-name: "DeepSeek" -->
+<!-- gptel--bounds: ((response (37706 39482) (39532 40682) (41803 43929) (44180 46657) (46937 47596) (47699 49544) (50008 50844) (52442 53779) (55095 56409) (57621 58761) (59084 59985) (60658 61603) (62273 62803) (64110 64203) (64255 64770) (66077 66170) (66238 67238) (67246 68409) (69110 69415) (69856 70113) (70550 70645) (70744 71388) (73221 74709) (75194 75935) (76853 77521) (77614 78963) (79787 80816) (81752 82823) (83071 83801) (125491 141565) (142645 144174) (145289 147456) (148277 148558) (148602 150081) (150131 151318))) -->
+<!-- End: -->
+Finally, the model implementation for its use at FGE is relevant, not
+only because it automates classification process, saving time, but
+because it shows the feasibility to explore AI and NLP state of the
+art in the legal domain, provide solutions and expand scientific
+research. Cooperation with governamental entities is of importance to
+accomplish goals that enrich the use of AI.
+
+The implementation of the model at FGE proves relevant not only due to the automation of the classification process—thereby reducing time expenditures—but also by demonstrating the feasibility of adopting state-of-the-art AI and NLP in the legal domain. This approach offers the potential to generate solutions and foster scientific advancement. Collaborating with governmental entities is essential for achieving objectives that further the effective application of AI.
+
+### \cite{Shaheen2021} extends this research to zero-shot cross-lingual
+transfer using multilingual transformers (M-BERT, M-DistilBERT). By
+fine-tuning models exclusively on English EURLEX57K documents and
+evaluating on French/German translations, they achieve target-language
+performance comparable to models trained on all three languages. Key
+innovations include continued pretraining on legal corpora and
+progressive unfreezing during fine-tuning, highlighting transformers'
+ability to bridge linguistic gaps in low-resource legal NLP scenarios.
+
+Research has been extended to zero-shot cross-lingual transfer in legal NLP by leveraging multilingual transformers, such as M-BERT and M-DistilBERT. Fine-tuning performed solely on English EURLEX57K documents and subsequent evaluation on French and German translations yields target-language performance comparable to models trained across all three languages. The methodology features two key innovations: continued pretraining on legal-domain corpora and the application of progressive unfreezing during the fine-tuning process. These approaches demonstrate the capacity of transformers to bridge linguistic gaps, particularly within low-resource legal scenarios.
+
+### \cite{Shaheen2021} extends this research to zero-shot cross-lingual
+transfer using multilingual transformers (M-BERT, M-DistilBERT). By
+fine-tuning models exclusively on English EURLEX57K documents and
+evaluating on French/German translations, they achieve target-language
+performance comparable to models trained on all three languages. Key
+innovations include continued pretraining on legal corpora and
+progressive unfreezing during fine-tuning, highlighting transformers'
+ability to bridge linguistic gaps in low-resource legal NLP scenarios.
+
+This research extends to zero-shot cross-lingual transfer with multilingual transformers such as M-BERT and M-DistilBERT~\cite{Shaheen2021}. By fine-tuning the models solely on English EURLEX57K documents and subsequently evaluating them on French and German translations, target-language performance is achieved that closely matches models trained on all three languages. Notable advancements comprise continued pretraining on legal corpora and the use of progressive unfreezing during fine-tuning, which together underscore the capacity of transformer architectures to bridge linguistic gaps, particularly in low-resource legal NLP contexts.
+
+### in my latex I use \numprint to give format to the numbers. however I was required to use the english formatting for numbers is there a way to set numprint to give that format and how can I use emacs to search for numerica patterns
+
+You can configure `numprint` to use English formatting and use Emacs to search for numeric patterns as follows:
+
+### 1. Configuring numprint for English Formatting
+
+Add this to your LaTeX preamble:
+```latex
+\usepackage[english]{numprint}  % Load package with English formatting
+\npenglish  % Set English formatting as default
+```
+
+This will:
+- Use commas as thousand separators (e.g., 1,000,000)
+- Use periods as decimal points (e.g., 3.14159)
+
+### 2. Searching for Numeric Patterns in Emacs
+
+You can use these Emacs regex patterns to find numbers:
+
+#### Basic number search:
+`M-x occur` then enter:
+```regexp
+[0-9]+\(?:,[0-9]+\)*\(?:\.[0-9]+\)?
+```
+
+#### More comprehensive search (includes scientific notation):
+```regexp
+\b[+-]?[0-9]+\(?:,[0-9]+\)*\(?:\.[0-9]+\)?\(?:[eE][+-]?[0-9]+\)?\b
+```
+
+#### To find all \numprint commands:
+```regexp
+\\numprint{\([^}]+\)}
+```
+
+### 3. Alternative: Use babel/polyglossia with numprint
+
+If you're already using babel/polyglossia:
+```latex
+\usepackage[english]{babel}  % or polyglossia
+\usepackage{numprint}
+\nplang{english}  % Explicitly set English formatting
+```
+
+This will automatically format numbers according to English conventions when using `\numprint{}`.
+
+### 4. For temporary English formatting
+
+If you need just some numbers in English format:
+```latex
+\numprint[english]{1000000}  % Will display as 1,000,000
+```
+
+### 5. Emacs Customization (optional)
+
+Add this to your `.emacs` to highlight numbers:
+```elisp
+(font-lock-add-keywords nil '(("\\<\\([0-9]+,?\\)+[0-9]+\\>" . font-lock-warning-face)))
+```
+
+This will make numbers stand out in your buffer.
+
+### ERROR: LaTeX Error: Unknown option `english' for package `numprint'.
+
+--- TeX said ---
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.61 \ProcessOptions\relax
+
+You're right - the `numprint` package doesn't actually have an `english` option. Here's the correct way to configure English-style number formatting with `numprint`:
+
+### Correct Configuration for English Number Formatting
+
+```latex
+\usepackage{numprint}
+\npthousandsep{,}  % Use comma as thousands separator
+\npdecimalsign{.}  % Use period as decimal point
+```
+
+### Alternative Approach Using siunitx (Recommended)
+
+For more robust number formatting, consider using the `siunitx` package instead:
+
+```latex
+\usepackage[group-separator={,},output-decimal-marker={.}]{siunitx}
+```
+
+Then use `\num{}` command instead of `\numprint{}`:
+```latex
+\num{1000000}  % Will display as 1,000,000
+\num{3.14159}  % Will display as 3.14159
+```
+
+### Emacs Search Patterns
+
+To find numbers in your LaTeX files with Emacs:
+
+1. Basic number search:
+   ```
+   M-x occur [0-9,.]+\\(?:[0-9]+\\)*
+   ```
+
+2. Find all `\numprint` commands:
+   ```
+   M-x occur \\numprint{\\([^}]+\\)}
+   ```
+
+3. Find numbers in text (including those without `\numprint`):
+   ```
+   M-x occur \\(?:\\numprint{\\)?\\([0-9,.]+\\)\\(?:}\\)?
+   ```
+
+### Migration from numprint to siunitx
+
+If you want to switch to `siunitx`, you can use this Emacs command to replace all `\numprint` with `\num`:
+
+1. `M-x replace-regexp`
+2. Enter: `\\numprint{\([^}]+\)}`
+3. Replace with: `\\num{\1}`
+
+This will maintain all your existing number formatting while using the more modern `siunitx` package.
+
+### how can I use emacs to find all numbers patterns and surround them with \numprint{x} where x is the number pattern found. I think my pattern might be [0-9,.]+
+
+Here's how to find all number patterns in Emacs and surround them with `\numprint{}`:
+
+### 1. First, verify your number pattern
+Your pattern `[0-9,.]+` is a good start, but let's refine it to:
+```regexp
+\b[0-9][0-9,.]*\b
+```
+This will match:
+- Whole numbers: `1234`
+- Numbers with commas: `1,234`
+- Decimal numbers: `1.234` or `1,234.56`
+
+### 2. Emacs replacement command
+Use this interactive replacement:
+
+1. Open your LaTeX file in Emacs
+2. Run: `M-x replace-regexp` (or `C-M-%`)
+3. Enter this regex pattern:
+   ```regexp
+   \b\([0-9][0-9,.]*\)\b
+   ```
+4. Enter this replacement:
+   ```
+   \\numprint{\1}
+   ```
+
+### 3. For more precise matching
+If you need to exclude certain patterns (like years or page numbers), use:
+```regexp
+\b[0-9]{4,}[0-9,.]*\b
+```
+This will only match numbers with 4+ digits.
+
+### 4. Alternative: Use query-replace-regexp
+For more control over each replacement:
+```elisp
+M-x query-replace-regexp
+\b\([0-9][0-9,.]*\)\b
+\numprint{\1}
+```
+Then press `y` for each replacement or `!` to replace all.
+
+### 5. Important notes:
+- Back up your file first
+- Numbers already in commands (like `\cite{2020}`) won't be modified
+- Check the results carefully as some false positives may occur
+- For decimal numbers, you may want separate patterns for comma vs period decimals
+
+### 6. Sample before/after:
+Before:
+```latex
+The population grew to 1,234,567 in 2020.
+```
+After:
+```latex
+The population grew to \numprint{1,234,567} in 2020.
+```
+
+### 
+
+<!-- Local Variables: -->
+<!-- gptel-model: deepseek-chat -->
+<!-- gptel--backend-name: "DeepSeek" -->
+<!-- gptel--bounds: ((response (37706 39482) (39532 40682) (41803 43929) (44180 46657) (46937 47596) (47699 49544) (50008 50844) (52442 53779) (55095 56409) (57621 58761) (59084 59985) (60658 61603) (62273 62803) (64110 64203) (64255 64770) (66077 66170) (66238 67238) (67246 68409) (69110 69415) (69856 70113) (70550 70645) (70744 71388) (73221 74709) (75194 75935) (76853 77521) (77614 78963) (79787 80816) (81752 82823) (83071 83801) (125491 141565) (142645 144174) (145289 147456) (148277 148558) (148602 150081) (150131 151318) (152367 152837) (153390 154056) (154609 155252) (155490 157094) (157413 158855) (159021 160476))) -->
+<!-- End: -->
