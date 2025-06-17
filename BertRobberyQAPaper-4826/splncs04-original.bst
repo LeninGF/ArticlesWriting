@@ -477,27 +477,16 @@ FUNCTION {format.names}
           namesleft #1 >
             { ", " * t * }
             {
-              numnames #6 >
-                { " " * bbl.etal * }
+              s nameptr "{ll}" format.name$ duplicate$ "others" =
+                { 't := }
+                { pop$ }
+              if$
+              "," *
+              t "others" =
                 {
-                  s nameptr "{ll}" format.name$ duplicate$ "others" =
-                    { 't := }
-                    { pop$ }
-                  if$
-                  t "others" =
-                    {
-                      " " * bbl.etal *
-                    }
-                    {
-                      numnames #2 >
-                        { "," * }
-                        'skip$
-                      if$
-                      bbl.and
-                      space.word * t *
-                    }
-                  if$
+                  " " * bbl.etal *
                 }
+                { " " * t * }
               if$
             }
           if$
@@ -506,10 +495,6 @@ FUNCTION {format.names}
       if$
       nameptr #1 + 'nameptr :=
       namesleft #1 - 'namesleft :=
-      nameptr #6 = numnames #6 > and
-        { " " * bbl.etal * #1 'namesleft := }
-        'skip$
-      if$
     }
   while$
   } if$
@@ -534,21 +519,17 @@ FUNCTION {format.names.ed}
           namesleft #1 >
             { ", " * t * }
             {
-              numnames #6 >
-                { " " * bbl.etal * }
+              s nameptr "{ll}" format.name$ duplicate$ "others" =
+                { 't := }
+                { pop$ }
+              if$
+              "," *
+              t "others" =
                 {
-                  s nameptr "{ll}" format.name$ duplicate$ "others" =
-                    { 't := }
-                    { pop$ }
-                  if$
-                  "," *
-                  t "others" =
-                    {
-                      " " * bbl.etal *
-                    }
-                    { " " * t * }
-                  if$
+
+                  " " * bbl.etal *
                 }
+                { " " * t * }
               if$
             }
           if$
@@ -557,10 +538,6 @@ FUNCTION {format.names.ed}
       if$
       nameptr #1 + 'nameptr :=
       namesleft #1 - 'namesleft :=
-      nameptr #6 = numnames #6 > and
-        { " " * bbl.etal * #1 'namesleft := }
-        'skip$
-      if$
     }
   while$
   } if$
