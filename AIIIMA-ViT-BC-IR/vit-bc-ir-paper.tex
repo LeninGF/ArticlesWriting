@@ -137,7 +137,7 @@ Instituto de Computação, Universidade Federal Fluminense, Niterói – RJ
 % The abstract should briefly summarize the contents of the paper in
 % 150--250 words.
   Breast Cancer (BC) is a leading cause of mortality among women
-  worldwide, and early detection remains crucial for improving patient
+  worldwide and early detection remains crucial for improving patient
   survival rates. Thermography (TG) offers a non-invasive imaging
   technique for identifying abnormal temperature patterns associated
   with malignancies. In this work, we propose a video
@@ -225,7 +225,7 @@ CNN architecture. (4) To the best of our knowledge, this is the first
 study accounting the use of \ac{ViViTs} in \ac{DIT} protocol for
 \ac{TG} in \ac{BC} classification. Our model achieved an
 \ac{AUC}-score of $0.9350 \pm 0.0094$ in 10 fold cross validation
-setup and 0.944 on a separated test set of 15 patients with stratified
+setup and 0.9444 on a separated test set of 15 patients with stratified
 labels. This work advances the state-of-the-art set by
 \cite{DeMatheus2023}, where 3D \ac{CNNs} achieved 93.51\% \ac{AUC} in
 binary classification, and compliments the work by \cite{Garia2023},
@@ -528,13 +528,13 @@ research objectives comparable to ours.
 
 
 According to our proposed search strategy for literature review, the
-first study employing \ac{ViTs} for \ac{BC} \ac{TG} image
-classification into \textit{Cancerous} or \textit{Healthy} categories
-is reported in \cite{Garia2023}. Their approach utilizes the standard
-\ac{ViT}-Base architecture with 12 layers, 12 attention heads, and a
-768-dimensional embedding space\cite{dosovitskiy2020image}. Similar to
-our work, their methodology leverages the transformer's self-attention
-mechanism for \ac{TG} image classification into \textit{Cancerous} or
+first study employing \ac{ViTs} for \ac{BC} classification using
+\ac{TG} images is reported in \cite{Garia2023}. Their approach
+utilizes the standard \ac{ViT}-Base architecture with 12 layers, 12
+attention heads, and a 768-dimensional embedding
+space\cite{dosovitskiy2020image}. Similar to our work, their
+methodology leverages the transformer's self-attention mechanism for
+\ac{TG} image classification into \textit{Cancerous} or
 \textit{Healthy} categories. The authors investigate the impact of
 patch size on classification accuracy, demonstrating that
 $32 \times 32$ patches yield superior performance compared to the
@@ -550,14 +550,14 @@ To benchmark our methodology against \ac{CNNs}-based approaches for
 \ac{DIT}, we compare with \cite{DeMatheus2023}, which employs
 3D-\ac{CNNs} to recognize patterns changes in a sequence of \ac{TG}
 images. Cancer identification using a sequence of images is similar to
-action recognition and depend on spatiotemporal models that extract
+action recognition and depend on spatio-temporal models that extract
 space-time feature information from data. While 2D \ac{CNNs} applied
 to individual frames remain competitive for action recognition
 \cite{Tran2017}, 3D convolutions inherently capture motion information
 across adjacent frames \cite{Ji2013,Qiming2023}. In
 \cite{DeMatheus2023}, each patient's data is represented as a
 hypercube constructed by stacking 20 preprocessed frames. The
-preprocessing step involved the segmentation of the region of interest
+preprocessing stage involved the segmentation of the region of interest
 from the original \ac{TG} images and their resized to
 $32 \times 32\times 3$. Baffa et al. enhanced the model generalization
 through data augmentation with the following operations: rotations up
@@ -635,7 +635,7 @@ $\mathcal{X} \in \mathbb{R}^{B \times F \times C \times H \times W}$,
 where: $B$ denotes the batch size, $F$ represents the number of
 frames, $C$ corresponds to the number of channels, and $H$ and $W$
 indicate the height and width of the \ac{TM} or \ac{IR} images,
-respectively. Due to the small dataset size, we trained the models
+respectively. Due to the small dataset size, we evaluated the models
 using \textit{K}-fold cross-validation. Finally, we selected the
 best-performing model and evaluated it on the test set. We employed
 AdamW as the optimizer together with checkpoint and early stopping
@@ -692,7 +692,7 @@ comprises a single–channel, two–dimensional matrix of floating-point
 temperature values captured by the FLIR SC620 infrared camera with a
 measurement accuracy of \(\pm2\,^{\circ}\mathrm{C}\)
 \cite{DeMatheus2023}. The latter consists of RGB images acquired from
-the same camera, . In both cases, the resolution is \(640\times 480\)
+the same camera. In both cases, the resolution is \(640\times 480\)
 pixels. However, as noted in \cite{Garia2023}, the number of subjects
 and images varies across studies, making direct comparisons
 difficult. Table~\ref{tab:dataset_comparison} summarizes the
@@ -853,7 +853,7 @@ tensor format $(B, F, C, H, W)$. We construct our model from the base
 architecture proposed in \cite{dosovitskiy2020image}.
 
 The architecture comprises three principal components: (1) a
-pretrained ViT-B/16 backbone, from which the classification head has
+pre-trained ViT-B/16 backbone, from which the classification head has
 been removed; (2) frame-wise feature extraction where input sequences
 are reshaped from \((B, F, C, H, W)\) to \((B \times F, C, H, W)\),
 processing each frame independently through the ViT encoder and
@@ -867,7 +867,7 @@ predictions \((B, 1)\).
 % consists of:
 
 % \begin{itemize}
-%     \item A pretrained ViT-B/16 backbone (ImageNet1K weights) with its classification head removed
+%     \item A pre-trained ViT-B/16 backbone (ImageNet1K weights) with its classification head removed
 %     \item Frame-wise feature extraction where:
 %     \begin{itemize}
 %         \item Input sequences are reshaped from $(B, T, C, H, W)$ to $(B \times T, C, H, W)$
@@ -899,16 +899,16 @@ Since video classification requires both spatial and temporal
 processing of image sequences, we implement a TimeSformer-based
 architecture \cite{Bertasius2021} for \ac{DIT}analysis. Generally,
 models for video data need to address two key challenges: (1) joint
-spatiotemporal feature learning, and (2) handling variable-length
+spatio-temporal feature learning, and (2) handling variable-length
 sequences. However, in \ac{DIT}, this second challenge is mitigated by
 the standardized protocol where each patient examination contains
 exactly 20 \ac{IR} frames.
 
-Our TimeSformerThermoClassifier model comprises a pretrained
+Our TimeSformerThermoClassifier model comprises a pre-trained
 TimeSformer-base model, which was finetuned on Kinetics-400, and a
 modified classification head. The TimeSformer model is configured to
 process an input of \( F = 8 \) frames at \( H \times W \) resolution;
-it employs spatiotemporal attention across divided space-time patches
+it employs spatio-temporal attention across divided space-time patches
 and maintains a hidden dimension of \( D = 768 \) across all
 layers. For the classification head, the original Kinetics-400
 classification layer is replaced with a single-output linear layer to
@@ -918,10 +918,10 @@ through the binary cross-entropy loss.
 % Our TimeSformerThermoClassifier consists of:
 
 % \begin{itemize}
-%     \item A pretrained TimeSformer-base model (finetuned on Kinetics-400) with:
+%     \item A pre-trained TimeSformer-base model (finetuned on Kinetics-400) with:
 %     \begin{itemize}
 %         \item Input configuration for $T=8$ frames at $H \times W$ resolution
-%         \item Spatiotemporal attention across divided space-time patches
+%         \item Spatio-Temporal attention across divided space-time patches
 %         \item Hidden dimension $D=768$ throughout all layers
 %     \end{itemize}
     
@@ -936,22 +936,22 @@ The forward pass processes input tensors
 $\mathbf{X} \in \mathbb{R}^{B \times F \times C \times H \times W}$
 through a sequence of operations: first, frame rearrangement is
 applied when needed to match TimeSformer's expected $(B,C,F,H,W)$
-format; subsequently, spatiotemporal feature extraction is performed
+format; subsequently, spatio-temporal feature extraction is performed
 via patch embedding (typically $16\times16$) and divided space-time
 attention layers; following this, global average pooling of the
-spatiotemporal features is conducted; and finally, binary
+spatio-temporal features is conducted; and finally, binary
 classification is achieved through the final linear layer.
 % The forward pass processes input tensors
 % $\mathbf{X} \in \mathbb{R}^{B \times T \times C \times H \times W}$
 % through:
 % \begin{enumerate}
 %     \item Frame rearrangement (when needed) to match TimeSformer's expected $(B,C,T,H,W)$ format
-%     \item Spatiotemporal feature extraction via:
+%     \item Spatio-Temporal feature extraction via:
 %     \begin{itemize}
 %         \item Patch embedding (typically $16\times16$)
 %         \item Divided space-time attention layers
 %     \end{itemize}
-%     \item Global average pooling of spatiotemporal features
+%     \item Global average pooling of spatio-temporal features
 %     \item Binary classification via the final linear layer
 %     \end{enumerate}
 
@@ -1005,8 +1005,8 @@ highlighted.
 \hline
 \ac{TM} & TDL+CNN+LSTM & AdamW, $k=3$ CV & Loss & 50 \\
 \hline
-\multirow{2}{*}{\ac{IR}} & \ac{ViT} (16$\times$16) pretrained & AdamW, lr=3e-5, $k=10$ CV & F1-score & 20 \\
- & \ac{ViT} (32$\times$32) pretrained & AdamW, lr=3e-5, $k=10$ CV & F1-score & 20 \\
+\multirow{2}{*}{\ac{IR}} & \ac{ViT} (16$\times$16) pre-trained & AdamW, lr=3e-5, $k=10$ CV & F1-score & 20 \\
+ & \ac{ViT} (32$\times$32) pre-trained & AdamW, lr=3e-5, $k=10$ CV & F1-score & 20 \\
 \hline
 \ac{IR} & \ac{ViT} (32$\times$32) scratch & \begin{tabular}[c]{@{}l@{}}AdamW, lr=1e-4, wd=0.05\\ LR warmup + cosine\\ (min lr=1e-6), $k=10$ CV\end{tabular} & Loss & 50 \\
 \hline
@@ -1018,7 +1018,7 @@ highlighted.
 Our experimental protocol varied across modalities and
 architectures. For \ac{TM} data, we employed 3-fold cross-validation
 trained for 50 epochs using AdamW optimizer while monitoring
-validation loss. For \ac{IR} images with pretrained \ac{ViT} models
+validation loss. For \ac{IR} images with pre-trained \ac{ViT} models
 (both 16$\times$16 and 32$\times$32 patch sizes), we used 10-fold
 cross-validation for 20 epochs with a \ac{lr} of 3e-5,
 optimizing for validation F1-score. However, when training the
@@ -1026,7 +1026,7 @@ optimizing for validation F1-score. However, when training the
 epochs with higher initial \ac{lr} (1e-4), weight decay (0.05),
 and implemented \ac{lr} warmup with cosine annealing (minimum
 lr=1e-6), while monitoring validation loss. The \ac{ViViT} model
-followed similar configuration to pretrained \ac{ViT}s (20 epochs,
+followed similar configuration to pre-trained \ac{ViT}s (20 epochs,
 lr=3e-5) monitored by F1-score.
 
 % \begin{enumerate}
@@ -1073,13 +1073,13 @@ and compare our work with the most relevant studies identified through
 our literature review (Table \ref{tab:study_comparison}).
 
 Our work is similar to that of Garia et al.~\cite{Garia2023} in the
-use of Transformer-based models for thermal gesture recognition
-(\ac{TG}). However, we address dynamic infrared thermography
+use of Transformer-based models for breast cancer classification using
+Thermography (\ac{TG}). However, we address dynamic infrared thermography
 (\ac{DIT}), which requires a different methodological
 focus. Specifically, we investigate: (1) a temporal deep learning
 (\ac{TDL}) approach using Time Distributed Layer
 (\ac{TDL})+\ac{CNNs}+\ac{LSTM}; (2) vision transformers (\ac{ViT}),
-both with pretrained weights and trained from scratch; and (3)
+both with pre-trained weights and trained from scratch; and (3)
 pre-trained video vision transformers (\ac{ViViT}).
 
 Consequently, our problem is most similar to the work of Baffa et
@@ -1120,11 +1120,11 @@ recommend that future research clearly indicate whether they are using
 \multirow{2}{*}{$\mathbb{D}_{\mathrm{TM}}$} & \multirow{2}{*}{TDL+CNN+LSTM} & F1-score & $0.8585 \pm 0.0296$ ($k=3$) & - \\
  & & AUC & - & - \\
 \hline
-\multirow{12}{*}{$\mathbb{D}_{\mathrm{IR}}$} & \multirow{3}{*}{ViT (16$\times$16) pretrained} & F1-score & $0.9644 \pm 0.0458$ & - \\
+\multirow{12}{*}{$\mathbb{D}_{\mathrm{IR}}$} & \multirow{3}{*}{ViT (16$\times$16) pre-trained} & F1-score & $0.9644 \pm 0.0458$ & - \\
  & & Accuracy & $0.9538 \pm 0.0615$ & 0.87 \\
  & & AUC & - & - \\
 \cline{2-5}
- & \multirow{3}{*}{ViT (32$\times$32) pretrained} & F1-score & $1.0000 \pm 0.0000$ & 0.9412 \\
+ & \multirow{3}{*}{ViT (32$\times$32) pre-trained} & F1-score & $1.0000 \pm 0.0000$ & 0.9412 \\
  & & Accuracy & $1.0000 \pm 0.0000$ & 0.9333 \\
  & & AUC & $1.0000 \pm 0.0000$ & 0.9444 \\
 \cline{2-5}
@@ -1181,19 +1181,25 @@ size compared to the $32 \times 32$ images used by the baseline method
 in \cite{DeMatheus2023}, although we employ a shorter temporal
 sequence ($F=8$ frames).
 
-Our experiments also confirm the statement presented in
-\cite{Garia2023} about a better performance when using \ac{ViTs} with
-$32 \times 32$ patches. However, it must be noticed that
-\cite{Garia2023} work with another acquisition protocol of the same
-dataset (\ac{SIT}), while we focus on \ac{DIT}. Different to their
-result, training from scratch performed lower.
+Our experiments corroborate that \ac{ViTs} with $32 \times 32$ patches
+yield better performance. However, it should be noted that we have
+used a different acquisition protocol of the same dataset wrt. to
+\cite{Garia2023}. In contrast to their results, training from scratch
+underperformed in our setup.
 
 Consequently, we infer that \ac{ViViTs} can be applied with a good
-performance in \ac{BC} classification with \ac{TG} images. Our
-experiments also suggest that future works should emphasize on what
-type of thermal data was used in the experiments since results using
-directly the point temperatures of the CSV files are different from
-those when using \ac{IR} images.
+performance in \ac{BC} classification with \ac{TG} images acquired
+dynamically. Our experiments also suggest that future works should
+emphasize on what type of thermal data was used in the experiments
+since results using directly the point temperatures of the CSV files
+are different from those when using \ac{IR} images.
+
+With respect to the research questions, we conclude that
+transformer-based models exhibit a performance comparable to that of
+\ac{CNNs} for this research problem. In our experiments, fine-tuning a
+pre-trained model yielded superior performance. Finally, the
+integration of \ac{DIT} with \ac{ViViTs} achieves results similar to
+those reported in \cite{Garia2023}.
 % **Conclusions:** Summarize findings, state contributions, and
 % mention limitations.
 % \section{Future Works}
@@ -1282,9 +1288,9 @@ those when using \ac{IR} images.
 % % ==================== citations ====================
 % % ==================== credits ====================
 \begin{credits}
-  \subsubsection{\ackname} Maía Pérez, Marco E. Benalcázar and Lenin
+  \subsubsection{\ackname} María Pérez, Marco E. Benalcázar and Lenin
   G. Falconí would like to thank the support of Escuela Politécnica
-  Nacional for the funding of this research. Aura Conci thanks the the
+  Nacional for the funding of this research. Aura Conci thanks the
   Brazilian agencies (FAPERJ and CNPq) for funding this research at
   UFF (307638/2022-7 and E26/200.924/2022).
 
