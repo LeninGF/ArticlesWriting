@@ -1204,6 +1204,35 @@ transformer-based models exhibit a performance comparable to that of
 pre-trained model yielded superior performance. Finally, the
 integration of \ac{DIT} with \ac{ViViTs} achieves results similar to
 those reported in \cite{Garia2023}.
+
+% ==================== reviewer 3 observation b ====================
+%  the following was written with aid of copilot let us check the
+%  ideas in it
+% While our experiments show that fine-tuning pre-trained ViTs on
+% natural image datasets (e.g., ImageNet) yields strong performance, it
+% is important to note the significant domain gap between natural RGB
+% images and medical thermal data. Thermal images differ in modality,
+% texture, and semantic content, which may limit the transferability of
+% learned features. Despite this, our results suggest that pre-trained
+% models still provide a useful initialization, possibly due to their
+% ability to capture general spatial patterns. Future work should
+% investigate pre-training on thermal-specific datasets or employ domain
+% adaptation strategies to bridge this gap more effectively.
+
+% (b) El preentrenamiento en imágenes/videos naturales para datos
+% térmicos médicos representa una brecha de dominio significativa que
+% no está suficientemente abordada en la discusión.
+
+% In machine learning and computer vision, a domain gap refers to the difference between the data used to train a model (source domain) and the data where the model is applied (target domain).
+
+% In your case: Source domain: Natural images/videos (e.g., ImageNet,
+% Kinetics) — everyday objects, RGB format, rich textures.  Target
+% domain: Medical thermal images — grayscale or pseudo-colored,
+% physiological patterns, very different visual characteristics.
+
+% ==================== * * ====================
+
+
 % **Conclusions:** Summarize findings, state contributions, and
 % mention limitations.
 % \section{Future Works}
