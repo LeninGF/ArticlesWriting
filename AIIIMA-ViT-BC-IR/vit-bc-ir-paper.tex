@@ -33,6 +33,13 @@ pdfpagemode=UseOutlines]{hyperref} % check if it is correct to use
 \usepackage{multirow}
 \usepackage{threeparttable}
 
+% -------------------- thesis transfer learning equation
+% --------------------
+\DeclareMathOperator{\ypred}{\phi}  %options \hslash
+\DeclareMathOperator{\ypredtarget}{\phi^{T}}
+\DeclareMathOperator{\ypredsource}{\phi^{S}}
+\DeclareMathOperator{\ConvNetOut}{\mathcal{A}}
+% --------------------++--------------------
 % Used for displaying a sample figure. If possible, figure files should
 % be included in EPS format.
 %
@@ -95,6 +102,8 @@ pdfpagemode=UseOutlines]{hyperref} % check if it is correct to use
   \acro{AUC}[AUC]{Area Under the Receiver Operating Characteristic
     Curve}
   \acro{lr}[lr]{learning rate}
+  \acro{TL}[TL]{Transfer Learning}
+  \acro{FT}[FT]{Fine-Tuning}
 \end{acronym}
 
 % 
@@ -222,7 +231,7 @@ under the \ac{DIT} protocol. Our study makes the following key
 contributions: (1) We extend \ac{ViT}-based approaches to \ac{DIT}
 protocol, leveraging sequential image analysis to improve \ac{BC}
 classification performance using a patient level dataset. (2) We
-evaluate the impact of fine-tuning using pre-trained \ac{ViTs}. (3) We
+evaluate the impact of \ac{FT} using pre-trained \ac{ViTs}. (3) We
 conduct experiments on two different versions of the DMR-IR dataset
 (thermal map and thermal image) and compare performance to a simple
 CNN architecture. (4) To the best of our knowledge, this is the first
@@ -242,7 +251,8 @@ about the \ac{TG} protocols for screening BC is presented. Section
 questions. Our proposed methodology is presented in Section
 \ref{sec:methodology}. Results are presented in Section
 \ref{sec:results}. Finally, discussion over main findings is presented
-in \ref{sec:conclusions}.% and future works in \ref{sec:future-works}.
+in Section \ref{sec:discussion} and this work's conclusions in Section
+\ref{sec:conclusions}.% and future works in \ref{sec:future-works}.
 
 \section{Advantages of Dynamic Infrared Thermography in Breast Cancer}
 \label{sec:thermography}
@@ -298,14 +308,19 @@ safely applied across all age groups and is generally more
 cost-effective than \ac{MG} and other imaging modalities. It can also
 be applied to females with dense breast tissue, women who are pregnant
 or breast feeding. Although the \ac{FDA} approved \ac{TG} as a cancer
-risk assessment tool in 1982\cite{Kennedy2009}, it is typically used
-as an adjunct to \ac{MG} rather than a standalone diagnostic method.
+risk assessment tool in 1982, it is typically used as an adjunct to
+\ac{MG} rather than a standalone diagnostic
+method~\cite{Kennedy2009,Ryan2025}. Advances in thermal sensing
+equipment, image processing, machine learning and \ac{AI} pipelines
+have contributed to more feasible and accurate \ac{CAD} systems for
+infrared \ac{TG}.
 
 \ac{TG} images can be obtained by using two different protocols:
 \ac{SIT} and \ac{DIT}. The former consists in capturing the thermal
-images under controlled conditions. The latter measures the thermal
+images under controlled conditions of frontal, oblique and lateral
+breast views~\cite{Ryan2025}. The latter measures the thermal
 response to a thermal stress applied to the
-patient\cite{tsietso2022review}. Despite its advantages, \ac{TG} is
+patient~\cite{Ryan2025,tsietso2022review}. Despite its advantages, \ac{TG} is
 susceptible to procedural inconsistencies and thermal noise
 interference. A major challenge lies in the non-specificity of thermal
 anomalies, which complicates accurate interpretation. For instance,
@@ -365,16 +380,28 @@ Attention mechanisms had been previously explored in image processing
 \cite{dosovitskiy2020image}. However, this work demonstrated that a
 pure Transformer architecture could be directly applied to sequences
 of image patches, treating them analogously to tokens in \ac{NLP}
-tasks with minimal modifications to the original
-architecture. Dosovitskiy et al. showed that \ac{ViTs} achieve
+tasks with minimal modifications to the original architecture. An
+image patch, in a \ac{ViT} is a fundamental hyperparameter that
+determines how an input image is divided into smaller segments
+(patches) before being processed by the transformer architecture. The
+patch size defines the dimensions of each non-overlapping block that
+the image is split into. For an input image of size
+\(H \times W \times C\) (Height × Width × Channels) and a patch size
+of \(P \times P\), the number of patches is \(N = \frac{H}{P} \times
+\frac{W}{P}\); where each patch becomes a token of dimension \(P
+\times P \times C\). For instance, if the image is $(224 \times 224
+\times 3)$, $N=\frac{224}{16}\times \frac{224}{16} = 14\times 14 =
+196$ tokens.
+
+Dosovitskiy et al. showed that \ac{ViTs} achieve
 superior performance when pre-trained on large-scale datasets such as
-ImageNet-21K and JFT-300M, followed by fine-tuning for downstream
+ImageNet-21K and JFT-300M, followed by \ac{FT} for downstream
 tasks, outperforming state-of-the-art \ac{CNNs}. Additionally, their
 work provides key implementation insights: (1) \textbf{Positional
   embeddings} show no significant improvement when extended to 2D
-representations; (2) \textbf{Fine-tuning} employs higher-resolution
+representations; (2) \textbf{\ac{FT}} employs higher-resolution
 images while maintaining original patch size \cite{Kolesnikov2019};
-(3) \textbf{Transfer learning} replaces the classification head with a
+(3) \textbf{\ac{TL}} replaces the classification head with a
 zero-initialized linear layer matching the target output dimension;
 (4) \textbf{Training} requires strong regularization for scratch
 training on ImageNet with cosine learning rate decay; (5)
@@ -573,7 +600,17 @@ dimension. Their experiments employed the DMR-IR dataset, comprising
 cross-validation strategy, their model achieved an \ac{AUC} score of
 \(93.51\% \pm 4.03\%\).
 
-
+Despite the current trend of researching modern \ac{DL} architectures
+for \ac{BC} classification in infrared \ac{TG}, it should be noted
+that texture-based \ac{CAD} systems can accurately classify \ac{BC} in
+\ac{TG}, achieving over 90\% accuracy, due to the rich texture content
+present in the images~\cite{Ryan2025}. A significant advantage of
+these texture-based methods is their computational efficiency,
+particularly when dealing with limited datasets, as they require
+substantially fewer resources than their \ac{DL} counterparts. This
+efficiency, however, comes at the cost of requiring manual feature
+engineering, whereas \ac{DL} approaches automate the feature learning
+process.
 
 \section{Methodology}
 \label{sec:methodology}
@@ -686,6 +723,42 @@ where $y \in \{0,1\}$ are the ground truth labels.
 In this context, we hypothesize that  \ac{ViViTs} can outperform
 3D \ac{CNNs} in \ac{BC} classification for \ac{TG}.
 
+
+\subsection{Model Fine-Tuning}\label{sec:transfer-learnin}
+\ac{FT} is a \ac{TL} technique where the weights of a pre-trained model are further trained on a smaller, task-specific dataset. Typically, the classification head is replaced to adapt the model to the nuances of the new task. This process can update all layers of the pre-trained model or gradually unfreeze some of them (layer-wise fine-tuning). We adopt the formal definitions for \ac{TL} and \ac{FT} given in \cite{falconi2020transfer}:
+
+\begin{definition}[Transfer Learning]
+  Given an original domain $\mathcal{D}^{S}$ with an original learning task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$ with a target task $\mathcal{T}^{T}$, the transfer learning operation seeks to improve the learning of a prediction function $\ypredtarget(\cdot)$ in $\mathcal{D}^{T}$ using the knowledge acquired in $\ypredsource(\cdot)$ in $\mathcal{T}^{S}$, through $\phi^S$; where $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ or $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
+\end{definition}
+
+Equations \eqref{eq:Transfer2} and \eqref{eq:Transfer3} represent the transfer learning operation and model prediction, respectively. Here, $L$ denotes the number of layers in the pre-trained model, and $\ConvNetOut$ refers to a set of operations that replace the original classification head.
+
+\begin{equation}
+  \mathbb{T}_{L} \left\langle \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right\rangle = \ConvNetOut \left( \ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{L} \right)
+  \label{eq:Transfer2}
+\end{equation}
+
+\begin{equation}
+  \mathcal{Y}^{T} = \mathbb{T}_{L} \left\langle \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right\rangle = \ypredtarget(\mathcal{D}^{T})
+  \label{eq:Transfer3}
+\end{equation}
+
+\begin{definition}[Fine-Tuning]
+  Given an original domain $\mathcal{D}^{S}$ with an original learning task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$ with a target task $\mathcal{T}^{T}$, the fine-tuning procedure enhances the learning of a target function $\mathcal{Y}^T = \ypredtarget(\mathcal{I}^T)$ by retraining $r$ layers of the original model $\mathcal{Y}^S = \ypredsource(\mathcal{I}^S)$ with $L$ layers, where $\gamma = L - r$.
+\end{definition}
+
+Equations \eqref{eq:finetuningLenin} and \eqref{eq:finetuningTunstall} represent the fine-tuning operation and the fine-tuned model prediction, respectively. Full model update occurs when $r = L$. The operation $\ConvNetOut$ involves replacing the original classification head of the pre-trained model. For instance, in the case of TimeSformer, it would replace the original 400-class output for Kinetics-400 with a new head appropriate for the target task.
+
+\begin{equation}
+  \mathbb{F}_{T} \left\langle \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right\rangle = \ConvNetOut \left( \ypredsource \left( \ypredsource(\mathcal{D}^{T}) \Bigr\rvert_{0}^{\gamma - 1} \right) \Bigr\rvert_{\gamma}^{L} \right)
+  \label{eq:finetuningLenin}
+\end{equation}
+
+\begin{equation}
+  \mathbb{F}_{T} \left\langle \ypredsource(\mathcal{D}^{S}), \mathcal{D}^{T} \right\rangle = \ConvNetOut \left( \ypredsource(\mathcal{D}^{T}) \right)
+  \label{eq:finetuningTunstall}
+\end{equation}
+
 \subsection{Data Collection, Preprocessing and Data Augmentation}
 \label{sec:dataset}
 
@@ -759,6 +832,8 @@ apply shearing transformations and introducing noise.
 % \begin{lstlisting}
 % wget --no-check-certificate http://visual.ic.uff.br/proeng/thiagoelias/database.rar
 % \end{lstlisting}
+
+
 \subsection{Model Development}
 \label{sec:model-development}
 
@@ -767,7 +842,10 @@ architectures, and (2) spatial-only. The former experiments with
 \ac{TDL} and \ac{ViViTs}. While, the latter, applies the basic
 \ac{ViT} designed to the flatten inputs (i.e.  $(B\times F, C, H)$)
 without temporal modeling. Both PyTorch and Keras/Tensorflow were used
-as the deep learning backends.
+as the deep learning backends. Table~\ref{tab:model_summary} presents
+the models studied, along with the source domain dataset used when
+\ac{FT} was applied for model adaptation. The input tensor dimensions,
+deep learning backend, and number of parameters are also provided. 
 
 % Table X introduces the different models
 % studied in this research with their main characteristics.
@@ -971,7 +1049,67 @@ extract up to 8 frames from the 20 without altering the order of the
 sequence. 
 
 
+% \begin{table}[ht]
+%   \centering
+%   \scriptsize
+% \caption{Source and Target Domain Specifications for Model Fine
+%   Tuning: Specifications of the source domains (pre-training datasets), target domain (fine-tuning dataset), input tensor, framework, and parameters for each model variant tested}
+% \label{tab:model_summary}
+% \begin{tabular}{lllllll}
+% \hline
+% \textbf{Model} & \textbf{Pre-Trained}& \textbf{Source Domain
+%                                        $\mathcal{D}^{S}$} &
+%                                                             \textbf{Target
+%                                                             Domain $\mathcal{D}^{T}$} & \textbf{Input Tensor} & \textbf{Framework} & \textbf{\# Parameters} \\ \hline
 
+% ViT ($16 \times 16$)& Yes  & ImageNet-1K                   & $\mathbb{D}_{\mathrm{IR}}$
+%                                                             (149
+%                                                             patients)
+%                                                                                       & $(B\times 20, 3,224,224)$     & PyTorch            & \numprint{85799425} \\ \hline
+% ViT ($32 \times 32$)& Yes  & ImageNet-1K                   & $\mathbb{D}_{\mathrm{IR}} $
+%                                                             (149
+%                                                             patients)
+%                                                                                       & $(B\times 20, 3,224,224)$     & PyTorch            & \numprint{ 87456001} \\ \hline
+  
+% ViT ($32 \times 32$) & No       & None                          &
+%                                                                   $\mathbb{D}_{\mathrm{IR}}
+%                                                                   $
+%                                                                   (149
+%                                                                   patients)
+%                                                                                       &
+%                                                                                         $(B\times 20, 3,224,224)$     & PyTorch            & \numprint{87456001} \\ \hline
+% ViViT / TimeSformer & Yes & Kinetics-400                  &
+%                                                             $\mathbb{D}_{\mathrm{IR}}$
+%                                                             (149
+%                                                             patients)
+%                                                                                       &
+%                                                                                         $(B,8,3,224,224)$
+%                                                                                                               & PyTorch            & \numprint{121259521} \\ \hline
+% TDL + LSTM    & No      & None                          & $\mathbb{D}_{\mathrm{TM}}$ (55 patients)        & $(B, 20, 1,224,224)$           & TensorFlow         & \numprint{7377} \\ \hline
+% \end{tabular}
+% \end{table}
+
+\begin{table}[ht]
+  \centering
+  \scriptsize
+  \caption{Specifications of the source domains (pre-training datasets), target domain (fine-tuning dataset), input tensor, framework, and parameters for each model variant tested.}
+  \label{tab:model_summary}
+  \begin{tabularx}{\textwidth}{p{0.16\textwidth}XXXp{0.24\textwidth}lX}
+    \hline
+    \textbf{Model} & \textbf{Pre-Trained} & \textbf{Source Domain $\mathcal{D}^{S}$} & \textbf{Target Domain $\mathcal{D}^{T}$} & \textbf{Input Tensor} & \textbf{Framework} & \textbf{\# Parameters} \\
+    \hline
+    ViT($16 \times 16$) & Yes & ImageNet-1K & $\mathbb{D}_{\mathrm{IR}}$  & $(B\times 20, 3,224,224)$ & PyTorch & \numprint{85799425} \\
+    \hline
+    ViT($32 \times 32$) & Yes & ImageNet-1K & $\mathbb{D}_{\mathrm{IR}}$ & $(B\times 20, 3,224,224)$ & PyTorch & \numprint{87456001} \\
+    \hline
+    ViT($32 \times 32$) & No & None & $\mathbb{D}_{\mathrm{IR}}$  & $(B\times 20, 3,224,224)$ & PyTorch & \numprint{87456001} \\
+    \hline
+    ViViT / TimeSformer & Yes & Kinetics-400 & $\mathbb{D}_{\mathrm{IR}}$ & $(B,8,3,224,224)$ & PyTorch & \numprint{121259521} \\
+    \hline
+    TDL + LSTM & No & None & $\mathbb{D}_{\mathrm{TM}}$ & $(B, 20, 1,224,224)$ & TensorFlow & \numprint{7377} \\
+    \hline
+  \end{tabularx}
+\end{table}
 
 % \begin{enumerate}
 % \item Review literature about \ac{CNNs} vs \ac{ViT}
@@ -999,7 +1137,7 @@ highlighted.
     like \ac{TDL} and \ac{ViViT} \label{fig:exp-guide} }
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Training protocols for different modalities and architectures}
 \label{tab:training_protocols}
@@ -1031,7 +1169,9 @@ epochs with higher initial \ac{lr} (1e-4), weight decay (0.05),
 and implemented \ac{lr} warmup with cosine annealing (minimum
 lr=1e-6), while monitoring validation loss. The \ac{ViViT} model
 followed similar configuration to pre-trained \ac{ViT}s (20 epochs,
-lr=3e-5) monitored by F1-score.
+lr=3e-5) monitored by F1-score. Table~\ref{tab:training_protocols}
+presents the training protocols used for the different
+modality-architecture combinations.
 
 % \begin{enumerate}
 % \item Replicate results provided in \cite{Garia2023} to assess that
@@ -1176,25 +1316,49 @@ Our work & ViViT & DIT & Yes & DMR-IR & Patient & 149 & K=10 & 10\% & \textbf{0.
 \label{sec:discussion}
 To the best of our knowledge, this work presents the first application
 of a \ac{ViViT} to the \ac{DIT} protocol. Our approach achieves
-superior performance compared to the results reported in
-\cite{DeMatheus2023} on a test set of 15 patients, while yielding
-comparable outcomes in a $K=10$ cross-validation setting. However,
-model generalization needs a bigger sample. It is noteworthy that our
+superior performance on a test set of 15 patients (93\% accuracy, 93\%
+precision, 94\% recall) compared to the results reported in
+\cite{DeMatheus2023}. Furthermore, in a $K=10$ cross-validation
+setting, our method achieves a similar mean accuracy of 93.50\% but
+demonstrates superior stability, as indicated by a significantly
+smaller standard deviation of $\pm$ 0.94\%. This higher precision and
+lower variance suggest a more robust model. It is noteworthy that our
 experiments utilize \ac{IR} images with a spatial resolution of
 $224 \times 224$ pixels, a significantly larger input size compared to
 the $32 \times 32$ images used by the baseline method in
-\cite{DeMatheus2023}, although we employ a shorter temporal sequence
-($F=8$ frames), which is a consequence of fine-tuning a pre-trained
-model. It would be of interest to benchmark the performance of
-\ac{ViViTs} with a larger number of time frames.
+\cite{DeMatheus2023}. We employ a shorter temporal sequence ($F=8$
+frames) to accommodate the use of a pre-trained model. To address
+this, future ablations studies should quantify the incremental value of
+temporal modeling by varying (a) the number of frames (e.g., 3, 4, 6,
+8, and the full 20-frame sequence), (b) the sampling strategy
+(contiguous vs.\ uniformly spaced frames), and (c) the timing (early
+vs.\ late frames relative to cooling).
+
+Another important difference is that our current results do
+not use a prior segmentation stage. Moreover, this arises the question
+if segmentation would increase performance in our results. However, as
+indicated in \cite{Ryan2025}, there are no ablation studies that could
+confirm this in infrared \ac{TG}.
 
 % Another difference with Matheus is we do not make a segmentation of
 % the region of interest before sumiting the image to the model
 Our experiments corroborate that \ac{ViTs} with $32 \times 32$ patches
 yield better performance. However, it should be noted that a different
 acquisition protocol for the same dataset was employed compared to
-\cite{Garia2023}. In contrast to their findings, training a model from
-scratch underperformed in our setup.
+\cite{Garia2023}. In contrast to their findings, pre-training clearly
+benefited performance in our experiments, despite the domain gap between
+natural images/videos and medical thermal data.
+
+\ac{DIT} aims to capture physiological responses under thermal stress
+that may not be visible in single static frames. Our results show that
+a pre-trained spatial \ac{ViT} with temporal averaging can reach
+performance comparable to a pre-trained video transformer, suggesting
+that a substantial portion of the discriminative signal may be
+spatial. This raises two complementary questions: (i) whether the
+current \ac{DIT} protocol sufficiently captures the
+temporal dynamics it is designed to measure, and (ii) whether simpler
+static protocols (\ac{SIT}) augmented with robust spatial modeling could be
+adequate for certain clinical scenarios.
 
 The results also suggest that future works should emphasize the type
 of thermal data used, as outcomes obtained directly from the point
@@ -1202,25 +1366,53 @@ temperatures in CSV files differ from those using \ac{IR} images. The
 challenges associated with temperature maps may stem from the fact
 that pre-trained networks are typically trained on natural images,
 which constitute a domain distinct from both \ac{IR} imagery and
-temperature maps. The best performance was achieved using \ac{IR}
-images.
+temperature maps. We observed that infrared RGB images delivered
+stronger performance than raw temperature matrices.
+
+\subsection{Threats to Validity}
+\label{sec:threats-validity}
+
+Our study is primarily limited by: (i) the relatively small size of
+the dataset, and (ii) the absence of clinical validation. Although
+this research prevented patient information leakage in the hold-out
+test set, the limited sample size, combined with the use of large
+architectures such as transformers, increases the risk of
+overfitting. This risk, in turn, limits the potential for the clinical
+translation of these results. To mitigate overfitting, \ac{FT} and
+data augmentation were employed; however, future work should include
+statistical tests and ablation studies to further validate and improve
+the model's performance. The sample size of available public datasets,
+however, is a factor over which we have limited control, besides some
+of the suggestions indicated in \cite{Ryan2025}. Clinical validation,
+while challenging to achieve, is necessary. It would not only validate
+the current model but also enhance it by incorporating other
+physiological factors (e.g., menstrual cycle, hormone therapy) that
+may influence thermographic patterns and, consequently, the model's
+performance.
+
 
 \section{Conclusions}
 \label{sec:conclusions}
 
 This research paper shows that \ac{ViViTs} can be effectively applied
 to \ac{BC} classification using dynamically acquired \ac{TG}
-images. With respect to the research questions, we conclude the
-following:
+images. Our current results show that the basic TimeSformer with 8
+frames has achieved a similar performance to 3D-CNN in a prior
+work. Also, this work extends that of \cite{Garia2023} by extending to
+the dynamic protocol.
 
-\begin{enumerate}
-\item Transformer-based models exhibit performance comparable to that
-  of \ac{CNNs} for this classification task.
-    \item In our experiments, fine-tuning a pre-trained model yielded
-      superior performance compared to training from scratch.
-    \item The integration of \ac{DIT} with \ac{ViViTs} achieves
-      results comparable to those reported in \cite{Garia2023}.
-\end{enumerate}
+With respect to the research questions, we conclude that
+transformer-based models exhibit a performance comparable to that of
+\ac{CNNs} for this research problem. In our experiments, fine-tuning a
+pre-trained model yielded superior performance. Finally, the
+integration of \ac{DIT} with \ac{ViViTs} achieves results similar to
+those reported in \cite{Garia2023}. Moreover, our results indicate
+that \ac{ViTs} with temporal averaging perform similarly to fine-tuned
+\ac{ViViTs}. This suggests that further research is necessary to fully
+account for the effect of temporal dynamics in \ac{BC} prediction
+using infrared images and transformer-based architectures.
+
+
 % ==================== original conclusion section ====================
 % To the best of our knowledge, this work presents the first application
 % of a \ac{ViViT} to the \ac{DIT} protocol. Our approach achieves
