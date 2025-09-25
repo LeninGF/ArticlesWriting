@@ -1,0 +1,68 @@
+\section*{Suggested Improvements Based on Reviewers' Feedback}
+
+Based on the reviewers' constructive comments, we propose the following improvements to strengthen the manuscript:
+
+\subsection*{1. Discussion Section (Reviewer \#2, \#3)}
+\begin{itemize}
+    \item Add a dedicated \textbf{Discussion} section (after Results, before Conclusion).
+    \item Address the \textbf{domain gap} between natural image/video pre-training (ImageNet, Kinetics-400) and thermal medical imaging. Discuss potential limitations and future directions such as domain adaptation, self-supervised pre-training on thermal data, or synthetic data augmentation.
+    \item Critically analyze \textbf{overfitting risks} due to the small dataset size (149 patients). Discuss mitigation strategies such as ensembling, probability averaging, dropout, and data augmentation.
+    \item Explicitly discuss the \textbf{clinical implications} of the results: whether dynamic thermal imaging is necessary, and whether large transformer models are justified compared to simpler architectures.
+    \item Expand on \textbf{computational cost} of ViViT compared to ViT and 3D CNNs, and its implications for clinical deployment.
+\end{itemize}
+
+\subsection*{2. Dataset and Temporal Acquisition Details (Reviewer \#3)}
+\begin{itemize}
+    \item Report the \textbf{frame rate (fps)}, total acquisition duration, and timing of cooling relative to capture in the DIT protocol.
+    \item Clarify whether the 20 frames span the full physiological cooling response.
+    \item Add ablation experiments:
+    \begin{enumerate}
+        \item Vary frame count (e.g., 3, 4, 6, 8, 20).
+        \item Compare contiguous vs. uniformly spaced frames.
+        \item Compare early vs. late frames.
+    \end{enumerate}
+    \item Discuss whether temporal modeling provides measurable improvements beyond spatial information.
+\end{itemize}
+
+\subsection*{3. Clarity and Presentation (Reviewer \#2, \#5)}
+\begin{itemize}
+    \item Revise the \textbf{abstract} to minimize abbreviations; only retain those repeated multiple times (e.g., DIT, ViT).
+    \item Add a \textbf{summary table} listing:
+    \begin{itemize}
+        \item Model type (ViT, ViViT, 3D CNN, etc.).
+        \item Pre-training dataset (ImageNet-1K, Kinetics-400, or none).
+        \item Fine-tuning dataset (DMR-IR, 149 patients).
+        \item Input format (thermal maps vs. RGB).
+    \end{itemize}
+    \item Improve \textbf{Figure 1}: replace the flowchart with a more graphical schematic using standard deep learning symbols (convolutions, transformer blocks, temporal arrows).
+    \item Ensure \textbf{references} are consistently ordered numerically within brackets (e.g., [17,21] not [21,17]).
+    \item Verify all \textbf{ORCID IDs} of the authors.
+\end{itemize}
+
+\subsection*{4. Statistical Rigor (Reviewer \#5)}
+\begin{itemize}
+    \item Add \textbf{confidence intervals} for AUC, F1, and accuracy metrics.
+    \item Perform \textbf{statistical significance tests} (e.g., permutation tests, McNemar’s test) when comparing models.
+    \item Discuss suspiciously high cross-validation results (e.g., F1 = 1.0 for ViT-32 pre-trained) and analyze whether this indicates overfitting.
+\end{itemize}
+
+\subsection*{5. Additional Discussion Points (Reviewer \#2, \#3)}
+\begin{itemize}
+    \item Discuss the trade-off between \textbf{dynamic vs. static thermal imaging}: is the temporal signal essential, or are spatial features sufficient?
+    \item Compare \textbf{plain temperature matrices vs. infrared images} in terms of performance, acquisition complexity, and clinical practicality.
+    \item Highlight the need for \textbf{external validation} on larger or multicenter datasets to confirm generalizability.
+\end{itemize}
+
+\subsection*{6. Minor Revisions}
+\begin{itemize}
+    \item Justify the choice of sampling only 8 frames for TimeSformer (Reviewer \#5).
+    \item Add limitations regarding dataset size, computational cost, and generalization.
+    \item Ensure consistent terminology throughout the manuscript.
+\end{itemize}
+
+\section*{Summary}
+In summary, the main revisions include: (i) adding a comprehensive Discussion section, (ii) clarifying dataset acquisition details, (iii) improving clarity with tables and figures, (iv) strengthening statistical rigor, and (v) expanding on clinical implications and limitations. These changes will enhance both the scientific and clinical impact of the paper.
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: "improvementIdeas.tex"
+%%% End:
