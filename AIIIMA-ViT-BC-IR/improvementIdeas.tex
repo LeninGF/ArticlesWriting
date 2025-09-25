@@ -5,15 +5,28 @@ Based on the reviewers' constructive comments, we propose the following improvem
 \subsection*{1. Discussion Section (Reviewer \#2, \#3)}
 \begin{itemize}
     \item Add a dedicated \textbf{Discussion} section (after Results, before Conclusion).
-    \item Address the \textbf{domain gap} between natural image/video pre-training (ImageNet, Kinetics-400) and thermal medical imaging. Discuss potential limitations and future directions such as domain adaptation, self-supervised pre-training on thermal data, or synthetic data augmentation.
-    \item Critically analyze \textbf{overfitting risks} due to the small dataset size (149 patients). Discuss mitigation strategies such as ensembling, probability averaging, dropout, and data augmentation.
-    \item Explicitly discuss the \textbf{clinical implications} of the results: whether dynamic thermal imaging is necessary, and whether large transformer models are justified compared to simpler architectures.
-    \item Expand on \textbf{computational cost} of ViViT compared to ViT and 3D CNNs, and its implications for clinical deployment.
+    \item Address the \textbf{domain gap} between natural image/video
+      pre-training (ImageNet, Kinetics-400) and thermal medical
+      imaging. Discuss potential limitations and future directions
+      such as domain adaptation, self-supervised pre-training on
+      thermal data, or synthetic data augmentation.
+    \item Critically analyze \textbf{overfitting risks} due to the
+      small dataset size (149 patients). Discuss mitigation strategies
+      such as ensembling, probability averaging, dropout, and data
+      augmentation.
+    \item Explicitly discuss the \textbf{clinical implications} of the
+      results: whether dynamic thermal imaging is necessary, and
+      whether large transformer models are justified compared to
+      simpler architectures.
+    \item Expand on \textbf{computational cost} of ViViT compared to
+      ViT and 3D CNNs, and its implications for clinical deployment.
 \end{itemize}
 
 \subsection*{2. Dataset and Temporal Acquisition Details (Reviewer \#3)}
 \begin{itemize}
-    \item Report the \textbf{frame rate (fps)}, total acquisition duration, and timing of cooling relative to capture in the DIT protocol.
+\item Report the \textbf{frame rate (fps)}, total acquisition
+  duration, and timing of cooling relative to capture in the DIT
+  protocol.
     \item Clarify whether the 20 frames span the full physiological cooling response.
     \item Add ablation experiments:
     \begin{enumerate}
@@ -21,12 +34,14 @@ Based on the reviewers' constructive comments, we propose the following improvem
         \item Compare contiguous vs. uniformly spaced frames.
         \item Compare early vs. late frames.
     \end{enumerate}
-    \item Discuss whether temporal modeling provides measurable improvements beyond spatial information.
+  \item Discuss whether temporal modeling provides measurable
+    improvements beyond spatial information.
 \end{itemize}
 
 \subsection*{3. Clarity and Presentation (Reviewer \#2, \#5)}
 \begin{itemize}
-    \item Revise the \textbf{abstract} to minimize abbreviations; only retain those repeated multiple times (e.g., DIT, ViT).
+\item Revise the \textbf{abstract} to minimize abbreviations; only
+  retain those repeated multiple times (e.g., DIT, ViT).
     \item Add a \textbf{summary table} listing:
     \begin{itemize}
         \item Model type (ViT, ViViT, 3D CNN, etc.).
@@ -34,23 +49,35 @@ Based on the reviewers' constructive comments, we propose the following improvem
         \item Fine-tuning dataset (DMR-IR, 149 patients).
         \item Input format (thermal maps vs. RGB).
     \end{itemize}
-    \item Improve \textbf{Figure 1}: replace the flowchart with a more graphical schematic using standard deep learning symbols (convolutions, transformer blocks, temporal arrows).
-    \item Ensure \textbf{references} are consistently ordered numerically within brackets (e.g., [17,21] not [21,17]).
-    \item Verify all \textbf{ORCID IDs} of the authors.
+  \item Improve \textbf{Figure 1}: replace the flowchart with a more
+    graphical schematic using standard deep learning symbols
+    (convolutions, transformer blocks, temporal arrows).
+  \item Ensure \textbf{references} are consistently ordered
+    numerically within brackets (e.g., [17,21] not [21,17]).
+  \item Verify all \textbf{ORCID IDs} of the authors.
 \end{itemize}
 
 \subsection*{4. Statistical Rigor (Reviewer \#5)}
 \begin{itemize}
-    \item Add \textbf{confidence intervals} for AUC, F1, and accuracy metrics.
-    \item Perform \textbf{statistical significance tests} (e.g., permutation tests, McNemar’s test) when comparing models.
-    \item Discuss suspiciously high cross-validation results (e.g., F1 = 1.0 for ViT-32 pre-trained) and analyze whether this indicates overfitting.
+\item Add \textbf{confidence intervals} for AUC, F1, and accuracy
+  metrics.
+\item Perform \textbf{statistical significance tests} (e.g.,
+  permutation tests, McNemar’s test) when comparing models.
+\item Discuss suspiciously high cross-validation results (e.g., F1 =
+  1.0 for ViT-32 pre-trained) and analyze whether this indicates
+  overfitting.
 \end{itemize}
 
 \subsection*{5. Additional Discussion Points (Reviewer \#2, \#3)}
 \begin{itemize}
-    \item Discuss the trade-off between \textbf{dynamic vs. static thermal imaging}: is the temporal signal essential, or are spatial features sufficient?
-    \item Compare \textbf{plain temperature matrices vs. infrared images} in terms of performance, acquisition complexity, and clinical practicality.
-    \item Highlight the need for \textbf{external validation} on larger or multicenter datasets to confirm generalizability.
+\item Discuss the trade-off between \textbf{dynamic vs. static thermal
+    imaging}: is the temporal signal essential, or are spatial
+  features sufficient?
+\item Compare \textbf{plain temperature matrices vs. infrared images}
+  in terms of performance, acquisition complexity, and clinical
+  practicality.
+\item Highlight the need for \textbf{external validation} on larger or
+  multicenter datasets to confirm generalizability.
 \end{itemize}
 
 \subsection*{6. Minor Revisions}
@@ -61,7 +88,144 @@ Based on the reviewers' constructive comments, we propose the following improvem
 \end{itemize}
 
 \section*{Summary}
-In summary, the main revisions include: (i) adding a comprehensive Discussion section, (ii) clarifying dataset acquisition details, (iii) improving clarity with tables and figures, (iv) strengthening statistical rigor, and (v) expanding on clinical implications and limitations. These changes will enhance both the scientific and clinical impact of the paper.
+In summary, the main revisions include: (i) adding a comprehensive
+Discussion section, (ii) clarifying dataset acquisition details, (iii)
+improving clarity with tables and figures, (iv) strengthening
+statistical rigor, and (v) expanding on clinical implications and
+limitations. These changes will enhance both the scientific and
+clinical impact of the paper.
+
+\section{Discussion}
+
+This work presents, to our knowledge, the first application of Video
+Vision Transformers (ViViTs) to dynamic infrared thermography (DIT)
+for breast cancer classification. The proposed approach achieves
+competitive performance (AUC $=0.9350 \pm 0.0094$ in cross-validation
+and $0.9444$ on a held-out test set) and slightly advances prior DIT
+baselines based on 3D CNNs. Below, we discuss the implications of
+these findings, the necessity of dynamic acquisition and large-scale
+transformer models, and the practical constraints that affect clinical
+translation.
+
+\subsection{Do we need dynamic thermal imaging?}
+DIT aims to capture physiological responses under thermal stress
+(e.g., vascular reactivity, metabolic heat signatures) that may not be
+visible in single static frames. Our results show that a pre-trained
+spatial ViT with temporal averaging can reach performance comparable
+to a pre-trained video transformer, suggesting that a substantial
+portion of the discriminative signal may be spatial. This raises two
+complementary questions: (i) whether the current DIT timing and
+sampling protocol sufficiently captures the temporal dynamics it is
+designed to measure, and (ii) whether simpler static protocols (SIT)
+augmented with robust spatial modeling could be adequate for certain
+clinical scenarios.
+
+To address this, future ablations should quantify the incremental
+value of temporal modeling by varying (a) the number of frames (e.g.,
+3, 4, 6, 8, and the full 20-frame sequence), (b) the sampling strategy
+(contiguous vs.\ uniformly spaced frames), and (c) the timing (early
+vs.\ late frames relative to cooling). Reporting frame rate, total
+acquisition time, and stress onset/offset will allow the community to
+relate model gains to physiological phases and decide when DIT
+provides clinically meaningful information beyond spatial cues.
+
+\subsection{Do we need large transformer models?}
+Pre-training clearly benefited performance in our experiments (e.g.,
+ViT-32 pre-trained vs.\ scratch), despite the domain gap between
+natural images/videos and medical thermal data. However, large
+transformers incur substantial computational cost, memory demand, and
+latency, which can limit deployment in routine screening. The observed
+parity between ViT-32 (spatial) and TimeSformer (spatio-temporal)
+suggests a careful trade-off: in settings where temporal dynamics add
+marginal gains, lighter spatial backbones or distilled variants may be
+preferred.
+
+Future work should evaluate: (i) compact architectures (e.g.,
+mobile-friendly transformers or efficient CNN/Transformer hybrids),
+(ii) knowledge distillation from ViViT into lightweight students, and
+(iii) model pruning/quantization for point-of-care
+devices. Benchmarking inference time, memory, and energy alongside
+accuracy will enable more informed clinical choices.
+
+\subsection{Domain gap and generalization}
+Using ImageNet/Kinetics pre-training for thermal medical imaging
+introduces a domain gap. While transfer learning improved results, it
+may also encourage shortcut learning on spurious correlates. To reduce
+this risk, several directions are promising: (i) self-supervised or
+masked modeling pre-training directly on thermal sequences, (ii)
+domain adaptation from natural to thermal imagery, and (iii) synthetic
+data generation that respects thermal physics and acquisition
+variability.
+
+Generalization remains constrained by dataset size (149 patients for
+IR; fewer for temperature maps). We recommend external validation on
+larger and multi-center cohorts, reporting site-wise performance to
+assess robustness to device, protocol, and population differences.
+
+\subsection{Overfitting, statistical rigor, and evaluation design}
+Near-perfect cross-validation outcomes (e.g., F1 $=1.0$ for ViT-32
+pre-trained) warrant a cautious interpretation. Small patient-level
+datasets and protocol homogeneity can inflate estimates. To strengthen
+rigor, we suggest: (i) reporting confidence intervals for AUC, F1, and
+accuracy; (ii) applying statistical tests such as permutation testing
+or McNemar’s test when comparing paired model predictions; and (iii)
+preferring patient-level ensembling or fold-wise probability averaging
+over selecting a single best-performing fold/model.
+
+Additionally, clarifying and standardizing the split strategy
+(stratified, patient-level, non-overlapping sequences) helps avoid
+leakage and improves reproducibility. Any data quality issues (e.g.,
+resized frames, duplicated sequences) should be documented and
+mitigated.
+
+\subsection{Thermal maps vs.\ infrared images}
+We observed that infrared RGB images delivered stronger performance
+than raw temperature matrices. Possible explanations include: (i)
+pre-trained backbones are tuned to image statistics closer to RGB
+thermograms than to scalar temperature maps, and (ii) color encodings
+may enhance contrast of physiologically relevant patterns for learned
+filters. Nonetheless, temperature matrices provide physically grounded
+measurements and may be preferable when interpretability and
+calibration are paramount.
+
+A practical path forward is to evaluate: (i) bespoke architectures for
+temperature matrices with physics-informed inductive biases, and (ii)
+cross-modal fusion (e.g., jointly modeling RGB thermograms and
+temperature maps) to combine interpretability with discriminative
+power.
+
+\subsection{Clinical implications and deployment}
+For clinical adoption, the value proposition must balance accuracy,
+throughput, cost, and ease of integration. If temporal modeling adds
+limited marginal gains, static protocols with efficient spatial models
+could simplify workflows and reduce acquisition time. Conversely, if
+ablations show that specific temporal windows or dynamics improve
+sensitivity (e.g., in dense tissue or certain tumor phenotypes), DIT
+with targeted sampling may be justified.
+
+Interpretability is another key factor. Attention visualizations and
+region-wise attribution over thermograms can help clinicians relate
+model decisions to thermal asymmetries and vascular patterns. Finally,
+clear reporting of computational requirements, training/inference
+times, and hardware constraints will guide deployment decisions in
+diverse clinical environments.
+
+\subsection{Limitations and future work}
+Our study is limited by: (i) small sample size; (ii) lack of explicit
+timing metadata in DIT sequences; (iii) reliance on
+natural-image/video pre-training; and (iv) absence of statistical
+significance testing in the current comparisons. Future work should:
+(a) include detailed temporal acquisition parameters and targeted
+temporal ablations; (b) pursue domain-specific pre-training and
+adaptation; (c) conduct external, multi-center validation; (d)
+benchmark lightweight and distilled models; and (e) integrate
+interpretability and uncertainty estimation to support clinical
+decision-making.
+
+Overall, while ViViTs show promise for DIT-based breast cancer
+classification, the necessity of dynamic acquisition and large models
+should be established through carefully controlled temporal studies,
+rigorous statistical analyses, and deployment-oriented evaluations.
 %%% Local Variables:
 %%% mode: LaTeX
 %%% TeX-master: "improvementIdeas.tex"
