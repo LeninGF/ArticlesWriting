@@ -1171,39 +1171,88 @@ Our work & ViViT & DIT & Yes & DMR-IR & Patient & 149 & K=10 & 10\% & \textbf{0.
 % *Trained from scratch. All cross-validation results use $k=10$ unless
 % noted. Test set evaluations use 15 patients for \ac{IR} models.
 \newpage
-\section{Conclusions}
-\label{sec:conclusions}
 
+\section{Discussion}
+\label{sec:discussion}
 To the best of our knowledge, this work presents the first application
 of a \ac{ViViT} to the \ac{DIT} protocol. Our approach achieves
 superior performance compared to the results reported in
 \cite{DeMatheus2023} on a test set of 15 patients, while yielding
-comparable outcomes in a $K=10$ cross-validation setting. It is
-noteworthy that our experiments utilize \ac{IR} images with a spatial
-resolution of $224 \times 224$ pixels, a significantly larger input
-size compared to the $32 \times 32$ images used by the baseline method
-in \cite{DeMatheus2023}, although we employ a shorter temporal
-sequence ($F=8$ frames).
+comparable outcomes in a $K=10$ cross-validation setting. However,
+model generalization needs a bigger sample. It is noteworthy that our
+experiments utilize \ac{IR} images with a spatial resolution of
+$224 \times 224$ pixels, a significantly larger input size compared to
+the $32 \times 32$ images used by the baseline method in
+\cite{DeMatheus2023}, although we employ a shorter temporal sequence
+($F=8$ frames), which is a consequence of fine-tuning a pre-trained
+model. It would be of interest to benchmark the performance of
+\ac{ViViTs} with a larger number of time frames.
 
+% Another difference with Matheus is we do not make a segmentation of
+% the region of interest before sumiting the image to the model
 Our experiments corroborate that \ac{ViTs} with $32 \times 32$ patches
-yield better performance. However, it should be noted that we have
-used a different acquisition protocol of the same dataset wrt. to
-\cite{Garia2023}. In contrast to their results, training from scratch
-underperformed in our setup.
+yield better performance. However, it should be noted that a different
+acquisition protocol for the same dataset was employed compared to
+\cite{Garia2023}. In contrast to their findings, training a model from
+scratch underperformed in our setup.
 
-Consequently, we infer that \ac{ViViTs} can be applied with a good
-performance in \ac{BC} classification with \ac{TG} images acquired
-dynamically. Our experiments also suggest that future works should
-emphasize on what type of thermal data was used in the experiments
-since results using directly the point temperatures of the CSV files
-are different from those when using \ac{IR} images.
+The results also suggest that future works should emphasize the type
+of thermal data used, as outcomes obtained directly from the point
+temperatures in CSV files differ from those using \ac{IR} images. The
+challenges associated with temperature maps may stem from the fact
+that pre-trained networks are typically trained on natural images,
+which constitute a domain distinct from both \ac{IR} imagery and
+temperature maps. The best performance was achieved using \ac{IR}
+images.
 
-With respect to the research questions, we conclude that
-transformer-based models exhibit a performance comparable to that of
-\ac{CNNs} for this research problem. In our experiments, fine-tuning a
-pre-trained model yielded superior performance. Finally, the
-integration of \ac{DIT} with \ac{ViViTs} achieves results similar to
-those reported in \cite{Garia2023}.
+\section{Conclusions}
+\label{sec:conclusions}
+
+This research paper shows that \ac{ViViTs} can be effectively applied
+to \ac{BC} classification using dynamically acquired \ac{TG}
+images. With respect to the research questions, we conclude the
+following:
+
+\begin{enumerate}
+\item Transformer-based models exhibit performance comparable to that
+  of \ac{CNNs} for this classification task.
+    \item In our experiments, fine-tuning a pre-trained model yielded
+      superior performance compared to training from scratch.
+    \item The integration of \ac{DIT} with \ac{ViViTs} achieves
+      results comparable to those reported in \cite{Garia2023}.
+\end{enumerate}
+% ==================== original conclusion section ====================
+% To the best of our knowledge, this work presents the first application
+% of a \ac{ViViT} to the \ac{DIT} protocol. Our approach achieves
+% superior performance compared to the results reported in
+% \cite{DeMatheus2023} on a test set of 15 patients, while yielding
+% comparable outcomes in a $K=10$ cross-validation setting. It is
+% noteworthy that our experiments utilize \ac{IR} images with a spatial
+% resolution of $224 \times 224$ pixels, a significantly larger input
+% size compared to the $32 \times 32$ images used by the baseline method
+% in \cite{DeMatheus2023}, although we employ a shorter temporal
+% sequence ($F=8$ frames).
+
+% Our experiments corroborate that \ac{ViTs} with $32 \times 32$ patches
+% yield better performance. However, it should be noted that we have
+% used a different acquisition protocol of the same dataset wrt. to
+% \cite{Garia2023}. In contrast to their results, training from scratch
+% underperformed in our setup.
+
+% Consequently, we infer that \ac{ViViTs} can be applied with a good
+% performance in \ac{BC} classification with \ac{TG} images acquired
+% dynamically. Our experiments also suggest that future works should
+% emphasize on what type of thermal data was used in the experiments
+% since results using directly the point temperatures of the CSV files
+% are different from those when using \ac{IR} images.
+
+% With respect to the research questions, we conclude that
+% transformer-based models exhibit a performance comparable to that of
+% \ac{CNNs} for this research problem. In our experiments, fine-tuning a
+% pre-trained model yielded superior performance. Finally, the
+% integration of \ac{DIT} with \ac{ViViTs} achieves results similar to
+% those reported in \cite{Garia2023}.
+% ==================== ==================== ====================
 
 % ==================== reviewer 3 observation b ====================
 %  the following was written with aid of copilot let us check the
