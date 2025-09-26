@@ -188,7 +188,7 @@ non-invasive, and cost-effective alternative for \ac{BC} screening
 that is applicable to all age groups without
 contraindications. Moreover, when combined with machine learning
 techniques, \ac{TG} demonstrates significant potential for early BC
-detection \cite{Rakhunde2022}.
+detection~\cite{Rakhunde2022}.
 
 Recent advances in \ac{AI}, particularly in \ac{DL}, have
 significantly transformed \ac{CAD} systems for medical imaging
@@ -201,7 +201,7 @@ classification of \ac{BC} using the UFF's \ac{DIT} protocol, which
 employs a sequence of temperature maps per patient
 \cite{VisualLab2014}. This \ac{IR} image acquisition method
 established the superiority of dynamic protocols for highlighting
-vascular behavior \cite{Silva2014}. In this work we hypothesize that
+vascular behavior~\cite{Silva2014}. In this work we hypothesize that
 \ac{ViTs} can better model temporal dependencies in thermal sequences
 compared to \ac{CNNs}. As a consequence, we examine both video and
 image-based \ac{ViTs} implementations and compare their performance
@@ -242,8 +242,8 @@ study accounting the use of \ac{ViViTs} in \ac{DIT} protocol for
 setup and 0.9444 on a separated test set of 15 patients with stratified
 labels. This work advances the state-of-the-art set by
 \cite{DeMatheus2023}, where 3D \ac{CNNs} achieved 93.51\% \ac{AUC} in
-binary classification, and compliments the work by \cite{Garia2023},
-which achieved 95.7\% in \ac{SIT} protocol \cite{Silva2014,VisualLab2014}.
+binary classification, and compliments the work by~\cite{Garia2023},
+which achieved 95.7\% in \ac{SIT} protocol~\cite{Silva2014,VisualLab2014}.
 
 The organization of this paper is presented as follows: In Section
 \ref{sec:thermography}, a brief introduction to main characteristics
@@ -319,9 +319,12 @@ infrared \ac{TG}.
 \ac{TG} images can be obtained by using two different protocols:
 \ac{SIT} and \ac{DIT}. The former consists in capturing the thermal
 images under controlled conditions of frontal, oblique and lateral
-breast views~\cite{Ryan2025}. The latter measures the thermal
-response to a thermal stress applied to the
-patient~\cite{Ryan2025,tsietso2022review}. Despite its advantages, \ac{TG} is
+breast views~\cite{Ryan2025}. The latter measures the thermal response
+to a thermal stress applied to the
+patient~\cite{Ryan2025,tsietso2022review}. The UFF's \ac{DIT} protocol
+captures an image every 15 seconds over an interval of 5 minutes,
+resulting in a sequence of 20 images per
+patient~\cite{DeMatheus2023,VisualLab2014}. Despite its advantages, \ac{TG} is
 susceptible to procedural inconsistencies and thermal noise
 interference. A major challenge lies in the non-specificity of thermal
 anomalies, which complicates accurate interpretation. For instance,
@@ -367,7 +370,7 @@ tasks, outperforming state-of-the-art \ac{CNNs}. Additionally, their
 work provides key implementation insights: (1) \textbf{Positional
   embeddings} show no significant improvement when extended to 2D
 representations; (2) \textbf{\ac{FT}} employs higher-resolution
-images while maintaining original patch size \cite{Kolesnikov2019};
+images while maintaining original patch size~\cite{Kolesnikov2019};
 (3) \textbf{\ac{TL}} replaces the classification head with a
 zero-initialized linear layer matching the target output dimension;
 (4) \textbf{Training} requires strong regularization for scratch
@@ -381,14 +384,14 @@ Video can be understood as a sequence of images through a time
 dimension that introduces motion and deformations on them
 \cite{Selva_2023}. Because of this sequential nature present in video
 information, it would be expected that \ac{ViTs} to be effective in
-video modeling \cite{Bertasius2021}. The \textit{TimeSformer} stands
+video modeling~\cite{Bertasius2021}. The \textit{TimeSformer} stands
 as the first convolution-free architecture that adapts the \ac{ViT}
-architecture proposed in \cite{dosovitskiy2020image} to video by
+architecture proposed in~\cite{dosovitskiy2020image} to video by
 extending the self-attention mechanism from the image space to the
-space-time 3D volume\cite{Bertasius2021}. Their main idea is to treat
+space-time 3D volum~\cite{Bertasius2021}. Their main idea is to treat
 video as a sequence of patches extracted from the individual frames,
 where each patch is linearly mapped into an embedding space with
-positional information \cite{Bertasius2021}.
+positional information~\cite{Bertasius2021}.
 
 There is active research on \ac{ViViTs}, with several notable
 models proposed in recent literature (e.g., ViViT~\cite{Arnab2021},
@@ -409,7 +412,7 @@ architecture for sequence prediction characterized with two key
 properties: (1) \emph{causal convolutions}, which prevent information
 leakage from future to past data, and (2) a \emph{fixed output
   length}, enabling the model to map variable-length inputs to outputs
-of the same length \cite{Bai2018}.
+of the same length~\cite{Bai2018}.
 
 A significant advantage of \ac{TCN} is its inherent parallelism, where
 predictions for later time steps do not depend sequentially on earlier
@@ -417,11 +420,11 @@ ones. This is achieved by processing the same filter across each
 layer, allowing the model to handle long input sequences efficiently
 during both training and evaluation.
 
-In contrast, Keras \cite{chollet2015keras}, a popular \ac{DL}
+In contrast, Keras~\cite{chollet2015keras}, a popular \ac{DL}
 framework, provides a \ac{TDL} wrapper that applies a given layer to
 every temporal slice of an input. By reusing the same weights across
 all timestamps in the 3D input tensor, this approach ensures parameter
-efficiency. Recent work by \cite{Dhage2025} demonstrates that
+efficiency. Recent work by~\cite{Dhage2025} demonstrates that
 combining \ac{TDL} with LSTM can simultaneously improve feature
 extraction and temporal pattern recognition in sequential data,
 leading to enhanced accuracy in \ac{HAR} tasks.
@@ -432,7 +435,7 @@ leading to enhanced accuracy in \ac{HAR} tasks.
 \label{sec:literature-review}
 
 This section provides a systematic literature review following the
-methodology proposed in \cite{kitchenham2009systematic} to find
+methodology proposed in~\cite{kitchenham2009systematic} to find
 relevant works in the area of this research goals and questions.
 To ensure comprehensive coverage of \ac{ViTs} and \ac{TG} applications, we
 employed the \ac{PICOC} framework to engineer the search string. We focused
@@ -477,7 +480,7 @@ evaluated against the predefined inclusion and exclusion
 criteria. This selection process resulted in 4 relevant publications
 for the literature review. The scarcity of publications investigating
 \ac{ViT} and \ac{TG} suggests significant opportunities for novel
-contributions, with only one study \cite{Garia2023} addressing
+contributions, with only one study~\cite{Garia2023} addressing
 research objectives comparable to ours.
 
 \subsection{Deep Learning for Dynamic Breast Thermography}
@@ -485,10 +488,10 @@ research objectives comparable to ours.
 
 According to our proposed search strategy for literature review, the
 first study employing \ac{ViTs} for \ac{BC} classification using
-\ac{TG} images is reported in \cite{Garia2023}. Their approach
+\ac{TG} images is reported in~\cite{Garia2023}. Their approach
 utilizes the standard \ac{ViT}-Base architecture with 12 layers, 12
 attention heads, and a 768-dimensional embedding
-space\cite{dosovitskiy2020image}. Similar to our work, their
+spac~\cite{dosovitskiy2020image}. Similar to our work, their
 methodology leverages the transformer's self-attention mechanism for
 \ac{TG} image classification into \textit{Cancerous} or
 \textit{Healthy} categories. The authors investigate the impact of
@@ -498,19 +501,19 @@ standard $16 \times 16$ configuration. Also, it is worth to mention
 that their implementation does not incorporate pre-trained weights on
 natural images or data augmentation techniques. Their approach
 achieved an \ac{AUC} of 95.7\% for binary classification on the DMR-IR
-dataset\cite{Silva2014}, using a total of 950 samples with an analysis
+datase~\cite{Silva2014}, using a total of 950 samples with an analysis
 unit per \ac{TG} image. However, the study was limited to \ac{SIT}
 acquisition protocol.
 
 To benchmark our methodology against \ac{CNNs}-based approaches for
-\ac{DIT}, we compare with \cite{DeMatheus2023}, which employs
+\ac{DIT}, we compare with~\cite{DeMatheus2023}, which employs
 3D-\ac{CNNs} to recognize patterns changes in a sequence of \ac{TG}
 images. Cancer identification using a sequence of images is similar to
 action recognition and depend on spatio-temporal models that extract
 space-time feature information from data. While 2D \ac{CNNs} applied
 to individual frames remain competitive for action recognition
 \cite{Tran2017}, 3D convolutions inherently capture motion information
-across adjacent frames \cite{Ji2013,Qiming2023}. In
+across adjacent frames~\cite{Ji2013,Qiming2023}. In
 \cite{DeMatheus2023}, each patient's data is represented as a
 hypercube constructed by stacking 20 preprocessed frames. The
 preprocessing stage involved the segmentation of the region of interest
@@ -543,14 +546,14 @@ process.
 This section outlines the methodological procedures employed to
 develop and validate our set of models for \ac{BC} using the \ac{DIT}
 protocol, specially the efficacy of \ac{ViTs} models. The most similar
-work to our approach was proposed in \cite{Garia2023}, where the
+work to our approach was proposed in~\cite{Garia2023}, where the
 authors trained a \ac{ViT} model from scratch using the same dataset
 but the \ac{SIT} protocol. Their study does not evaluate the
 performance of pre-trained \ac{ViTs}, which is studied now here.
 
 From our literature review there is no previous automated
 classification of \ac{BC} by using \ac{DIT} protocol and \ac{ViViTs}. To
-benchmark our results, we consider the work of Baffa et al.\cite{DeMatheus2023},
+benchmark our results, we consider the work of Baffa et al~\cite{DeMatheus2023},
 where 3D \ac{CNNs} are employed to study the evolution of the sequence
 of \ac{TG} images.
 
@@ -674,7 +677,7 @@ $\mathbf{x} \in \mathcal{X} \subset \mathbb{R}^{F \times C \times H
 \end{equation}
 
 Considering that a video classification aims to predict the class of a
-given input sequence of frames \cite{Selva_2023}, the final prediction
+given input sequence of frames~\cite{Selva_2023}, the final prediction
 $\hat{y} \in \{0,1\}$ is:
 
 \begin{equation}
@@ -691,7 +694,7 @@ In this context, we hypothesize that  \ac{ViViTs} can outperform
 
 
 \subsection{Model Fine-Tuning}\label{sec:transfer-learnin}
-\ac{FT} is a \ac{TL} technique where the weights of a pre-trained model are further trained on a smaller, task-specific dataset. Typically, the classification head is replaced to adapt the model to the nuances of the new task. This process can update all layers of the pre-trained model or gradually unfreeze some of them (layer-wise fine-tuning). We adopt the formal definitions for \ac{TL} and \ac{FT} given in \cite{falconi2020transfer}:
+\ac{FT} is a \ac{TL} technique where the weights of a pre-trained model are further trained on a smaller, task-specific dataset. Typically, the classification head is replaced to adapt the model to the nuances of the new task. This process can update all layers of the pre-trained model or gradually unfreeze some of them (layer-wise fine-tuning). We adopt the formal definitions for \ac{TL} and \ac{FT} given in~\cite{falconi2020transfer}:
 
 \begin{definition}[Transfer Learning]
   Given an original domain $\mathcal{D}^{S}$ with an original learning task $\mathcal{T}^{S}$, a target domain $\mathcal{D}^{T}$ with a target task $\mathcal{T}^{T}$, the transfer learning operation seeks to improve the learning of a prediction function $\ypredtarget(\cdot)$ in $\mathcal{D}^{T}$ using the knowledge acquired in $\ypredsource(\cdot)$ in $\mathcal{T}^{S}$, through $\phi^S$; where $\mathcal{D}^{S} \neq \mathcal{D}^{T}$ or $\mathcal{T}^{S} \neq \mathcal{T}^{T}$.
@@ -736,7 +739,7 @@ temperature values captured by the FLIR SC620 infrared camera with a
 measurement accuracy of \(\pm2\,^{\circ}\mathrm{C}\)
 \cite{DeMatheus2023}. The latter consists of RGB images acquired from
 the same camera. In both cases, the resolution is \(640\times 480\)
-pixels. However, as noted in \cite{Garia2023}, the number of subjects
+pixels. However, as noted in~\cite{Garia2023}, the number of subjects
 and images varies across studies, making direct comparisons
 difficult. Table~\ref{tab:dataset_comparison} summarizes the
 characteristics of \(\mathbb{D}_{\mathrm{TM}}\) and
@@ -784,7 +787,7 @@ pre-trained networks employed.  Since the \ac{DIT} protocol operates
 at the patient level, the number of available samples is inherently
 limited. To mitigate this constraint, data augmentation was applied
 exclusively to the training fold. The augmentation strategy differs
-from that of \cite{DeMatheus2023}, incorporating only the following
+from that of~\cite{DeMatheus2023}, incorporating only the following
 transformations: horizontal flip, rotation up to $15^{\circ}$, and
 resize. Other augmentation techniques were excluded to preserve the
 thermal properties of the data, which differ significantly from
@@ -815,7 +818,7 @@ deep learning backend, and number of parameters are also provided.
 
 \subsubsection{Time Distributed Layer Model:}
 \label{sec:time-distr-layer}
-Building upon the hybrid architecture proposed in \cite{Dhage2025}, we
+Building upon the hybrid architecture proposed in~\cite{Dhage2025}, we
 implement a sequential model combining \ac{TDL} for spatial feature
 extraction and \ac{LSTM} for temporal modeling. Each frame undergoes
 spatial feature extraction through resizing to $224\times224$
@@ -850,7 +853,7 @@ constrains.
 \ac{ViT}-based classifier to process complete sequences of 20 thermal
 frames per case, maintaining compatibility with the standard 5D input
 tensor format $(B, F, C, H, W)$. We construct our model from the base
-architecture proposed in \cite{dosovitskiy2020image}.
+architecture proposed in~\cite{dosovitskiy2020image}.
 
 The architecture comprises three principal components: (1) a
 pre-trained ViT-B/16 backbone, from which the classification head has
@@ -877,7 +880,7 @@ latter case.
 
 Since video classification requires both spatial and temporal
 processing of image sequences, we implement a TimeSformer-based
-architecture \cite{Bertasius2021} for \ac{DIT}analysis. Generally,
+architecture~\cite{Bertasius2021} for \ac{DIT}analysis. Generally,
 models for video data need to address two key challenges: (1) joint
 spatio-temporal feature learning, and (2) handling variable-length
 sequences. However, in \ac{DIT}, this second challenge is mitigated by
@@ -1077,13 +1080,13 @@ recommend that future research clearly indicate whether they are using
 \toprule
 \textbf{Study} & \textbf{Model} & \textbf{Protocol} & \textbf{Pre-trained} & \textbf{Dataset} & \textbf{Analysis Unit} & \textbf{Total Subjects} & \textbf{Cross Validation} & \textbf{Test Set} & \textbf{AUC} \\
 \midrule
-Garia et al.\cite{Garia2023} & ViT & SIT & No & DMR-IR & Images & 950 & - & 10\% & 0.9570 \\
-Baffa et al.\cite{DeMatheus2023} & 3D-CNN & DIT & No & DMR-IR & Patient & 149 & K=10 & - & 0.9351 \\
+Garia et al~\cite{Garia2023} & ViT & SIT & No & DMR-IR & Images & 950 & - & 10\% & 0.9570 \\
+Baffa et al~\cite{DeMatheus2023} & 3D-CNN & DIT & No & DMR-IR & Patient & 149 & K=10 & - & 0.9351 \\
 Our work & ViViT & DIT & Yes & DMR-IR & Patient & 149 & K=10 & 10\% & \textbf{0.9444} \\
 \bottomrule
 \end{tabularx}
 \end{table}
-
+\newpage
 \section{Discussion}
 \label{sec:discussion}
 To the best of our knowledge, this work presents the first application
@@ -1109,7 +1112,7 @@ vs.\ late frames relative to cooling).
 Another important difference is that our current results do
 not use a prior segmentation stage. Moreover, this arises the question
 if segmentation would increase performance in our results. However, as
-indicated in \cite{Ryan2025}, there are no ablation studies that could
+indicated in~\cite{Ryan2025}, there are no ablation studies that could
 confirm this in infrared \ac{TG}.
 
 Our experiments corroborate that \ac{ViTs} with $32 \times 32$ patches
@@ -1138,7 +1141,7 @@ that pre-trained networks are typically trained on natural images,
 which constitute a domain distinct from both \ac{IR} imagery and
 temperature maps. We observed that infrared RGB images delivered
 stronger performance than raw temperature matrices.
-
+\newpage
 \subsection{Threats to Validity}
 \label{sec:threats-validity}
 
@@ -1153,7 +1156,7 @@ data augmentation were employed; however, future work should include
 statistical tests and ablation studies to further validate and improve
 the model's performance. The sample size of available public datasets,
 however, is a factor over which we have limited control, besides some
-of the suggestions indicated in \cite{Ryan2025}. Clinical validation,
+of the suggestions indicated in~\cite{Ryan2025}. Clinical validation,
 while challenging to achieve, is necessary. It would not only validate
 the current model but also enhance it by incorporating other
 physiological factors (e.g., menstrual cycle, hormone therapy) that
@@ -1168,7 +1171,7 @@ This research paper shows that \ac{ViViTs} can be effectively applied
 to \ac{BC} classification using dynamically acquired \ac{TG}
 images. Our current results show that the basic TimeSformer with 8
 frames has achieved a similar performance to 3D-CNN in a prior
-work. Also, this work extends that of \cite{Garia2023} by extending to
+work. Also, this work extends that of~\cite{Garia2023} by extending to
 the dynamic protocol.
 
 With respect to the research questions, we conclude that
@@ -1176,7 +1179,7 @@ transformer-based models exhibit a performance comparable to that of
 \ac{CNNs} for this research problem. In our experiments, fine-tuning a
 pre-trained model yielded superior performance. Finally, the
 integration of \ac{DIT} with \ac{ViViTs} achieves results similar to
-those reported in \cite{Garia2023}. Moreover, our results indicate
+those reported in~\cite{Garia2023}. Moreover, our results indicate
 that \ac{ViTs} with temporal averaging perform similarly to fine-tuned
 \ac{ViViTs}. This suggests that further research is necessary to fully
 account for the effect of temporal dynamics in \ac{BC} prediction
@@ -1187,18 +1190,18 @@ using infrared images and transformer-based architectures.
 % To the best of our knowledge, this work presents the first application
 % of a \ac{ViViT} to the \ac{DIT} protocol. Our approach achieves
 % superior performance compared to the results reported in
-% \cite{DeMatheus2023} on a test set of 15 patients, while yielding
+%~\cite{DeMatheus2023} on a test set of 15 patients, while yielding
 % comparable outcomes in a $K=10$ cross-validation setting. It is
 % noteworthy that our experiments utilize \ac{IR} images with a spatial
 % resolution of $224 \times 224$ pixels, a significantly larger input
 % size compared to the $32 \times 32$ images used by the baseline method
-% in \cite{DeMatheus2023}, although we employ a shorter temporal
+% in~\cite{DeMatheus2023}, although we employ a shorter temporal
 % sequence ($F=8$ frames).
 
 % Our experiments corroborate that \ac{ViTs} with $32 \times 32$ patches
 % yield better performance. However, it should be noted that we have
 % used a different acquisition protocol of the same dataset wrt. to
-% \cite{Garia2023}. In contrast to their results, training from scratch
+%~\cite{Garia2023}. In contrast to their results, training from scratch
 % underperformed in our setup.
 
 % Consequently, we infer that \ac{ViViTs} can be applied with a good
@@ -1213,7 +1216,7 @@ using infrared images and transformer-based architectures.
 % \ac{CNNs} for this research problem. In our experiments, fine-tuning a
 % pre-trained model yielded superior performance. Finally, the
 % integration of \ac{DIT} with \ac{ViViTs} achieves results similar to
-% those reported in \cite{Garia2023}.
+% those reported in~\cite{Garia2023}.
 % ==================== ==================== ====================
 
 
@@ -1249,6 +1252,7 @@ using infrared images and transformer-based architectures.
 % BibTeX users should specify bibliography style 'splncs04'.
 % References will then be sorted and formatted in the correct style.
 %
+\newpage
 \bibliographystyle{splncs04}
 \bibliography{bibliography}
 
