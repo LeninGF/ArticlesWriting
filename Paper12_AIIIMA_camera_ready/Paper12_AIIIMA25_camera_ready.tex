@@ -32,7 +32,8 @@ pdfpagemode=UseOutlines]{hyperref} % check if it is correct to use
 \usepackage{numprint}
 \usepackage{multirow}
 \usepackage{threeparttable}
-
+\usepackage{subcaption}
+\usepackage{adjustbox}
 % -------------------- thesis transfer learning equation
 % --------------------
 \DeclareMathOperator{\ypred}{\phi}  %options \hslash
@@ -334,40 +335,6 @@ infections or inflammations. A comparative overview of \ac{TG} and
 \subsection{Image Vision Transformers}
 \label{sec:vision-transformers}
 
-% \subsubsection{Image Transformers}
-% \label{sec:image-transformers}
-
-
-% There are several important insights from \cite{dosovitskiy2020image}:
-% \begin{itemize}
-% \item \ac{ViT} excels results when pre-trained on a large dataset and fine
-%   tuned/transfer learning in an specific task.
-% \item  datasets used to pre-train Vit: ImageNet-21K, JFT-300M
-% \item attention mechanism in image processing is not a new idea. There
-%   are several approaches described in the related works section of
-%   this paper
-% \item For classification it is just enough with the encoder part of
-%   the Transformer architecture
-% \item There is no significant improvement using 2D position embeddings
-% \item ``Typically, we pre-train \ac{ViT} on large datasets, and ﬁne-tune to
-%   (smaller) downstream tasks.``
-% \item Recommendation to fine tune with higher resolution images but
-%   keeping the same patch size. Check \cite{Kolesnikov2019}.
-% \item Strong regularization is mandatory to train from scratch on
-%   ImageNet.
-% \item All images used for training of \ac{ViT} proposed in the work of
-%   \cite{dosovitskiy2020image} are of $224 \times 224$. Does it mean I
-%   must use same size? Don't think so Transformer seems input size
-%   agnostic if we do not exceed positional embeddings. Moreover
-%   \cite{Kolesnikov2019} seems to state that is good to fine tune on
-%   higher resolution images. The FT is performed on images $384\times 384$
-% \item What is \textbf{cosine learning rate decay}?
-% \item For TL remove the whole head (two linear layers) and replace it
-%   by a single, zero initialized linear layer with the number of
-%   classification outputs/labels.
-% \item \cite{dosovitskiy2020image} uses the preprocessing recommended
-%   in \cite{Kolesnikov2019}.
-% \end{itemize}
 In 2017, the Transformer architecture was introduced in the seminal
 paper \say{Attention Is All You Need} as the first sequence
 transduction model relying entirely on attention mechanisms
@@ -408,22 +375,6 @@ training on ImageNet with cosine learning rate decay; (5)
 \textbf{Preprocessing} adheres to guidelines from
 \cite{Kolesnikov2019}. 
 
-% \begin{itemize}
-% \item \textbf{Positional embeddings:} Extending them to 2D
-%   representations yields no significant improvement.
-% \item \textbf{Fine-Tuning:} Higher-resolution images should be used
-%   while maintaining the original patch size, following
-%   \cite{Kolesnikov2019}.
-% \item \textbf{Transfer Learning:} The classification head should be
-%   replaced with a zero-initialized linear layer matching the target
-%   task's output dimension.
-% \item \textbf{Training considerations:} Strong regularization is
-%   necessary when training from scratch on ImageNet, and cosine
-%   learning rate decay is recommended for optimization.
-% \item \textbf{Preprocessing:} The pipeline adheres to the guidelines
-%   from \cite{Kolesnikov2019}.
-% \end{itemize}
-
 \subsection{Video Transformers}
 \label{sec:video-transformers}
 Video can be understood as a sequence of images through a time
@@ -447,9 +398,6 @@ models, which scales quadratically with respect to the sequence length
 $T$ (i.e., $\mathcal{O}(T^2)$). Additionally, these approaches tackle
 challenges related to spatial redundancy, temporal fidelity, and
 inductive biases~\cite{Selva_2023}.
-
-% \subsubsection{Temporal Processing Layers}
-% \label{sec:temp-proc-layers}
 
 \subsection{CNN-based Sequence Modeling}
 \label{sec:sequence-modeling}
@@ -482,9 +430,7 @@ leading to enhanced accuracy in \ac{HAR} tasks.
 
 \section{Literature Review}
 \label{sec:literature-review}
-% **Related Works:** Briefly compare existing CNN and
-% transformer-based methods. Discuss datasets, performance, and
-% limitations.
+
 This section provides a systematic literature review following the
 methodology proposed in \cite{kitchenham2009systematic} to find
 relevant works in the area of this research goals and questions.
@@ -536,27 +482,6 @@ research objectives comparable to ours.
 
 \subsection{Deep Learning for Dynamic Breast Thermography}
 \label{sec:related-works-1}
-
-% L. S. Garia et al. \cite{Garia2023} trains a \ac{ViT} from scratch to
-% classify \ac{TG} images as either \textit{Cancerous} or
-% \textit{Healthy}. In their work, the authors use the basic \ac{ViT}
-% architecture (ViT-Base) proposed in \cite{dosovitskiy2020image}, which
-% uses 12 layers, 12 heads, and an embedding of 768. This is the first
-% work addressing the classification of \ac{TG} using \ac{ViTs}. Similar
-% to our approach, their method utilizes the transformer's encoder for
-% classification by leveraging the self-attention mechanism to capture
-% relationships between image patch embeddings. In their experimental
-% approach, the researchers evaluate the model's accuracy with respect
-% to patch size and show that patches of $32 \times 32$ outperform
-% $16 \times 16$ patches, which are usually used by \ac{ViTs}. The study
-% does not employ pre-training on natural images or data augmentation
-% techniques. The dataset used is the DMR-IR \cite{Silva2014}. However,
-% they focus only on images by \textit{static protocol}. Additionally,
-% the authors do not compare their approach with other models such as
-% \ac{CNNs}, although they were the first to publish. They justify this
-% omission by citing substantial variations across related works that
-% preclude meaningful comparison.
-
 
 According to our proposed search strategy for literature review, the
 first study employing \ac{ViTs} for \ac{BC} classification using
@@ -614,8 +539,6 @@ process.
 
 \section{Methodology}
 \label{sec:methodology}
-% **Methodology:** Describe data collection, preprocessing, model
-% architecture, training details, and evaluation metrics.
 
 This section outlines the methodological procedures employed to
 develop and validate our set of models for \ac{BC} using the \ac{DIT}
@@ -630,27 +553,6 @@ classification of \ac{BC} by using \ac{DIT} protocol and \ac{ViViTs}. To
 benchmark our results, we consider the work of Baffa et al.\cite{DeMatheus2023},
 where 3D \ac{CNNs} are employed to study the evolution of the sequence
 of \ac{TG} images.
-
-% The methodology consisted in 7 stages mainly; although some steps may
-% change depending on the specific experiment. First, the machine learning
-% problem was formulated. Thereafter, the sequence of Thermal Maps
-% ($\mathbb{D}^{TM} \in \mathbb{R}^{640 \times 480 \times 1}$) and
-% Infrared Images
-% ($\mathbb{D}^{IR} \in \mathbb{Z}^{640 \times 480\times 3}$) for each
-% subject were retrieved from the DMR-IR dataset, forming two subsets of
-% data, respectively. In the next step, each dataset was preprocessed
-% accordingly to its characteristics. Afterward, for $\mathbb{D}^{IR}$,
-% we employed a stratified sampling holdout technique, reserving 10\% of
-% the cases as a test set. This was not possible for $\mathbb{D}^{TM}$
-% due to the low number of cases. In the next step, models were designed
-% considering an input tensor of 5 dimensions
-% $\mathcal{X} \in \mathbb{R}^{B \times F \times C \times H \times W}$;
-% where $B$ refers to the batch size, $F$ to the number of frames, $C$
-% the number of channels, $H$ the height, and $W$ the width of the
-% thermal map/infrared image. As a continuation, the models were trained
-% using \textit{K-Fold Cross Validation} due to the reduced number of
-% cases. Once completed, best model is selected and evaluated on the
-% test set.
 
 The methodology consists of seven main stages (Figure
 \ref{fig:methodoly-overview}), where some steps vary depending on the
@@ -683,12 +585,76 @@ AdamW as the optimizer together with checkpoint and early stopping
 callbacks. All experiments were performed using Kaggle's GPU 1 x Tesla
 P100 of 3584 CUDA cores, 16 GB GDDR6 and up to 30 GB of RAM.
 
+% ==================== old flow chart methodology ====================
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[height=.6\textheight, width=\textwidth]{figures/methodology3.pdf}
+%   \caption{Overview of the methodology used in this research. It
+%     comprises seven stages: (1) Problem Formulation, (2) Data
+%     Organization, (3) Preprocessing, (4) Data Patitioning, (5) Model
+%     Design, (6) Model Training, and (7) Model Evaluation. \label{fig:methodoly-overview} }
+%   \end{figure}
 
-\begin{figure}[ht]
+% ====================   new methodolgy figure but exceeds left margin ====================
+% \begin{figure}[p]
+% \centering
+%   % Left column, top row
+%   \begin{subfigure}[t]{\textwidth}
+%     \centering
+%     \includegraphics[width=1.3\linewidth, height=.48\textheight, keepaspectratio]{figures/methodology_TM.pdf}
+%     \subcaption{Methodology for Temperature Maps: depicts the CNN
+%       network with \ac{TDL}}
+%     \label{fig:part1}
+%   \end{subfigure}
+
+%   % Left column, bottom row
+%   \begin{subfigure}[t]{\textwidth}
+%     \centering
+%     \includegraphics[width=1.3\linewidth, height=.48\textheight,keepaspectratio]{figures/Methodology_IR.pdf}
+%     \subcaption{Methodology for Infrared Thermography Images: depicts
+%       the \ac{ViT} and \ac{ViViT} models}
+%     \label{fig:part2}
+%   \end{subfigure}
+
+% \caption{Overview of the methodology used in this research. It
+%      comprises seven stages: (1) Problem Formulation, (2) Data
+%      Organization, (3) Preprocessing, (4) Data Patitioning, (5) Model
+%      Design, (6) Model Training, and (7) Model Evaluation for (a)
+%      Temperature Maps and (b) Infrared Thermography Images }
+% \label{fig:methodoly-overview}
+% \end{figure}
+
+
+\begin{figure}[p]
   \centering
-  \includegraphics[width=\textwidth]{figures/methodology2.png}
-  \caption{Overview of the methodology used in this research. The
-    different models, metrics and datasets are presented at each stage. \label{fig:methodoly-overview} }
+  \begin{subfigure}[t]{\textwidth}
+    \centering
+    \makebox[\textwidth][c]{%
+      \includegraphics[width=1.2\textwidth, height=0.48\textheight]{figures/methodology_TM.pdf}%
+    }
+    \subcaption{Methodology for Temperature Maps: depicts the CNN
+      network with \ac{TDL}}
+    \label{fig:part1}
+  \end{subfigure}
+
+  \vspace{0.8em}
+
+  \begin{subfigure}[t]{\textwidth}
+    \centering
+    \makebox[\textwidth][c]{%
+      \includegraphics[ width=1.2\textwidth, height=0.48\textheight]{figures/Methodology_IR.pdf}%
+    }
+    \subcaption{Methodology for Infrared Thermography Images: depicts
+      the \ac{ViT} and \ac{ViViT} models}
+    \label{fig:part2}
+  \end{subfigure}
+
+  \caption{Overview of the methodology used in this research. It
+     comprises seven stages: (1) Problem Formulation, (2) Data
+     Organization, (3) Preprocessing, (4) Data Patitioning, (5) Model
+     Design, (6) Model Training, and (7) Model Evaluation for (a)
+     Temperature Maps and (b) Infrared Thermography Images.}
+  \label{fig:methodoly-overview}
 \end{figure}
 
 \subsection{Problem Formulation}
@@ -847,9 +813,6 @@ the models studied, along with the source domain dataset used when
 \ac{FT} was applied for model adaptation. The input tensor dimensions,
 deep learning backend, and number of parameters are also provided. 
 
-% Table X introduces the different models
-% studied in this research with their main characteristics.
-
 \subsubsection{Time Distributed Layer Model:}
 \label{sec:time-distr-layer}
 Building upon the hybrid architecture proposed in \cite{Dhage2025}, we
@@ -867,49 +830,6 @@ the classification head consists of a dense layer (16 units, ReLU)
 with $\ell_2$ regularization, dropout ($p=0.5$) for additional
 regularization, and a sigmoid output for binary classification.
 
-% The network processes
-% input tensors
-% $\mathbf{x} \in \mathbb{R}^{F \times H \times W \times C}$ through
-% three distinct stages:
-
-% \begin{enumerate}
-% \item \textbf{Spatial Feature Extraction}: Each frame undergoes
-%   resizing to $224\times224$ resolution; two convolutional blocks (32
-%   and 16 filters, $3\times3$ kernels, ReLU activation); max pooling
-%   ($2\times2$) after each convolution; batch normalization for stable
-%   training.
-%     \item \textbf{Temporal Processing}: Global max pooling reduces
-%       spatial dimensions to 16 features per frame; LSTM layer (16
-%       units) with $\ell_2$ regularization ($\lambda=0.01$) models
-%       temporal dynamics.
-%     \item \textbf{Classification Head}: Dense layer (16 units, ReLU)
-%       with $\ell_2$ regularization; dropout ($p=0.5$) for
-%       regularization; sigmoid output for binary classification.
-% \end{enumerate}
-
-% \begin{enumerate}
-%     \item \textbf{Spatial Feature Extraction}: Each frame undergoes:
-%     \begin{itemize}
-%         \item Resizing to $224\times224$ resolution
-%         \item Two convolutional blocks (32 and 16 filters, $3\times3$ kernels, ReLU)
-%         \item Max pooling ($2\times2$) after each convolution
-%         \item Batch normalization for stable training
-%     \end{itemize}
-    
-%     \item \textbf{Temporal Processing}:
-%     \begin{itemize}
-%         \item Global max pooling reduces spatial dimensions to 16 features per frame
-%         \item LSTM layer (16 units) with $\ell_2$ regularization ($\lambda=0.01$) models temporal dynamics
-%     \end{itemize}
-    
-%     \item \textbf{Classification Head}:
-%     \begin{itemize}
-%         \item Dense layer (16 units, ReLU) with $\ell_2$ regularization
-%         \item Dropout ($p=0.5$) for regularization
-%         \item Sigmoid output for binary classification
-%     \end{itemize}
-% \end{enumerate}
-
 The \ac{TDL} wrapper employs weight sharing across all frames,
 applying identical transformations to each temporal slice. This
 architecture efficiently integrates spatial feature learning through
@@ -922,8 +842,6 @@ the $\mathbb{D}_{\mathrm{TM}}$ dataset. It has a total of
 \numprint{7377} trainable parameters and was coded using
 Keras/Tensorflow. Resizing of \ac{TM} was carried out due to memory
 constrains.
-
-
 
 \subsubsection{Basic Vision Transformer:}
 \label{sec:basic-visi-transf}
@@ -943,26 +861,6 @@ extracting features vectors from the final layer with \(D = 768\);
 (3) a linear classification head that projects these features to
 logits of shape \((B \times F, 1)\), and computes temporal mean
 predictions \((B, 1)\). 
-
-
-% The architecture
-% consists of:
-
-% \begin{itemize}
-%     \item A pre-trained ViT-B/16 backbone (ImageNet1K weights) with its classification head removed
-%     \item Frame-wise feature extraction where:
-%     \begin{itemize}
-%         \item Input sequences are reshaped from $(B, T, C, H, W)$ to $(B \times T, C, H, W)$
-%         \item Each frame passes independently through the ViT encoder
-%         \item Features are extracted from the final layer (dimension $D=768$)
-%     \end{itemize}
-%     \item A linear classification head that:
-%     \begin{itemize}
-%         \item Projects features to logits $(B \times T, 1)$
-%         \item Reshapes outputs back to $(B, T, 1)$
-%         \item Computes temporal mean predictions $(B, 1)$
-%     \end{itemize}
-% \end{itemize}
 
 This design enables parallel processing of all frames while preserving
 sequence information through temporal averaging. The model accepts the
@@ -997,23 +895,6 @@ classification layer is replaced with a single-output linear layer to
 perform binary prediction; a sigmoid activation is implicitly used
 through the binary cross-entropy loss.
 
-% Our TimeSformerThermoClassifier consists of:
-
-% \begin{itemize}
-%     \item A pre-trained TimeSformer-base model (finetuned on Kinetics-400) with:
-%     \begin{itemize}
-%         \item Input configuration for $T=8$ frames at $H \times W$ resolution
-%         \item Spatio-Temporal attention across divided space-time patches
-%         \item Hidden dimension $D=768$ throughout all layers
-%     \end{itemize}
-    
-%     \item Modified classification head:
-%     \begin{itemize}
-%         \item Original Kinetics-400 classification layer replaced
-%         \item Single-output linear layer for binary prediction
-%         \item Sigmoid activation (implicit in BCE loss)
-%     \end{itemize}
-% \end{itemize}
 The forward pass processes input tensors
 $\mathbf{X} \in \mathbb{R}^{B \times F \times C \times H \times W}$
 through a sequence of operations: first, frame rearrangement is
@@ -1023,21 +904,6 @@ via patch embedding (typically $16\times16$) and divided space-time
 attention layers; following this, global average pooling of the
 spatio-temporal features is conducted; and finally, binary
 classification is achieved through the final linear layer.
-% The forward pass processes input tensors
-% $\mathbf{X} \in \mathbb{R}^{B \times T \times C \times H \times W}$
-% through:
-% \begin{enumerate}
-%     \item Frame rearrangement (when needed) to match TimeSformer's expected $(B,C,T,H,W)$ format
-%     \item Spatio-Temporal feature extraction via:
-%     \begin{itemize}
-%         \item Patch embedding (typically $16\times16$)
-%         \item Divided space-time attention layers
-%     \end{itemize}
-%     \item Global average pooling of spatio-temporal features
-%     \item Binary classification via the final linear layer
-%     \end{enumerate}
-
-
 
 This architecture leverages TimeSformer's proven effectiveness in
 video understanding while adapting it specifically for thermal medical
@@ -1048,46 +914,6 @@ developed a random sampling from sequence code which allowed to
 extract up to 8 frames from the 20 without altering the order of the
 sequence. 
 
-
-% \begin{table}[ht]
-%   \centering
-%   \scriptsize
-% \caption{Source and Target Domain Specifications for Model Fine
-%   Tuning: Specifications of the source domains (pre-training datasets), target domain (fine-tuning dataset), input tensor, framework, and parameters for each model variant tested}
-% \label{tab:model_summary}
-% \begin{tabular}{lllllll}
-% \hline
-% \textbf{Model} & \textbf{Pre-Trained}& \textbf{Source Domain
-%                                        $\mathcal{D}^{S}$} &
-%                                                             \textbf{Target
-%                                                             Domain $\mathcal{D}^{T}$} & \textbf{Input Tensor} & \textbf{Framework} & \textbf{\# Parameters} \\ \hline
-
-% ViT ($16 \times 16$)& Yes  & ImageNet-1K                   & $\mathbb{D}_{\mathrm{IR}}$
-%                                                             (149
-%                                                             patients)
-%                                                                                       & $(B\times 20, 3,224,224)$     & PyTorch            & \numprint{85799425} \\ \hline
-% ViT ($32 \times 32$)& Yes  & ImageNet-1K                   & $\mathbb{D}_{\mathrm{IR}} $
-%                                                             (149
-%                                                             patients)
-%                                                                                       & $(B\times 20, 3,224,224)$     & PyTorch            & \numprint{ 87456001} \\ \hline
-  
-% ViT ($32 \times 32$) & No       & None                          &
-%                                                                   $\mathbb{D}_{\mathrm{IR}}
-%                                                                   $
-%                                                                   (149
-%                                                                   patients)
-%                                                                                       &
-%                                                                                         $(B\times 20, 3,224,224)$     & PyTorch            & \numprint{87456001} \\ \hline
-% ViViT / TimeSformer & Yes & Kinetics-400                  &
-%                                                             $\mathbb{D}_{\mathrm{IR}}$
-%                                                             (149
-%                                                             patients)
-%                                                                                       &
-%                                                                                         $(B,8,3,224,224)$
-%                                                                                                               & PyTorch            & \numprint{121259521} \\ \hline
-% TDL + LSTM    & No      & None                          & $\mathbb{D}_{\mathrm{TM}}$ (55 patients)        & $(B, 20, 1,224,224)$           & TensorFlow         & \numprint{7377} \\ \hline
-% \end{tabular}
-% \end{table}
 
 \begin{table}[ht]
   \centering
@@ -1111,15 +937,6 @@ sequence.
   \end{tabularx}
 \end{table}
 
-% \begin{enumerate}
-% \item Review literature about \ac{CNNs} vs \ac{ViT}
-% \item Check repositories about \ac{ViT}:
-%   \begin{itemize}
-%   \item
-%     \url{https://github.com/google-research/vision\_transformer/blob/main/vit\_jax/models\_vit.py}
-%   \item \url{https://github.com/Alibaba-MIIL/ImageNet21K}
-%   \end{itemize}
-% \end{enumerate}
 \subsection{Experimental Protocol}
 \label{sec:training-protocol}
 
@@ -1172,40 +989,6 @@ followed similar configuration to pre-trained \ac{ViT}s (20 epochs,
 lr=3e-5) monitored by F1-score. Table~\ref{tab:training_protocols}
 presents the training protocols used for the different
 modality-architecture combinations.
-
-% \begin{enumerate}
-% \item Replicate results provided in \cite{Garia2023} to assess that
-%   training from scratch a \ac{ViT} achieves the reported performance in
-%   static \ac{TG} images.
-% \item Fine Tune a model using the same dataset
-% \item Extend model for dynamic dataset
-% \end{enumerate}
-
-% \subsection{Evaluation Metrics}
-% \label{sec:evaluation-metrics}
-
-% In this research we used the following evaluation metrics to study the
-% performance of the models in both datasets:
-
-% \begin{itemize}
-%     \item \textbf{Accuracy}: Measures overall prediction correctness:
-%     \[
-%     \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
-%     \]
-%     where $TP$, $TN$, $FP$, and $FN$ denote true positives, true negatives, false positives, and false negatives respectively.
-
-%     \item \textbf{F1-score}: Harmonic mean of precision and recall:
-%     \[
-%     \text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
-%     \]
-%     Balances false positives and false negatives, ideal for imbalanced datasets.
-
-%     \item \textbf{AUC-ROC}: Area Under the Receiver Operating Characteristic curve:
-%     \[
-%     \text{AUC} = \int_0^1 TPR(FPR) \, dFPR
-%     \]
-%     Measures model's ability to distinguish classes across all thresholds (1 = perfect, 0.5 = random).
-% \end{itemize}
 
 \section{Results}
 \label{sec:results}
@@ -1301,17 +1084,6 @@ Our work & ViViT & DIT & Yes & DMR-IR & Patient & 149 & K=10 & 10\% & \textbf{0.
 \end{tabularx}
 \end{table}
 
-% \begin{itemize}
-%     \item[*] Model trained from scratch
-%     \item All cross-validation results use $k=10$ unless noted
-%     \item Test set evaluations use 15 patients for \ac{IR} models
-%     \item Standard deviation for De Matheus et al. corrected to 0.0403 (4.03\% as decimal)
-% \end{itemize}
-
-% *Trained from scratch. All cross-validation results use $k=10$ unless
-% noted. Test set evaluations use 15 patients for \ac{IR} models.
-\newpage
-
 \section{Discussion}
 \label{sec:discussion}
 To the best of our knowledge, this work presents the first application
@@ -1340,8 +1112,6 @@ if segmentation would increase performance in our results. However, as
 indicated in \cite{Ryan2025}, there are no ablation studies that could
 confirm this in infrared \ac{TG}.
 
-% Another difference with Matheus is we do not make a segmentation of
-% the region of interest before sumiting the image to the model
 Our experiments corroborate that \ac{ViTs} with $32 \times 32$ patches
 yield better performance. However, it should be noted that a different
 acquisition protocol for the same dataset was employed compared to
@@ -1446,120 +1216,7 @@ using infrared images and transformer-based architectures.
 % those reported in \cite{Garia2023}.
 % ==================== ==================== ====================
 
-% ==================== reviewer 3 observation b ====================
-%  the following was written with aid of copilot let us check the
-%  ideas in it
-% While our experiments show that fine-tuning pre-trained ViTs on
-% natural image datasets (e.g., ImageNet) yields strong performance, it
-% is important to note the significant domain gap between natural RGB
-% images and medical thermal data. Thermal images differ in modality,
-% texture, and semantic content, which may limit the transferability of
-% learned features. Despite this, our results suggest that pre-trained
-% models still provide a useful initialization, possibly due to their
-% ability to capture general spatial patterns. Future work should
-% investigate pre-training on thermal-specific datasets or employ domain
-% adaptation strategies to bridge this gap more effectively.
 
-% (b) El preentrenamiento en imágenes/videos naturales para datos
-% térmicos médicos representa una brecha de dominio significativa que
-% no está suficientemente abordada en la discusión.
-
-% In machine learning and computer vision, a domain gap refers to the difference between the data used to train a model (source domain) and the data where the model is applied (target domain).
-
-% In your case: Source domain: Natural images/videos (e.g., ImageNet,
-% Kinetics) — everyday objects, RGB format, rich textures.  Target
-% domain: Medical thermal images — grayscale or pseudo-colored,
-% physiological patterns, very different visual characteristics.
-
-% ==================== * * ====================
-
-
-% **Conclusions:** Summarize findings, state contributions, and
-% mention limitations.
-% \section{Future Works}
-% \label{sec:future-works}
-% **Future Works:** Suggest improvements, possible applications, and
-% further research directions.
-
-
-
-% \section{First Section}
-% \subsection{A Subsection Sample}
-% Please note that the first paragraph of a section or subsection is
-% not indented. The first paragraph that follows a table, figure,
-% equation etc. does not need an indent, either.
-
-% Subsequent paragraphs, however, are indented.
-
-% \subsubsection{Sample Heading (Third Level)} Only two levels of
-% headings should be numbered. Lower level headings remain unnumbered;
-% they are formatted as run-in headings.
-
-% \paragraph{Sample Heading (Fourth Level)}
-% The contribution should contain no more than four levels of
-% headings. Table~\ref{tab1} gives a summary of all heading levels.
-
-% % ==================== tables example ====================
-% \begin{table}
-% \caption{Table captions should be placed above the
-% tables.}\label{tab1}
-% \begin{tabular}{|l|l|l|}
-% \hline
-% Heading level &  Example & Font size and style\\
-% \hline
-% Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
-% 1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
-% 2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
-% 3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
-% 4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
-% \hline
-% \end{tabular}
-% \end{table}
-
-% % ==================== tables example ====================
-% % ==================== equations example ====================
-% \noindent Displayed equations are centered and set on a separate
-% line.
-% \begin{equation}
-% x + y = z
-% \end{equation}
-% Please try to avoid rasterized images for line-art diagrams and
-% schemas. Whenever possible, use vector graphics instead (see
-% Fig.~\ref{fig1}).
-% % ==================== equations example ====================
-% % ==================== figures example ====================
-% \begin{figure}
-% \includegraphics[width=\textwidth]{fig1.eps}
-% \caption{A figure caption is always placed below the illustration.
-% Please note that short captions are centered, while long ones are
-% justified by the macro package automatically.} \label{fig1}
-% \end{figure}
-% % ==================== theorems ====================
-% \begin{theorem}
-% This is a sample theorem. The run-in heading is set in bold, while
-% the following text appears in italics. Definitions, lemmas,
-% propositions, and corollaries are styled the same way.
-% \end{theorem}
-% %
-% % the environments 'definition', 'lemma', 'proposition', 'corollary',
-% % 'remark', and 'example' are defined in the LLNCS documentclass as well.
-% %
-% \begin{proof}
-% Proofs, examples, and remarks have the initial word in italics,
-% while the following text appears in normal font.
-% \end{proof}
-% % ==================== theorems ====================
-% % ==================== citations ====================
-% For citations of references, we prefer the use of square brackets
-% and consecutive numbers. Citations using labels or the author/year
-% convention are also acceptable. The following bibliography provides
-% a sample reference list with entries for journal
-% articles~\cite{ref_article1}, an LNCS chapter~\cite{ref_lncs1}, a
-% book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
-% and a homepage~\cite{ref_url1}. Multiple citations are grouped
-% \cite{ref_article1,ref_lncs1,ref_book1},
-% \cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
-% % ==================== citations ====================
 % % ==================== credits ====================
 \begin{credits}
   \subsubsection{\ackname} María Pérez, Marco E. Benalcázar and Lenin
@@ -1594,27 +1251,6 @@ using infrared images and transformer-based architectures.
 %
 \bibliographystyle{splncs04}
 \bibliography{bibliography}
-%
-% \begin{thebibliography}{8}
-% \bibitem{ref_article1}
-% Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
-
-% \bibitem{ref_lncs1}
-% Author, F., Author, S.: Title of a proceedings paper. In: Editor,
-% F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
-% Springer, Heidelberg (2016). \doi{10.10007/1234567890}
-
-% \bibitem{ref_book1}
-% Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
-% Location (1999)
-
-% \bibitem{ref_proc1}
-% Author, A.-B.: Contribution title. In: 9th International Proceedings
-% on Proceedings, pp. 1--2. Publisher, Location (2010)
-
-% \bibitem{ref_url1}
-% LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
-% \end{thebibliography}
 
 \end{document}
 
