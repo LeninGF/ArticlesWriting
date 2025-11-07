@@ -76,7 +76,7 @@ Myriam Hernandez-Alvarez\inst{1}\orcidID{0000-0003-4718-0400}}
 
 \institute{Escuela Politécnica Nacional, Quito 170525, Ecuador\\
 \url{https://www.epn.edu.ec} \\
-\email{\{lenin.falconi,myriam.hernandez,lorena.barona\}@epn.edu.ec}}
+\email{\{lenin.falconi, lorena.barona, myriam.hernandez\}@epn.edu.ec}}
 %
 \maketitle              % typeset the header of the contribution
 % abstract 150 - 250 words
@@ -363,7 +363,7 @@ histogram and box plot visualizations, representing the complete set
 of \numprint{174594} samples.
 
 
-\begin{figure}[]
+\begin{figure}[H]
   % \centering                    %
   \begin{subfigure}[b]{\linewidth}
     \includegraphics[width=.8\linewidth]{./images/histogramOriginalDataset.png}
@@ -418,7 +418,8 @@ or because the LLM failed, the variable
 \texttt{impossible\_find\_answer} was set to True.
 
 \begin{table}[h]
-\centering
+  \centering
+  \scriptsize
 \caption{Proposed Questions for the Dataset}
 \label{tab:commonquestions}
 \begin{tabular}{|p{0.9\textwidth}|}
@@ -448,17 +449,17 @@ quality. However, the engineered prompt allowed for the identification
 of problems in generated samples.
 \subsubsection{Dataset Quality}
 \label{sec:dataset-quality}
-After obtaining the initial \numprint{1544} samples (yielding \numprint{7705} total samples
-when accounting for the five questions per context), we performed
-quality assessment using the \texttt{impossible\_find\_answer} flag,
-which identified approximately \numprint{3000} failure cases. We retained only
-samples with \texttt{impossible\_find\_answer=False} and analyzed
-answer lengths through histogram and box plot visualizations. This
-revealed two key patterns: answers should be at most 17 words to be
-considered valid, as we observed cases with zero-word
-responses. A final curated dataset of \numprint{4572} samples for model training
-and evaluation was obtained by selecting samples with a number of
-words greater than 0 and where \texttt{impossible\_find\_answer=False}.
+After collecting the initial \numprint{1544} samples, which generated
+\numprint{7705} question-answer pairs at five questions per context,
+we conducted quality assessment using the
+\texttt{impossible\_find\_answer} flag. This process identified
+approximately \numprint{3000} invalid cases, leading us to retain only
+samples where \texttt{impossible\_find\_answer} is
+\texttt{False}. Through histogram and box plot analysis of answer
+lengths, we established an upper limit of 17 words for valid
+responses. The final curated dataset consisted of \numprint{4572}
+samples, all containing at least one word and meeting our validity
+criteria, suitable for model training and evaluation.
 
 
 \subsubsection{Dataset Train and Test Split}
@@ -516,6 +517,7 @@ fact that we were not able to use the whole dataset.
 \begin{table}[htbp]
 \caption{\label{tab:org68816bf}Training Parameters}
 \centering
+\scriptsize
 \begin{tabular}{ll}
   \hline
 Parameter & Value\\[0pt]
@@ -602,8 +604,6 @@ epoch & 10.0000 \\
 \end{tabular}
 
 \end{table}
-
-
 
 \section{Conclusions and Future Works}
 \label{sec:conclusions}

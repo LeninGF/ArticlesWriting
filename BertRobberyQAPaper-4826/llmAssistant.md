@@ -966,3 +966,40 @@ We encourage further research and collaboration to refine these approaches and f
 <!-- gptel--backend-name: "DeepSeek" -->
 <!-- gptel--bounds: ((response (146 2169) (2378 4494) (5440 7079) (7493 8558) (8898 9346) (10049 11034) (11109 12320) (12483 13860) (14126 14930) (15217 16197) (16319 17267) (17344 18382) (18485 20420) (20530 22100) (22276 24769) (25523 26678) (26843 27562) (28382 30335) (30495 31989) (33340 34782) (34891 36325) (36526 36926) (37041 38126) (38193 39893) (41427 43055) (45893 47394) (47706 49188) (49893 51382) (51958 52725) (52787 54165) (54803 55588) (56306 57205))) -->
 <!-- End: -->
+After obtaining the initial \numprint{1544} samples (yielding \numprint{7705} total samples
+when accounting for the five questions per context), we performed
+quality assessment using the \texttt{impossible\_find\_answer} flag,
+which identified approximately \numprint{3000} failure cases. We retained only
+samples where \texttt{impossible\_find\_answer} is False and analyzed
+answer lengths through histogram and box plot visualizations. This
+revealed that answers should be at most 17 words to be
+considered valid. A final curated dataset of \numprint{4572} samples for model training
+and evaluation was obtained by selecting samples with a number of
+words greater than 0 and where \texttt{impossible\_find\_answer=False}.
+
+After collecting the initial \numprint{1544} samples—corresponding to a total of \numprint{7705} question-answer pairs based on five questions per context—we conducted a quality assessment using the \texttt{impossible\_find\_answer} flag, which identified approximately \numprint{3000} invalid cases. Only samples for which \texttt{impossible\_find\_answer} is \texttt{False} were retained. We further analyzed the distribution of answer lengths via histogram and box plot visualizations, determining that valid answers should contain no more than 17 words. The final curated dataset comprised \numprint{4572} samples, each containing at least one word and meeting the aforementioned criteria, for use in model training and evaluation.
+
+### I like the paragraph but could you rewrite avoiding to write ideas between - like in -corresponding to.....- Use commas or other resources. The rest is perfect
+
+Here's the revised paragraph without using parenthetical dashes, while maintaining all technical details and improving flow:
+
+```latex
+After collecting the initial \numprint{1544} samples, which generated \numprint{7705} question-answer pairs at five questions per context, we conducted quality assessment using the \texttt{impossible\_find\_answer} flag. This process identified approximately \numprint{3000} invalid cases, leading us to retain only samples where \texttt{impossible\_find\_answer} is \texttt{False}. Through histogram and box plot analysis of answer lengths, we established an upper limit of 17 words for valid responses. The final curated dataset consisted of \numprint{4572} samples, all containing at least one word and meeting our validity criteria, suitable for model training and evaluation.
+```
+
+Key improvements:
+1. Replaced the parenthetical dash construction with a clear relative clause ("which generated...")
+2. Maintained all numerical precision and technical terms
+3. Improved sentence flow while preserving the logical sequence
+4. Kept all LaTeX formatting (\numprint, \texttt)
+5. Made the selection criteria clearer by separating them into distinct steps
+
+The paragraph now reads more smoothly while maintaining its academic rigor and technical accuracy. Would you like any further refinements to specific parts?
+
+### 
+
+<!-- Local Variables: -->
+<!-- gptel-model: deepseek-chat -->
+<!-- gptel--backend-name: "DeepSeek" -->
+<!-- gptel--bounds: ((response (146 2169) (2378 4494) (5440 7079) (7493 8558) (8898 9346) (10049 11034) (11109 12320) (12483 13860) (14126 14930) (15217 16197) (16319 17267) (17344 18382) (18485 20420) (20530 22100) (22276 24769) (25523 26678) (26843 27562) (28382 30335) (30495 31989) (33340 34782) (34891 36325) (36526 36926) (37041 38126) (38193 39893) (41427 43055) (45893 47394) (47706 49188) (49893 51382) (51958 52725) (52787 54165) (54803 55588) (56306 57205) (58529 59264) (59431 60777))) -->
+<!-- End: -->
