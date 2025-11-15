@@ -207,7 +207,7 @@ compared to \ac{CNNs}. As a consequence, we examine both video and
 image-based \ac{ViTs} implementations and compare their performance
 with that of \ac{CNNs}-based architectures. Our primary objective is
 to improve diagnostic accuracy in \ac{BC} classification through
-\ac{TG} imaging. . The following are the proposed research questions
+\ac{TG} imaging. The following are the proposed research questions
 for this research:
 
 \begin{enumerate}
@@ -388,7 +388,7 @@ video modeling~\cite{Bertasius2021}. The \textit{TimeSformer} stands
 as the first convolution-free architecture that adapts the \ac{ViT}
 architecture proposed in~\cite{dosovitskiy2020image} to video by
 extending the self-attention mechanism from the image space to the
-space-time 3D volum~\cite{Bertasius2021}. Their main idea is to treat
+space-time 3D volume~\cite{Bertasius2021}. Their main idea is to treat
 video as a sequence of patches extracted from the individual frames,
 where each patch is linearly mapped into an embedding space with
 positional information~\cite{Bertasius2021}.
@@ -553,7 +553,7 @@ performance of pre-trained \ac{ViTs}, which is studied now here.
 
 From our literature review there is no previous automated
 classification of \ac{BC} by using \ac{DIT} protocol and \ac{ViViTs}. To
-benchmark our results, we consider the work of Baffa et al~\cite{DeMatheus2023},
+benchmark our results, we consider the work of Baffa et al.~\cite{DeMatheus2023},
 where 3D \ac{CNNs} are employed to study the evolution of the sequence
 of \ac{TG} images.
 
@@ -1080,8 +1080,8 @@ recommend that future research clearly indicate whether they are using
 \toprule
 \textbf{Study} & \textbf{Model} & \textbf{Protocol} & \textbf{Pre-trained} & \textbf{Dataset} & \textbf{Analysis Unit} & \textbf{Total Subjects} & \textbf{Cross Validation} & \textbf{Test Set} & \textbf{AUC} \\
 \midrule
-Garia et al~\cite{Garia2023} & ViT & SIT & No & DMR-IR & Images & 950 & - & 10\% & 0.9570 \\
-Baffa et al~\cite{DeMatheus2023} & 3D-CNN & DIT & No & DMR-IR & Patient & 149 & K=10 & - & 0.9351 \\
+Garia et al.~\cite{Garia2023} & ViT & SIT & No & DMR-IR & Images & 950 & - & 10\% & 0.9570 \\
+Baffa et al.~\cite{DeMatheus2023} & 3D-CNN & DIT & No & DMR-IR & Patient & 149 & K=10 & - & 0.9351 \\
 Our work & ViViT & DIT & Yes & DMR-IR & Patient & 149 & K=10 & 10\% & \textbf{0.9444} \\
 \bottomrule
 \end{tabularx}
