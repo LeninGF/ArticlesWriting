@@ -186,3 +186,70 @@
 	year         = 2020,
 	booktitle    = {PML4DC at ICLR 2020}
 }
+
+% ==================== zero shot learning ====================
+@article{Lampert2014,
+	title        = {Attribute-Based Classification for Zero-Shot Visual Object Categorization},
+	author       = {Christoph H Lampert and Hannes Nickisch and Stefan Harmeling},
+	year         = 2014,
+	journal      = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	volume       = 36,
+	doi          = {10.1109/TPAMI.2013.140},
+	abstract     = {We study the problem of object recognition for categories for which we have no training examples, a task also called zero-data or zero-shot learning. This situation has hardly been studied in computer vision research, even though it occurs frequently; the world contains tens of thousands of different object classes, and image collections have been formed and suitably annotated for only a few of them. To tackle the problem, we introduce attribute-based classification: Objects are identified based on a high-level description that is phrased in terms of semantic attributes, such as the object's color or shape. Because the identification of each such property transcends the specific learning task at hand, the attribute classifiers can be prelearned independently, for example, from existing image data sets unrelated to the current task. Afterward, new classes can be detected based on their attribute representation, without the need for a new training phase. In this paper, we also introduce a new data set, Animals with Attributes, of over 30,000 images of 50 animal classes, annotated with 85 semantic attributes. Extensive experiments on this and two more data sets show that attribute-based classification indeed is able to categorize images without access to any training images of the target classes.},
+	keywords     = {Object recognition,vision and scene understanding}
+}
+@article{Rampur2018,
+	title        = {ZERO-SHOT LEARNING IN NATURAL LANGUAGE PROCESSING: A STUDY OF RECENT TECHNIQUES},
+	author       = {Veeresh Rampur},
+	year         = 2018,
+	journal      = {International Journal of Research and Analytical Reviews (IJRAR.ORG)},
+	volume       = 5,
+	pages        = {622--627},
+	issn         = {2349-5138},
+	url          = {https://ijrar.org/papers/IJRAR19D6450.pdf},
+	abstract     = {Zero-shot learning (ZSL) has gained significant attention in natural language processing (NLP) as a robust solution for addressing the challenges posed by limited labeled data. This study explores recent techniques and advancements in ZSL, highlighting its methodologies, applications, and potential impacts on various NLP tasks. Traditional supervised learning approaches often require large, annotated datasets, making them impractical in domains where such data is scarce or difficult to obtain. In contrast, zero-shot learning enables models to generalize knowledge from seen classes to unseen classes, leveraging semantic representations and relationships. This study categorizes ZSL techniques into several key approaches, including semantic embedding models, attribute-based methods, textual knowledge graphs, and generative models. Semantic embeddings, particularly those derived from transformer architectures like BERT and GPT, have transformed how models understand context and meaning, allowing for effective classification and inference for unseen classes. Attribute-based approaches define classes through a set of descriptive features, facilitating the mapping of input data to these features for zero-shot classification. The applications of zero-shot learning in NLP are diverse, spanning text classification, sentiment analysis, named entity recognition, and dialogue systems. These techniques demonstrate improved adaptability and efficiency, enabling models to perform well in dynamic environments with emerging categories. However, challenges such as the need for high-quality semantic representations, model interpretability, and scalability remain. In conclusion, this survey provides a comprehensive overview of recent advancements in zero-shot learning for NLP, underscoring its potential to enhance machine understanding of language while minimizing the reliance on labeled data. As the field evolves, addressing the challenges and exploring multimodal integration will further unlock the possibilities of zero-shot learning in real-world applications.},
+	issue        = 1,
+	keywords     = {Natural Language Processing,Recent Techniques,Zero-Shot Learning}
+}
+@article{Wei2022,
+	title        = {FINETUNED LANGUAGE MODELS ARE ZERO-SHOT LEARNERS Closed-Book QA},
+	author       = {Jason Wei and Maarten Bosma and Vincent Y Zhao and Kelvin Guu and Adams Wei Yu and Brian Lester and Nan Du and Andrew M Dai and Quoc V Le Google Research},
+	year         = 2022,
+	url          = {https://github.com/google-research/flan.},
+	abstract     = {This paper explores a simple method for improving the zero-shot learning abilities of language models. We show that instruction tuning-finetuning language models on a collection of datasets described via instructions-substantially improves zero-shot performance on unseen tasks. We take a 137B parameter pretrained language model and instruction tune it on over 60 NLP datasets verbalized via natural language instruction templates. We evaluate this instruction-tuned model, which we call FLAN, on unseen task types. FLAN substantially improves the performance of its unmodified counterpart and surpasses zero-shot 175B GPT-3 on 20 of 25 datasets that we evaluate. FLAN even outperforms few-shot GPT-3 by a large margin on ANLI, RTE, BoolQ, AI2-ARC, OpenbookQA, and StoryCloze. Ablation studies reveal that number of finetuning datasets, model scale, and natural language instructions are key to the success of instruction tuning. Target Input (Commonsense Reasoning) keep stack of pillow cases in fridge Inference on unseen task type Finetune on many tasks ("instruction-tuning") … Translate this sentence to Spanish: The new office building was built in less than three months. Input (Translation) El nuevo edificio de oficinas se construyó en tres meses. Target Input (Natural Language Inference) It is not possible to tell FLAN Response Coreference resolution tasks Sentiment analysis tasks GPT-3 175B zero shot GPT-3 175B few-shot FLAN 137B zero-shot Performance on unseen task types Natural language inference 42.9 53.2 56.2 Figure 1: Top: overview of instruction tuning and FLAN. Instruction tuning finetunes a pretrained language model on a mixture of tasks phrased as instructions. At inference time, we evaluate on an unseen task type; for instance, we could evaluate the model on natural language inference (NLI) when no NLI tasks were seen during instruction tuning. Bottom: performance of zero-shot FLAN, compared with zero-shot and few-shot GPT-3, on three unseen task types where instruction tuning improved performance substantially out of ten we evaluate. NLI datasets: ANLI R1-R3, CB, RTE. Reading comprehension datasets: BoolQ, MultiRC, OBQA. Closed-book QA datasets: ARC-easy, ARC-challenge, NQ, TriviaQA.}
+}
+@article{YuchenGuo2018,
+	title        = {Zero-Shot Learning with Attribute Selection},
+	author       = {Yuchen Guo and Guiguang Ding and Jungong Han and Sheng Tang},
+	url          = {www.aaai.org},
+	year         = 2018,
+	abstract     = {Zero-shot learning (ZSL) is regarded as an effective way to construct classification models for target classes which have no labeled samples available. The basic framework is to transfer knowledge from (different) auxiliary source classes having sufficient labeled samples with some attributes shared by target and source classes as bridge. Attributes play an important role in ZSL but they have not gained sufficient attention in recent years. Previous works mostly assume attributes are perfect and treat each attribute equally. However, as shown in this paper, different attributes have different properties, such as their class distribution, variance, and entropy, which may have considerable impact on ZSL accuracy if treated equally. Based on this observation, in this paper we propose to use a subset of attributes, instead of the whole set, for building ZSL models. The attribute selection is conducted by considering the information amount and predictability under a novel joint optimization framework. To our knowledge, this is the first work that notices the influence of attributes themselves and proposes to use a refined attribute set for ZSL. Since our approach focuses on selecting good attributes for ZSL, it can be combined to any attribute based ZSL approaches so as to augment their performance. Experiments on four ZSL benchmarks demonstrate that our approach can improve zero-shot classification accuracy and yield state-of-the-art results.},
+	keywords     = {VIsion Track}
+}
+@article{Ramesh2025,
+	title        = {A review on NLP zero-shot and few-shot learning: methods and applications},
+	author       = {G. Ramesh and Mahammad Sahil and Shashank A. Palan and Darshan Bhandary and Teli Abhishek Ashok and J. Shreyas and N. Sowjanya},
+	year         = 2025,
+	month        = 8,
+	journal      = {Discover Applied Sciences 2025 7:9},
+	publisher    = {Springer},
+	volume       = 7,
+	pages        = {1--22},
+	doi          = {10.1007/S42452-025-07225-5},
+	isbn         = {0123456789},
+	issn         = {3004-9261},
+	url          = {https://link.springer.com/article/10.1007/s42452-025-07225-5},
+	abstract     = {Zero-shot and few-shot learning techniques in natural language processing (NLP), this comprehensive review traces their evolution from traditional methods to cutting-edge approaches like transfer learning and pre-trained language models, semantic embedding, attribute-based approaches, generative models for data augmentation in zero-shot learning, and meta-learning, model-agnostic meta-learning, relationship networks, model-agnostic meta-learning (MAML), prototypical networks in few-shot learning. Real-world applications underscore the adaptability and efficacy of these techniques across various NLP tasks in both industry and academia. Acknowledging challenges inherent in zero-shot and few-shot learning, this review identifies limitations and suggests avenues for improvement. It emphasizes theoretical foundations alongside practical considerations such as accuracy and generalization across diverse NLP tasks. By consolidating key insights, this review provides researchers and practitioners with valuable guidance on the current state and future potential of zero-shot and few-shot learning techniques in addressing real-world NLP challenges. Looking ahead, this review aims to stimulate further research, fostering a deeper understanding of the complexities and applicability of zero-shot and few-shot learning techniques in NLP. By offering a roadmap for future exploration, it seeks to contribute to the ongoing advancement and practical implementation of NLP technologies across various domains.},
+	issue        = 9,
+	keywords     = {Applied and Technical Physics,Chemistry/Food Science,Earth Sciences,Engineering,Environment,Materials Science,general}
+}
+
+@misc{rajpurkar2018,
+	title        = {Know What You Don't Know: Unanswerable Questions for SQuAD},
+	author       = {Pranav Rajpurkar and Robin Jia and Percy Liang},
+	year         = 2018,
+	url          = {https://arxiv.org/abs/1806.03822},
+	eprint       = {1806.03822},
+	archiveprefix = {arXiv},
+	primaryclass = {cs.CL}
+}
