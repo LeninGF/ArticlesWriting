@@ -125,7 +125,7 @@ Myriam Hernandez-Alvarez\inst{1}\orcidID{0000-0003-4718-0400} \and\\
   underexplored.  This study addresses this gap by developing an
   automated classification system using a BERT model tailored to
   Spanish robbery narratives.  Utilizing transfer learning and
-  subsequent fine-tuning on an expanded, labeled dataset, the system
+  subsequent fine-tuning on an expanded labeled dataset, the system
   significantly improves classification performance.  Initial transfer
   learning achieved moderate accuracy (\numprint{80.5}\%) but faced difficulties
   with semantically similar categories.  Fine-tuning notably increased
@@ -153,7 +153,7 @@ typically require vast amounts of data and computational
 resources. For specialized domains with limited data, such as legal
 text processing, \emph{Transfer Learning (TL)} and \emph{Fine-Tuning
 (FT)} offer a viable path to adapt large pre-trained models to niche
-tasks \cite{yosinski2014transferable,howard2018universallanguagemodelfinetuning}.
+tasks \cite{howard2018universallanguagemodelfinetuning,yosinski2014transferable}.
 
 \newpage
 The legal domain poses distinct challenges for Natural Language
@@ -162,9 +162,9 @@ documents, and intricate structural features. These factors have
 fostered the emergence of Legal NLP (LNLP) as a specialized subfield
 \cite{Ariai2024,Zhong2020}. Although there has been increasing interest in
 judicial outcome prediction
-\cite{mumcuouglu2021natural,kalia2022classifying,wang2020deep}, legal
+\cite{kalia2022classifying,mumcuouglu2021natural,wang2020deep}, legal
 article prediction from text, and document classification
-\cite{yan2019law,clavie2021}, available benchmark datasets such as
+\cite{clavie2021,yan2019law}, available benchmark datasets such as
 LexGlue primarily target English, thereby neglecting other
 languages. While transformer models such as mBERT have facilitated
 cross-lingual transfer, the unique characteristics of legal
@@ -188,7 +188,7 @@ and (3) a final FT phase on a large-scale dataset of 1.1 million
 narratives, expanding from 6 to 11 categories and achieving a final
 accuracy of \(95.5\%\).
 
-This research makes three key contributions: (1) a novel, large-scale
+This research makes three key contributions: (1) a novel large-scale
 dataset of over one million annotated Spanish-language robbery
 narratives from Ecuadorian police reports; (2) an effective
 three-phase FT approach that adapts a pre-trained BERT model to the
@@ -216,7 +216,7 @@ legal documents into predefined juridical categories. Research has
 increasingly adopted transformer architectures, which use a
 self-attention mechanism to capture long-range dependencies in text
 more effectively than prior architectures
-\cite{vaswani2017attention,tunstall2022natural} and are considered
+\cite{tunstall2022natural,vaswani2017attention} and are considered
 state-of-the-art in NLP tasks. BERT \cite{devlin2018bert}, a notable
 application of the Transformer encoder, generates deeply bidirectional
 contextual representations through an exclusively encoder-based
@@ -355,7 +355,7 @@ categories from \numprint{671146} robbery records provided by
 \printInicialesComision{}. After standard text pre-processing,
 including the removal of non-alphanumeric characters and conversion to
 lowercase, we analyzed statistical characteristics of the narrative
-length. To comply with DistilBERT’s\cite{Sanh2019DistilBERTAD})
+length. To comply with DistilBERT’s\cite{Sanh2019DistilBERTAD}
 512-token limit, we filtered narratives to be between 35 and 300
 words, resulting in a dataset of \(N = \numprint{431669}\)
 samples. This was stratified into training (\numprint{63.32}\%),
@@ -412,7 +412,7 @@ preceding sequence of tokens, TC can be formalized as shown
 in~\eqref{eq:classification-prob}. Training a TC model thus implies
 learning a function $f$ that maps a target dataset $D^T$, consisting
 of text sequences $X_i \in D = \{X_1, X_2, \dots, X_N\}$ to one of $k$
-categories (~\eqref{eq:clasificacion}).
+categories~\eqref{eq:clasificacion}.
 
 For this work, we selected the \modelohuggingface
 model~\cite{Sanh2019DistilBERTAD}, a distilled version of BERT, which
