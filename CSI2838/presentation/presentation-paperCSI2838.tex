@@ -41,6 +41,7 @@
   \acro{SAM}[SAM]{Segment Anything Model}
   \acro{MedSAM}[MedSAM]{MedSAM}
   \acro{OOD}[OOD]{out-of-domain}
+  \acro{HITL}[HITL]{Human-in-the-Loop}
 \end{acronym}
 
 
@@ -72,7 +73,7 @@
 \definecolor{myteal}{RGB}{17, 202, 160} % Keeping only the necessary color definition
 
 % --- PRESENTATION METADATA ---
-\title[Modern and Traditional Techniques for Mammogram Segmentation]{
+\title[SAM \& Otsu in  MG Segmentation]{
   Towards a segmentation of the pectoral muscle and masses present in mammograms by combining modern and traditional techniques
 }
 \author[Falconi, et al.]{
@@ -172,7 +173,7 @@
       in a \ac{ZSL} setting with a human in the loop in a \ac{MG}?
     \item How does \ac{MedSAM} perform in pectoral muscle segmentation under \ac{ZSL} conditions?
     \item Do traditional segmentation approaches retain relevance for this specific task?
-    \item Would a hybrid approach, combining foundational and traditional methods, yield superior performance?
+    % \item Would a hybrid approach, combining foundational and traditional methods, yield superior performance?
   \end{itemize}
 \end{frame}
 \subsection{Contribution}
@@ -184,7 +185,7 @@
   \begin{enumerate}
     \item Performance assessment of \ac{MedSAM} in pectoral muscle segmentation using \ac{ZSL} with a human-in-the-loop approach.
     \item A manual segmentation pipeline to enhance the \ac{MG} and its borders.
-    \item A publicly available Pectoral Muscle Segmentation Dataset.
+    \item A Pectoral Muscle Segmentation Dataset.
     \item An iterative Otsu algorithm for automatic segmentation of the \ac{MG}.
   \end{enumerate}
 \end{frame}
@@ -202,8 +203,8 @@
   \end{itemize}
 For an image with grayscale levels \( L \) (typically 0-255), let:
 \begin{itemize}
-    \item Let $n_i$ be the \textbf{number of pixels} at intensity level $i$, where $i \in [0, L-1]$.
-    \item Let $N$ be the \textbf{total number of pixels} in the image.
+    \item $n_i$ be the \textbf{number of pixels} at intensity level $i$, where $i \in [0, L-1]$.
+    \item  $N$ be the \textbf{total number of pixels} in the image.
     \item The \textbf{probability} $p_i$ of a randomly selected pixel having intensity $i$ is given by:
     \[
     p_i = \frac{n_i}{N}
@@ -255,33 +256,104 @@ where:
 \subsection{Foundation Models for Medical Image Segmentation}
 
 \begin{frame}[allowframebreaks]
-\frametitle{Foundation Models for Medical Image Segmentation}
-\framesubtitle{From General-Purpose to Domain-Specialized Architectures}
-
-\begin{block}{The Segment Anything Model (SAM)}
-\begin{itemize}
+ \frametitle{Foundation Models for Medical Image Segmentation}
+\framesubtitle{Segment Anything Model}
+\begin{columns}
+  \begin{column}{.5\textwidth}
+    \begin{itemize}
     \item \textbf{Concept:} A promptable foundation model for \emph{general} image segmentation.
     \item \textbf{Training:} Trained on the SA-1B dataset (11M images, 1B+ masks).
     \item \textbf{Core Capability:} Strong \textbf{zero-shot} transfer to unseen objects and domains via points, boxes, or text prompts.
     \item \textbf{Limitation in Medicine:} Performance degrades on medical images due to the \emph{domain gap} between natural and biomedical textures.
-\end{itemize}
-\end{block}
+    \end{itemize}
+    
+    
+  \end{column}
 
-\newpage
+  \begin{column}{.5\textwidth}
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=\textwidth, height=.65\textheight]{./figures_ppt/rfblog-segmentanything2.jpg}
+      \caption{\label{fig:label}Segment Anything Model}
+    \end{figure}
 
-\begin{block}{MedSAM: A Medical Adaptation}
-\begin{itemize}
-    \item \textbf{Motivation:} To bridge the domain gap for medical imaging while retaining SAM's promptable, foundational design.
-    \item \textbf{Approach:} Fine-tuned on a large-scale medical image dataset (over 1M masks from CT, MRI, ultrasound, etc.).
-    \item \textbf{Key Advancement:} Enhances SAM's encoder with medical domain knowledge, improving feature representation for anatomical structures.
-    \item \textbf{Significance:} Demonstrates how a general foundation model can be specialized for clinical tasks without architectural overhaul.
-\end{itemize}
-\end{block}
 
-\vspace{0.3cm}
+  \end{column}
+\end{columns}
 
-\textbf{Research Implication:} These models enable new paradigms for medical image analysis, particularly in \textbf{few-shot} and \textbf{zero-shot} learning scenarios where annotated data is scarce.
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{Foundation Models for Medical Image Segmentation}
+  \framesubtitle{Segment Anything in Medical Images}
+\begin{columns}
+  \begin{column}{.5\textwidth}
+    \begin{itemize}
+      \item \textbf{Motivation:} To bridge the domain gap for medical
+        imaging while retaining SAM's promptable, foundational design.
+        \item \textbf{Approach:} Fine-tuned on a large-scale medical
+          image dataset (over 1M masks from CT, MRI, ultrasound,
+          etc.).
+           \item \textbf{Key Advancement:} Enhances SAM's encoder with
+             medical domain knowledge.
+             \item \textbf{Significance:} No need to change model's
+               architecture to specialize.
+               \end{itemize}  
+    
+  \end{column}
+
+  \begin{column}{.5\textwidth}
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=\textwidth, height=.55\textheight]{./figures_ppt/MedSamModel.png}
+      \caption{\label{fig:label}10.1038/s41467-024-44824-z }
+    \end{figure}
+
+
+  \end{column}
+\end{columns}
+
+
+
+% \textbf{Research Implication:} These models enable new paradigms for medyyical image analysis, particularly in \textbf{few-shot} and \textbf{zero-shot} learning scenarios where annotated data is scarce.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Foundation Models for Medical Image Segmentation}
+  \framesubtitle{Segment Anything in Medical Images}
+\begin{columns}
+  \begin{column}{.5\textwidth}
+    \begin{itemize}
+      \item \textbf{Motivation:} To bridge the domain gap for medical
+        imaging while retaining SAM's promptable, foundational design.
+        \item \textbf{Approach:} Fine-tuned on a large-scale medical
+          image dataset (over 1M masks from CT, MRI, ultrasound,
+          etc.).
+           \item \textbf{Key Advancement:} Enhances SAM's encoder with
+             medical domain knowledge.
+             \item \textbf{Significance:} No need to change model's
+               architecture to specialize.
+               \end{itemize}  
+    
+  \end{column}
+
+  \begin{column}{.5\textwidth}
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=\textwidth, height=.55\textheight]{./figures_ppt/MedSamTrainingData.png}
+      \caption{\label{fig:label}10.1038/s41467-024-44824-z }
+    \end{figure}
+
+
+  \end{column}
+\end{columns}
+
+
+
+% \textbf{Research Implication:} These models enable new paradigms for medyyical image analysis, particularly in \textbf{few-shot} and \textbf{zero-shot} learning scenarios where annotated data is scarce.
+\end{frame}
+
 \subsection{Zero Shot Learning}
 
 \begin{frame}
@@ -294,7 +366,10 @@ where:
         with no further training.
       \item Relies on a pre-trained model in a large dataset.
       \item In computer vision, it uses a visual prompt given by the
-        user (i.e. human in the loop)
+        user (i.e. human in the loop).
+      \item It uses inference time.
+      \item It exploits visual prompts with \ac{HITL}.
+      \item It is a consequence of Transformer's \ac{OOD} capabilities.
 
       \end{itemize}
 
@@ -315,25 +390,90 @@ where:
 % --- SLIDE 6: METHODOLOGY DETAILS ---
 \begin{frame}
   \frametitle{Methodology Overview}
+  \framesubtitle{ZSL with \ac{MedSAM}}
 
+          \begin{enumerate}
+  \item Select a sample dataset for manual labeling.
+  \item Preprocess \ac{MG}s to remove artifacts.
+  \item Generate Pectoral Muscle Masks using 5 different researchers.
+  \item Generate Pectoral Muscle Masks using \ac{MedSAM}.
+  \item Compute performance with segmentation scores.
+  \end{enumerate}  
+        
 \end{frame}
-
-\subsection{Dataset Characteristics}
-
 
 \begin{frame}
-  \frametitle{Dataset Characteristics}
+  \frametitle{Methodology Overview}
+  \framesubtitle{Otsu Algorithm Approach}
 
+          \begin{itemize}
+        \item Design a pipeline to apply Otsu's segmentation
+          iteratively.
+        \item Visually inspect Results
+        \end{itemize}
 \end{frame}
 
+\subsection{MIAS Dataset Characteristics}
+
+
+\begin{frame}{Dataset: Mammographic Image Analysis Society (MIAS)}
+    The study utilizes the \textbf{Mini-MIAS database}, a standard benchmark for mammographic image analysis.
+
+
+        \begin{itemize}
+            \item \textbf{Source:} Digitized film mammograms (UK National Breast Screening Programme).
+            \item \textbf{Volume:} 322 images from 161 patients.
+            \item \textbf{View:} Medio-Lateral Oblique (MLO) view exclusively.
+            \item \textbf{Resolution:} $1024 \times 1024$ pixels (PGM format).
+            \item \textbf{Annotations:} Contains radiologist annotations for masses, calcifications, and asymmetries.
+            \item \textbf{Format:} Approximate center coordinates ($x, y$) and radio ($r$) provided in \texttt{Info.txt}.
+            % \item \textbf{Challenge:} Lack of pixel-wise segmentation masks necessitates the creation of the \textit{Human Reference Standard}.
+        \end{itemize}
+
+\end{frame}
 % --- SLIDE 7: MODELS EVALUATED ---
 
 
 \subsection{Experimental Procedure}
 
 
-\begin{frame}
-  \frametitle{Experimental Set Up}
+\begin{frame}[allowframebreaks]
+  \frametitle{Experimental Design for \ac{ZSL}}
+  \framesubtitle{Ground Truth Dataset} A total of 170 images from MIAS
+  were randomly selected representing a 95\% confidence level with a
+  5\% error.
+  \begin{columns}
+    \begin{column}{.5\textwidth}
+      \begin{itemize}
+        \item \textbf{Collaborative Annotation:} Dataset split among \textbf{5 independent researchers}.
+        \item \textbf{Annotation Tools:}
+        \begin{itemize}
+            \item Manual Polygon delineation.
+            \item Superpixel segmentation for boundary adherence.
+        \end{itemize}
+        \item \textbf{Refinement:} Applied morphological operations
+          (\textit{Dilation} and \textit{Erosion}).
+        \item \textbf{Output:} 
+        \begin{itemize}
+            \item Mask A: Pectoral Muscle.
+            \item Mask B: Glandular Tissue.
+        \end{itemize}
+      \end{itemize}
+      
+      
+    \end{column}
+
+    \begin{column}{.5\textwidth}
+      \begin{figure}[ht]
+        \centering
+        \includegraphics[width=\textwidth, height=.6\textheight]{./figures_ppt/case48_GT.png}
+        \caption{\label{fig:label}Ground Truth for case 48 }
+      \end{figure}
+
+
+    \end{column}
+  \end{columns}
+
   % \begin{figure}[ht]
   %   \centering
   %   \includegraphics[width=\textwidth, height=.7\textheight]{../figures/experimentalMethodologyGuide.png}
@@ -342,13 +482,154 @@ where:
   % \end{figure}
 
 \end{frame}
+
+\begin{frame}
+  \frametitle{Experimental Design for \ac{ZSL}}
+  \framesubtitle{\ac{MedSAM}'s predicted dataset}
+  \begin{columns}
+    \begin{column}{.5\textwidth}
+        
+ \begin{enumerate}
+            \item \textbf{Integration:} Loaded MedSAM model directly into Medical Image Labeler.
+            \item \textbf{Prompting Strategy:} Used a \textbf{Bounding Box} prompt covering the pectoral muscle area.
+            \item \textbf{Anchor Point:} Box initiation started from the upper edge where the muscle originates.
+            \item \textbf{Selection:} Multiple prompts were tested;
+              the result with the highest visual fidelity was
+              selected.
+            \item No further operations (dilation or erosion) were allowed.
+        \end{enumerate}
+ 
+      
+    \end{column}
+
+    \begin{column}{.5\textwidth}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth, height=.6\textheight]{./figures_ppt/case48_medSAM.png}
+  \caption{\label{fig:label}MedSAM prediction of case 48 }
+\end{figure}
+
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+% --- Slide 1 ---
+\begin{frame}{Global Otsu Threshold}
+\begin{itemize}
+    \item Normalize the image intensities to the range $[0,1]$:
+    \[
+    I_0 = \frac{I_{\text{raw}} - \min(I_{\text{raw}})}{\max(I_{\text{raw}} - \min(I_{\text{raw}}))}
+    \]
+    \item Apply Otsu’s method to compute the global threshold $T_1$.
+    \item Otsu selects $T_1$ that maximizes the between-class variance:
+    \[
+    \sigma_B^2(T) = \omega_0(T)\,\omega_1(T)\,[\mu_0(T) - \mu_1(T)]^2
+    \]
+    \item This separates the image into two main regions: \textbf{low} ($I_0 < T_1$) and \textbf{high} ($I_0 \geq T_1$).
+\end{itemize}
+\end{frame}
+
+% --- Slide 2 ---
+\begin{frame}{Subdivision into Four Classes}
+\begin{itemize}
+    \item Apply Otsu again within each subset:
+    \[
+    T_{\text{low}} = \text{Otsu}(I_0 \mid I_0 < T_1), \quad
+    T_{\text{high}} = \text{Otsu}(I_0 \mid I_0 \geq T_1)
+    \]
+    \item If subsets are empty, use defaults: $T_{\text{low}} \approx T_1/2$, $T_{\text{high}} \approx (1+T_1)/2$.
+    \item Final segmentation into four regions:
+    \[
+    \begin{aligned}
+    \text{Class 1: } & I_0 < T_{\text{low}} \\
+    \text{Class 2: } & T_{\text{low}} \leq I_0 < T_1 \\
+    \text{Class 3: } & T_1 \leq I_0 < T_{\text{high}} \\
+    \text{Class 4: } & I_0 \geq T_{\text{high}}
+    \end{aligned}
+    \]
+    % \item Produces a label map with values $\{1,2,3,4\}$.
+\end{itemize}
+\end{frame}
 % ===================================
 % SECTION 3: RESULTS
 % ===================================
 \section{Results}
+\begin{frame}{Performance Evaluation Metrics of MedSAM}
+    To quantify the inter-method agreement between the Zero-Shot MedSAM predictions ($P$) and the Human Reference Standard ($G$):
+
+    \begin{block}{Volumetric Agreement}
+        \begin{equation*}
+            \text{Dice Coefficient (DSC)} = \frac{2 |P \cap G|}{|P| + |G|}
+        \end{equation*}
+        \begin{equation*}
+            \text{Intersection over Union (IoU)} = \frac{|P \cap G|}{|P \cup G|}
+        \end{equation*}
+    \end{block}
+
+    \vspace{0.2cm}
+    \textbf{Additional Metrics:} Precision and  Recall were calculated to assess over-segmentation and boundary adherence.
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Performance Evaluation of MedSAM}
+  % \begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth, height=.6\textheight]{./figures_ppt/SegmentationMetricsPerformance.png}
+  %   \caption{\label{fig:label} }
+  % \end{figure}
+
+  \end{frame}
+
+  \begin{frame}
+  \frametitle{Performance Evaluation of MedSAM}
+  % \begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth, height=.6\textheight]{./figures_ppt/SegmentationComparisonExamples_withLegend.png}
+  %   \caption{\label{fig:label} }
+  % \end{figure}
+
+  \end{frame}
+
+% \begin{frame}
+%   \frametitle{Performance Evaluation of MedSAM}
+%   \begin{itemize}
+%     \item \textbf{Dice Score:} \\
+%     Mean = 0.865 $\pm$ 0.140, \quad Median = 0.909
+%     \item \textbf{Jaccard (IoU):} \\
+%     Mean = 0.783 $\pm$ 0.171, \quad Median = 0.833
+%     \item \textbf{Precision:} \\
+%     Mean = 0.925 $\pm$ 0.141, \quad Median = 0.982
+%     \item \textbf{Recall:} \\
+%     Mean = 0.830 $\pm$ 0.151, \quad Median = 0.873
+% \end{itemize}
+  
+% \end{frame}
 
 
+\begin{frame}
+  \frametitle{Performance Evaluation of MedSAM}
+\centering
+\begin{tabular}{lccccc}
+\hline
+\textbf{Metric} & \textbf{Mean} & \textbf{Std} & \textbf{Median} & \textbf{Min} & \textbf{Max} \\
+\hline
+Dice      & 0.86531 & 0.14039 & 0.90895 & 0.15112  & 0.98791 \\
+IoU       & 0.78329 & 0.17118 & 0.83310 & 0.08174  & 0.97611 \\
+Precision & 0.92517 & 0.14076 & 0.98206 & 0.08738  & 1.00000 \\
+Recall    & 0.82970 & 0.15068 & 0.87316 & 0.13349  & 0.99039 \\
+\hline
+\end{tabular}
 
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Iterative Otsu}
+    \centering
+    \includegraphics[width=\textwidth, height=.6\textheight]{./figures_ppt/otsus_result.png}
+  
+\end{frame}
 
 
 % ===================================
@@ -357,30 +638,66 @@ where:
 \section{Conclusion}
 
 % --- SLIDE 11: CONCLUSION ---
-\begin{frame}
-  \frametitle{Conclusion \& Future Work}
+\begin{frame}[allowframebreaks]
+  \frametitle{Conclusion}
+\begin{itemize}
 
+\item \ac{ZSL} with foundation model such as \ac{MedSAM} can aid in
+  pectoral muscle segmentation.
+  Score.
+\item MedSAM presented a performance near 0.90 for Dice Score without
+  further training.
+\item Foundation Models can be used to aid in labeling operations for
+  medical data.
+\item Traditional approaches, such Otsu's iteratively, present
+  relevant results and do not need high computational resources
+  compared to Transformer-based models and work independent of \ac{MG}
+  orintation.
+\item Iterative Otsu needs an additional step to separate muscle from
+  mass. It can be hybrid by using a foundation model or calculating
+  the size of the areas.
+\end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Limitations and Future Work}
+  \begin{itemize}
+  \item \textbf{Dataset Scope:} This study utilized a subset of the \ac{MIAS} dataset. Future work should validate our approach on the complete \ac{MIAS} dataset and extend evaluation to additional public mammography datasets.
+  \item \textbf{Annotation Process:} Ground truth annotations were obtained from individual radiologists. Future studies should implement consensus labeling or multiple annotator review to assess and mitigate potential labeling bias.
+  \item \textbf{Human-in-the-Loop Refinement:} The integration of \ac{HITL} mechanisms for prompt refinement requires further investigation to quantify and control for introduced human biases in the interactive learning process.
+  \end{itemize}
+\end{frame}
 % --- SLIDE 12: Q&A ---
 \begin{frame}
-  \frametitle{} % No title
-  \centering
+  \frametitle{Q\&A} % No title
+  \begin{columns}
+    \begin{column}{.5\textwidth}
+        \centering
   \Huge
   Thank You
   \vspace{1em}
   \Large
-  Questions?
-  \vfill
-  \small
-  Lenin G. Falconi: lenin.falconi@epn.edu.ec \\
+  Questions?\\
+      
+    \end{column}
+
+    \begin{column}{.5\textwidth}
+      \centering
+      \Large
+      Lenin G. Falconi: \\
+      \includegraphics[width=\textwidth]{./figures_ppt/linkedin3.png}
+      lenin.falconi@epn.edu.ec
+
+    \end{column}
+  \end{columns}
+
 \end{frame}
 % Bibliography
-\begin{frame}[allowframebreaks]
-    \frametitle{References}
-    % \nocite{*} % This command will include all entries from your .bib file
-    \printbibliography
-\end{frame}
+% \begin{frame}[allowframebreaks]
+%     \frametitle{References}
+%     % \nocite{*} % This command will include all entries from your .bib file
+%     \printbibliography
+% \end{frame}
 \end{document}
 
 

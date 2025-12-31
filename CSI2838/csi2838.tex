@@ -10,6 +10,18 @@
 % questions. Make observations about weak points. Use Latex to provide
 % content for the slides
 
+% You are computer science PhD professional. Assist me to improve the
+% English writing for my paper at a conference using  academic
+% tone. Correct punctuation and grammar errors. Explain
+% questions. Use Latex syntax when writing the response
+
+
+% You are computer science PhD professional. Assist me to improve the
+% English writing for my paper at a conference using academic
+% tone. Correct punctuation and grammar errors. Explain questions. Use
+% Latex syntax when writing the response. Do not replace syntax like
+% \ac{} or \Ac
+
 \documentclass[runningheads]{llncs}
 %
 \usepackage[T1]{fontenc}
@@ -68,6 +80,7 @@ pdfpagemode=UseOutlines]{hyperref} % check if it is correct to use
   \acro{AI}[AI]{Artificial Intelligence}
   \acro{BC}[BC]{Breast Cancer}
   \acro{MLO}[MLO]{Medio Lateral Oblique}
+  \acro{CC}[CC]{Cranio-Caudal}
   \acro{MG}[MG]{Mammography}
   \acro{CADe}[CADe]{Computer-Aided Detection}
   \acro{CADx}[CADx]{Computer-Aided Diagnosis}
@@ -76,6 +89,10 @@ pdfpagemode=UseOutlines]{hyperref} % check if it is correct to use
   \acro{SAM}[SAM]{Segment Anything Model}
   \acro{MedSAM}[MedSAM]{MedSAM}
   \acro{OOD}[OOD]{out-of-domain}
+  \acro{HITL}[HITL]{Human-in-the-Loop}
+  \acro{CNNs}[CNNs]{Convolutional Neural Networks}
+  \acro{SOTA}[SOTA]{State-of-the-Art}
+  \acro{CNN}[CNN]{Convolutional Neural Network}
 \end{acronym}
 \title{Towards a segmentation of the pectoral muscle and masses present in mammograms by combining modern and traditional techniques}
 %\title{Full Pectoral Muscle and mases Segmentation for Mammograms}
@@ -112,7 +129,37 @@ Instituto de Computação, Universidade Federal Fluminense, Niterói – RJ
 %
 \begin{abstract}
 % Se propone combinar técnicas modernas y tradicionales para una segmentación robusta del músculo pectoral y anomalías en mamografías de la base de datos MIAS. Un método basado en multiumbralización Otsu segmenta la imagen completa, incluyendo el músculo pectoral y las anomalías. Esto se logra mediante un preprocesamiento efectivo que filtra ruido, realza detalles y elimina artefactos, mejorando la nitidez y resaltando bordes y estructuras anatómicas. La remoción del músculo pectoral se realizó de forma automática y semiautomática. El ground truth y las máscaras pixeladas del pectoral se crearon con la herramienta interactiva SAM en Matlab 2024b. Las métricas de validación mostraron un desempeño eficiente de los algoritmos propuestos. Las máscaras generadas fueron validadas cuantitativamente frente a las segmentaciones de referencia creadas con el metodo semiatomatico utilizando métricas estándar como Dice, Jaccard, Precisión, Recall, Especificidad, etc. Además, se incorporó validación visual mediante superposición gráfica. Los resultados demostraron alta concordancia con la referencia, con valores medios de Dice superiores al ¿0.85? en una cohorte de mamografías de la base MIAS. Este enfoque balancea precisión y control del usuario, siendo especialmente útil en contextos clínicos y de investigación con recursos limitados o alta variabilidad anatómica. Se discuten también recomendaciones para futuras integraciones en pipelines CAD completos.
-The presence of the pectoral muscle in Medio Lateral Oblique (MLO) mammograms presents a significant challenge for Computer-Aided Detection (CAD) systems due to its intensity and textural similarity to glandular tissue. This study proposes a hybrid segmentation pipeline applied to the MIAS database that integrates traditional image processing with modern foundation models to segment both the pectoral muscle and breast anomalies. The methodology employs a semi-automatic approach for pectoral muscle removal using manual polygon selection and morphological operations, alongside a recursive Otsu thresholding algorithm for the segmentation of masses. To address the scarcity of expert radiologist annotations, the study utilizes the Segment Anything Model (SAM) to generate simulated ground truth masks for quantitative validation. Experimental evaluations demonstrate that the proposed method achieves high volumetric agreement with a mean Dice Similarity Coefficient (DSC) of 0.9383. However, an Average Symmetric Surface Distance (ASSD) of 6.57 mm indicates moderate discrepancies in boundary delineation. These findings suggest that while SAM-derived masks serve as a robust proxy for benchmarking in resource-constrained environments, further fine-tuning is required to achieve the precision necessary for clinical contouring.
+  The presence of the pectoral muscle in Medio-Lateral Oblique (MLO)
+  mammograms presents a significant challenge for Computer-Aided
+  Detection (CAD) systems due to its intensity and textural similarity
+  to glandular tissue. To address the scarcity of expert radiologist
+  annotations for the pectoral muscle, this study evaluates the
+  performance of the Medical Segment Anything Model (MedSAM) in a
+  Zero-Shot Learning (ZSL) setting for pectoral muscle
+  segmentation. This is combined with a traditional recursive Otsu
+  thresholding approach for mass detection in mammograms from the MIAS
+  database. Experimental results show that MedSAM achieves a DICE
+  score of \(0.86 \pm 0.14\) on a substantial subset of MIAS
+  mammograms, indicating its potential for immediate use, without
+  further training, to assist in pectoral muscle segmentation.
+
+  % This study proposes a hybrid segmentation
+  % pipeline applied to the MIAS database that integrates traditional
+  % image processing with modern foundation models to segment both the
+  % pectoral muscle and breast anomalies. The methodology employs a
+  % semi-automatic approach for pectoral muscle removal using manual
+  % polygon selection and morphological operations, alongside a
+  % recursive Otsu thresholding algorithm for the segmentation of
+  % masses.  the Segment Anything Model (SAM) to generate
+  % simulated ground truth masks for quantitative
+  % validation. Experimental evaluations demonstrate that the proposed
+  % method achieves high volumetric agreement with a mean Dice
+  % Similarity Coefficient (DSC) of 0.9383. However, an Average
+  % Symmetric Surface Distance (ASSD) of 6.57 mm indicates moderate
+  % discrepancies in boundary delineation. These findings suggest that
+  % while SAM-derived masks serve as a robust proxy for benchmarking in
+  % resource-constrained environments, further fine-tuning is required
+  % to achieve the precision necessary for clinical contouring.
 
 \keywords{Ground truth  \and pectoral muscle  \and Segmentation \and enhancement \and mammogram \and SAM.}
 \end{abstract}
@@ -121,50 +168,66 @@ The presence of the pectoral muscle in Medio Lateral Oblique (MLO) mammograms pr
 %
 \section{Introduction}
 
-\Ac{BC} is one of the most common diseases that affect women around
-the world. It is usually detected through regular screening tests or
-when clinical symptoms appear~\cite{ACS2019}. Each year, it affects
-about 2.1 million people and is responsible for a large number of
-cancer-related deaths. Moreover, \ac{BC} remains the most commonly
-diagnosed cancer among women worldwide, with approximately 2.3 million
-new cases and approximately \numprint{670000} deaths reported in the
-same year\cite{ZHANG2025287}. These statistics underscore the persistent
-global burden of the disease and reinforce the importance of early
-detection and improved diagnostic methods.
+\Ac{BC} is one of the most prevalent diseases affecting women
+worldwide. It is typically detected through routine screening or upon
+the presentation of clinical symptoms~\cite{ACS2019}. Annually,
+\ac{BC} impacts about 2.1 million individuals and accounts for a
+significant proportion of cancer-related deaths. Furthermore, \ac{BC}
+remains the most frequently diagnosed cancer among women globally,
+with around 2.3 million new cases and approximately \numprint{670000}
+deaths reported in the same year~\cite{ZHANG2025287}. These statistics
+highlight the persistent global burden of the disease and underscore
+the importance of early detection and enhanced diagnostic methods.
 
-Early detection and diagnose of \ac{BC} is crucial to reduce the
-number of deaths caused by the disease. Due to this, regular \ac{BC}
-screening is highly recommended by healthcare professionals. Digital
-\ac{MG} is currently the most effective imaging method for detecting
-and diagnosing breast cancer at an early stage. Common signs of
-\ac{BC} on mammograms include calcifications, masses or lumps,
-asymmetries, and changes in the normal structure of the
-breast. However, identifying these signs can be time-consuming and
-tiring for radiologists, and between 10\% and 30\% of abnormalities
-may go unnoticed~\cite{Moreira2012}.
+Early detection and diagnosis of \ac{BC} are crucial for reducing
+mortality associated with the disease. Consequently, regular screening
+is strongly recommended by healthcare professionals. Digital \ac{MG}
+is currently the most effective imaging modality for the detection and
+diagnosis of \ac{BC}. Common mammographic indicators of \ac{BC}
+include calcifications, masses, asymmetries, and architectural
+distortions. However, identifying these signs can be time-consuming
+and fatiguing for radiologists, with an estimated 10\% to 30\% of
+abnormalities remaining undetected~\cite{Moreira2012}.
 	
-Mammography, particularly in the \ac{MLO} view, is crucial for \ac{BC}
-diagnosis. However, the presence of the pectoral muscle in the image
-can significantly interfere with \ac{CADe} and \ac{CADx} algorithms
-due to its intensity and texture resembling breast tissue. A recent
-study explored various edge features for pectoral muscle segmentation
-and proposed a fully automatic method that employs active contours,
-which achieved a Dice coefficient of  97.8\% in the \ac{MIAS}
-dataset~\cite{RAMPUN201728}. 
+The presence of the pectoral muscle, which is primarily visible in the
+\ac{MLO} view of \ac{MG} images, can significantly interfere with both
+\ac{CADe} and \ac{CADx} algorithms. This interference arises from the
+muscle's intensity and texture characteristics and complicates the
+detection of abnormalities, as the pectoral muscle, fibroglandular
+tissue, and abnormalities all appear as regions of elevated
+intensity~\cite{Aliniya2024,Guo2020,Larroza2024}.
 
-On the other hand, and in contrast to traditional approaches, \ac{DL}
-methods require a large amount of data to train their models in an
-specific task. Recently, an approach that has gained notoriety is
-\ac{ZSL}, where a foundational model can generalize to tasks and data
-beyond the scope of its training data~\cite{Kirillov2023}. The
-\ac{SAM}~\cite{Kirillov2023}, a foundational segmentation model
-designed to be promptable, presents competitive results using \ac{ZSL}
-to those of models trained in supervised learning. Because of that, \ac{SAM}
-was tested out-of-the box in challenging scenarios such as
-medical~\cite{Ma2024}. However, since the original model exhibits
-significant limitations on medical data, \ac{MedSAM}~\cite{Ma2024} was
-refined to enhance the segmentation performance of \ac{SAM} in the
-medical domain.
+Consequently, the removal of the pectoral muscle is necessary to
+improve the abnormalities detection rate in \ac{MG}. However, the
+scarcity of publicly available datasets with ground-truth pectoral
+muscle segmentation masks, has led most existing approaches to rely on
+traditional image processing techniques~\cite{Aliniya2024}. For
+instance, a recent study explored various edge features for pectoral
+muscle segmentation and proposed a fully automatic method employing
+active contours, which achieved a DICE coefficient of 97.8\% on
+the \ac{MIAS} dataset~\cite{RAMPUN201728}.
+
+Traditional approaches face a limitation in the removal of pectoral
+muscle in \ac{MG} due to the fact that the muscle's location, shape,
+density and position vary among patients\cite{Aliniya2024}. To address
+this, \ac{DL} methods are being investigated to identify the pectoral
+muscle region in both
+\ac{MLO}~\cite{Guo2020}~\cite{Aliniya2024Supervised} and \ac{CC}
+views~\cite{Larroza2024}. However, \ac{DL} methods typically require
+large amounts of annotated data to train effectively in a supervised
+learning setting for a specific task.
+
+Recently, \ac{ZSL} has gained attention as a paradigm in which a
+foundational model can generalize to tasks and data beyond its
+original training scope \cite{Kirillov2023}. One prominent example is
+\ac{SAM} \cite{Kirillov2023}, a promptable foundation model for image
+segmentation, which has demonstrated competitive performance in
+\ac{ZSL} settings compared to fully supervised models. Consequently,
+\ac{SAM} has been extensively evaluated in challenging domains such as
+medical imaging \cite{Ma2024}. Nevertheless, due to its suboptimal
+performance on specialized medical data, \ac{MedSAM} \cite{Ma2024} was
+subsequently developed as a fine-tuned variant to enhance the
+segmentation capability of \ac{SAM} within the medical domain.
 
 
 
@@ -177,29 +240,102 @@ medical domain.
 % segmentation, an algorithm has been proposed to automatically segment
 % the pectoral muscle in both the right and left breast.
 
-In this work, we study the performance of \ac{MedSAM} in pectoral
-muscle segmentation in \ac{MG} images from the \ac{MIAS}
-dataset. Also, we 
+This work investigates the applicability of transformer-based
+foundational models in pectoral muscle segmentation in \ac{MG}, given
+the strong \ac{OOD} generalization of such models. Particularly, we
+focus on the performance of \ac{MedSAM}. Additionally, we propose an
+iterative approach based on Otsu's algorithm to automatically
+delineate the breast region. As a consequence, this paper makes the
+following contributions:
+\begin{itemize}
+\item A performance assessment of \ac{MedSAM} for pectoral muscle
+  segmentation using \ac{ZSL} with a \ac{HITL} approach.
+\item A manual segmentation pipeline to enhance the \ac{MG} and its
+  borders.
+\item A Pectoral Muscle Segmentation Dataset.
+\item An iterative Otsu algorithm for the automatic segmentation of
+  \ac{MG} images.
+\end{itemize}
 
-This paper is organized as follows: Section\ref{sec:Medical Image Segmentation} introduces the medical image segmentation evolution addressing traditional and deep learning approaches. Discussion about related works are presented in Section 3. %~\ref{3} 
+
+This paper is organized as follows: Section\ref{sec:Medical Image
+  Segmentation} introduces the medical image segmentation evolution
+addressing traditional and deep learning approaches. Discussion about
+related works are presented in Section 3. %~\ref{3}
 
 \section{Medical Image Segmentation}\label{sec:Medical Image Segmentation}
 
-Medical image segmentation plays a pivotal role in clinical diagnostics and treatment planning, enabling precise delineation of anatomical structures and pathological regions~\cite{Berrezueta2025}. The field has undergone significant evolution, transitioning from traditional methods to deep learning-based approaches, and more recently, to foundation models capable of generalizing across diverse tasks and modalities.
+% Search string for zero shot learning in pectoral muscle segmentation
+% ( "zero-shot learning" OR "ZSL" OR "foundation model" OR "segment
+% anything" OR "SAM" OR "MedSAM" ) AND ( "pectoral muscle" OR
+% "pectoralis" OR "chest muscle" ) AND ( "segmentation" OR
+% "delineation" OR "extraction" OR "detection" ) AND ( "mammography"
+% OR "mammogram" OR "mammographic" OR "breast imaging" ) AND ( "MLO"
+% OR "mediolateral oblique" OR "medio-lateral oblique" OR "oblique
+% view" ) AND ( "breast cancer" OR "mammary carcinoma" OR "breast
+% carcinoma" )
+
+Medical image segmentation plays a pivotal role in clinical
+diagnostics and treatment planning, enabling precise delineation of
+anatomical structures and pathological
+regions~\cite{Berrezueta2025}. The field has undergone significant
+evolution, transitioning from traditional methods to deep
+learning-based approaches, and more recently, to foundation models
+capable of generalizing across diverse tasks and modalities.
 
 \subsection{Traditional and Deep Learning-Based Methods}
 
-Early segmentation techniques relied on manual feature extraction or handcrafted algorithms such as thresholding, edge detection, and morphological operations~\cite{Yao2023}. While interpretable, these methods often struggled with the complexity and variability of medical images. The advent of deep learning, particularly convolutional neural networks (CNNs), marked a paradigm shift. Architectures such as U-Net~\cite{RonnebergerFB15} and its variants (e.g., UNet++~\cite{zhou2018unetplusplus}) became the state-of-the-art (SOTA) for medical image segmentation due to their ability to learn hierarchical features and preserve spatial context through encoder-decoder structures with skip connections.
+Early segmentation techniques relied on manual feature extraction or
+handcrafted algorithms such as thresholding, edge detection, and
+morphological operations~\cite{Yao2023}. While interpretable, these
+methods often struggled with the complexity and variability of medical
+images. The advent of \ac{DL}, particularly \ac{CNNs}, marked a
+paradigm shift. Architectures such as U-Net~\cite{RonnebergerFB15} and
+its variants (e.g., UNet++~\cite{zhou2018unetplusplus}) became the
+\ac{SOTA} for medical image segmentation due to their
+ability to learn hierarchical features and preserve spatial context
+through encoder-decoder structures with skip connections.
 
-Despite their success, CNN-based models are limited in capturing long-range dependencies due to the inductive biases of convolutional operations. This limitation spurred the integration of Transformer architectures~\cite{vaswani2017attention}, which leverage self-attention mechanisms to model global context. Models like TransUNet~\cite{chen2021transunet} and Swin-Unet~\cite{cao2022swinunet} combined the local feature extraction of CNNs with the global attention mechanism of Transformers, achieving SOTA performance on various medical segmentation tasks~\cite{yao2023review}.
+
+Despite their success, \ac{CNN}-based models are limited in capturing
+long-range dependencies due to the inductive biases of convolutional
+operations. This limitation encouraged the development of Transformer
+architectures~\cite{vaswani2017attention}, which leverage
+self-attention mechanisms to model global context. Models like
+TransUNet~\cite{chen2021transunet} and
+Swin-Unet~\cite{cao2022swinunet} combined the local feature extraction
+of \ac{CNNs} with the global attention mechanism of Transformers, achieving
+\ac{SOTA} performance on various medical segmentation
+tasks~\cite{yao2023review}.
+
 
 \subsection{Foundational Models for Image Segmentation}
 
-The introduction of the Segment Anything Model (SAM)~\cite{kirillov2023segment} represented a breakthrough in natural image segmentation, offering remarkable zero-shot generalization capabilities through prompt-based segmentation. However, its direct application to medical images proved suboptimal due to fundamental differences between natural and medical imaging domains, such as low contrast, ambiguous boundaries, and modality-specific artifacts~\cite{Ma2024,Berrezueta2025}.
+The introduction of the \ac{SAM}~\cite{Kirillov2023}
+represented a breakthrough in natural image segmentation, offering
+remarkable zero-shot generalization capabilities through prompt-based
+segmentation. However, its direct application to medical images proved
+suboptimal due to fundamental differences between natural and medical
+imaging domains (e.g. low contrast, ambiguous boundaries, and
+modality-specific artifacts)~\cite{Ma2024,Berrezueta2025}.
 
-To address these challenges, several medical adaptations of SAM were developed. MedSAM~\cite{Ma2024} was among the first foundation models tailored for medical imaging, fine-tuned on a large-scale dataset comprising over 1.57 million image-mask pairs across 10 modalities and 30 cancer types. It demonstrated superior performance compared to both vanilla SAM and modality-specific specialist models, highlighting the potential of large-scale domain-specific fine-tuning.
+To address these challenges, several medical adaptations of \ac{SAM} were
+developed. \ac{MedSAM}~\cite{Ma2024} was among the first foundation models
+tailored for medical imaging, fine-tuned on a large-scale dataset
+comprising over 1.57 million image-mask pairs across 10 modalities and
+30 cancer types. It demonstrated superior performance compared to both
+vanilla SAM and modality-specific specialist models, highlighting the
+potential of large-scale domain-specific fine-tuning.
 
-Further innovations followed, such as MedSAM-2~\cite{zhu2024medsam2}, which extended SAM’s capabilities to 3D medical images by treating volumetric data as video sequences and introducing a \emph{self-sorting memory bank} to handle unordered slices. This approach enabled \emph{one-prompt segmentation}, allowing the model to generalize from a single prompt to segment similar structures across multiple images without temporal relationships. Such advances significantly reduce the need for extensive user interaction, making these models more practical for clinical deployment.
+Further innovations followed, such as MedSAM-2~\cite{Zhu2024}, which
+extended SAM’s capabilities to 3D medical images by treating
+volumetric data as video sequences and introducing a
+\emph{self-sorting memory bank} to handle unordered slices. This
+approach enabled \emph{one-prompt segmentation}, allowing the model to
+generalize from a single prompt to segment similar structures across
+multiple images without temporal relationships. Such advances
+significantly reduce the need for extensive user interaction, making
+these models more practical for clinical deployment.
 
 %\begin{longtable}
 % \begin{table}
