@@ -1,0 +1,799 @@
+% ==================== SLR ====================
+
+
+% ==================== Thesis Plan ====================
+@article{GLOBOCAN,
+	title        = {{Global cancer statistics 2018: GLOBOCAN estimates of incidence and mortality worldwide for 36 cancers in 185 countries}},
+	author       = {Bray, Freddie and Ferlay, Jacques and Soerjomataram, Isabelle and Siegel, Rebecca L. and Torre, Lindsey A. and Jemal, Ahmedin},
+	year         = 2018,
+	journal      = {CA: A Cancer Journal for Clinicians},
+	publisher    = {American Cancer Society},
+	volume       = 68,
+	number       = 6,
+	pages        = {394--424},
+	doi          = {10.3322/caac.21492},
+	issn         = {00079235},
+	url          = {http://doi.wiley.com/10.3322/caac.21492},
+	file         = {:home/leninml/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Bray et al. - 2018 - Global cancer statistics 2018 GLOBOCAN estimates of incidence and mortality worldwide for 36 cancers in 185 countri.pdf:pdf},
+	keywords     = {cancer,epidemiology,incidence,survival}
+}
+vvv
+
+
+
+% ==================== Datasets ====================
+@article{Silva2014,
+	title        = {A new database for breast research with infrared image},
+	author       = {L. F. Silva and D. C.M. Saade and G. O. Sequeiros and A. C. Silva and A. C. Paiva and R. S. Bravo and A. Conci},
+	year         = 2014,
+	journal      = {Journal of Medical Imaging and Health Informatics},
+	publisher    = {American Scientific Publishers},
+	volume       = 4,
+	pages        = {92--100},
+	doi          = {10.1166/jmihi.2014.1226},
+	issn         = 21567026,
+	abstract     = {Breast cancer has been responsible for several deaths among women around the world. Its causes are unknown, but early diagnosis increases the cure chances of the patient. Breast infrared image has been studied and identified as a potential screening tool for the early cancer detection. However, two topics have retarded the progress of the researches: The absence of a unique acquisition protocol and a public bank of these images. We have revised infrared image acquisition protocols and, based on them, we have reproduced four protocols which have been tested on volunteers of our laboratory. After tests and observations of these protocols, we have suggested a new dynamic protocol to be used as a standard. Furthermore, this paper describes a new infrared image database containing additional breast exams and clinical data of patients of our university hospital. This can be accessed online for free and, presents several search options, including the image content similarity. We believe that such database will be particularly useful to evaluate the potential contribution of the infrared images to breast disease detection. Copyright © 2014 American Scientific Publishers All rights reserved.},
+	issue        = 1,
+	keywords     = {Acquisition protocols,Breast cancer,Breast disease detection,Breast research,Image database,Information retrieval,Infrared imaging,Pattern recognition}
+}
+
+
+@article{VisualLab2014,
+	title        = {Captura de imagens térmicas no HUAP (Rotina diária e protocolos)},
+	author       = {Visual-Lab},
+	year         = 2014,
+	institution  = {Universidade Federal Fluminense},
+	url          = {https://visual.ic.uff.br/proeng/protocolo.pdf}
+}
+
+
+% ======= mammography datasets ===========
+%%%%%%% MUST BE REVIEWED %%%%%%%
+
+@article{SawyerLee2016,
+  author  = {Sawyer-Lee, R. and Gimenez, F. and Hoogi, A. and Rubin, D.},
+  title   = {Curated Breast Imaging Subset of DDSM},
+  journal = {The Cancer Imaging Archive},
+  year    = {2016}
+}
+
+@misc{MammoBench2023,
+  author       = {Mammography AI Consortium},
+  title        = {MAMMO-Bench: A Multi-Center Benchmark for Mammography AI},
+  year         = {2023},
+  note         = {Proprietary dataset}
+}
+
+@article{Nguyen2022,
+  author  = {Nguyen, H.T. and Nguyen, H.Q. and Pham, H.H. and Lam, K. and Le, L.T. and Dao, M. and Vu, V.},
+  title   = {VinDr-Mammo: A Large-Scale Benchmark Dataset for Computer-Aided Diagnosis in Full-Field Digital Mammography},
+  journal = {Scientific Data},
+  year    = {2022},
+  volume  = {9},
+  number  = {1},
+  pages   = {305}
+}
+
+@misc{OCCICAM2021,
+  author       = {Ontario Cancer Care and Imaging Association},
+  title        = {OCCICAM Mammography Database},
+  year         = {2021},
+  note         = {Proprietary dataset for research purposes}
+}
+
+% ==================== Literature Review Methodology ====================
+@article{kitchenham2009systematic,
+	title        = {Systematic literature reviews in software engineering--a systematic literature review},
+	author       = {Kitchenham, Barbara and Brereton, O Pearl and Budgen, David and Turner, Mark and Bailey, John and Linkman, Stephen},
+	year         = 2009,
+	journal      = {Information and software technology},
+	publisher    = {Elsevier},
+	volume       = 51,
+	number       = 1,
+	pages        = {7--15}
+}
+
+% ==================== FrameWorks ====================
+@misc{chollet2015keras,
+	title        = {Keras},
+	author       = {Chollet, Fran\c{c}ois and others},
+	year         = 2015,
+	howpublished = {\url{https://keras.io}}
+}
+
+
+% xxxxxxxxxxxxxxxxxxCSCI-RTPCxxxxxxxxxxxxxxxxxx
+
+@article{RAMPUN201728,
+	title = {Fully automated breast boundary and pectoral muscle segmentation in mammograms},
+	journal = {Artificial Intelligence in Medicine},
+	volume = {79},
+	pages = {28-41},
+	year = {2017},
+	issn = {0933-3657},
+	doi = {https://doi.org/10.1016/j.artmed.2017.06.001},
+	url = {https://www.sciencedirect.com/science/article/pii/S0933365717301471},
+	author = {Andrik Rampun and Philip J. Morrow and Bryan W. Scotney and John Winder},
+	keywords = {Breast mammography, Breast segmentation, Pectoral segmentation, Computer aided diagnosis},
+	abstract = {Breast and pectoral muscle segmentation is an essential pre-processing step for the subsequent processes in computer aided diagnosis (CAD) systems. Estimating the breast and pectoral boundaries is a difficult task especially in mammograms due to artifacts, homogeneity between the pectoral and breast regions, and low contrast along the skin-air boundary. In this paper, a breast boundary and pectoral muscle segmentation method in mammograms is proposed. For breast boundary estimation, we determine the initial breast boundary via thresholding and employ Active Contour Models without edges to search for the actual boundary. A post-processing technique is proposed to correct the overestimated boundary caused by artifacts. The pectoral muscle boundary is estimated using Canny edge detection and a pre-processing technique is proposed to remove noisy edges. Subsequently, we identify five edge features to find the edge that has the highest probability of being the initial pectoral contour and search for the actual boundary via contour growing. The segmentation results for the proposed method are compared with manual segmentations using 322, 208 and 100mammograms from the Mammographic Image Analysis Society (MIAS), INBreast and Breast Cancer Digital Repository (BCDR) databases, respectively. Experimental results show that the breast boundary and pectoral muscle estimation methods achieved dice similarity coefficients of 98.8\% and 97.8\% (MIAS), 98.9\% and 89.6\% (INBreast) and 99.2\% and 91.9\% (BCDR), respectively.}
+}
+
+@misc{ACS2019,
+	author       = {{American Cancer Society}},
+	title        = {Breast Cancer Facts \& Figures 2019–2020},
+	year         = {2019},
+	publisher    = {American Cancer Society},
+	pages        = {1--44},
+	address      = {Atlanta, GA},
+	note         = {Accessed from https://www.cancer.org}
+}
+
+@article{ZHANG2025287,
+	title = {Global burden of female breast cancer: new estimates in 2022, temporal trend and future projections up to 2050 based on the latest release from GLOBOCAN},
+	journal = {Journal of the National Cancer Center},
+	volume = {5},
+	number = {3},
+	pages = {287-296},
+	year = {2025},
+	issn = {2667-0054},
+	doi = {https://doi.org/10.1016/j.jncc.2025.02.002},
+	url = {https://www.sciencedirect.com/science/article/pii/S2667005425000225},
+	author = {Yunmeng Zhang and Yuting Ji and Siwen Liu and Jingjing Li and Jie Wu and Qianyun Jin and Xiaomin Liu and Hongyuan Duan and Zhuowei Feng and Ya Liu and Yacong Zhang and Zhangyan Lyu and Fangfang Song and Fengju Song and Lei Yang and Hong Liu and Yubei Huang},
+	keywords = {Breast cancer, Mortality, Incidence, Trend: early onset, Human development index},
+	abstract = {Background
+	Breast cancer (BC) incidence and mortality vary significantly across countries, highlighting the need to update the global burden of female BC, including current trends and future projections.
+	Methods
+	Data were sourced from GLOBOCAN 2022, including estimated new cases and deaths from BC across 21 United Nation (UN) regions and 185 countries, the age-standardized incidence rate (ASIR) and mortality rate (ASMR), the estimated annual percentage changes (EAPC), and demographic projections through 2050. The region-specific and country-specific BC burden for women of all ages and for young women (< 40 years old) was reorganized and re-plotted to highlight subgroup differences. Linear regression was used to explore the link between ASIR/ASMR and the human development index (HDI). Transitioning countries referred to those with low or medium HDI, while transitioned countries were those with high or very high HDI.
+	Results
+	In 2022, an estimated 2.3 million new BC cases and 666,000 BC-related deaths occurred globally, accounting for 23.8 \% and 15.4 \% of all cancer cases and deaths in women, respectively. Regionally, Eastern Asia reported the highest number of cases (480,019, ASIR: 37.54/100,000), while South-Central Asia had the highest number of deaths (135,348, ASMR: 13.41/100,000). At the country level, China had the highest number of cases due to its large population, whereas India reported the highest number of deaths. ASIR for both overall and early-onset BC increased with HDI, while ASMR for early-onset BC decreased with HDI (P < 0.05). Overall BC showed an increasing trend in ASIR during 2003–2015 (EAPC: 0.92 \%) and a decreasing trend in ASMR during 2006–2016 (EAPC:-1.06 \%). Early-onset BC showed a more significant rise in ASIR (EAPCs: 1.4 \%) and a slight increase in ASMR (EAPCs: 0.16 \%). If national rates remain stable, BC cases and deaths will increase by 54.7 \% and 70.9 \%, respectively, by 2050. Notably, increased early-onset BC cases are only observed in transitioning countries, while decreased cases are seen in transitioned countries.
+	Conclusions
+	Breast cancer remains the leading cancer burden in women, particularly in transitioning countries. Addressing this growing burden requires urgent integration of primary prevention, early detection and high-quality treatment through multi-sectoral collaboration.}
+}
+
+@article{Fenton2014,
+	author       = {Fenton, Joshua J. and Zhu, Weiwei and Balch, Steven and Smith-Bindman, Rebecca and Fishman, Paul and Hubbard, Rebecca A.},
+	title        = {Distinguishing Screening From Diagnostic Mammograms Using Medicare Claims Data},
+	journal      = {Medical Care},
+	volume       = {52},
+	number       = {7},
+	pages        = {e44--e51},
+	year         = {2014},
+	month        = {July},
+	doi          = {10.1097/MLR.0b013e318269e0f5},
+	publisher    = {Lippincott Williams & Wilkins}
+}
+
+@article{Moreira2012,
+	author    = {Moreira, Inês C. and Amaral, Igor and Domingues, Inês and Cardoso, António and Cardoso, Maria João and Cardoso, Jaime S.},
+	title     = {{INbreast: Toward a Full-field Digital Mammographic Database}},
+	journal   = {Academic Radiology},
+	volume    = {19},
+	number    = {2},
+	pages     = {236--248},
+	year      = {2012},
+	month     = {February},
+	publisher = {Elsevier},
+	doi       = {10.1016/j.acra.2011.09.014},
+	issn      = {1076-6332},
+	url       = {https://doi.org/10.1016/j.acra.2011.09.014}
+}
+
+@misc{MIAS1994,
+	author       = {{Mammographic Image Analysis Society}},
+	title        = {{MIAS Database (Mini-MIAS): Mammographic Image Analysis Society Digital Mammogram Database}},
+	howpublished = {\url{http://peipa.essex.ac.uk/info/mias.html}},
+	year         = {1994},
+	note         = {Accessed via PEIPA web site; 322 mammographic images (161 patients), MLO view; PGM format; includes breast density, abnormality type and severity, center‑coordinates and radius of abnormalities in data annotations},
+}
+
+@misc{mathworks2023sam,
+    author = {MathWorks},
+    title = {Segment Objects in Interactive ROI Using Segment Anything Model - MATLAB \& Simulink},
+    year = {2023},
+    howpublished = {\url{https://la.mathworks.com/help/images/interactively-segment-image-using-sam.html}},
+    note = {Accessed: 2025-09-13}
+}
+
+@article{khan2023fast,
+  author = {Khan, Shoaib Siddique and Khan, Muhammad and Alharbi, Yasser},
+  title = {Fast Local Laplacian Filter Based on Modified Laplacian through Bilateral Filter for Coronary Angiography Medical Imaging Enhancement},
+  journal = {Algorithms},
+  volume = {16},
+  number = {12},
+  pages = {531},
+  year = {2023},
+  doi = {10.3390/a16120531}
+}
+
+@article{Shukla2024,
+	title        = {Adaptive decomposition with guided filtering and Laplacian pyramid-based image fusion method for medical applications},
+	author       = {Shukla, Nirdesh and Sood, Meenakshi and Kumar, Amod and Choudhary, Gaurav},
+	year         = 2024,
+	month        = {08},
+	day          = {01},
+	journal      = {Discover Applied Sciences},
+	volume       = 6,
+	number       = 8,
+	pages        = 423,
+	doi          = {10.1007/s42452-024-06111-w},
+	issn         = {3004-9261},
+	url          = {https://doi.org/10.1007/s42452-024-06111-w},
+	abstract     = {Medical image fusion enhances diagnostic precision and facilitates clinical decision-making by integrating information from multiple medical imaging modalities. However, this field is still challenging as the output integrated image, whether from spatial or transform domain algorithms, may suffer from drawbacks such as low contrast, blurring effect, noise, over smoothness, etc. Also, some existing novel works are restricted to specific image datasets. So, to address such issues, a new multi-modal medical image fusion approach based on the advantageous effects of multiple transforms has been introduced in the present work. For this, we use an adaptive image decomposition tool known as Hilbert vibration decomposition (HVD). HVD decomposes an image into different energy components, and after a proper decomposition of the source images, the desirable features of the decomposed components are then passed through a guided filter (GF) for edge preservation. Then, the Laplacian pyramid integrates these filtered parts using the choose max rule. Since HVD offers better spatial resolution and is independent of fixed cut-off frequencies like other transforms, the subjective outputs from this method for different publicly available medical image datasets are clear and better than the previously 20 state-of-the-art published results. Moreover, the obtained values of different objective evaluation metrics such as information entropy (IE): 7.6943, 5.9737, mean: 110.6453, 54.6346, standard deviation (SD): 85.5376, 61.8129, average gradient (AG): 109.2818, 64.6451, spatial frequency (SF): 0.1475, 0.1100, and edge metric (QHK/S): 0.5400, 0.6511 demonstrate its comparability to others. The algorithm's running period of just 0.161244 s also indicates high computational efficiency.}
+}
+
+
+
+
+@incollection{WOODS2012223,
+	title        = {Chapter 7 - Image Enhancement and Analysis},
+	author       = {John W. Woods},
+	year         = 2012,
+	booktitle    = {Multidimensional Signal, Image, and Video Processing and Coding (Second Edition)},
+	publisher    = {Academic Press},
+	address      = {Boston},
+	pages        = {223--256},
+	doi          = {https://doi.org/10.1016/B978-0-12-381420-3.00007-2},
+	isbn         = {978-0-12-381420-3},
+	url          = {https://www.sciencedirect.com/science/article/pii/B9780123814203000072},
+	editor       = {John W. Woods},
+	edition      = {Second Edition},
+	keywords     = {enhancement, analysis, edge detection, segmentation, region growing, template matching},
+	abstract     = {Publisher Summary This chapter deals with the basic image processing filters: box, Prewitt, and Sobel, and employs them for simple image enhancement. It also includes basic image analysis including edge detection and linking, image segmentation, object detection, and template matching. Image enhancement is taken to mean improving the image, such as less noise, sharp edges, and good contrast. Image analysis means the extraction of structure and other useful information from an image. This chapter then shows detection of lines and edges and discusses the edge-linking problem that occurs when the located edge pixels on an object boundary have gaps. It then looks at the problems of image segmentation. Various methods are developed to segment the images directly using similarity of gray-level (and color) values and local textures, such as simple manual thresholding and K-means algorithm. Segmented regions may be disconnected, so a segmentation technique called region growing is described that uses pixel location giving connected regions. Furthermore, this chapter considers the problem of detecting objects in an image.}
+}
+
+
+@INPROCEEDINGS{7314222,
+
+  author={Fiallos, Carlos B. and Pérez, Maria G. and Conci, Aura and Andaluz, Víctor H.},
+
+  booktitle={2015 International Conference on Systems, Signals and Image Processing (IWSSIP)}, 
+
+  title={Automatic detection of injuries in mammograms using image analysis techniques}, 
+
+  year={2015},
+
+  volume={},
+
+  number={},
+
+  pages={245-248},
+
+  keywords={Discrete wavelet transforms;Mammography;Image segmentation;Feature extraction;Breast;ROI;Microcalcification;Mammographic images;Image segmentation;Texture descriptor},
+
+  doi={10.1109/IWSSIP.2015.7314222}}
+
+% ===== Image Segmentation Section ======
+@inproceedings{Berrezueta2025,
+	title        = {Foundation Models for Medical Image Segmentation: A Literature Review},
+	author       = {Said Berrezueta and Maria Baldeon-Calisto and Danny Navarrete and Noel Perez-Perez and Ricardo Flores-Moyano and Daniel Riofrio and Diego Benitez},
+	year         = 2025,
+	booktitle    = {ISDFS 2025 - 13th International Symposium on Digital Forensics and Security},
+	publisher    = {Institute of Electrical and Electronics Engineers Inc.},
+	doi          = {10.1109/ISDFS65363.2025.11012116},
+	isbn         = 9798331509934,
+	abstract     = {Medical image segmentation is an important component of medical image analysis, allowing precise delineation of regions of interest for accurate diagnosis and treatment planning. Deep learning models have traditionally dominated this field; however, their reliance on large task-specific datasets and limited generalization capabilities present significant challenges. The emergence of foundation models (FMs), particularly the Segment Anything Model (SAM), has introduced a new paradigm by enabling vision FMs to perform diverse segmentation tasks without the need for re-training. This study presents a system-atic literature review of FMs for medical image segmentation, synthesizing 27 papers published between 2023 and 2024. The review examines three key aspects: the development of novel FMs designed for medical image segmentation, adaptations of SAM for medical imaging applications, and primary challenges asso-ciated with implementing FMs in this domain. By consolidating recent advances and limitations, this study provides an updated perspective on the role of FMs in medical-image segmentation.},
+	keywords     = {Computer Vision,FMs,Foundation models,Medical Image Segmentation,SAM,Segment Anything Model}
+}
+
+@article{Yao2023,
+	title        = {From CNN to Transformer: A Review of Medical Image Segmentation Models},
+	author       = {Wenjian Yao and Jiajun Bai and Wei Liao and Yuheng Chen and Mengjuan Liu and Yao Xie},
+	year         = 2023,
+	month        = 8,
+	journal      = {Journal of Imaging Informatics in Medicine},
+	publisher    = {Springer Nature},
+	volume       = 37,
+	pages        = {1529--1547},
+	doi          = {10.1007/s10278-024-00981-7},
+	issn         = 29482933,
+	url          = {https://arxiv.org/pdf/2308.05305},
+	abstract     = {Medical image segmentation is an important step in medical image analysis, especially as a crucial prerequisite for efficient disease diagnosis and treatment. The use of deep learning for image segmentation has become a prevalent trend. The widely adopted approach currently is U-Net and its variants. Additionally, with the remarkable success of pre-trained models in natural language processing tasks, transformer-based models like TransUNet have achieved desirable performance on multiple medical image segmentation datasets. In this paper, we conduct a survey of the most representative four medical image segmentation models in recent years. We theoretically analyze the characteristics of these models and quantitatively evaluate their performance on two benchmark datasets (i.e., Tuberculosis Chest X-rays and ovarian tumors). Finally, we discuss the main challenges and future trends in medical image segmentation. Our work can assist researchers in the related field to quickly establish medical segmentation models tailored to specific regions.},
+	issue        = 4,
+	keywords     = {CNN,Deep learning,Medical image segmentation,Transformer,U-Net}
+}
+@inproceedings{Zou2023,
+	title        = {Segment Everything Everywhere All at Once},
+	author       = {Zou, Xueyan and Yang, Jianwei and Zhang, Hao and Li, Feng and Li, Linjie and Wang, Jianfeng and Wang, Lijuan and Gao, Jianfeng and Lee, Yong Jae},
+	year         = 2023,
+	booktitle    = {Advances in Neural Information Processing Systems},
+	publisher    = {Curran Associates, Inc.},
+	volume       = 36,
+	pages        = {19769--19782},
+	url          = {https://proceedings.neurips.cc/paper_files/paper/2023/file/3ef61f7e4afacf9a2c5b71c726172b86-Paper-Conference.pdf},
+	editor       = {A. Oh and T. Naumann and A. Globerson and K. Saenko and M. Hardt and S. Levine}
+}
+
+@article{Ravi2024,
+	title        = {SAM 2: Segment Anything in Images and Videos},
+	author       = {Nikhila Ravi and Valentin Gabeur and Yuan-Ting Hu and Ronghang Hu and Chaitanya Ryali and Tengyu Ma and Haitham Khedr and Roman Rädle and Chloe Rolland and Laura Gustafson and Eric Mintun and Junting Pan and Kalyan Vasudev Alwala and Nicolas Carion and Chao-Yuan Wu and Ross Girshick and Piotr Dollár and Christoph Feichtenhofer},
+	year         = 2024,
+	month        = 10,
+	url          = {http://arxiv.org/abs/2408.00714},
+	abstract     = {We present Segment Anything Model 2 (SAM 2), a foundation model towards solving promptable visual segmentation in images and videos. We build a data engine, which improves model and data via user interaction, to collect the largest video segmentation dataset to date. Our model is a simple transformer architecture with streaming memory for real-time video processing. SAM 2 trained on our data provides strong performance across a wide range of tasks. In video segmentation, we observe better accuracy, using 3x fewer interactions than prior approaches. In image segmentation, our model is more accurate and 6x faster than the Segment Anything Model (SAM). We believe that our data, model, and insights will serve as a significant milestone for video segmentation and related perception tasks. We are releasing our main model, dataset, as well as code for model training and our demo.}
+}
+
+@article{RonnebergerFB15,
+	title        = {U-Net: Convolutional Networks for Biomedical Image Segmentation},
+	author       = {Olaf Ronneberger and Philipp Fischer and Thomas Brox},
+	year         = 2015,
+	journal      = {CoRR},
+	volume       = {abs/1505.04597},
+	url          = {http://arxiv.org/abs/1505.04597},
+	eprinttype   = {arXiv},
+	eprint       = {1505.04597},
+	timestamp    = {Mon, 13 Aug 2018 16:46:52 +0200},
+	biburl       = {https://dblp.org/rec/journals/corr/RonnebergerFB15.bib},
+	bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@inproceedings{zhou2018unetplusplus,
+	title        = {Unet++: A nested u-net architecture for medical image segmentation},
+	author       = {Zhou, Zongwei and Siddiquee, Md Mahfuzur Rahman and Tajbakhsh, Nima and Liang, Jianming},
+	year         = 2018,
+	booktitle    = {Deep Learning in Medical Image Analysis and Multimodal Learning for Clinical Decision Support},
+	pages        = {3--11},
+	organization = {Springer}
+}
+@article{vaswani2017attention,
+	title        = {Attention is all you need},
+	author       = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, {\L}ukasz and Polosukhin, Illia},
+	year         = 2017,
+	journal      = {Advances in neural information processing systems},
+	volume       = 30
+}
+@article{chen2021transunet,
+	title        = {Transunet: Transformers make strong encoders for medical image segmentation},
+	author       = {Chen, Jieneng and Lu, Yongyi and Yu, Qihang and Luo, Xiangde and Adeli, Ehsan and Wang, Yan and Lu, Le and Yuille, Alan L and Zhou, Yuyin},
+	year         = 2021,
+	journal      = {arXiv preprint arXiv:2102.04306}
+}
+@inproceedings{cao2022swinunet,
+	title        = {Swin-unet: Unet-like pure transformer for medical image segmentation},
+	author       = {Cao, Hu and Wang, Yueyue and Chen, Joy and Jiang, Dongsheng and Zhang, Xiaopeng and Tian, Qi and Wang, Manning},
+	year         = 2022,
+	booktitle    = {European Conference on Computer Vision},
+	pages        = {205--218},
+	organization = {Springer}
+}
+
+
+
+
+
+
+@article{Sharif_2024,
+   title={Two-Stage Deep Denoising With Self-Guided Noise Attention for Multimodal Medical Images},
+   volume={8},
+   ISSN={2469-7303},
+   url={http://dx.doi.org/10.1109/TRPMS.2024.3380090},
+   DOI={10.1109/trpms.2024.3380090},
+   number={5},
+   journal={IEEE Transactions on Radiation and Plasma Medical Sciences},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Sharif, S. M. A. and Naqvi, Rizwan Ali and Loh, Woong-Kee},
+   year={2024},
+   month=may, pages={521–531} }
+
+
+@article{Gangwar2025,
+  author = {Gangwar, Shivam and Devi, Reeta and Mat Isa, Nor Ashidi},
+  title = {Optimized exposer region-based modified adaptive histogram equalization method for contrast enhancement in CXR imaging},
+  journal = {Scientific Reports},
+  volume = {15},
+  number = {1},
+  pages = {6693},
+  year = {2025},
+  month = {feb},
+  day = {25},
+  abstract = {In medical imaging, low-contrast chest X-ray (CXR) images may fail to provide adequate information for accurate visual interpretation and disease diagnosis. Conventional contrast enhancement techniques, such as histogram equalization, often introduce intensity shifts and loss of fine details. This study presents an advanced Exposure Region-Based Modified Adaptive Histogram Equalization (ERBMAHE) method, further optimized using Particle Swarm Optimization (PSO) to enhance contrast, preserve brightness, and strengthen fine details. The ERBMAHE method segments CXR images into underexposed, well-exposed, and overexposed regions using the 9IEC algorithm. The well-exposed region is further divided, generating five histograms. Each region undergoes adaptive contrast enhancement via a novel weighted probability density function (PDF) and power-law transformation to ensure balanced enhancement across different exposure levels. The PSO algorithm is then employed to optimize power-law parameters, further refining contrast enhancement and illumination uniformity while maintaining the natural appearance of medical images. The PSO-ERBMAHE method was tested on 600 Kaggle CXR images and compared against six state-of-the-art techniques. It achieved a superior peak signal-to-noise ratio (PSNR = 31.10 dB), entropy (7.48), feature similarity index (FSIM = 0.98), tenengrad function (TEN = 0.19), quality-aware relative contrast measure (QRCM = 0.10), and contrast ratio, while maintaining a low absolute mean brightness error (AMBE = 0.10). The method effectively enhanced image contrast while preserving brightness and visual quality, as confirmed by medical expert evaluations. The proposed PSO-ERBMAHE method delivers high-quality contrast enhancement in medical imaging, ensuring better visibility of critical anatomical features. By strengthening fine details, maintaining mean brightness, and improving computational efficiency, this technique enhances disease examination and diagnosis, reducing misinterpretation risks and improving clinical decision-making.},
+  issn = {2045-2322},
+  doi = {10.1038/s41598-025-90876-6},
+  url = {https://doi.org/10.1038/s41598-025-90876-6}
+}
+
+@misc{matlab_imbinarize,
+  author       = {MathWorks},
+  title        = {imbinarize - MATLAB Function Documentation},
+  year         = {2025},
+  url          = {https://la.mathworks.com/search.html?c%5B%5D=entire_site&q=imbinarize&page=1},
+  note         = {Accessed: 2025-09-15}
+}
+
+@misc{oza_figshare,
+  author       = {Parita Oza},
+  title        = {Parita Oza on Figshare},
+  year         = {2025},
+  url          = {https://figshare.com/authors/Parita_Oza/17353984},
+  note         = {Accessed: 2025-09-15}
+}
+
+@misc{maini2010comprehensivereviewimageenhancement,
+      title={A Comprehensive Review of Image Enhancement Techniques}, 
+      author={Raman Maini and Himanshu Aggarwal},
+      year={2010},
+      eprint={1003.4053},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/1003.4053}, 
+}
+@article{Qi2022,
+  author    = {Qi, Yunliang and Yang, Zhen and Sun, Wenhao and Lou, Meng and Lian, Jing and Zhao, Wenwei and Deng, Xiangyu and Ma, Yide},
+  title     = {A Comprehensive Overview of Image Enhancement Techniques},
+  journal   = {Archives of Computational Methods in Engineering},
+  volume    = {29},
+  number    = {1},
+  pages     = {583--607},
+  year      = {2022},
+  publisher = {Springer},
+  doi       = {10.1007/s11831-021-09587-6},
+  url       = {https://doi.org/10.1007/s11831-021-09587-6},
+  issn      = {1886-1784}
+}
+
+
+@article{oza2024dmiddataset,
+  title        = {Digital mammography dataset for breast cancer diagnosis research (DMID) with breast mass segmentation analysis},
+  author       = {Oza, Prashant and Oza, Urmila and Oza, Radhika and Patel, Ankit and Patel, Bhargav and Patel, Dharmendra and Patel, Jignesh and Patel, Manish and Patel, Mehul and Patel, Nishant and Patel, Shailesh and Patel, Vikas},
+  journal      = {Biomedical Engineering Letters},
+  volume       = {14},
+  number       = {2},
+  pages        = {317--330},
+  year         = {2024},
+  publisher    = {Springer},
+  doi          = {10.1007/s13534-023-00339-y},
+  url          = {https://doi.org/10.1007/s13534-023-00339-y}
+}
+
+@article{Bora2016,
+  author    = {Vibha Bafna Bora and Ashwin G. Kothari and Avinash G. Keskar},
+  title     = {Robust Automatic Pectoral Muscle Segmentation from Mammograms Using Texture Gradient and Euclidean Distance Regression},
+  journal   = {Journal of Digital Imaging},
+  year      = {2016},
+  volume    = {29},
+  number    = {1},
+  pages     = {115--125},
+  doi       = {10.1007/s10278-015-9813-5},
+  url       = {https://doi.org/10.1007/s10278-015-9813-5}
+}
+
+
+@article{Chen2024,
+  author    = {Simin Chen and Debbie L. Bennett and Graham A. Colditz and Shu Jiang},
+  title     = {Pectoral Muscle Removal in Mammogram Images: A Novel Approach for Improved Accuracy and Efficiency},
+  journal   = {Cancer Causes \& Control},
+  year      = {2024},
+  volume    = {35},
+  pages     = {185--191},
+  doi       = {10.1007/s10552-023-01781-0},
+  url       = {https://doi.org/10.1007/s10552-023-01781-0}
+}
+
+@article{Yu2022,
+  author    = {Xiang Yu and Shui{-}Hua Wang and Juan Manuel G{\'{o}}rriz and Xian{-}Wei Jiang and David S. Guttery and Yu{-}Dong Zhang},
+  title     = {PeMNet for Pectoral Muscle Segmentation},
+  journal   = {Biology},
+  year      = {2022},
+  volume    = {11},
+  number    = {1},
+  pages     = {134},
+  doi       = {10.3390/biology11010134},
+  url       = {https://doi.org/10.3390/biology11010134}
+}
+
+@inproceedings{Shah2015,
+  author    = {Hitiksha Shah},
+  title     = {Automatic Suppression of Pectoral Muscle in Digital Mammogram Using Triangular Mask},
+  booktitle = {Proceedings of the 1st International Conference on Advent Trends in Engineering, Science and Technology (ICATEST)},
+  year      = {2015},
+  pages     = {300--303},
+  publisher = {International Journal of Research in Advent Technology (Special Issue)},
+  doi       = {10.13140/RG.2.2.33656.39686},
+  url       = {https://doi.org/10.13140/RG.2.2.33656.39686}
+}
+
+@article{Torabi2024,
+  author    = {Fereshteh Torabi Jafroudi and Azadeh Kiani{-}Sarkaleh and Mahyar Nirouei},
+  title     = {Automatic Classification of Cancerous Masses in Digital Mammograms Using Curvelet Analysis and Hybrid Genetic Algorithm--Artificial Neural Network Model},
+  journal   = {Iranian Journal of Radiology},
+  year      = {2024},
+  volume    = {21},
+  number    = {2},
+  pages     = {e146102},
+  doi       = {10.5812/iranjradiol-146102},
+  url       = {https://doi.org/10.5812/iranjradiol-146102}
+}
+
+@article{AlKarawi2024,
+  author    = {Dhurgham Al{-}Karawi and Shakir Al{-}Zaidi and Khaled Ahmad Helael and Naser Obeidat and Abdulmajeed Mounzer Mouhsen and Tarek Ajam and Bashar A. Alshalabi and Mohamed Salman and Mohammed H. Ahmed},
+  title     = {A Review of Artificial Intelligence in Breast Imaging},
+  journal   = {Tomography},
+  year      = {2024},
+  volume    = {10},
+  number    = {5},
+  pages     = {705--726},
+  doi       = {10.3390/tomography10050055},
+  url       = {https://doi.org/10.3390/tomography10050055}
+}
+
+@incollection{Sharma2021,
+  author    = {K. Sharma and S. Mukherjee},
+  title     = {Fully Automated Digital Mammogram Segmentation},
+  booktitle = {Intelligent Computing and Applications},
+  editor    = {S. S. Dash and others},
+  year      = {2021},
+  publisher = {Springer Nature Singapore},
+  series    = {Advances in Intelligent Systems and Computing},
+  volume    = {1172},
+  pages     = {143--153},
+  doi       = {10.1007/978-981-15-5566-4_13},
+  url       = {https://doi.org/10.1007/978-981-15-5566-4_13}
+}
+
+
+@article{otsu1979,
+	title        = {A Threshold Selection Method from Gray-Level Histograms},
+	author       = {Otsu, Nobuyuki},
+	year         = 1979,
+	journal      = {IEEE Transactions on Systems, Man, and Cybernetics},
+	volume       = 9,
+	number       = 1,
+	pages        = {62--66},
+	doi          = {10.1109/TSMC.1979.4310076},
+	keywords     = {Histograms;Marine vehicles;Radar tracking;Least squares approximation;Surveillance;Target tracking;Gaussian distribution;Displays;Q measurement;Sea measurements}
+}
+
+
+
+
+
+@article{Yeghiazaryan2018,
+  author    = {Yeghiazaryan, Varduhi and Voiculescu, Irina},
+  title     = {Family of boundary overlap metrics for the evaluation of medical image segmentation},
+  journal   = {Journal of Medical Imaging (Bellingham)},
+  year      = {2018},
+  volume    = {5},
+  number    = {1},
+  pages     = {015006},
+  doi       = {10.1117/1.JMI.5.1.015006},
+  pmid      = {29487883},
+  pmcid     = {PMC5817231},
+  month     = jan,
+  note      = {Epub 2018 Feb 19}
+}
+
+¿Quieres que te lo adapte a un estilo específico (por ejemplo, APA, IEEE o Vancouver)?
+
+
+@ARTICLE{4781564,
+
+  author={Heimann, Tobias and van Ginneken, Bram and Styner, Martin A. and Arzhaeva, Yulia and Aurich, Volker and Bauer, Christian and Beck, Andreas and Becker, Christoph and Beichel, Reinhard and Bekes, GyÖrgy and Bello, Fernando and Binnig, Gerd and Bischof, Horst and Bornik, Alexander and Cashman, Peter M. M. and Chi, Ying and Cordova, AndrÉs and Dawant, Benoit M. and Fidrich, MÁrta and Furst, Jacob D. and Furukawa, Daisuke and Grenacher, Lars and Hornegger, Joachim and KainmÜller, Dagmar and Kitney, Richard I. and Kobatake, Hidefumi and Lamecker, Hans and Lange, Thomas and Lee, Jeongjin and Lennon, Brian and Li, Rui and Li, Senhu and Meinzer, Hans-Peter and Nemeth, GÁbor and Raicu, Daniela S. and Rau, Anne-Mareike and van Rikxoort, Eva M. and Rousson, MikaËl and Rusko, LÁszlÓ and Saddi, Kinda A. and Schmidt, GÜnter and Seghers, Dieter and Shimizu, Akinobu and Slagmolen, Pieter and Sorantin, Erich and Soza, Grzegorz and Susomboon, Ruchaneewan and Waite, Jonathan M. and Wimmer, Andreas and Wolf, Ivo},
+
+  journal={IEEE Transactions on Medical Imaging}, 
+
+  title={Comparison and Evaluation of Methods for Liver Segmentation From CT Datasets}, 
+
+  year={2009},
+
+  volume={28},
+
+  number={8},
+
+  pages={1251-1265},
+
+  keywords={Liver;Image segmentation;Computed tomography;Shape;Image databases;Training data;Testing;Knowledge based systems;Humans;Deformable models;Evaluation;liver;segmentation},
+
+  doi={10.1109/TMI.2009.2013851}}
+
+@Article{diagnostics14080848,
+AUTHOR = {Carriero, Alessandro and Groenhoff, Léon and Vologina, Elizaveta and Basile, Paola and Albera, Marco},
+TITLE = {Deep Learning in Breast Cancer Imaging: State of the Art and Recent Advancements in Early 2024},
+JOURNAL = {Diagnostics},
+VOLUME = {14},
+YEAR = {2024},
+NUMBER = {8},
+ARTICLE-NUMBER = {848},
+URL = {https://www.mdpi.com/2075-4418/14/8/848},
+PubMedID = {38667493},
+ISSN = {2075-4418},
+ABSTRACT = {The rapid advancement of artificial intelligence (AI) has significantly impacted various aspects of healthcare, particularly in the medical imaging field. This review focuses on recent developments in the application of deep learning (DL) techniques to breast cancer imaging. DL models, a subset of AI algorithms inspired by human brain architecture, have demonstrated remarkable success in analyzing complex medical images, enhancing diagnostic precision, and streamlining workflows. DL models have been applied to breast cancer diagnosis via mammography, ultrasonography, and magnetic resonance imaging. Furthermore, DL-based radiomic approaches may play a role in breast cancer risk assessment, prognosis prediction, and therapeutic response monitoring. Nevertheless, several challenges have limited the widespread adoption of AI techniques in clinical practice, emphasizing the importance of rigorous validation, interpretability, and technical considerations when implementing DL solutions. By examining fundamental concepts in DL techniques applied to medical imaging and synthesizing the latest advancements and trends, this narrative review aims to provide valuable and up-to-date insights for radiologists seeking to harness the power of AI in breast cancer care.},
+DOI = {10.3390/diagnostics14080848}
+}
+
+
+@article{Shen2018,
+  author    = {Shen, Rongbo and Yan, Kezhou and Xiao, Fen and Chang, Jia and Jiang, Cheng and Zhou, Ke},
+  title     = {Automatic Pectoral Muscle Region Segmentation in Mammograms Using Genetic Algorithm and Morphological Selection},
+  journal   = {Journal of Digital Imaging},
+  year      = {2018},
+  volume    = {31},
+  number    = {5},
+  pages     = {680--691},
+  doi       = {10.1007/s10278-018-0068-9},
+  url       = {https://doi.org/10.1007/s10278-018-0068-9},
+  issn      = {1618-727X},
+  abstract  = {In computer-aided diagnosis systems for breast mammography, the pectoral muscle region can easily cause a high false positive rate and misdiagnosis due to its similar texture and low contrast with breast parenchyma. Pectoral muscle region segmentation is a crucial pre-processing step to identify lesions, and accurate segmentation in poor-contrast mammograms is still a challenging task. In order to tackle this problem, a novel method is proposed to automatically segment pectoral muscle region in this paper. The proposed method combines genetic algorithm and morphological selection algorithm, incorporating four steps: pre-processing, genetic algorithm, morphological selection, and polynomial curve fitting. For the evaluation results on different databases, the proposed method achieves average FP rate and FN rate of 2.03 and 6.90\% (mini MIAS), 1.60 and 4.03\% (DDSM), and 2.42 and 13.61\% (INBreast), respectively. The results can be comparable performance in various metrics over the state-of-the-art methods.}
+}
+
+
+@Article{bioengineering11101034,
+AUTHOR = {Xu, Yan and Quan, Rixiang and Xu, Weiting and Huang, Yi and Chen, Xiaolong and Liu, Fengyuan},
+TITLE = {Advances in Medical Image Segmentation: A Comprehensive Review of Traditional, Deep Learning and Hybrid Approaches},
+JOURNAL = {Bioengineering},
+VOLUME = {11},
+YEAR = {2024},
+NUMBER = {10},
+ARTICLE-NUMBER = {1034},
+URL = {https://www.mdpi.com/2306-5354/11/10/1034},
+PubMedID = {39451409},
+ISSN = {2306-5354},
+ABSTRACT = {Medical image segmentation plays a critical role in accurate diagnosis and treatment planning, enabling precise analysis across a wide range of clinical tasks. This review begins by offering a comprehensive overview of traditional segmentation techniques, including thresholding, edge-based methods, region-based approaches, clustering, and graph-based segmentation. While these methods are computationally efficient and interpretable, they often face significant challenges when applied to complex, noisy, or variable medical images. The central focus of this review is the transformative impact of deep learning on medical image segmentation. We delve into prominent deep learning architectures such as Convolutional Neural Networks (CNNs), Fully Convolutional Networks (FCNs), U-Net, Recurrent Neural Networks (RNNs), Adversarial Networks (GANs), and Autoencoders (AEs). Each architecture is analyzed in terms of its structural foundation and specific application to medical image segmentation, illustrating how these models have enhanced segmentation accuracy across various clinical contexts. Finally, the review examines the integration of deep learning with traditional segmentation methods, addressing the limitations of both approaches. These hybrid strategies offer improved segmentation performance, particularly in challenging scenarios involving weak edges, noise, or inconsistent intensities. By synthesizing recent advancements, this review provides a detailed resource for researchers and practitioners, offering valuable insights into the current landscape and future directions of medical image segmentation.},
+DOI = {10.3390/bioengineering11101034}
+}
+
+% ==================== SAM Models ====================
+@article{Ma2024,
+	title        = {Segment Anything in Medical Images},
+	author       = {Jun Ma and Yuting He and Feifei Li and Lin Han and Chenyu You and Bo Wang},
+	year         = 2024,
+	month        = 4,
+	journal      = {Nature Communications},
+	publisher    = {Nature Research},
+	volume       = 15,
+	doi          = {10.1038/s41467-024-44824-z},
+	url          = {http://arxiv.org/abs/2304.12306 http://dx.doi.org/10.1038/s41467-024-44824-z},
+	abstract     = {Medical image segmentation is a critical component in clinical practice, facilitating accurate diagnosis, treatment planning, and disease monitoring. However, existing methods, often tailored to specific modalities or disease types, lack generalizability across the diverse spectrum of medical image segmentation tasks. Here we present MedSAM, a foundation model designed for bridging this gap by enabling universal medical image segmentation. The model is developed on a large-scale medical image dataset with 1,570,263 image-mask pairs, covering 10 imaging modalities and over 30 cancer types. We conduct a comprehensive evaluation on 86 internal validation tasks and 60 external validation tasks, demonstrating better accuracy and robustness than modality-wise specialist models. By delivering accurate and efficient segmentation across a wide spectrum of tasks, MedSAM holds significant potential to expedite the evolution of diagnostic tools and the personalization of treatment plans.},
+	issue        = 1
+}
+@article{Zhu2024,
+	title        = {Medical SAM 2: Segment medical images as video via Segment Anything Model 2},
+	author       = {Jiayuan Zhu and Abdullah Hamdi and Yunli Qi and Yueming Jin and Junde Wu},
+	year         = 2024,
+	month        = 8,
+	url          = {https://arxiv.org/pdf/2408.00874},
+	abstract     = {Medical image segmentation plays a pivotal role in clinical diagnostics and treatment planning, yet existing models often face challenges in generalization and in handling both 2D and 3D data uniformly. In this paper, we introduce Medical SAM 2 (MedSAM-2), a generalized auto-tracking model for universal 2D and 3D medical image segmentation. The core concept is to leverage the Segment Anything Model 2 (SAM2) pipeline to treat all 2D and 3D medical segmentation tasks as a video object tracking problem. To put it into practice, we propose a novel \emph\{self-sorting memory bank\} mechanism that dynamically selects informative embeddings based on confidence and dissimilarity, regardless of temporal order. This mechanism not only significantly improves performance in 3D medical image segmentation but also unlocks a \emph\{One-Prompt Segmentation\} capability for 2D images, allowing segmentation across multiple images from a single prompt without temporal relationships. We evaluated MedSAM-2 on five 2D tasks and nine 3D tasks, including white blood cells, optic cups, retinal vessels, mandibles, coronary arteries, kidney tumors, liver tumors, breast cancer, nasopharynx cancer, vestibular schwannoma, mediastinal lymph nodules, cerebral artery, inferior alveolar nerve, and abdominal organs, comparing it against state-of-the-art (SOTA) models in task-tailored, general and interactive segmentation settings. Our findings demonstrate that MedSAM-2 surpasses a wide range of existing models and updates new SOTA on several benchmarks. The code is released on the project page: https://supermedintel.github.io/Medical-SAM2/.}
+}
+@article{Kirillov2023,
+	title        = {Segment Anything},
+	author       = {Alexander Kirillov and Eric Mintun and Nikhila Ravi and Hanzi Mao and Chloe Rolland and Laura Gustafson and Tete Xiao and Spencer Whitehead and Alexander C. Berg and Wan Yen Lo and Piotr Dollár and Ross Girshick},
+	year         = 2023,
+	month        = 4,
+	journal      = {Proceedings of the IEEE International Conference on Computer Vision},
+	publisher    = {Institute of Electrical and Electronics Engineers Inc.},
+	pages        = {3992--4003},
+	doi          = {10.1109/ICCV51070.2023.00371},
+	isbn         = 9798350307184,
+	issn         = 15505499,
+	url          = {https://arxiv.org/abs/2304.02643v1},
+	abstract     = {We introduce the Segment Anything (SA) project: a new task, model, and dataset for image segmentation. Using our efficient model in a data collection loop, we built the largest segmentation dataset to date (by far), with over 1 billion masks on 11M licensed and privacy respecting images. The model is designed and trained to be promptable, so it can transfer zero-shot to new image distributions and tasks. We evaluate its capabilities on numerous tasks and find that its zero-shot performance is impressive -- often competitive with or even superior to prior fully supervised results. We are releasing the Segment Anything Model (SAM) and corresponding dataset (SA-1B) of 1B masks and 11M images at https://segment-anything.com to foster research into foundation models for computer vision.}
+}
+
+% ==================== Foundation Models and Pectoral Muscle ====================
+@article{Guo2020,
+	title        = {Automatic segmentation of the pectoral muscle based on boundary identification and shape prediction},
+	author       = {Yongze Guo and Wenhui Zhao and Songfeng Li and Yaqin Zhang and Yao Lu},
+	year         = 2020,
+	month        = 2,
+	journal      = {Physics in Medicine and Biology},
+	publisher    = {Institute of Physics Publishing},
+	volume       = 65,
+	doi          = {10.1088/1361-6560/ab652b},
+	issn         = 13616560,
+	abstract     = {The purpose of this work is to identify the pectoral muscle region in mediolateral oblique (MLO) view mammograms even when the boundary is blurred or obscured. The problem is decoupled into two subproblems in our study: identifying parts of boundaries with high confidence and predicting the overall shape of the pectoral muscle. Due to the similarity in intensity and texture between pectoral muscle and gland tissue, we trained a deep neural network to distinguish them in the first subproblem. The boundary with high confidence can be obtained according to the consistency of predictions from multiple converged models. For the shape prediction problem, a generative adversarial network (GAN) is used to learn mapping from a given identified region and the breast shape to the overall pectoral muscle shape. Our method is evaluated on a mammogram dataset including 633 MLO view mammograms collected from three different datacenters. We take U-Net as our baseline model and the dataset is divided into three groups according to the performance of U-Net for evaluation. In all three groups, U-Net achieves 80.1\%, 92.9\%, and 98.3\% in the Dice similarity coefficient, respectively, and our method achieves 85.2\%, 94.8\%, and 98.1\% in the Dice similarity coefficient, respectively. The experiment shows that our method effectively estimates the pectoral muscle boundary, even parts of boundaries that are difficult to detect, and greatly improves the performance of segmentation in this case.},
+	issue        = 4,
+	keywords     = {boundary identification,deep learning,pectoral muscle segmentation,shape prediction},
+	pmid         = 31869824
+}
+@article{Gu2025,
+	title        = {How to build the best medical image segmentation algorithm using foundation models: a comprehensive empirical study with Segment Anything Model},
+	author       = {Hanxue Gu and Haoyu Dong and Jichen Yang and Maciej A. Mazurowski},
+	year         = 2025,
+	month        = 5,
+	journal      = {Machine Learning for Biomedical Imaging},
+	publisher    = {Machine Learning for Biomedical Imaging},
+	volume       = 3,
+	pages        = {88--120},
+	doi          = {10.59275/j.melba.2025-86a6},
+	url          = {http://arxiv.org/abs/2404.09957 http://dx.doi.org/10.59275/j.melba.2025-86a6},
+	abstract     = {Automated segmentation is a fundamental medical image analysis task, which enjoys significant advances due to the advent of deep learning. While foundation models have been useful in natural language processing and some vision tasks for some time, the foundation model developed with image segmentation in mind - Segment Anything Model (SAM) - has been developed only recently and has shown similar promise. However, there are still no systematic analyses or "best-practice" guidelines for optimal fine-tuning of SAM for medical image segmentation. This work summarizes existing fine-tuning strategies with various backbone architectures, model components, and fine-tuning algorithms across 18 combinations, and evaluates them on 17 datasets covering all common radiology modalities. Our study reveals that (1) fine-tuning SAM leads to slightly better performance than previous segmentation methods, (2) fine-tuning strategies that use parameter-efficient learning in both the encoder and decoder are superior to other strategies, (3) network architecture has a small impact on final performance, (4) further training SAM with self-supervised learning can improve final model performance. We also demonstrate the ineffectiveness of some methods popular in the literature and further expand our experiments into few-shot and prompt-based settings. Lastly, we released our code and MRI-specific fine-tuned weights, which consistently obtained superior performance over the original SAM, at https://github.com/mazurowski-lab/finetune-SAM.},
+	issue        = {May 2025}
+}
+@article{Leszczelowska2025,
+	title        = {Domain-Specific Adaptation of Deep Learning Models for Accurate Breast Region Segmentation in Mammography},
+	author       = {Paulina Leszczelowska and Jacek Ruminski},
+	year         = 2025,
+	journal      = {International Conference on Human System Interaction, HSI},
+	publisher    = {IEEE Computer Society},
+	doi          = {10.1109/HSI66212.2025.11142407},
+	isbn         = 9798331538583,
+	issn         = 21582254,
+	url          = {https://ieeexplore.ieee.org/abstract/document/11142407},
+	abstract     = {The segmentation of breasts in mammography images can be used to remove useless information, such as annotations, from tissue regions that are important for further analysis. Since the nipple is comparatively small, models optimised for global metrics often fail to include it, even though overall metrics remain high. In this work, we investigate a complex method to improve the accuracy and efficiency of breast segmentation in mammography, focused on the nipple area. The proposed multi-phase method combines the deep learning approach with the morphological method of erosion and dilation. The proposed method is compared with two baselines: (i) pure deep learning, (ii) purely morphological. The results show that smoothing improves YOLO11's segmentation metrics and enhances the visual quality of UNet outputs. However, the best overall performance was achieved by the UNet model, with an IoU of 0.978 and Dice score of 0.989 for the entire breast, and 0.920 IoU and 0.957 Dice for the nipple area.},
+	keywords     = {image seg-mentation,mammography,medical imaging,preprocessing,transfer learning}
+}
+@article{M2025,
+	title        = {SAM 2-Driven Self-Training for Mammogram Segmentation: Zero-Shot Mask Generation Via Pseudo-Video},
+	author       = {Mauricio Fernandez M and Yixiong Liang and Christopher A. Cochran},
+	year         = 2025,
+	month        = 8,
+	publisher    = {Institute of Electrical and Electronics Engineers (IEEE)},
+	pages        = {1348--1353},
+	doi          = {10.1109/ICIP55913.2025.11084376},
+	url          = {https://ieeexplore.ieee.org/abstract/document/11084376}
+}
+@article{Aliniya2024Supervised,
+	title        = {Supervised Pectoral Muscle Removal in Mammography Images},
+	author       = {Parvaneh Aliniya and Mircea Nicolescu and Monica Nicolescu and George Bebis},
+	year         = 2024,
+	journal      = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+	publisher    = {Springer, Cham},
+	volume       = {14845 LNAI},
+	pages        = {126--130},
+	doi          = {10.1007/978-3-031-66535-6_14},
+	isbn         = {978-3-031-66535-6},
+	issn         = {1611-3349},
+	url          = {https://link.springer.com/chapter/10.1007/978-3-031-66535-6_14},
+	abstract     = {In this paper, we provide the segmentation masks of the pectoral muscle for INbreast, MIAS, and a CBIS-DDSM subset datasets, which will enable the development of supervised methods and the utilization of deep learning for pectoral muscle removal from mammography...},
+	keywords     = {Breast Cancer,Mammography,Pectoral Muscle}
+}
+@article{Aliniya2024,
+	title        = {Towards Robust Supervised Pectoral Muscle Segmentation in Mammography Images},
+	author       = {Parvaneh Aliniya and Mircea Nicolescu and Monica Nicolescu and George Bebis},
+	year         = 2024,
+	month        = 12,
+	journal      = {Journal of Imaging 2024, Vol. 10, Page 331},
+	publisher    = {Multidisciplinary Digital Publishing Institute},
+	volume       = 10,
+	pages        = 331,
+	doi          = {10.3390/JIMAGING10120331},
+	issn         = {2313-433X},
+	url          = {https://www.mdpi.com/2313-433X/10/12/331/htm https://www.mdpi.com/2313-433X/10/12/331},
+	abstract     = {Mammography images are the most commonly used tool for breast cancer screening. The presence of pectoral muscle in images for the mediolateral oblique view makes designing a robust automated breast cancer detection system more challenging. Most of the current methods for removing the pectoral muscle are based on traditional machine learning approaches. This is partly due to the lack of segmentation masks of pectoral muscle in available datasets. In this paper, we provide the segmentation masks of the pectoral muscle for the INbreast, MIAS, and CBIS-DDSM datasets, which will enable the development of supervised methods and the utilization of deep learning. Training deep learning-based models using segmentation masks will also be a powerful tool for removing pectoral muscle for unseen data. To test the validity of this idea, we trained AU-Net separately on the INbreast and CBIS-DDSM for the segmentation of the pectoral muscle. We used cross-dataset testing to evaluate the performance of the models on an unseen dataset. In addition, the models were tested on all of the images in the MIAS dataset. The experimental results show that cross-dataset testing achieves a comparable performance to the same-dataset experiments.},
+	issue        = 12,
+	keywords     = {CBIS,DDSM,INbreast,MIAS,breast cancer mammography,deep learning,pectoral muscle,supervised training}
+}
+@article{Larroza2024,
+	title        = {Breast Delineation in Full-Field Digital Mammography Using the Segment Anything Model},
+	author       = {Andrés Larroza and Francisco Javier Pérez-Benito and Raquel Tendero and Juan Carlos Perez-Cortes and Marta Román and Rafael Llobet},
+	year         = 2024,
+	month        = 5,
+	journal      = {Diagnostics},
+	publisher    = {Multidisciplinary Digital Publishing Institute (MDPI)},
+	volume       = 14,
+	doi          = {10.3390/diagnostics14101015},
+	issn         = 20754418,
+	url          = {https://www.scopus.com/pages/publications/85194159722?origin=resultslist},
+	abstract     = {Breast cancer is a major health concern worldwide. Mammography, a cost-effective and accurate tool, is crucial in combating this issue. However, low contrast, noise, and artifacts can limit the diagnostic capabilities of radiologists. Computer-Aided Diagnosis (CAD) systems have been developed to overcome these challenges, with the accurate outlining of the breast being a critical step for further analysis. This study introduces the SAM-breast model, an adaptation of the Segment Anything Model (SAM) for segmenting the breast region in mammograms. This method enhances the delineation of the breast and the exclusion of the pectoral muscle in both medio lateral-oblique (MLO) and cranio-caudal (CC) views. We trained the models using a large, multi-center proprietary dataset of 2492 mammograms. The proposed SAM-breast model achieved the highest overall Dice Similarity Coefficient (DSC) of 99.22\% ± 1.13 and Intersection over Union (IoU) 98.48\% ± 2.10 over independent test images from five different datasets (two proprietary and three publicly available). The results are consistent across the different datasets, regardless of the vendor or image resolution. Compared with other baseline and deep learning-based methods, the proposed method exhibits enhanced performance. The SAM-breast model demonstrates the power of the SAM to adapt when it is tailored to specific tasks, in this case, the delineation of the breast in mammograms. Comprehensive evaluations across diverse datasets—both private and public—attest to the method’s robustness, flexibility, and generalization capabilities. © 2024 by the authors.},
+	issue        = 10,
+	keywords     = {breast segmentation,mammography,segment anything model (SAM)}
+}
+
+@article{Sani2023,
+	title        = {Grouped mask region convolution neural networks for improved breast cancer segmentation in mammography images},
+	author       = {Zaharaddeen Sani and Rajesh Prasad and Ezzeddin K.M. Hashim},
+	year         = 2023,
+	month        = 8,
+	journal      = {Evolving Systems 2023 15:1},
+	publisher    = {Springer},
+	volume       = 15,
+	pages        = {25--40},
+	doi          = {10.1007/S12530-023-09527-8},
+	issn         = {1868-6486},
+	url          = {https://link.springer.com/article/10.1007/s12530-023-09527-8},
+	abstract     = {Mammography is one of the most effective tools radiologists use to detect breast cancer early, as it can detect cancer up to ten years before it manifests. The accuracy of breast cancer segmentation using computer aided design (CAD) systems is challenged by several factors, such as insufficient data for model training and data complexity. For example, mammography images are symmetrical by nature and appear complex to computer vision models, making accurate segmentation difficult. Data augmentation techniques are employed by researchers to help computer vision models preserve the invariance and equivariance features of transformed input images. However, these techniques have been insufficient and incur a computational cost. To improve the data efficiency of the computer vision models, this study proposes a model that combines the functionalities of the Mask Region Convolutional Neural Networks (Mask-RCNN) and Group Convolutional Neural Networks (GCNN) to provide highly accurate breast cancer segmentation. The GCNN preserves the invariant rotation of the transformed mammography images, increases weight sharing and the expressive capacity of the model, and minimizes computational costs. Our proposed model was applied to two mammography datasets, INbreast and MIAS. It achieved competitive results in terms of accuracy, Dice coefficient, Jaccard index, specificity, and sensitivity of 99.01\%, 86.63\%, 87.76\%, 99.24\%, and 98.55\%, respectively, compared to conventional architectures.},
+	issue        = 1,
+	keywords     = {Artificial Intelligence,Complex Systems,Complexity,Group convolution,Mammography images,Mask RCNN,Rotation invariance,Segmentation}
+}
+
+% ==================== books ====================
+
+@book{gonzales2018digital,
+	title        = {Digital image processing},
+	author       = {Rafael C.. Gonzalez and Richard E.. Woods},
+	year         = 2018,
+	publisher    = {Pearson Education Limited},
+	pages        = 1168,
+	isbn         = {978-1-292-22304-9},
+	abstract     = {Fourth edition. "For 40 years, Image Processing has been the foundational text for the study of digital image processing. The book is suited for students at the college senior and first-year graduate level with prior background in mathematical analysis, vectors, matrices, probability, statistics, linear systems, and computer programming. As in all earlier editions, the focus of this edition of the book is on fundamentals. The 4th Edition, which celebrates the book's 40th anniversary, is based on an extensive survey of faculty, students, and independent readers in 150 institutions from 30 countries. Their feedback led to expanded or new coverage of topics such as deep learning and deep neural networks, including convolutional neural nets, the scale-invariant feature transform (SIFT), maximally-stable extremal regions (MSERs), graph cuts, k-means clustering and superpixels, active contours (snakes and level sets), and exact histogram matching. Major improvements were made in reorganizing the material on image transforms into a more cohesive presentation, and in the discussion of spatial kernels and spatial filtering. Major revisions and additions were made to examples and homework exercises throughout the book. For the first time, we added MATLAB projects at the end of every chapter, and compiled support packages for you and your teacher containing, solutions, image databases, and sample code"--Publisher's description. Digital image fundamentals -- Intensity transformations and spatial filtering -- Filtering in the frequency domain -- Image restoration and reconstruction -- Wavelet and other image transforms -- Color image processing -- Image compression and watermarking -- Morphological image processing -- Image segmentation I edge detection, thresholding, and region detection -- Image segmentation II active contours : snakes and level sets -- Feature extraction -- Image pattern classification.},
+	edition      = 4
+}
