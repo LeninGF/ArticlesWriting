@@ -93,6 +93,13 @@ pdfpagemode=UseOutlines]{hyperref} % check if it is correct to use
   \acro{CNNs}[CNNs]{Convolutional Neural Networks}
   \acro{SOTA}[SOTA]{State-of-the-Art}
   \acro{CNN}[CNN]{Convolutional Neural Network}
+  \acro{ML}[ML]{Machine Learning}
+  \acro{TG}[TG]{Thermography}
+  \acro{US}[US]{Ultrasound}
+  \acro{MRI}[MRI]{Magnetic Resonance Imaging}
+  \acro{GCAM}[GCAM]{Global Channel Attention Module}
+  \acro{IoU}[IoU]{Intersection over Union}
+  \acro{DICE}[DICE]{Dice Similarity Coefficient}
 \end{acronym}
 \title{Towards a segmentation of the pectoral muscle and masses present in mammograms by combining modern and traditional techniques}
 %\title{Full Pectoral Muscle and mases Segmentation for Mammograms}
@@ -260,8 +267,15 @@ following contributions:
 
 This paper is organized as follows: Section\ref{sec:Medical Image
   Segmentation} introduces the medical image segmentation evolution
-addressing traditional and deep learning approaches. Discussion about
-related works are presented in Section 3. %~\ref{3}
+addressing traditional and \ac{DL} approaches. The related works are
+discussed in Section~\ref{sec:RelatedWorks}. The proposed methodology
+is presented in Section~\ref{sec:Methodology}, addressing the
+preprocessing of the dataset, and the experimental design for the
+\ac{MedSAM} in \ac{ZSL} for pectoral muscle segmentation and the
+iterative Otsu algorithm for segmentation of mammogram
+images. Section~\ref{sec:experimental-results} presents the
+experimental results of this research. Discussion and Limitations of
+our current work are presented in Section~\ref{sec:discussion-conclusion}. %~\ref{3}
 
 \section{Medical Image Segmentation}\label{sec:Medical Image Segmentation}
 
@@ -279,22 +293,24 @@ Medical image segmentation plays a pivotal role in clinical
 diagnostics and treatment planning, enabling precise delineation of
 anatomical structures and pathological
 regions~\cite{Berrezueta2025}. The field has undergone significant
-evolution, transitioning from traditional methods to deep
-learning-based approaches, and more recently, to foundation models
-capable of generalizing across diverse tasks and modalities.
+evolution, transitioning from traditional methods to \ac{DL}-based
+approaches that include novel foundation models capable of
+generalizing across diverse tasks and modalities.
 
 \subsection{Traditional and Deep Learning-Based Methods}
 
-Early segmentation techniques relied on manual feature extraction or
-handcrafted algorithms such as thresholding, edge detection, and
-morphological operations~\cite{Yao2023}. While interpretable, these
-methods often struggled with the complexity and variability of medical
-images. The advent of \ac{DL}, particularly \ac{CNNs}, marked a
-paradigm shift. Architectures such as U-Net~\cite{RonnebergerFB15} and
-its variants (e.g., UNet++~\cite{zhou2018unetplusplus}) became the
-\ac{SOTA} for medical image segmentation due to their
-ability to learn hierarchical features and preserve spatial context
-through encoder-decoder structures with skip connections.
+Early segmentation techniques relied on manual feature extraction,
+handcrafted models, non-parametric unsupervised methods such as
+thresholding~\cite{otsu1979}, gradient-based approaches like edge
+detection~\cite[pp.~716-722]{gonzales2018digital}, and morphological
+operations~\cite{Yao2023}. While interpretable, these methods often
+struggled with the complexity and variability of medical images~\cite{Yao2023}. The
+advent of \ac{DL}, particularly \ac{CNNs}, marked a paradigm
+shift. Architectures such as U-Net~\cite{RonnebergerFB15} and its
+variants (e.g., UNet++~\cite{zhou2018unetplusplus}) became the
+\ac{SOTA} for medical image segmentation due to their ability to learn
+hierarchical features and preserve spatial context through
+encoder-decoder structures.
 
 
 Despite their success, \ac{CNN}-based models are limited in capturing
@@ -306,11 +322,11 @@ TransUNet~\cite{chen2021transunet} and
 Swin-Unet~\cite{cao2022swinunet} combined the local feature extraction
 of \ac{CNNs} with the global attention mechanism of Transformers, achieving
 \ac{SOTA} performance on various medical segmentation
-tasks~\cite{yao2023review}.
+tasks~\cite{Yao2023}.
 
 
 \subsection{Foundational Models for Image Segmentation}
-
+\label{sec:found-models-image}
 The introduction of the \ac{SAM}~\cite{Kirillov2023}
 represented a breakthrough in natural image segmentation, offering
 remarkable zero-shot generalization capabilities through prompt-based
@@ -355,16 +371,88 @@ these models more practical for clinical deployment.
 %\end{longtable}
 \section{Related Works}\label{sec:RelatedWorks}
 
-Research on digital mammography over the last decade has revealed a clear progression from rule-based segmentation approaches to more sophisticated optimization and deep learning methods.  Early work, such as that of Bora \emph{et, al.}\cite{Bora2016}, relied on texture gradients and geometric models to approximate the pectoral boundary and achieved respectable accuracy on small datasets.  Similarly, Shah\cite{Shah2015} applied morphological filtering, wavelet enhancement, and a triangular mask to suppress the muscle region, reporting high accuracy on mini-MIAS images.  These methods are straightforward and computationally efficient, but they rely on heuristic assumptions about muscle shape and offer limited evaluation beyond basic error metrics.
+Research on digital \ac{MG} over the past decade has evolved from
+traditional approaches to modern representation learning
+paradigms. Early work, such as that of Bora \emph{et
+  al.}~\cite{Bora2016}, relied on manually designed texture gradients
+and geometric models to approximate the pectoral boundary, achieving
+respectable accuracy on small datasets. Similarly, Shah \emph{et
+  al.}~\cite{Shah2015} applied heuristic pipelines involving
+morphological filtering, wavelet enhancement, and triangular masks to
+suppress the muscle region, reporting high accuracy on the mini-\ac{MIAS}
+dataset. While these traditional methods are computationally
+efficient, their performance is inherently limited by the quality of
+handcrafted features and heuristic assumptions about pectoral muscle
+morphology.
 
-Subsequent studies introduced optimization techniques to improve robustness. Shen \emph{et al.}\cite{Shen2018} employed a genetic algorithm combined with morphological selection to automatically learn multilevel thresholds. The test was carried out on the miniMIAS, DDSM and INBreast datasets, and achieved low false positive and false negative rates with Dice scores of up to 97.15\%. However, the translation of these quantitative improvements into better clinical outcomes was not explored. Chen \emph{et al.}\cite{Chen2024} proposed a faster pipeline using binarization, Canny edge detection, and robust interpolation. Their method reduced the mean segmentation error compared to the Libra algorithm and processed images 5.4 times faster, though false negatives remained relatively high. The clinical impact of these efficiency gains was not evaluated. An intermediate study by Sharma and Mukherjee proposed a comprehensive segmentation pipeline that combines filtering, multilevel thresholding, and edge detection; however, it did not report quantitative metrics~\cite{Sharma2021}. These works demonstrate that algorithmic refinement can yield incremental improvements, but discussions on direct clinical outcomes remain limited.
+Subsequent studies introduced optimization techniques to improve
+robustness. Shen \emph{et al.}\cite{Shen2018} employed a genetic
+algorithm combined with morphological selection to automatically learn
+multilevel thresholds. The test was carried out on the mini-\ac{MIAS},
+DDSM and INBreast datasets, and achieved low false positive and false
+negative rates with DICE scores of up to 97.15\%. However, the
+translation of these quantitative improvements into better clinical
+outcomes was not explored. Chen \emph{et al.}~\cite{Chen2024} proposed
+a faster pipeline using binarization, Canny edge detection, and robust
+interpolation. Their method reduced the mean segmentation error
+compared to the Libra algorithm and processed images 5.4 times faster,
+though false negatives remained relatively high. The clinical impact
+of these efficiency gains was not evaluated. An intermediate study by
+Sharma \emph{et al.}~\cite{Sharma2021} proposed a comprehensive
+segmentation pipeline that combines filtering, multilevel
+thresholding, and edge detection. However, they did not report
+quantitative metrics. These works demonstrate that algorithmic
+refinement can yield incremental improvements, but discussions on
+direct clinical outcomes remains limited.
 
-A 2024 review by Al-Karawi \emph{et. al.}\cite{AlKarawi2024} summarizes these developments, noting that modern approaches like Mask--RCNN combined with graph convolutional networks reach accuracies near 99\% in benchmark datasets.  The review emphasizes the trend toward hybrid architectures that integrate classical image processing with deep networks, but also highlights that reported performances stem from heterogeneous evaluations, which limit direct comparison.
-The most significant leap comes from deep learning.  Yu \emph{et, al.}\cite{Yu2022} integrated a global channel attention module into Deeplabv3+, producing PeMNet, which achieved an intersection--over--union of 97.46\% and pixel accuracy of 99.48\% on combined OPTIMAM and INBreast data.  This architecture leverages feature hierarchies and attention mechanisms to outperform classical methods.  In a related but distinct direction, TorabiJafroudi \emph{et, al.}\cite{Torabi2024} used the Curvelet transform and a genetic algorithm to select features for classifying masses as benign or malignant.  Their six-fold cross-validation achieved 98.2\% accuracy and 100\% specificity, illustrating the potential of multiresolution analysis coupled with machine learning.
+A 2024 review by Al-Karawi \emph{et al.}~\cite{AlKarawi2024} provides
+a comprehensive analysis of various \ac{ML} models applied to \ac{BC}
+detection across multiple imaging modalities, including \ac{MG},
+\ac{US}, \ac{TG}, and \ac{MRI}. Regarding the specific task of image
+segmentation in \ac{MG}, the highest reported performance (accuracy:
+99\%, Dice: 87\%) was achieved by Sani \emph{et
+  al.}~\cite{Sani2023}. In their work, the authors modified the Mask
+R-CNN architecture by replacing its standard \ac{CNN} layers with
+Grouped-\ac{CNN} layers. For pectoral muscle segmentation, Yu \emph{et
+  al.}~\cite{Yu2022} developed the PeMNet model, which integrates a
+\ac{GCAM} into the Deeplabv3+ framework. This model attained an
+\ac{IoU} of 97.46\% and a pixel accuracy of 99.48\% on a combined
+dataset from INbreast and OPTIMAM.
 
-Across these studies, a recurring theme is the reliance on quantitative error metrics (e.g., false positives/negatives, Dice, Jaccard, IoU) as proxies for performance.  While useful, such metrics do not fully capture generalisability, computational cost, or clinical relevance.  Most datasets remain modest in size or confined to specific repositories, and external validation is seldom performed.  Consequently, despite impressive numerical results, the broader impact on diagnostic workflows is unclear.  Future research would benefit from larger, more diverse cohorts, standardized evaluation protocols, and assessments of how improvements in segmentation or classification translate to enhanced patient outcomes.
+% In a related but distinct direction, TorabiJafroudi
+% \emph{et al.}\cite{Torabi2024} used the Curvelet transform and a
+% genetic algorithm to select features for classifying masses as benign
+% or malignant.  Their six-fold cross-validation achieved 98.2\%
+% accuracy and 100\% specificity, illustrating the potential of
+% multiresolution analysis coupled with machine learning.
 
-Table~\ref{tab:relatedworks} summarises the reviewed studies. For each entry we list the datasets, core approach, validation strategy and key performance metrics.
+Across these studies, a recurring theme is the reliance on
+quantitative error metrics (e.g., false positives/negatives, DICE,
+Jaccard, IoU) as proxies for performance. Given the limited size of
+benchmark datasets and the need for clinical validation, future
+research would benefit from larger, more diverse cohorts and
+standardized evaluation protocols. The current trend involves merging
+datasets and splitting them into subsets for training, validation, and
+testing. In other cases, certain datasets are reserved exclusively for
+testing to assess model generalizability.
+% While useful, such metrics
+% do not fully capture generalisability, computational cost, or clinical
+% relevance.  Most datasets remain modest in size or confined to
+% specific repositories, and external validation is seldom performed.
+% Consequently, despite impressive numerical results, the broader impact
+% on diagnostic workflows is unclear.  Future research would benefit
+% from larger, more diverse cohorts, standardized evaluation protocols,
+% and assessments of how improvements in segmentation or classification
+% translate to enhanced patient outcomes.
+
+Table~\ref{tab:relatedworks} summarises the reviewed studies, listing
+for each entry the datasets used, the core methodological approach,
+the validation strategy, and the key performance metrics. High-quality
+mammography databases are essential for the development and rigorous
+evaluation of \ac{CADx} and \ac{CADe} systems in \ac{BC} research. An
+overview of prominent public and private mammography databases
+frequently cited in the literature is provided in
+Table~\ref{tab:mammography-datasets}.
 
 \begin{table}[htbp]
 \centering
@@ -379,24 +467,27 @@ Bora et al., 2016 \cite{Bora2016} & PTG map + Hough transform + Euclidean distan
 
 Shah, 2015 \cite{Shah2015} & Morphological ops + wavelet enhancement + triangular mask & mini-MIAS (322 MLO) & Visual assessment & 98\% suppression; 100\% extraction & Artefact removal, geometric mask \\ \hline
 
-Shen et al., 2018 \cite{Shen2018} & Genetic algorithm + multilevel thresholding + morphology & mini-MIAS (322), DDSM (128), INBreast (201) & FP/FN, Jaccard, Dice, Hausdorff & Dice: 94.96\%–97.15\% & Wavelet thresholds, morphology \\ \hline
+Shen et al., 2018 \cite{Shen2018} & Genetic algorithm + multilevel thresholding + morphology & mini-MIAS (322), DDSM (128), INBreast (201) & FP/FN, Jaccard, DICE, Hausdorff & DICE: 94.96\%–97.15\% & Wavelet thresholds, morphology \\ \hline
 
-Sharma \& Mukherjee, 2021 \cite{Sharma2021} & Filtering + Otsu + CLAHE + Canny & MIAS (320), CBIS-DDSM (2620) & Jaccard, Dice, score matching & Qualitative improvement; faster runtime & Intensity norm, edge detection \\ \hline
+Sharma \& Mukherjee, 2021 \cite{Sharma2021} & Filtering + Otsu + CLAHE + Canny & MIAS (320), CBIS-DDSM (2620) & Jaccard, DICE, score matching & Qualitative improvement; faster runtime & Intensity norm, edge detection \\ \hline
 
-Yu et al., 2022 \cite{Yu2022} & PeMNet: Deeplabv3+ + channel attention & OPTIMAM (682) + INBreast (200) & IoU, Dice, accuracy, sensitivity & IoU 97.46\%, Dice 96.30\% & Channel attention, deep features \\ \hline
+Yu et al., 2022 \cite{Yu2022} & PeMNet: Deeplabv3+ + channel attention & OPTIMAM (682) + INBreast (200) & IoU, DICE, accuracy, sensitivity & IoU 97.46\%, DICE 96.30\% & Channel attention, deep features \\ \hline
 
 Chen et al., 2023 \cite{Chen2024} & Binarisation + Canny + interpolation & 1902 MLO images & Mean error, FP/FN vs. Libra & Mean error 12.22\%; FP 9.17\% & Binary intensity, edges \\ \hline
 
-Torabi Jafroudi et al., 2024 \cite{Torabi2024} & Curvelet + fractal features + GA + ANN & MIAS (113 abnormal) & 6-fold CV & Acc 98.2\%, AUC 0.98 & Curvelet coefficients (17 features) \\ \hline
+% Torabi Jafroudi et al., 2024 \cite{Torabi2024} & Curvelet + fractal features + GA + ANN & MIAS (113 abnormal) & 6-fold CV & Acc 98.2\%, AUC 0.98 & Curvelet coefficients (17 features) \\ \hline
 
-Al-Karawi et al., 2024 \cite{AlKarawi2024} & Survey of AI techniques (various) & Multiple datasets reviewed & Summary of metrics & Acc up to 99.1\% & Literature survey \\ \hline
+Sani et al., 2024 \cite{Sani2023} & Mask-RCNN + GCNN & MIAS \&
+                                                       INBreast &
+                                                                  Accuracy,
+                                                                  DICE,
+Jaccard, Sensitivity, Specificity& Acc 99.0\%, DICE 87.1\%,  Jaccard
+                                   88.0\% & Modified Mask-RCNN using G-CNNs \\ \hline
 \end{tabularx}
 \end{table}
 
 % \subsection{Public and Private Mammography Databases in Scientific Literature}
 % This section provides a brief overview of commonly used mammography databases in scientific research with a focus on our experiments, particularly MIAS that will be used to experiment our techniques.
-
-Mammography databases are critical for developing and evaluating computer-aided detection and diagnosis (CAD) systems for breast cancer. Below is an overview of key public and private mammography databases commonly referenced in scientific literature (see Table 2), with a focus on the Mini-MIAS database.
 
 \begin{table}[htbp]
 \caption{Public and Private Mammography Databases.}\label{tab:mammography-datasets}
@@ -424,64 +515,456 @@ DMID~\cite{oza_figshare,oza2024dmiddataset} & Public & Several hundred (exact no
 
 
 \section{Materials and Methods}\label{sec:Methodology}
+This section describes: (i) the database used and (ii) the proposed
+methodology. In this research, \ac{MIAS}~\cite{MIAS1994} dataset was
+used, which is a public dataset established to support in \ac{MG}
+analysis. It comprises a total of \numprint{322} digitized film-screen
+mammograms from the UK National Breast Screening Programme,
+corresponding to 161 patients. 
 
-This section describes: (i) the database used and (ii) the proposed methodology. Table~\ref{tab:mammography-datasets} presents a summary of most commonly used datasets for breast cancer using the mammography imaging modality. The table presents the number of images and its origin as either public or private. In this research, MIAS~\cite{MIAS1994} was used.
+\subsection{Preprocessing}
+\label{sec:preprocessing}
+
+Medical images are frequently degraded by noise originating from
+interference or other phenomena that affect the measurement processes
+within imaging acquisition systems. The \ac{MIAS} dataset, for
+instance, contains scanner noise introduced during the digitization of
+film mammograms. In this work, enhancement and artifact removal were
+performed using the \texttt{MATLAB Image Batch Processor} to apply a
+preprocessing function. This function performs binary thresholding by
+minimizing the interclass variance between foreground and background
+pixels. The resulting binary image is then labeled, and properties of
+the labeled regions are calculated to identify the largest connected
+area as the region of interest (ROI). Subsequently, morphological
+operations are employed to refine features. To further improve image
+quality, a Laplacian-based sharpening filter is applied. The kernel
+used is a discrete approximation of the Laplacian operator, defined
+as:
+
+\begin{equation}
+  \label{eq:laplacian}
+\mathbf{B} =
+\begin{bmatrix}
+-1 & -1 & -1 \\
+-1 & 8  & -1 \\
+-1 & -1 & -1
+\end{bmatrix}.
+\end{equation}
+
+% \[
+% \mathbf{B} =
+% \begin{bmatrix}
+% -1 & -1 & -1 \\
+% -1 & 8  & -1 \\
+% -1 & -1 & -1
+% \end{bmatrix}.
+% \]
+
+This kernel acts as a high-pass filter, emphasizing high-frequency
+components by highlighting regions of rapid intensity change, which is
+effective for edge enhancement. While unsharp masking is a common
+technique in medical imaging, the selection of an appropriate
+enhancement method is influenced by the imaging modality, the specific
+diagnostic task, and the viewing
+conditions~\cite{maini2010comprehensivereviewimageenhancement}. A
+total of 322 images were processed. However, 8 images present either
+artifacts or the original edge distortions. The processing efficiency
+can therefore be calculated as:
+
+\begin{equation}
+  \label{eq:performance}
+  \epsilon = 100 - \left( \frac{n_{\text{wrong}}}{n_{\text{all}}} \times 100 \right) = 97.52\%
+\end{equation}
+
+% \[
+% \epsilon = 100 - \left( \frac{n_{\text{wrong}}}{n_{\text{all}}} \times 100 \right) = 97.52\%,
+% \]
+
+where \( n_{\text{wrong}} \) is the number of incorrectly processed
+samples and \( n_{\text{all}} \) is the total number of samples.
+Figure~\ref{preprocessing-pipeline} illustrates the main stages of the
+image enhancement pipeline applied to mammographic data. The specific
+mask used was previously validated in our previous work on the
+\ac{MIAS} dataset, where it demonstrated strong
+performance~\cite{7314222}.
 
 
 
-The proposed approach used five main stages, as illustrated in Fig.~\ref{fig1}. The process begins with the acquisition and preprocessing of medical images, ensuring adequate quality for subsequent analysis. In the second stage, the ROI is delineated to isolate relevant anatomical structures. Stage 3 involves the creation and validation of the simulated reality, where binary masks are generated to emulate expert annotations and serve as reference data. In stage 4, the segmentation algorithm is applied to the ROI, generating candidate results for evaluation. Finally, stage 5 corresponds to the validation and quantitative comparison between the segmentation results and the simulated reality, allowing one to assess the accuracy and robustness of the proposed method.
+\begin{figure}[htbp]
+  \centering
+\includegraphics[width=0.9\textwidth]{./images/preprocessing.png}
+\caption{Image enhancement pipeline: 
+    a) Original mammogram image, 
+    b) Binary mask isolating breast tissue, 
+    c) Region of interest (ROI) extracted and refined, 
+    d) Edge map generated using Laplacian kernel, 
+    e) Final enhanced image with improved contrast and detail.
+} \label{preprocessing-pipeline}
+\end{figure}
 
+\subsection{\ac{MedSAM} for Pectoral Muscle Segmentation}
+\label{sec:zsl-with-medsam}
+\Ac{ZSL} is a modern \ac{ML} paradigm in which a foundational model is
+used to make predictions on data from classes or domains that were not
+present in its training set without further training. These models are
+generally transformer-based and rely on pre-training on a large
+dataset.
+
+Unlike traditional supervised learning, which requires labeled
+examples for every target class, \ac{ZSL} enables generalization to
+unseen categories by leveraging auxiliary information, such as
+semantic attributes, textual descriptions, or embeddings from
+pre-trained models. 
+
+As previously discussed in Section~\ref{sec:found-models-image}, foundational
+models such as \ac{SAM} and \ac{MedSAM} are capable of strong
+zero-shot predictions on novel data. However, they require a visual
+prompt to be supplied by the user. Consequently, using \ac{MedSAM} to
+segment medical images introduces a \ac{HITL} component into the
+process.
+
+This research addresses two core research questions: (1) whether
+foundational models such as \ac{MedSAM} can achieve accurate
+segmentation in a \ac{ZSL} setting with \ac{HITL} prompting, and (2)
+to benchmark the specific performance of \ac{MedSAM} under these
+conditions.
+
+\subsubsection{Experimental Design and Dataset}
+To evaluate \ac{MedSAM}'s \ac{ZSL} performance, a ground-truth dataset
+was constructed from the public \ac{MIAS} database. A sample of 170
+mammograms was randomly selected, providing a 95\% confidence level
+with a 5\% margin of error for statistical representativeness of the
+dataset. This sample size ensures a robust evaluation while
+maintaining a focus on the \ac{ZSL} scenario where extensive annotated
+data is unavailable for training.
+
+These sample images were distributed among five independent researchers
+that manually labeled the pectoral muscle using \texttt{MATLAB Medical
+  Image Labeler}. The Ground Truth Annotation Protocol consisted of:
+
+% \subsubsection{Ground Truth Annotation Protocol}
+
+\begin{itemize}
+    \item \textbf{Manual Delineation:} Each annotator manually traced
+      the pectoral muscle boundary using either polygon or Superpixel
+      tools to ensure the annotated boundaries adhered to natural
+      image textures.
+    \item \textbf{Morphological Post-processing:} Standard
+      morphological operations (dilation and erosion) were applied to
+      smooth the masks, removing and filling small holes.
+\end{itemize}
+The final output for each image included a binary mask for the
+pectoral muscle and the glandular tissue to be used in future research. 
+
+\subsubsection{Zero-Shot Segmentation with \ac{MedSAM}}
+\label{sec:medsam-methodology}
+The core \ac{ZSL} experiment was conducted using the \ac{MedSAM} model
+without any task-specific fine-tuning. For each test image, the model
+was provided with a visual prompt over the preprocessed image. In
+accordance with the \ac{HITL} paradigm central to the first research
+question, this prompt was defined as a bounding box manually
+delineated around the pectoral muscle region by a human operator. This
+approach simulates a realistic clinical scenario requiring minimal
+interaction. The operator was permitted to adjust the bounding box
+dimensions to optimize the visual outcome. In all cases, the initial
+anchor point for the bounding box was placed at the superior edge
+where the muscle originates. \ac{MedSAM} generated the segmentation
+mask based exclusively on this prompt and its pre-trained weights,
+without employing any post-processing techniques such as dilation or
+erosion.
+
+Figure~\ref{fig:ground_truth_example} presents an illustrative
+example, comparing the manually annotated ground truth for case
+\texttt{mdb048rm} with the \ac{ZSL} prediction generated by
+\ac{MedSAM}.
+% [[./images/ManualMask_vs_MedSAM_1.png]]
+% [[./images/ManualMask_vs_MedSAM_2.png]]
+% [[./images/ManualMask_vs_MedSAM_3.png]]
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./images/ManualMask_vs_MedSAM_3.png}
+    \caption{Manually annotated ground truth for the pectoral muscle
+      (left) and \ac{MedSAM}'s predicted mask (right) for \textrm{mdb048rm}.}
+    \label{fig:ground_truth_example}
+\end{figure}
+
+% \subsubsection{Evaluation Metrics}
+% The performance of the \ac{ZSL} approach was quantified by comparing the masks generated by \ac{MedSAM} against the manual ground truth. Standard segmentation metrics were computed, including the Dice Similarity Coefficient (\ac{DICE}) and the Intersection over Union (\ac{IoU}), to assess spatial overlap accuracy. This quantitative analysis directly addresses the second research question regarding \ac{MedSAM}'s performance under \ac{ZSL} conditions.
+
+
+% Table~\ref{tab:mammography-datasets} presents a summary of most
+% commonly used datasets for breast cancer using the mammography imaging
+% modality. The table presents the number of images and its origin as
+% either public or private. In this research, MIAS~\cite{MIAS1994} was
+
+% ++++++++++++++++++++ Check this later ++++++++++++++++++++
+% The proposed approach used five main stages, as illustrated in Fig.~\ref{fig1}. The process begins with the acquisition and preprocessing of medical images, ensuring adequate quality for subsequent analysis. In the second stage, the ROI is delineated to isolate relevant anatomical structures. Stage 3 involves the creation and validation of the simulated reality, where binary masks are generated to emulate expert annotations and serve as reference data. In stage 4, the segmentation algorithm is applied to the ROI, generating candidate results for evaluation. Finally, stage 5 corresponds to the validation and quantitative comparison between the segmentation results and the simulated reality, allowing one to assess the accuracy and robustness of the proposed method.
+% ++++++++++++++++++++++++++++++++++++++++ %
 % \subsection{Overview of Proposed Methods}
 
 %Digital mammography Dataset for Breast Cancer Diagnosis Research (DMID)
 
-\begin{figure}[htbp]
-\includegraphics[width=\textwidth]{images/stageOfMethod.png}
-\caption{Schematic representation of stage of the proposed method: First, we input image acquisition, 1) preprocessing and ROI delineation, 2) generation of a binary mask to establish the simulated ground truth to pectoral muscle, 3) application of the proposed segmentation method, and 4) quantitative validation by comparing the segmentation output against the simulated ground truth.} \label{fig1}
-\end{figure}
+% \begin{figure}[htbp]
+% \includegraphics[width=\textwidth]{images/stageOfMethod.png}
+% \caption{Schematic representation of stage of the proposed method: First, we input image acquisition, 1) preprocessing and ROI delineation, 2) generation of a binary mask to establish the simulated ground truth to pectoral muscle, 3) application of the proposed segmentation method, and 4) quantitative validation by comparing the segmentation output against the simulated ground truth.} \label{fig1}
+% \end{figure}
 
-\subsection{Input Image Acquisition}
+% \subsection{Input Image Acquisition}
 
 
 %\subsection{Public and Private Mammography Databases in Scientific Literature}
 
  % \cancel{and INbreast databases}. 
-Several techniques have been used to classify \ac{BC} using the MIAS database~\cite {MIAS1994}. These data sets are widely used for the development and evaluation of CAD systems for breast cancer. The information is based on their characteristics and applications in the literature (see Table 2)
+% Several techniques have been used to classify \ac{BC} using the MIAS database~\cite {MIAS1994}. These data sets are widely used for the development and evaluation of CAD systems for breast cancer. The information is based on their characteristics and applications in the literature (see Table 2)
 
-\subsection{Stage 1: Image Preprocesing} 
-%\\
-%\subsubsection{hhhhh}
-%hhhhjkkkkkl
+% \subsection{Stage 1: Image Preprocesing} 
+% %\\
+% %\subsubsection{hhhhh}
+% %hhhhjkkkkkl
 
-\subsubsection{Filtering and Enhancing}
+% \subsubsection{Filtering and Enhancing}
+% % ==================== this was in the paper ====================
+% % Medical images are often degraded by noise arising from interference
+% % or other phenomena that affect measurement processes in imaging
+% % acquisition systems. The presence of noise is intrinsic to these
+% % systems and often constitutes a limiting factor in the performance
+% % of medical instruments. For example, recent work on two-stage deep
+% % denoising with self-guided noise attention demonstrates substantial
+% % improvements in PSNR and SSIM for multimodal medical images using
+% % residual noise estimation. ~\cite{Sharif_2024} In addition, the
+% % physiological systems under study and the procedures used in
+% % radiology influence both image contrast and the visibility of
+% % structural details; techniques such as PSO-ERBMAHE for adaptive
+% % contrast enhancement have been shown to better preserve visibility
+% % of anatomical features, especially in low-contrast
+% % regions. ~\cite{Gangwar2025} Consequently, it is often necessary to
+% % adjust the grayscale intensity range to enhance the visualization of
+% % brighter regions, which are less distinguishable to the human eye
+% % compared to darker areas that are perceived with greater detail.
+% %====================
 
-Medical images are often degraded by noise arising from interference or other phenomena that affect measurement processes in imaging acquisition systems. The presence of noise is intrinsic to these systems and often constitutes a limiting factor in the performance of medical instruments. For example, recent work on two-stage deep denoising with self-guided noise attention demonstrates substantial improvements in PSNR and SSIM for multimodal medical images using residual noise estimation. ~\cite{Sharif_2024} In addition, the physiological systems under study and the procedures used in radiology influence both image contrast and the visibility of structural details; techniques such as PSO-ERBMAHE for adaptive contrast enhancement have been shown to better preserve visibility of anatomical features, especially in low-contrast regions. ~\cite{Gangwar2025} Consequently, it is often necessary to adjust the grayscale intensity range to enhance the visualization of brighter regions, which are less distinguishable to the human eye compared to darker areas that are perceived with greater detail.
+% %In this work, a Laplacian filter is applied during the preprocessing stage to enhance edge detail and improve contrast. The Laplacian filter is a second-order derivative filter used in image processing to highlight areas with rapid intensity changes, thereby sharpening edges and enhancing fine details. In mammography, it is applied to improve the visibility of subtle features, such as microcalcifications and masses, which are critical for early breast cancer detection. Often combined with Gaussian smoothing to form the Laplacian of Gaussian (LoG) filter, it reduces noise while enhancing edges. Scientific studies have demonstrated its effectiveness, including its use in normalizing mammographic images for cancer segmentation (Rangayyan, 2000), a modified parallel framework for sharpening mammograms and identifying masses using GPU (Wong et al., 2011), and multiscale approaches based on Laplacian pyramids for feature enhancement (Burt and Adelson, 1983).
 
-%In this work, a Laplacian filter is applied during the preprocessing stage to enhance edge detail and improve contrast. The Laplacian filter is a second-order derivative filter used in image processing to highlight areas with rapid intensity changes, thereby sharpening edges and enhancing fine details. In mammography, it is applied to improve the visibility of subtle features, such as microcalcifications and masses, which are critical for early breast cancer detection. Often combined with Gaussian smoothing to form the Laplacian of Gaussian (LoG) filter, it reduces noise while enhancing edges. Scientific studies have demonstrated its effectiveness, including its use in normalizing mammographic images for cancer segmentation (Rangayyan, 2000), a modified parallel framework for sharpening mammograms and identifying masses using GPU (Wong et al., 2011), and multiscale approaches based on Laplacian pyramids for feature enhancement (Burt and Adelson, 1983).
+% %A Laplacian filter is defined as a 3 × 3 FIR filter used in image processing, which approximates the laplacian of a function to detect edges by identifying zero crossings in the image \cite{WOODS2012223}
+% %\cite{7314222}
+% %Other approaches similar to Khan et al. (2023) \cite{khan2023fast} with the Fast Local Laplacian filter for angiography images, and Shukla et al. (2024) \cite{Shukla2024} using Laplacian pyramid-based fusion methods. These techniques demonstrate that Laplacian-based filters can help preserve important structural details while reducing the impact of low-contrast regions.
+% % ==================== included but unnecesarry this is not theory of
+% % preprocessing ====================
+% % Traditional image enhancement methods have relied primarily on spatial- and frequency-domain processing. Spatial approaches operate directly on image pixels, such as histogram equalization or unsharp masking, while frequency domain methods utilize mathematical transforms such as Fourier, DCT, or DWT to process the image in an alternative space. With technological advancements, more sophisticated techniques have emerged, including the Retinex model, fuzzy theory, and deep neural networks. Although each method provides distinct advantages, they also exhibit limitations, particularly in robustness and adaptability. This highlights the challenge of developing a universally effective enhancement technique suitable for various image types and conditions.~\cite{Qi2022}
+% % ====================
 
-%A Laplacian filter is defined as a 3 × 3 FIR filter used in image processing, which approximates the laplacian of a function to detect edges by identifying zero crossings in the image \cite{WOODS2012223}
-%\cite{7314222}
-%Other approaches similar to Khan et al. (2023) \cite{khan2023fast} with the Fast Local Laplacian filter for angiography images, and Shukla et al. (2024) \cite{Shukla2024} using Laplacian pyramid-based fusion methods. These techniques demonstrate that Laplacian-based filters can help preserve important structural details while reducing the impact of low-contrast regions.
-Traditional image enhancement methods have relied primarily on spatial- and frequency-domain processing. Spatial approaches operate directly on image pixels, such as histogram equalization or unsharp masking, while frequency domain methods utilize mathematical transforms such as Fourier, DCT, or DWT to process the image in an alternative space. With technological advancements, more sophisticated techniques have emerged, including the Retinex model, fuzzy theory, and deep neural networks. Although each method provides distinct advantages, they also exhibit limitations, particularly in robustness and adaptability. This highlights the challenge of developing a universally effective enhancement technique suitable for various image types and conditions.~\cite{Qi2022}
+% In our work, the enhancement and artifact removal process consists of several fundamental steps. Initially, automatic threshold-based binarization is applied using the \texttt{graythresh} and \texttt{im2bw} function, or \texttt{imbinarize} in more recent versions of Matlab-2024b.\cite{matlab_imbinarize} These functions convert the image to binary format by selecting a threshold that minimizes the intraclass variance between the foreground (white) and background (black) pixels Fig.~\ref{fig2}.
+% Following binarization, a series of morphological operations are performed to extract the relevant image components. These operations enable the representation and description of region shapes, including boundary extraction, peak and hole removal, object labeling, area and bounding box computation, selection of the largest region, and identification of the ROI. More procedures are then applied to refine the boundary delineation and remove residual artifacts.
+% \begin{figure}
+% \includegraphics[width=0.8\textwidth]{images/binarizacion.png}
+% \caption{Preprocessing steps for artifact removal and segmentation: a) Original image; b) Binarized image using automatic thresholding; c) Segmentation of ROI through morphological operations with Matlab2024b.} \label{fig2} The processed image was taken from ~\cite{oza_figshare}
+% \end{figure}
+
+% \subsubsection{Contrast Enhancement}
+
+% To improve image quality, we used an unsharp masking technique, which enhances high-frequency content, thereby improving edge definition and fine detail visibility. Unsharp masking is commonly used in medical image pre-processing to enhance sharpness and emphasize. Furthermore, the appropriate choice of these techniques is greatly influenced by the imaging modality, the task at hand, and the viewing conditions.~\cite{maini2010comprehensivereviewimageenhancement}
+% In our approach, a $3 \times 3$ unsharp mask was applied. The specific mask used is shown in Fig.~\ref{fig3} and was previously validated in our previous work on the MIAS image dataset, where it demonstrated strong performance~\cite{7314222}.
+
+% \begin{figure}
+% \includegraphics[width=0.9\textwidth]{images/unsharpMaskUsed.png}
+% \caption{Image enhanced with unsharp mask and Matlab's Imfilter filter. a) Original image, b) Image after applying the unsharp mask, c) Enhanced image with remove artifacts. d) unsharp mask used in this work.
+% } \label{fig3}
+% \end{figure}
+
+\subsection{Iterative Otsu Algorithm for Mammogram Segmentation}
+\label{sec:iter-otsu-algorithm}
+The proposed segmentation methodology employs an iterative, multi-level application of Otsu's thresholding algorithm. The process begins by normalizing the raw input mammogram, denoted as \( I_{\text{raw}} \), to a standard intensity range of \([0, 1]\):
+
+% \[
+% I_0 = \frac{I_{\text{raw}} - \min(I_{\text{raw}})}{\max(I_{\text{raw}}) - \min(I_{\text{raw}})}.
+% \]
+
+\begin{equation}
+I_0 = \frac{I_{\text{raw}} - \min(I_{\text{raw}})}{\max(I_{\text{raw}}) - \min(I_{\text{raw}})}
+\label{eq:normalization}
+\end{equation}
+
+A global threshold, \( T_1 \), is first computed by applying Otsu's method to the normalized image \( I_0 \). This algorithm selects the threshold that maximizes the between-class variance, defined as:
+% \[
+% \sigma_B^2(T) = \omega_0(T)\,\omega_1(T)\,[\mu_0(T) - \mu_1(T)]^2,
+% \]
+\begin{equation}
+\sigma_B^2(T) = \omega_0(T)\,\omega_1(T)\,[\mu_0(T) - \mu_1(T)]^2,
+\label{eq:between_class_var}
+\end{equation}
+where \( \omega_0, \omega_1 \) and \( \mu_0, \mu_1 \) represent the class probabilities and mean intensities for the foreground and background classes, respectively. This initial step partitions the image into two primary regions: a \textbf{low-intensity} region where \( I_0 < T_1 \) and a \textbf{high-intensity} region where \( I_0 \geq T_1 \).
+
+To achieve a more granular segmentation suitable for mammographic tissue classification, Otsu's method is applied recursively within each of these two regions. This yields two secondary thresholds:
+
+% \[
+% T_{\text{low}} = \text{Otsu}(I_0 \mid I_0 < T_1), \quad T_{\text{high}} = \text{Otsu}(I_0 \mid I_0 \geq T_1).
+% \]
+
+\begin{equation}
+T_{\text{low}} = \text{Otsu}(I_0 \mid I_0 < T_1), \quad T_{\text{high}} = \text{Otsu}(I_0 \mid I_0 \geq T_1).
+\label{eq:secondary_thresholds}
+\end{equation}
+A practical consideration is addressed for edge cases: if a subset contains no pixels (e.g., an empty histogram), default threshold values are assigned as \( T_{\text{low}} \approx T_1/2 \) and \( T_{\text{high}} \approx (1+T_1)/2 \) to ensure robustness.
+
+The final segmentation divides the mammogram into four distinct tissue classes based on intensity, defined as follows:
+% \[
+% \begin{aligned}
+% \text{Class 1: } & I_0 < T_{\text{low}}, \\
+% \text{Class 2: } & T_{\text{low}} \leq I_0 < T_1, \\
+% \text{Class 3: } & T_1 \leq I_0 < T_{\text{high}}, \\
+% \text{Class 4: } & I_0 \geq T_{\text{high}}.
+% \end{aligned}
+% \]
+
+\begin{equation}
+\begin{aligned}
+\text{Class 1: } & I_0 < T_{\text{low}}, \\
+\text{Class 2: } & T_{\text{low}} \leq I_0 < T_1, \\
+\text{Class 3: } & T_1 \leq I_0 < T_{\text{high}}, \\
+\text{Class 4: } & I_0 \geq T_{\text{high}}.
+\end{aligned}
+\label{eq:final_classes}
+\end{equation}
+This iterative, four-class segmentation provides a foundational label map that effectively differentiates between various density regions within the breast parenchyma, which is a critical precursor for subsequent analysis stages in the \ac{CAD} pipeline.
+
+\section{Experimental Results}
+\label{sec:experimental-results}
+In this Section we address the performance of \ac{MedSAM} for \ac{ZSL}
+segmentation of the pectoral muscle, using a labeled ground truth
+dataset of our own, and of the proposed Iterative Otsu
+approach for segmentation of masses in a mammogram. The latter
+evaluation was carried out visually through the application of the
+approach to samples of the \ac{MIAS} dataset presenting benign and
+malignant masses.
+
+The performance of the \ac{ZSL} approach was quantified by comparing
+the masks generated by \ac{MedSAM} against the manual ground
+truth. Standard segmentation metrics were computed, including
+\ac{DICE}, \ac{IoU}, Precision and Recall, to assess spatial overlap
+accuracy. This quantitative analysis directly addresses the second
+research question regarding \ac{MedSAM}'s performance under \ac{ZSL}
+conditions.
+
+\subsection{Segmentation Performance Metrics}
+\label{sec:segm-perf-metrics}
+In binary segmentation, the \ac{DICE} coefficient and the
+F\textsubscript{1}-score are algebraically
+equivalent~\cite{Shen2018}. To quantitatively evaluate the performance
+of the proposed methodology, we employ the following metrics, whose
+mathematical definitions are provided in Table~\ref{tab:metrics}:
+\begin{itemize}
+\item \ac{DICE}: Defined by Eq.~\eqref{eq:dice}, measures the ratio of
+  the correctly predicted positive pixels over the number of positive
+  areas in both the ground truth and the prediction mask, considering
+  the false positive rate in the calculations alongside false
+  negatives. It has a range of [0,1], and a higher value indicates
+  better performance\cite{Yao2023}.
+\item \ac{IoU}: Also known as Jaccard Similarity coefficient, and
+  defined in Eq.~\eqref{eq:iou}, quantifies the spatial overlap
+  between a predicted segmentation mask and the corresponding ground
+  truth mask (i.e. the size of the intersection divided by the size of
+  the union of two label sets)~\cite{4781564,Yao2023}.
+\item Precision: Measures the accuracy of positive predictions. In
+  segmentation, it quantifies what proportion of the predicted
+  foreground pixels are actually part of the true
+  object. A closer value to 1 describes a higher precision and a more
+  desired performance~\cite{Yao2023}. Eq.~\eqref{eq:precision} defines
+  it mathematically.
+\item Recall: Also known as Sensitivity, measures the completeness of
+  detection. It quantifies what proportion of the actual foreground
+  pixels are correctly identified by the model (i.e. the ratio of true
+  positive samples to the total actual positive
+  samples)~\cite{Yao2023}. Recall is defined by Eq.~\eqref{eq:recall}
+  in Table~\ref{tab:metrics}.
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\caption{Common segmentation evaluation metrics. TP, FP, FN, and TN denote true positives, false positives, false negatives, and true negatives, respectively.}
+\label{tab:segmentation_metrics}
+\begin{tabular}{p{0.3\textwidth} p{0.6\textwidth}}
+\toprule
+\textbf{Metric} & \textbf{Equation}  \\
+\midrule
+Dice Similarity Coefficient (DSC) & 
+\begin{equation}
+\text{DSC} = \frac{2 \times \text{TP}}{2 \times \text{TP} + \text{FP} + \text{FN}}
+\label{eq:dice}
+\end{equation}  \\
+\addlinespace
+Intersection over Union (IoU) / Jaccard Index & 
+\begin{equation}
+\text{IoU} = \frac{\text{TP}}{\text{TP} + \text{FP} + \text{FN}}
+\label{eq:iou}
+\end{equation}  \\
+\addlinespace
+Precision (Positive Predictive Value) & 
+\begin{equation}
+\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+\label{eq:precision}
+\end{equation}  \\
+\addlinespace
+Recall (Sensitivity) & 
+\begin{equation}
+\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+\label{eq:recall}
+\end{equation}  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{\ac{MedSAM} Experimental Results}
+\label{sec:medsam-exper-results}
+To assess the performance of \ac{MedSAM} for pectoral muscle
+segmentation in \ac{MG} using \ac{ZSL} with \ac{HITL}, a comparison
+was established between the predicted masks generated by the proposed
+methodology (described in Section~\ref{sec:medsam-methodology}) and
+the ground truth annotations in our labeled dataset. The results for
+the metrics \ac{DICE}, \ac{IoU}, precision, and recall are presented
+in Table~\ref{tab:medsam-results}. A total of 168 samples were used
+for this evaluation, as two samples were discarded after the
+preprocessing step due to the loss of most of the pectoral muscle
+region.
+
+\begin{table}[h]
+  \centering
+  \caption{Quantitative evaluation results for \ac{MedSAM}}
+  \label{tab:medsam-results}
+  \begin{tabular}{lcccc}
+    \hline
+    \textbf{Metric} & \textbf{Mean $\pm$ Std} &
+                                                \textbf{Median} & \textbf{Min} & \textbf{Max} \\
+    \hline
+    Dice      & 0.86531 $\pm$ 0.14039 & 0.90895 & 0.15112  & 0.98791
+    \\
+    IoU       & 0.78329 $\pm$ 0.17118 & 0.83310 & 0.08174  & 0.97611
+    \\
+    Precision & 0.92517 $\pm$ 0.14076 & 0.98206 & 0.08738  & 1.00000
+    \\
+    Recall    & 0.82970 $\pm$ 0.15068 & 0.87316 & 0.13349  & 0.99039
+    \\
+    \hline
+    \end{tabular}
+ \end{table}
 
 
-In our work, the enhancement and artifact removal process consists of several fundamental steps. Initially, automatic threshold-based binarization is applied using the \texttt{graythresh} and \texttt{im2bw} function, or \texttt{imbinarize} in more recent versions of Matlab-2024b.\cite{matlab_imbinarize} These functions convert the image to binary format by selecting a threshold that minimizes the intraclass variance between the foreground (white) and background (black) pixels Fig.~\ref{fig2}.
-Following binarization, a series of morphological operations are performed to extract the relevant image components. These operations enable the representation and description of region shapes, including boundary extraction, peak and hole removal, object labeling, area and bounding box computation, selection of the largest region, and identification of the ROI. More procedures are then applied to refine the boundary delineation and remove residual artifacts.
-\begin{figure}
-\includegraphics[width=0.8\textwidth]{images/binarizacion.png}
-\caption{Preprocessing steps for artifact removal and segmentation: a) Original image; b) Binarized image using automatic thresholding; c) Segmentation of ROI through morphological operations with Matlab2024b.} \label{fig2} The processed image was taken from ~\cite{oza_figshare}
-\end{figure}
+\section{Discussion and Conclusion}
+\label{sec:discussion-conclusion}
 
-\subsubsection{Contrast Enhancement}
+\subsection{Summary of Contributions}
+[Briefly restate your main contributions]
 
-To improve image quality, we used an unsharp masking technique, which enhances high-frequency content, thereby improving edge definition and fine detail visibility. Unsharp masking is commonly used in medical image pre-processing to enhance sharpness and emphasize. Furthermore, the appropriate choice of these techniques is greatly influenced by the imaging modality, the task at hand, and the viewing conditions.~\cite{maini2010comprehensivereviewimageenhancement}
-In our approach, a $3 \times 3$ unsharp mask was applied. The specific mask used is shown in Fig.~\ref{fig3} and was previously validated in our previous work on the MIAS image dataset, where it demonstrated strong performance~\cite{7314222}.
+\subsection{Discussion of Results}
+[Interpret your findings, compare with related work, explain why results are significant]
 
-\begin{figure}
-\includegraphics[width=0.9\textwidth]{images/unsharpMaskUsed.png}
-\caption{Image enhanced with unsharp mask and Matlab's Imfilter filter. a) Original image, b) Image after applying the unsharp mask, c) Enhanced image with remove artifacts. d) unsharp mask used in this work.
-} \label{fig3}
-\end{figure}
+\subsection{Limitations}
+[Acknowledge methodological constraints, dataset limitations, assumptions]
+
+\subsection{Future Work}
+[Propose specific directions for extending this research]
+
+\subsection{Conclusion}
+[Final summary statement about the work's impact and significance]
 
 \subsection{Stage 2: Image Segmentation}
 
@@ -518,7 +1001,7 @@ This approach combines expert visual accuracy and reproducibility, generating an
 
 \subsubsection{Recursive Otsu threshold segmentation}
 The objective of this method is to segment an image into multiple intensity classes using Otsu recursively: first, a global threshold is obtained; then, a local threshold is calculated on the lower subset and another on the upper subset, generating binary masks covering four ranges (plus the global mask).
-The Otsu thresholding method was originally proposed to segment images using a single threshold that maximizes the variance between-classes~\cite{4310076} ~\cite{bioengineering11101034} However, many applications require partitioning the image into more than two intensity regions, leading to the development of multilevel extensions.~\cite{bioengineering11101034} Among these, hierarchical or recursive approaches apply the Otsu criterion iteratively to pixel subsets to obtain adaptive multiple thresholds. This procedure, known as recursive Otsu thresholding, has been successfully used in domains such as medical image analysis and remote sensing because of its simplicity and effectiveness when dealing with multimodal histograms.  We present the flow chart of our algorithm in Fig.~\ref{fig5} and in Fig.~\ref{fig6} and in Figure 6, in the last column from right to left you can see the results obtained by applying the recursive thresholding approach
+The Otsu thresholding method was originally proposed to segment images using a single threshold that maximizes the variance between-classes~\cite{otsu1979,bioengineering11101034} However, many applications require partitioning the image into more than two intensity regions, leading to the development of multilevel extensions.~\cite{bioengineering11101034} Among these, hierarchical or recursive approaches apply the Otsu criterion iteratively to pixel subsets to obtain adaptive multiple thresholds. This procedure, known as recursive Otsu thresholding, has been successfully used in domains such as medical image analysis and remote sensing because of its simplicity and effectiveness when dealing with multimodal histograms.  We present the flow chart of our algorithm in Fig.~\ref{fig5} and in Fig.~\ref{fig6} and in Figure 6, in the last column from right to left you can see the results obtained by applying the recursive thresholding approach
 
 \begin{figure} 
 \includegraphics[width=0.7\textwidth]{images/flowChartOtsu2.png}
@@ -563,106 +1046,108 @@ To delineate the ground truth of the mammography images from the MIAS database, 
 \end{figure}
 \section{Results}\label{sec:results}
 
-\subsection {Quantitative Validation}%{Evaluation Metrics}
+% \subsection {Quantitative Validation}%{Evaluation Metrics}
 
-\subsection*{Definitions and brief descriptions}
-	In binary segmentation, the Dice coefficient and the F\textsubscript{1}-score are algebraically equivalent. To quantitatively evaluate the performance of the proposed method, we use the following metrics: FP rate, FN rate. ~\cite{Shen2018}
+% \subsection*{Definitions and brief descriptions}
+% 	In binary segmentation, the Dice coefficient and the F\textsubscript{1}-score are algebraically equivalent. To quantitatively evaluate the performance of the proposed method, we use the following metrics: FP rate, FN rate. ~\cite{Shen2018}
 
-    \begin{itemize}
-        \item Dice Similarity Coefficient (DSC): The Dice Similarity Coefficient (DSC) is a measure of overlap between predicted segmentation masks and ground truth masks, commonly used for evaluating segmentation models ~\cite{diagnostics14080848}(Eq.2). DSC measures the ratio of the correctly predicted positive pixels over the number of positive areas in both the ground truth and the prediction mask, considering the false positive rate in the calculations alongside false negatives.  
-        \item Jaccard, overlap ratio between prediction and ground truth; stricter than Dice. ~\cite{4781564}. (Eq.3)
-        \item Sensitivity: Measures the false negative rate (Eq. 4), complementing the assessment by analyzing the detection of relevant areas.
-        \item Accuracy: Although used (Eq. 7), it is not sufficient alone, as the pectoral muscles occupy a small portion of the images, limiting its informative capacity. ~\cite{Shen2018}
-    \end{itemize}
+%     \begin{itemize}
+%         \item Dice Similarity Coefficient (DSC): The Dice Similarity Coefficient (DSC) is a measure of overlap between predicted segmentation masks and ground truth masks, commonly used for evaluating segmentation models ~\cite{diagnostics14080848}(Eq.2). DSC measures the ratio of the correctly predicted positive pixels over the number of positive areas in both the ground truth and the prediction mask, considering the false positive rate in the calculations alongside false negatives.  
+%         \item Jaccard, overlap ratio between prediction and ground truth; stricter than Dice. ~\cite{4781564}. (Eq.3)
+%         \item Sensitivity: Measures the false negative rate (Eq. 4), complementing the assessment by analyzing the detection of relevant areas.
+%         \item Accuracy: Although used (Eq. 7), it is not sufficient alone, as the pectoral muscles occupy a small portion of the images, limiting its informative capacity. ~\cite{Shen2018}
+%     \end{itemize}
 
-	\begin{description}
-		\item[Precision:]
-		\[
-		\mathrm{Prec} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}}       	\tag {1}                
-		\]
-		%\textit{Proportion of predicted positives that are correct; reflects false positive control.}
+% 	\begin{description}
+% 		\item[Precision:]
+% 		\[
+% 		\mathrm{Prec} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}}       	\tag {1}                
+% 		\]
+% 		%\textit{Proportion of predicted positives that are correct; reflects false positive control.}
 		
-		\item[Dice Coefficient (F\textsubscript{1} for sets):]
-		\[
-		\mathrm{Dice} = \frac{2\,\mathrm{TP}}{2\,\mathrm{TP}+\mathrm{FP}+\mathrm{FN}}
-        	\tag{2}
-		\]
-		%\textit{Harmonic overlap; equals the F\textsubscript{1}-score in binary segmentation.}
+% 		\item[Dice Coefficient (F\textsubscript{1} for sets):]
+% 		\[
+% 		\mathrm{Dice} = \frac{2\,\mathrm{TP}}{2\,\mathrm{TP}+\mathrm{FP}+\mathrm{FN}}
+%         	\tag{2}
+% 		\]
+% 		%\textit{Harmonic overlap; equals the F\textsubscript{1}-score in binary segmentation.}
 
-        \item[Jaccard Index (IoU):]
-		\[
-		\mathrm{IoU} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}+\mathrm{FN}}
-        	\tag{3}
-		\]
-		%\textit{Overlap ratio between prediction and ground truth; stricter than Dice.} ~\cite{4781564}
+%         \item[Jaccard Index (IoU):]
+% 		\[
+% 		\mathrm{IoU} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}+\mathrm{FN}}
+%         	\tag{3}
+% 		\]
+% 		%\textit{Overlap ratio between prediction and ground truth; stricter than Dice.} ~\cite{4781564}
 		
         
-        \item[Recall (Sensitivity):]
-		\[
-		\mathrm{Rec} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}
-        	\tag{4}
-		\]
-		%\textit{Proportion of actual positives that are recovered; reflects false negative control.}
+%         \item[Recall (Sensitivity):]
+% 		\[
+% 		\mathrm{Rec} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}
+%         	\tag{4}
+% 		\]
+% 		%\textit{Proportion of actual positives that are recovered; reflects false negative control.}
 		
 		
 		
-		\item[F\textsubscript{1}-Score:]
-		\[
-		F_1 = \frac{2\cdot \mathrm{Prec}\cdot \mathrm{Rec}}{\mathrm{Prec}+\mathrm{Rec}}
-        	\tag{5}
-		\]
-		%\textit{Harmonic mean of Precision and Recall; balances both error types.}
+% 		\item[F\textsubscript{1}-Score:]
+% 		\[
+% 		F_1 = \frac{2\cdot \mathrm{Prec}\cdot \mathrm{Rec}}{\mathrm{Prec}+\mathrm{Rec}}
+%         	\tag{5}
+% 		\]
+% 		%\textit{Harmonic mean of Precision and Recall; balances both error types.}
 						
-		\item[Specificity:]
-		\[
-		\mathrm{Spec} = \frac{\mathrm{TN}}{\mathrm{TN}+\mathrm{FP}}
-        	\tag{6}
-		\]
-		%\textit{True negative rate; complements sensitivity on the negative class.}
+% 		\item[Specificity:]
+% 		\[
+% 		\mathrm{Spec} = \frac{\mathrm{TN}}{\mathrm{TN}+\mathrm{FP}}
+%         	\tag{6}
+% 		\]
+% 		%\textit{True negative rate; complements sensitivity on the negative class.}
 		
-		%\item[Negative Predictive Value (NPV):]
-		%\[
-		%\mathrm{NPV} = \frac{\mathrm{TN}}{\mathrm{TN}+\mathrm{FN}}
-		%\]
-		%\textit{Proportion of predicted negatives that are correct.}
+% 		%\item[Negative Predictive Value (NPV):]
+% 		%\[
+% 		%\mathrm{NPV} = \frac{\mathrm{TN}}{\mathrm{TN}+\mathrm{FN}}
+% 		%\]
+% 		%\textit{Proportion of predicted negatives that are correct.}
 		
-		\item[Accuracy:]
-		\[
-		\mathrm{Acc} = \frac{\mathrm{TP}+\mathrm{TN}}{\mathrm{TP}+\mathrm{FP}+\mathrm{FN}+\mathrm{TN}}
-        	\tag{7}
-		\]
-		%\textit{Overall correctness; can be misleading under strong class imbalance.}
+% 		\item[Accuracy:]
+% 		\[
+% 		\mathrm{Acc} = \frac{\mathrm{TP}+\mathrm{TN}}{\mathrm{TP}+\mathrm{FP}+\mathrm{FN}+\mathrm{TN}}
+%         	\tag{7}
+% 		\]
+% 		%\textit{Overall correctness; can be misleading under strong class imbalance.}
 		
-		%\item[Balanced Accuracy:]
-		%\[
-		%\mathrm{BAcc} = \frac{1}{2}\left(\mathrm{Rec} + \mathrm{Spec}\right)
-		%\]
-		%\textit{Averages sensitivity and specificity; robust to skewed class ratios.}
+% 		%\item[Balanced Accuracy:]
+% 		%\[
+% 		%\mathrm{BAcc} = \frac{1}{2}\left(\mathrm{Rec} + \mathrm{Spec}\right)
+% 		%\]
+% 		%\textit{Averages sensitivity and specificity; robust to skewed class ratios.}
 		
-		%\item[Matthews Correlation Coefficient (MCC):]
-		%\[
-		%\mathrm{MCC} =
-		%\frac{\mathrm{TP}\cdot \mathrm{TN} - \mathrm{FP}\cdot \mathrm{FN}}
-		%{\sqrt{(\mathrm{TP}+\mathrm{FP})(\mathrm{TP}+\mathrm{FN})(\mathrm{TN}+\mathrm{FP})(\mathrm{TN}+\mathrm{FN})}}
-		%\]
-		%\textit{Correlation-like metric in $[-1,1]$; informative even with class imbalance.}
-	\end{description}
+% 		%\item[Matthews Correlation Coefficient (MCC):]
+% 		%\[
+% 		%\mathrm{MCC} =
+% 		%\frac{\mathrm{TP}\cdot \mathrm{TN} - \mathrm{FP}\cdot \mathrm{FN}}
+% 		%{\sqrt{(\mathrm{TP}+\mathrm{FP})(\mathrm{TP}+\mathrm{FN})(\mathrm{TN}+\mathrm{FP})(\mathrm{TN}+\mathrm{FN})}}
+% 		%\]
+% 		%\textit{Correlation-like metric in $[-1,1]$; informative even with class imbalance.}
+% 	\end{description}
 
-    In the context of automated generation of ground truth datasets for mammography image segmentation, evaluating the quality of simulated annotations is critical to ensure their reliability for training and validating machine learning models. A key metric for this assessment is the \textbf{Average Symmetric Surface Distance (ASSD)}, which quantifies the spatial accuracy between the contours of predicted and reference masks. This section outlines the criteria for interpreting a simulated ground truth as ``high quality'' using ASSD, complemented by metrics such as the Dice Similarity Coefficient (DSC) and Intersection over Union (IoU), while considering factors specific to mammography imaging.~\cite{Yeghiazaryan2018}
 
-\subsection{Average Symmetric Surface Distance (ASSD)}
-The ASSD measures the average distance between corresponding points on the contours of the predicted and reference (ground truth) masks, providing a robust indicator of segmentation accuracy, particularly for boundary delineation.~\cite{Yeghiazaryan2018} ~\cite{4781564} This metric is especially relevant in mammography, where precise contouring of structures such as lesions or breast tissue is essential for clinical applications. The ideal ASSD values for simulated ground truth are interpreted as follows~\cite{Shen2018}:
+% ******************** ASSD Metric ********************
+% In the context of automated generation of ground truth datasets for mammography image segmentation, evaluating the quality of simulated annotations is critical to ensure their reliability for training and validating machine learning models. A key metric for this assessment is the \textbf{Average Symmetric Surface Distance (ASSD)}, which quantifies the spatial accuracy between the contours of predicted and reference masks. This section outlines the criteria for interpreting a simulated ground truth as ``high quality'' using ASSD, complemented by metrics such as the Dice Similarity Coefficient (DSC) and Intersection over Union (IoU), while considering factors specific to mammography imaging.~\cite{Yeghiazaryan2018}
 
-\begin{itemize}
-    \item \textbf{ASSD Ideal ($< 1$ mm)}: An ASSD below 1 mm indicates excellent segmentation, with near-perfect alignment between the simulated and reference contours. This level of precision is comparable to expert manual annotations and is highly desirable for mammography datasets used in diagnostic model training.
-    \item \textbf{ASSD Good (1 mm to 5 mm)}: Values in this range are considered acceptable for most clinical applications in mammography. Minor discrepancies in this range typically do not compromise diagnostic accuracy, reflecting robust performance of the ground truth generation algorithm.
-    \item \textbf{ASSD Reasonable (5 mm to 10 mm)}: ASSD values between 5 mm and 10 mm may be tolerable in exploratory settings or for structures with inherent variability (e.g., irregular lesions). However, such values suggest a moderate margin of error, indicating potential for refinement in the simulation process.
-    \item \textbf{ASSD Poor ($> 10$ mm)}: ASSD values exceeding 10 mm signify significant contour misalignment, rendering the simulated ground truth unreliable for clinical applications. Such datasets require substantial improvements to ensure validity.
-\end{itemize}
+% \subsection{Average Symmetric Surface Distance (ASSD)}
+% The ASSD measures the average distance between corresponding points on the contours of the predicted and reference (ground truth) masks, providing a robust indicator of segmentation accuracy, particularly for boundary delineation.~\cite{Yeghiazaryan2018} ~\cite{4781564} This metric is especially relevant in mammography, where precise contouring of structures such as lesions or breast tissue is essential for clinical applications. The ideal ASSD values for simulated ground truth are interpreted as follows~\cite{Shen2018}:
 
-These thresholds are derived from standard practices in medical image segmentation, adjusted for the challenges of simulated ground truth generation in mammography.
-In addition, combining ASSD with DSC and IoU provides a multifaceted assessment, where ASSD emphasizes boundary precision, and DSC/IoU evaluate volumetric consistency, both critical for mammography segmentation.
+% \begin{itemize}
+%     \item \textbf{ASSD Ideal ($< 1$ mm)}: An ASSD below 1 mm indicates excellent segmentation, with near-perfect alignment between the simulated and reference contours. This level of precision is comparable to expert manual annotations and is highly desirable for mammography datasets used in diagnostic model training.
+%     \item \textbf{ASSD Good (1 mm to 5 mm)}: Values in this range are considered acceptable for most clinical applications in mammography. Minor discrepancies in this range typically do not compromise diagnostic accuracy, reflecting robust performance of the ground truth generation algorithm.
+%     \item \textbf{ASSD Reasonable (5 mm to 10 mm)}: ASSD values between 5 mm and 10 mm may be tolerable in exploratory settings or for structures with inherent variability (e.g., irregular lesions). However, such values suggest a moderate margin of error, indicating potential for refinement in the simulation process.
+%     \item \textbf{ASSD Poor ($> 10$ mm)}: ASSD values exceeding 10 mm signify significant contour misalignment, rendering the simulated ground truth unreliable for clinical applications. Such datasets require substantial improvements to ensure validity.
+% \end{itemize}
 
+% These thresholds are derived from standard practices in medical image segmentation, adjusted for the challenges of simulated ground truth generation in mammography.
+% In addition, combining ASSD with DSC and IoU provides a multifaceted assessment, where ASSD emphasizes boundary precision, and DSC/IoU evaluate volumetric consistency, both critical for mammography segmentation.
+% ******************** ASSD ********************
 %\subsection{Complementary Metrics}
 %To provide a comprehensive evaluation, ASSD should be combined with volumetric overlap metrics, such as the \textbf{Dice Similarity Coefficient (DSC)} and \textbf{Intersection over Union (IoU)}:
 
