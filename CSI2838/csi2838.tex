@@ -682,7 +682,7 @@ example, comparing the manually annotated ground truth for case
 % [[./images/ManualMask_vs_MedSAM_3.png]]
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\textwidth]{./images/ManualMask_vs_MedSAM_3.png}
+    \includegraphics[scale=0.6]{./images/ManualMask_vs_MedSAM_3.png}
     \caption{Manually annotated ground truth for the pectoral muscle
       (left) and \ac{MedSAM}'s predicted mask (right) for \textrm{mdb048rm}.}
     \label{fig:ground_truth_example}
@@ -773,7 +773,10 @@ example, comparing the manually annotated ground truth for case
 
 \subsection{Iterative Otsu Algorithm for Mammogram Segmentation}
 \label{sec:iter-otsu-algorithm}
-The proposed segmentation methodology employs an iterative, multi-level application of Otsu's thresholding algorithm. The process begins by normalizing the raw input mammogram, denoted as \( I_{\text{raw}} \), to a standard intensity range of \([0, 1]\):
+The proposed segmentation methodology employs an iterative,
+multi-level application of Otsu's thresholding algorithm. The process
+begins by normalizing the raw input mammogram, denoted as
+\( I_{\text{raw}} \), to a standard intensity range of \([0, 1]\):
 
 % \[
 % I_0 = \frac{I_{\text{raw}} - \min(I_{\text{raw}})}{\max(I_{\text{raw}}) - \min(I_{\text{raw}})}.
@@ -784,7 +787,9 @@ I_0 = \frac{I_{\text{raw}} - \min(I_{\text{raw}})}{\max(I_{\text{raw}}) - \min(I
 \label{eq:normalization}
 \end{equation}
 
-A global threshold, \( T_1 \), is first computed by applying Otsu's method to the normalized image \( I_0 \). This algorithm selects the threshold that maximizes the between-class variance, defined as:
+A global threshold, \( T_1 \), is first computed by applying Otsu's
+method to the normalized image \( I_0 \). This algorithm selects the
+threshold that maximizes the between-class variance, defined as:
 % \[
 % \sigma_B^2(T) = \omega_0(T)\,\omega_1(T)\,[\mu_0(T) - \mu_1(T)]^2,
 % \]
@@ -792,9 +797,16 @@ A global threshold, \( T_1 \), is first computed by applying Otsu's method to th
 \sigma_B^2(T) = \omega_0(T)\,\omega_1(T)\,[\mu_0(T) - \mu_1(T)]^2,
 \label{eq:between_class_var}
 \end{equation}
-where \( \omega_0, \omega_1 \) and \( \mu_0, \mu_1 \) represent the class probabilities and mean intensities for the foreground and background classes, respectively. This initial step partitions the image into two primary regions: a \textbf{low-intensity} region where \( I_0 < T_1 \) and a \textbf{high-intensity} region where \( I_0 \geq T_1 \).
+where \( \omega_0, \omega_1 \) and \( \mu_0, \mu_1 \) represent the
+class probabilities and mean intensities for the foreground and
+background classes, respectively. This initial step partitions the
+image into two primary regions: a low-intensity region where
+\( I_0 < T_1 \) and a high-intensity region where
+\( I_0 \geq T_1 \).
 
-To achieve a more granular segmentation suitable for mammographic tissue classification, Otsu's method is applied recursively within each of these two regions. This yields two secondary thresholds:
+To achieve a more granular segmentation for the  mammographic
+tissue, Otsu's method is applied recursively within
+each of these two regions. This yields two secondary thresholds:
 
 % \[
 % T_{\text{low}} = \text{Otsu}(I_0 \mid I_0 < T_1), \quad T_{\text{high}} = \text{Otsu}(I_0 \mid I_0 \geq T_1).
@@ -804,9 +816,13 @@ To achieve a more granular segmentation suitable for mammographic tissue classif
 T_{\text{low}} = \text{Otsu}(I_0 \mid I_0 < T_1), \quad T_{\text{high}} = \text{Otsu}(I_0 \mid I_0 \geq T_1).
 \label{eq:secondary_thresholds}
 \end{equation}
-A practical consideration is addressed for edge cases: if a subset contains no pixels (e.g., an empty histogram), default threshold values are assigned as \( T_{\text{low}} \approx T_1/2 \) and \( T_{\text{high}} \approx (1+T_1)/2 \) to ensure robustness.
+A practical consideration is addressed for edge cases: if a subset
+contains no pixels (e.g., an empty histogram), default threshold
+values are assigned as \( T_{\text{low}} \approx T_1/2 \) and
+\( T_{\text{high}} \approx (1+T_1)/2 \) to ensure robustness.
 
-The final segmentation divides the mammogram into four distinct tissue classes based on intensity, defined as follows:
+The final segmentation divides the mammogram into four distinct tissue
+classes based on intensity, defined as follows:
 % \[
 % \begin{aligned}
 % \text{Class 1: } & I_0 < T_{\text{low}}, \\
@@ -825,7 +841,20 @@ The final segmentation divides the mammogram into four distinct tissue classes b
 \end{aligned}
 \label{eq:final_classes}
 \end{equation}
-This iterative, four-class segmentation provides a foundational label map that effectively differentiates between various density regions within the breast parenchyma, which is a critical precursor for subsequent analysis stages in the \ac{CAD} pipeline.
+This iterative, four-class segmentation provides a foundational label
+map that effectively differentiates between various density regions
+within the \ac{MG}, which is a critical precursor for subsequent
+analysis stages in the \ac{CADx}/\ac{CADe}
+pipeline. Figure~\ref{fig:SegmentationMap}shows the segmentation map obtained
+by applying our proposed methodology to \texttt{mdb028rl} mammogram
+directly without preprocessing.
+
+  \begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{./presentation/figures_ppt/pectoralMuscleProblem.pdf}
+    \caption{\label{fig:SegmentationMap}Segmentation Map for
+      \texttt{mdb028rl} using the iterative application of Otsu}
+  \end{figure}
 
 \section{Experimental Results}
 \label{sec:experimental-results}
@@ -924,7 +953,17 @@ the metrics \ac{DICE}, \ac{IoU}, precision, and recall are presented
 in Table~\ref{tab:medsam-results}. A total of 168 samples were used
 for this evaluation, as two samples were discarded after the
 preprocessing step due to the loss of most of the pectoral muscle
-region.
+region. \ac{MedSAM} achieved a \ac{DICE} score of
+\(0.86531 \pm 0.14039\) and an \ac{IoU} of \(0.78329 \pm
+0.17118\). The maximum and minimum values for each metric correspond
+to the best and worst performance of \ac{MedSAM}. For example,
+\ac{MedSAM} attained the highest \ac{DICE} score of \(0.988\) for
+image index 111 (i.e. \texttt{mdb160rl}), a median score of \(0.909\)
+for image index 138 (\texttt{mdb247ll}), and the lowest score for
+image index 43 (\texttt{mdb068rl}). These comparisons are presented in
+Figure~\ref{fig:MedSamDiceScoreCompare}. Figure~\ref{fig:boxplot-summary}
+presents a boxplot summary of the performance of \ac{MedSAM} in
+pectoral muscle segmentation task.
 
 \begin{table}[h]
   \centering
@@ -935,9 +974,9 @@ region.
     \textbf{Metric} & \textbf{Mean $\pm$ Std} &
                                                 \textbf{Median} & \textbf{Min} & \textbf{Max} \\
     \hline
-    Dice      & 0.86531 $\pm$ 0.14039 & 0.90895 & 0.15112  & 0.98791
+    \ac{DICE}      & 0.86531 $\pm$ 0.14039 & 0.90895 & 0.15112  & 0.98791
     \\
-    IoU       & 0.78329 $\pm$ 0.17118 & 0.83310 & 0.08174  & 0.97611
+    \ac{IoU}       & 0.78329 $\pm$ 0.17118 & 0.83310 & 0.08174  & 0.97611
     \\
     Precision & 0.92517 $\pm$ 0.14076 & 0.98206 & 0.08738  & 1.00000
     \\
@@ -947,6 +986,26 @@ region.
     \end{tabular}
  \end{table}
 
+ \begin{figure}[ht]
+   \centering
+   \includegraphics[width=\textwidth]{./presentation/figures_ppt/SegmentationComparisonExamples_withLegend.png}
+   \caption{Representative segmentation results of MedSAM showing
+     worst (Image 43, \texttt{mdb068rl}), median (Image 138,
+     \texttt{mdb247ll}), and best (Image 111, \texttt{mdb160rl}) cases
+     with \ac{DICE} scores of 0.151, 0.909, and 0.988, respectively.}
+   \label{fig:MedSamDiceScoreCompare}
+ \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{./presentation/figures_ppt/SegmentationMetricsPerformance.png}
+      \caption{Boxplot distribution of \ac{MedSAM}’s segmentation metrics
+        for pectoral muscle detection using \ac{ZSL},
+        showing variability across \ac{DICE}, \ac{IoU}, Precision, and Recall
+        scores.}
+      \label{fig:boxplot-summary}
+      
+\end{figure}
 
 \section{Discussion and Conclusion}
 \label{sec:discussion-conclusion}
@@ -1015,21 +1074,22 @@ The Otsu thresholding method was originally proposed to segment images using a s
 \caption{Results of the proposed preprocessing and segmentation pipeline on representative mammographic images. From left to right: (i) overlay of the isolated pectoral muscle on the enhanced image, (ii) clean mammogram with background and muscle removed, (iii) binary mask of the pectoral muscle, d) comparison between ground-truth mask (green) and the proposed method (red), and (iv) segmentation of breast anomalies obtained through multi-thresholding and image segmentation.} \label{fig6}
 \end{figure}
 
-\subsection{Stage 4: ¿Simulated Ground Truth Mask Generation and Validation} or \textbf{SAM-Generated Ground Truth Mask Creation and Validation} o SAM-Derived Reference Mask Generation and Evaluation?
-mmmmmmmmmmmmmmmmmmmmmmmm
-Stage 4 focuses on the delineation of the ROI to isolate the anatomical structures of interest, used for validation purposes; a simulated ground truth was constructed by delineating the ROI and generating the corresponding binary mask. These masks, which emulate the annotations of an expert radiologist, were used as a reference against which the proposed segmentation results were compared.
+% \subsection{Stage 4: ¿Simulated Ground Truth Mask Generation and Validation} or \textbf{SAM-Generated Ground Truth Mask Creation and Validation} o SAM-Derived Reference Mask Generation and Evaluation?
+% mmmmmmmmmmmmmmmmmmmmmmmm
+% Stage 4 focuses on the delineation of the ROI to isolate the anatomical structures of interest, used for validation purposes; a simulated ground truth was constructed by delineating the ROI and generating the corresponding binary mask. These masks, which emulate the annotations of an expert radiologist, were used as a reference against which the proposed segmentation results were compared.
 
-SAM-Generated ground truth consisted of automatically generated binary masks obtained by cropping the delineated of ROI of the pectoral muscle. In the absence of expert-delineated masks, this dataset served as the reference for the quantitative evaluation of the agreement with the proposed semi-automatic segmentation method for pectoral muscle removal.
+% SAM-Generated ground truth consisted of automatically generated binary masks obtained by cropping the delineated of ROI of the pectoral muscle. In the absence of expert-delineated masks, this dataset served as the reference for the quantitative evaluation of the agreement with the proposed semi-automatic segmentation method for pectoral muscle removal.
 
-By generating of the ground truth through interactive segmentation with the Segment Anything Model (SAM) (Matlab 2024b) \cite {mathworks2023sam}, we expect the average segmentation error to remain low, as the binary masks closely approximate expert-level annotations.
-The ground truth was constructed using SAM-based interactive ROI segmentation, which provides accurate binary masks. Therefore, we anticipate that the mean segmentation error will be minimal when comparing the proposed method with the simulated reference. Fig.~\ref{fig7}. shows the images used and the generated pectoral muscle masks, as well as the mask overlay on the enhanced image without background artifacts.
+% By generating of the ground truth through interactive segmentation with the Segment Anything Model (SAM) (Matlab 2024b) \cite {mathworks2023sam}, we expect the average segmentation error to remain low, as the binary masks closely approximate expert-level annotations.
+% The ground truth was constructed using SAM-based interactive ROI segmentation, which provides accurate binary masks. Therefore, we anticipate that the mean segmentation error will be minimal when comparing the proposed method with the simulated reference. Fig.~\ref{fig7}. shows the images used and the generated pectoral muscle masks, as well as the mask overlay on the enhanced image without background artifacts.
 
+% ******************** this figure may be useful ********************
 \begin{figure} 
 \centering
 \includegraphics[width=0.5\textwidth]{images/creationGT2.png}
 \caption{Interactive object segmentation is performed within user-defined ROIs using SAM, which employs deep learning and visual prompts to generate accurate binary masks. The first column shows the name of the image, the second shows the original image, and the third shows the overlay of the enhanced image without artifacts and the mask generated, using Matlab toolboxes} \label{fig7}
 \end{figure}
-
+% ******************** this figure may be useful ********************
 
 
 
@@ -1186,7 +1246,12 @@ Consider a simulated ground truth for segmenting pectoral muscle in mammography 
 \end{itemize}
 
 
-Table 3 presents the evaluation metrics obtained for each individual image in the dataset. The metrics include the Dice coefficient, Jaccard index, Precision, Recall, and F1 score, which collectively provide a comprehensive assessment of the segmentation performance across different cases. According to described above, the most of the results were successful or acceptable. 
+Table 3 presents the evaluation metrics obtained for each individual
+image in the dataset. The metrics include the Dice coefficient,
+Jaccard index, Precision, Recall, and F1 score, which collectively
+provide a comprehensive assessment of the segmentation performance
+across different cases. According to described above, the most of the
+results were successful or acceptable.
 
 
 \begin{table}[h!]
@@ -1226,9 +1291,19 @@ mdb264 & 0.9817 & 0.9817 & 0.9670 & 0.9968 & 0.9817 \\
 
 \subsection{Qualitative validation}
 
-Visual validation was performed by overlaying the SAM-derived simulated ground truth masks with the proposed semi-automatic segmentation masks to assess their alignment and accuracy. By superimposing these masks over the original images, visual inspection enabled the evaluation of their spatial alignment, boundary accuracy, and overall consistency, complementing the quantitative metrics
+Visual validation was performed by overlaying the SAM-derived
+simulated ground truth masks with the proposed semi-automatic
+segmentation masks to assess their alignment and accuracy. By
+superimposing these masks over the original images, visual inspection
+enabled the evaluation of their spatial alignment, boundary accuracy,
+and overall consistency, complementing the quantitative metrics
 
-To evaluate the performance of the recursive thresholding approach, the mass region of the MIAS dataset was delineated based on the information available in "Info.txt". This was done to visually assess the accuracy of the mass segmentation obtained with our approach, as explained in Stage 3 (see Figures 6 and 8). It is clear that the ROI segmentation fits the automatically outlined circle.
+To evaluate the performance of the recursive thresholding approach,
+the mass region of the MIAS dataset was delineated based on the
+information available in "Info.txt". This was done to visually assess
+the accuracy of the mass segmentation obtained with our approach, as
+explained in Stage 3 (see Figures 6 and 8). It is clear that the ROI
+segmentation fits the automatically outlined circle.
 
 \section{Discussion}
 Although the simulated ground truth generated with SAM provides accurate binary masks that approximate expert-level annotations, it cannot fully substitute for the radiologist-delineated ground truth. Expert annotations remain the gold standard for clinical validation, as they incorporate contextual knowledge and interpretative criteria beyond the pixel-level delineation. However, the simulated ground truth offers a practical and reproducible solution for algorithm development and preliminary validation, enabling reliable benchmarking in the absence of expert annotations.
