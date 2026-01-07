@@ -146,7 +146,7 @@ Instituto de Computação, Universidade Federal Fluminense, Niterói – RJ
   segmentation. In addition, we propose a recursive Otsu thresholding
   approach for mass detection in mammograms from the MIAS
   database. Experimental results demonstrate that MedSAM achieves a
-  Dice score of \(0.86 \pm 0.14\) on a substantial subset of MIAS
+  DICE score of \(0.86 \pm 0.14\) on a substantial subset of MIAS
   mammograms, indicating its potential for immediate use to assist in
   pectoral muscle segmentation. Qualitative evaluation of the
   recursive Otsu approach also shows promising results.
@@ -220,7 +220,7 @@ muscle in \ac{MG} due to the fact that the muscle's location, shape,
 density and position vary among patients\cite{Aliniya2024}. To address
 this, \ac{DL} methods are being investigated to identify the pectoral
 muscle region in both
-\ac{MLO}~\cite{Guo2020}~\cite{Aliniya2024Supervised} and \ac{CC}
+\ac{MLO}~\cite{Aliniya2024Supervised,Guo2020} and \ac{CC}
 views~\cite{Larroza2024}. However, \ac{DL} methods typically require
 large amounts of annotated data to train effectively in a supervised
 learning setting for a specific task.
@@ -261,7 +261,7 @@ following contributions:
 \item A manual segmentation pipeline to enhance the \ac{MG} and its
   borders.
 \item A Pectoral Muscle Segmentation Dataset.
-\item An recursive Otsu algorithm for the automatic segmentation of
+\item A recursive Otsu algorithm for the automatic segmentation of
   \ac{MG} images.
 \end{itemize}
 
@@ -411,7 +411,7 @@ a comprehensive analysis of various \ac{ML} models applied to \ac{BC}
 detection across multiple imaging modalities, including \ac{MG},
 \ac{US}, \ac{TG}, and \ac{MRI}. Regarding the specific task of image
 segmentation in \ac{MG}, the highest reported performance (accuracy:
-99\%, Dice: 87\%) was achieved by Sani \emph{et
+99\%, \ac{DICE}: 87\%) was achieved by Sani \emph{et
   al.}~\cite{Sani2023}. In their work, the authors modified the Mask
 R-CNN architecture by replacing its standard \ac{CNN} layers with
 Grouped-\ac{CNN} layers. For pectoral muscle segmentation, Yu \emph{et
@@ -460,7 +460,7 @@ Table~\ref{tab:mammography-datasets}.
 \caption{Summary of related works on pectoral muscle segmentation in mammograms}
 \label{tab:relatedworks}
 \scriptsize
-\begin{tabularx}{\textwidth}{|>{\hsize=1.2\hsize}X|>{\hsize=1.1\hsize}X|>{\hsize=0.9\hsize}X|>{\hsize=0.9\hsize}X|>{\hsize=1.1\hsize}X|>{\hsize=0.8\hsize}X|}
+\begin{tabularx}{\textwidth}{|>{\hsize=0.6\hsize}X|>{\hsize=1.2\hsize}X|>{\hsize=1.\hsize}X|>{\hsize=1.0\hsize}X|>{\hsize=1.1\hsize}X|>{\hsize=1.1\hsize}X|}
 \hline
 \textbf{Authors \& Year} & \textbf{Method} & \textbf{Dataset (Size)} & \textbf{Validation} & \textbf{Performance} & \textbf{Technique} \\ \hline
 
@@ -493,7 +493,7 @@ Jaccard, Sensitivity, Specificity& Acc 99.0\%, DICE 87.1\%,  Jaccard
 \begin{table}[htbp]
 \caption{Public and Private Mammography Databases.}\label{tab:mammography-datasets}
 \scriptsize
-\begin{tabularx}{\linewidth}{|>{\hsize=0.7\hsize}X|>{\hsize=0.7\hsize}X|>{\hsize=0.7\hsize}X|>{\hsize=1.9\hsize}X|}
+\begin{tabularx}{\linewidth}{|>{\hsize=0.6\hsize}X|>{\hsize=0.6\hsize}X|>{\hsize=0.6\hsize}X|>{\hsize=2.2\hsize}X|}
 \hline
 \textbf{Database} & \textbf{Type} & \textbf{Size} & \textbf{Description} \\
 \hline
@@ -514,7 +514,7 @@ DMID~\cite{oza_figshare,oza2024dmiddataset} & Public & Several hundred (exact no
 \end{tabularx}
 \end{table}
 
-
+\newpage
 \section{Materials and Methods}\label{sec:Methodology}
 This section describes: (i) the database used and (ii) the proposed
 methodology. In this research, \ac{MIAS}~\cite{MIAS1994} dataset was
@@ -530,7 +530,7 @@ Medical images are frequently degraded by noise originating from
 interference or other phenomena that affect the measurement processes
 within imaging acquisition systems. The \ac{MIAS} dataset, for
 instance, contains scanner noise introduced during the digitization of
-film mammograms. In this work, enhancement and artifact removal were
+the film mammograms. In this work, enhancement and artifact removal were
 performed using the \texttt{MATLAB Image Batch Processor} to apply a
 preprocessing function. This function performs binary thresholding by
 minimizing the interclass variance between foreground and background
@@ -539,8 +539,8 @@ the labeled regions are calculated to identify the largest connected
 area as the region of interest (ROI). Subsequently, morphological
 operations are employed to refine features. To further improve image
 quality, a Laplacian-based sharpening filter is applied. The kernel
-used is a discrete approximation of the Laplacian operator, defined
-as:
+used is a discrete approximation of the Laplacian operator, defined in
+Eq.~\eqref{eq:laplacian}.
 
 \begin{equation}
   \label{eq:laplacian}
@@ -674,9 +674,7 @@ anchor point for the bounding box was placed at the superior edge
 where the muscle originates. \ac{MedSAM} generated the segmentation
 mask based exclusively on this prompt and its pre-trained weights,
 without employing any post-processing techniques such as dilation or
-erosion.
-
-Figure~\ref{fig:ground_truth_example} presents an illustrative
+erosion. Figure~\ref{fig:ground_truth_example} presents an illustrative
 example, comparing the manually annotated ground truth for case
 \texttt{mdb048rm} with the \ac{ZSL} prediction generated by
 \ac{MedSAM}.
@@ -685,7 +683,7 @@ example, comparing the manually annotated ground truth for case
 % [[./images/ManualMask_vs_MedSAM_3.png]]
 \begin{figure}[htbp]
     \centering
-    \includegraphics[scale=0.6]{./images/ManualMask_vs_MedSAM_3.png}
+    \includegraphics[scale=0.45]{./images/ManualMask_vs_MedSAM_3.png}
     \caption{Manually annotated ground truth for the pectoral muscle
       (left) and \ac{MedSAM}'s predicted mask (right) for \textrm{mdb048rm}.}
     \label{fig:ground_truth_example}
@@ -776,21 +774,23 @@ example, comparing the manually annotated ground truth for case
 
 \subsection{Recursive Otsu Threshold Algorithm for Mammogram Segmentation}
 \label{sec:iter-otsu-algorithm}
+% <<locate the text>> Our approach addresses
+% the removal of pectoral muscle in either right or left mammograms by
+% using \ac{MedSAM} with \ac{ZSL} to create binary masks of pectoral
+% muscle.
+% <<after "Otsu's thresholding algorithm">>
 Considering that the presence of the pectoral muscle in mammograms,
 especially in \ac{MLO} views, represents a critical challenge for
 \ac{CADx} and \ac{CADe} systems, due to its intensity similar to that
 of glandular tissue, this study proposes an recursive, multi-level
-application of Otsu's thresholding algorithm. Our approach addresses
-the removal of pectoral muscle in either right or left mammograms by
-using \ac{MedSAM} with \ac{ZSL} to create binary masks of pectoral
-muscle. The challenge for a fully automated system is to detect the
-side (left/right) of the breast in the mammogram and remove the
-pectoral muscle from the correct location with precision. Our
-approach, decides whether the breast is left or right, creates a
-binary mask for the muscle, and combines the tissue mask with the
-removed muscle mask to display the final image without the pectoral
+application of Otsu's thresholding algorithm. The challenge for a
+fully automated system is to detect the side (left/right) of the
+breast in the mammogram and remove the pectoral muscle from the
+correct location with precision. Our approach determines whether the
+breast is left or right, generates a binary mask for the pectoral
+muscle with user assistance, and combines the tissue mask with the
+muscle-removed mask to produce the final image without the pectoral
 muscle.
-
 % the following image could be referenced when talking about the
 % creation of the binary masks of pectoral muscel
 % \begin{figure} 
@@ -880,23 +880,23 @@ classes based on intensity, defined as follows:
 \end{aligned}
 \label{eq:final_classes}
 \end{equation}
-This iterative, four-class segmentation provides a foundational label
+This recursive four-class segmentation procedure provides a foundational label
 map that effectively differentiates between various density regions
 within the \ac{MG}, which is a critical precursor for subsequent
 analysis stages in the \ac{CADx}/\ac{CADe}
-pipeline. Figure~\ref{fig:SegmentationMap}shows the segmentation map obtained
-by applying our proposed methodology to \texttt{mdb028rl} mammogram
-directly without preprocessing.
+pipeline. Figure~\ref{fig:SegmentationMap} shows the segmentation map obtained
+by applying our proposed methodology to the \texttt{mdb028rl} mammogram
+directly, without preprocessing.
 
   \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{./presentation/figures_ppt/pectoralMuscleProblem.pdf}
+    \includegraphics[scale=.45]{./presentation/figures_ppt/pectoralMuscleProblem.pdf}
     \caption{\label{fig:SegmentationMap}Segmentation Map for
       \texttt{mdb028rl} using the recursive application of Otsu. The
       removal of the pectoral muscle allows the detection of
       suspicious masses}
   \end{figure}
-
+\newpage
   
 \section{Experimental Results}
 \label{sec:experimental-results}
@@ -922,26 +922,27 @@ In binary segmentation, the \ac{DICE} coefficient and the
 F\textsubscript{1}-score are algebraically
 equivalent~\cite{Shen2018}. To quantitatively evaluate the performance
 of the proposed methodology, we employ the following metrics, whose
-mathematical definitions are provided in Table~\ref{tab:segmentation_metrics}:
+mathematical definitions are provided in
+Table~\ref{tab:segmentation_metrics}:
 \begin{itemize}
-\item \ac{DICE}: Defined by Eq.~\eqref{eq:dice}, measures the ratio of
+\item \textbf{\ac{DICE}}: Defined by Eq.~\eqref{eq:dice}, measures the ratio of
   the correctly predicted positive pixels over the number of positive
   areas in both the ground truth and the prediction mask, considering
   the false positive rate in the calculations alongside false
   negatives. It has a range of [0,1], and a higher value indicates
   better performance\cite{Yao2023}.
-\item \ac{IoU}: Also known as Jaccard Similarity coefficient, and
+\item \textbf{\ac{IoU}}: Also known as Jaccard Similarity coefficient, and
   defined in Eq.~\eqref{eq:iou}, quantifies the spatial overlap
   between a predicted segmentation mask and the corresponding ground
   truth mask (i.e. the size of the intersection divided by the size of
   the union of two label sets)~\cite{4781564,Yao2023}.
-\item Precision: Measures the accuracy of positive predictions. In
+\item \textbf{Precision}: Measures the accuracy of positive predictions. In
   segmentation, it quantifies what proportion of the predicted
   foreground pixels are actually part of the true
   object. A closer value to 1 describes a higher precision and a more
   desired performance~\cite{Yao2023}. Eq.~\eqref{eq:precision} defines
   it mathematically.
-\item Recall: Also known as Sensitivity, measures the completeness of
+\item \textbf{Recall}: Also known as Sensitivity, measures the completeness of
   detection. It quantifies what proportion of the actual foreground
   pixels are correctly identified by the model (i.e. the ratio of true
   positive samples to the total actual positive
@@ -991,10 +992,10 @@ segmentation in \ac{MG} using \ac{ZSL} with \ac{HITL}, a comparison
 was established between the predicted masks generated by the proposed
 methodology (described in Section~\ref{sec:medsam-methodology}) and
 the ground truth annotations in our labeled dataset. The results for
-the metrics \ac{DICE}, \ac{IoU}, precision, and recall are presented
+the metrics \ac{DICE}, \ac{IoU}, Precision, and Recall are presented
 in Table~\ref{tab:medsam-results}. A total of 168 samples were used
 for this evaluation, as two samples were discarded after the
-preprocessing step due to the loss of most of the pectoral muscle
+preprocessing step due to the loss of the whole pectoral muscle
 region. \ac{MedSAM} achieved a \ac{DICE} score of
 \(0.86531 \pm 0.14039\) and an \ac{IoU} of \(0.78329 \pm
 0.17118\). The maximum and minimum values for each metric correspond
@@ -1003,9 +1004,9 @@ to the best and worst performance of \ac{MedSAM}. For example,
 image index 111 (i.e. \texttt{mdb160rl}), a median score of \(0.909\)
 for image index 138 (\texttt{mdb247ll}), and the lowest score for
 image index 43 (\texttt{mdb068rl}). These comparisons are presented in
-Figure~\ref{fig:MedSamDiceScoreCompare}. Figure~\ref{fig:boxplot-summary}
-presents a boxplot summary of the performance of \ac{MedSAM} in
-pectoral muscle segmentation task.
+Figure~\ref{fig:MedSamDiceScoreCompare}. Likewise,
+Figure~\ref{fig:boxplot-summary} presents a boxplot summary of the
+performance of \ac{MedSAM} in pectoral muscle segmentation task.
 
 \begin{table}[h]
   \centering
@@ -1048,13 +1049,13 @@ pectoral muscle segmentation task.
       \label{fig:boxplot-summary}
       
 \end{figure}
-
+\newpage
 \subsection{Qualitative validation of Recursive Otsu Threshold
   Algorithm}
 \label{sec:qual-valid-recursive-otsu}
 
 Visual validation was performed by overlaying the ground truth masks
-with the proposed proposed segmentation masks from the recursive Otsu
+with the proposed  segmentation masks from the recursive Otsu
 Algorithm to assess their alignment and accuracy. By superimposing
 these masks over the original images, visual inspection enabled the
 evaluation of their spatial alignment, boundary accuracy, and overall
@@ -1067,7 +1068,7 @@ extracts the ground truth information, including the lesion
 coordinates and radio. Then, circular ROIs are drawn to approximate
 the location and size of the lesions. This circular approximation is
 suitable for general mass detection (e.g., CIRC, SPIC), but does not
-represent the exact lesion contours.This was done to visually assess
+represent the exact lesion contours. This was done to visually assess
 the accuracy of the mass segmentation obtained with our
 approach. Figure~\ref{fig:segmentation-pipeline-otsu} shows that the
 ROI segmentation fits the automatically outlined circle.
@@ -1128,7 +1129,7 @@ mammography repositories. Second, the ground truth annotations used
 for evaluation were provided by individual researchers. Each
 researcher worked with an independent set of samples. In order to
 reduce potential labeling bias, it is recommended to implement a
-consensus labeling set up. Third, The integration of \ac{HITL}
+consensus labeling set up. Third, the integration of \ac{HITL}
 mechanisms for prompt refinement requires further investigation to
 quantify and control for human biases introduced in the interactive
 labeling process.
