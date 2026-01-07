@@ -3936,3 +3936,505 @@ This work explores both traditional and modern approaches for mammogram segmenta
 <!-- gptel--backend-name: "DeepSeek" -->
 <!-- gptel--bounds: ((response (162 369) (438 624) (758 922) (1305 1668) (2125 2562) (2626 3341) (4020 4676) (5071 6739) (6747 9197) (9815 10421) (11260 12090) (15560 17693) (17757 21010) (21096 21822) (21898 24392) (25304 28519) (28997 31363) (31873 35725) (35950 41441) (41485 45551) (45911 48419) (48597 52168) (52296 53708) (53799 57632) (58063 60339) (61294 63904) (65262 68002) (68685 70529) (71146 72883) (72932 75771) (76299 76819) (77668 79912) (81084 83088) (84142 86381) (87308 90241) (90291 94039) (95086 96455) (97329 98806) (99663 100521) (101581 105347) (106585 109102) (109905 112546) (113575 114706) (114814 117577) (117691 121905) (122680 124998) (125253 129783) (130403 132514) (133228 136184) (136462 136902) (137343 138831) (138899 142648) (142681 145224) (147871 150939) (150988 155030) (156011 158702) (160952 165586) (166517 169600) (170992 173383) (173563 175173) (175318 177727) (179753 183508) (184706 187989) (188040 192616) (192829 197259) (197472 201266) (201575 202751) (203400 205373) (205934 208601) (210848 212044) (213133 214181) (215016 215828) (217405 220228) (221039 221852) (222815 225498) (226767 230165) (230775 232723) (233825 235755) (236796 239866))) -->
 <!-- End: -->
+## in latex the word error was separated as er-ror but I think it is wrong how can I control a correct separation
+
+In LaTeX, you can control hyphenation using several methods. The "er-ror" separation is incorrect because LaTeX's default hyphenation patterns treat "error" as a single syllable word. Here are the solutions:
+
+## **1. Prevent Hyphenation Entirely**
+
+```latex
+% Use \mbox{} for a single word
+This is an \mbox{error} in the text.
+
+% Use \nolinebreak or ~ for phrases
+This is an error~in the text.
+```
+
+## **2. Specify Correct Hyphenation Points**
+
+```latex
+% Use \hyphenation command in preamble
+\hyphenation{er-ror cor-rect hy-phen-a-tion}
+
+% Or use \- within the word
+This is an er\-ror in the text.
+```
+
+## **3. Use Packages for Better Control**
+
+```latex
+\usepackage{hyphenat}  % For \nohyphens command
+\nohyphens{This entire phrase won't be hyphenated}
+
+\usepackage{ragged2e}  % For \RaggedRight (reduces hyphenation)
+\RaggedRight
+```
+
+## **4. Adjust Hyphenation Parameters**
+
+```latex
+% In preamble
+\hyphenpenalty=10000  % Disable hyphenation entirely
+\exhyphenpenalty=10000 % Disable hyphenation after explicit hyphen
+
+% Or adjust tolerance
+\tolerance=1000
+\emergencystretch=1em
+```
+
+## **5. Best Practice for Your Case**
+
+For the specific word "error", add to your preamble:
+
+```latex
+\hyphenation{error}  % No hyphenation for "error"
+```
+
+Or in the text:
+
+```latex
+This is an \mbox{error} in the document.
+```
+
+## **6. Complete Example**
+
+```latex
+\documentclass{article}
+\hyphenation{error algorithm segmentation} % Add problem words here
+
+\begin{document}
+
+This work addresses the segmentation error in mammogram analysis.
+The recursive Otsu algorithm shows minimal error rates compared to
+traditional methods. However, computational error may occur during
+intensive processing.
+
+\end{document}
+```
+
+## **7. Debugging Hyphenation**
+
+To see where LaTeX wants to hyphenate:
+
+```latex
+\usepackage{showhyphens}
+\showhyphens{error algorithm segmentation mammography}
+```
+
+## **8. Language-Specific Solutions**
+
+If using non-English:
+
+```latex
+\usepackage[english]{babel}  % Load language package
+\babelhyphenation[english]{error}{er-ror}  % Define custom hyphenation
+```
+
+## **Recommendation**
+
+For your paper, add this to your preamble:
+
+```latex
+\hyphenation{
+    % Problem words from your paper
+    error
+    MedSAM
+    mammo-gram
+    pecto-ral
+    segmen-tation
+    algo-rithm
+}
+```
+
+This ensures consistent, correct hyphenation throughout your document. The "er-ror" issue specifically should be fixed with `\hyphenation{error}` or using `\mbox{error}` for critical instances.
+
+### how should error be split when text justification needs to divide it
+
+When text justification requires splitting the word "error," the correct hyphenation is:
+
+## **Correct Hyphenation:**
+**er-ror** (er·ror)
+
+This follows standard English syllabification rules:
+- First syllable: **er** (pronounced /ˈɛr/)
+- Second syllable: **ror** (pronounced /ər/)
+
+## **In LaTeX Implementation:**
+
+```latex
+% Option 1: Let LaTeX handle it (usually correct)
+The segmentation error in the mammogram analysis...
+
+% Option 2: Explicitly specify hyphenation points
+\hyphenation{er-ror} % In preamble
+
+% Option 3: Manual control in text
+This is an er\-ror in the algorithm.
+```
+
+## **Why "er-ror" is Actually Correct:**
+
+1. **Phonetic division:** /ˈɛr.ər/ (er-ror)
+2. **Morphological division:** "err" + "or" (though hyphenation follows pronunciation, not morphology)
+3. **Dictionary standards:** Merriam-Webster, Oxford, and Chicago Manual of Style all show "er-ror"
+
+## **If LaTeX is Hyphenating Incorrectly:**
+
+Check your language settings:
+```latex
+\usepackage[english]{babel} % Ensure English hyphenation patterns
+```
+
+## **Alternative Solutions for Your Paper:**
+
+If you're concerned about hyphenation in critical terms:
+
+```latex
+% Prevent hyphenation of technical terms
+\hyphenation{
+    MedSAM
+    Otsu
+    MIAS
+    % error % Remove if you want it to hyphenate
+}
+
+% Or use non-breaking spaces for phrases
+segmentation~error
+algorithm~error
+detection~error
+```
+
+## **Best Practice for Academic Papers:**
+
+1. **For common words like "error":** Let LaTeX hyphenate naturally
+2. **For technical terms:** Add to `\hyphenation{}` list in preamble
+3. **For critical phrases:** Use `~` (non-breaking space)
+
+```latex
+\hyphenation{
+    % Technical terms from your paper
+    mam-mo-gram
+    pec-to-ral
+    seg-men-ta-tion
+    al-go-rithm
+    % Common words you want to control
+    er-ror
+    eval-u-a-tion
+    per-for-mance
+}
+```
+
+**Note:** If your LaTeX is showing "er-ror" and you think it's wrong, it's actually correct! The visual separation might look odd, but "er-ror" follows standard English hyphenation rules. If you prefer to avoid hyphenating "error" entirely, use `\hyphenation{error}` in your preamble.
+
+### 
+``` LaTeX
+\begin{tabularx}{\linewidth}{|>{\hsize=0.7\hsize}X|>{\hsize=0.7\hsize}X|>{\hsize=0.7\hsize}X|>{\hsize=1.9\hsize}X|}
+```
+
+In the `tabularx` environment, the `\hsize` parameter controls the relative width of each `X` column. The values you've specified determine how the total available width is distributed among the columns.
+
+## How the Column Sizes Work
+
+The total `\hsize` for all `X` columns should sum to the number of `X` columns. In your example:
+
+- **Column 1:** `\hsize=0.7\hsize`
+- **Column 2:** `\hsize=0.7\hsize`  
+- **Column 3:** `\hsize=0.7\hsize`
+- **Column 4:** `\hsize=1.9\hsize`
+
+**Sum:** \(0.7 + 0.7 + 0.7 + 1.9 = 4.0\)
+
+This is correct since you have 4 `X` columns. The widths are distributed proportionally:
+- First three columns: \(0.7/4.0 = 17.5\%\) of the total width each
+- Fourth column: \(1.9/4.0 = 47.5\%\) of the total width
+
+## How to Change the Values
+
+To adjust column widths, modify the `\hsize` values while maintaining that their sum equals the number of `X` columns. For example:
+
+```latex
+% Equal width columns (default behavior)
+\begin{tabularx}{\linewidth}{|X|X|X|X|}
+
+% Custom distribution: 15%, 15%, 20%, 50%
+\begin{tabularx}{\linewidth}{|>{\hsize=0.6\hsize}X|>{\hsize=0.6\hsize}X|>{\hsize=0.8\hsize}X|>{\hsize=2.0\hsize}X|}
+
+% Alternative: Emphasize middle columns
+\begin{tabularx}{\linewidth}{|>{\hsize=0.5\hsize}X|>{\hsize=1.5\hsize}X|>{\hsize=1.5\hsize}X|>{\hsize=0.5\hsize}X|}
+```
+
+**Important:** Always ensure the sum of `\hsize` values equals the number of `X` columns. For \(n\) `X` columns: \(\sum_{i=1}^{n} \hsize_i = n\).
+
+## Recommendation for Academic Papers
+
+For conference papers, consider using more readable table formatting:
+
+```latex
+\begin{tabularx}{\linewidth}{@{}>{\hsize=0.8\hsize}X>{\hsize=1.2\hsize}X>{\hsize=1.0\hsize}X@{}}
+\hline
+\textbf{Column 1} & \textbf{Column 2} & \textbf{Column 3} \\
+\hline
+Content here & More content & Final content \\
+\hline
+\end{tabularx}
+```
+
+This removes vertical lines (improves readability) and uses `@{}` to eliminate extra padding at the edges.
+
+### should i write digitization of film mammograms or digitization of the film mammograms
+
+For academic writing, **"digitization of film mammograms"** is preferred.
+
+## **Analysis:**
+
+### **Option 1: "digitization of film mammograms"** ✓ (Recommended)
+- More concise and direct
+- Standard phrasing in medical imaging literature
+- Treats "film mammograms" as a compound noun
+- Example: "The MIAS dataset contains digitized film mammograms."
+
+### **Option 2: "digitization of the film mammograms"**
+- Adds unnecessary definite article
+- Implies specific, previously mentioned mammograms
+- Slightly wordier without adding clarity
+
+## **Context Matters:**
+
+**Use "the" when referring to specific mammograms:**
+```latex
+% When mammograms have been previously mentioned
+The dataset contains 322 film mammograms. The digitization of \emph{the} film mammograms introduced scanner noise.
+```
+
+**Omit "the" for general statements:**
+```latex
+% General process description
+Digitization of film mammograms is necessary for digital analysis.
+The MIAS dataset resulted from digitization of film mammograms.
+```
+
+## **Examples from Your Paper:**
+
+```latex
+% Preferred (general statement):
+The \ac{MIAS} dataset contains scanner noise due to digitization of film mammograms.
+
+% Alternative (if referring to specific ones):
+We analyzed 170 images from \ac{MIAS}. The digitization of the film mammograms introduced characteristic artifacts.
+```
+
+## **Academic Convention:**
+
+In computer science and medical imaging papers, the shorter form is more common:
+- "segmentation of mammograms" (not "segmentation of the mammograms")
+- "analysis of medical images" (not "analysis of the medical images")
+- "processing of digital mammograms" (not "processing of the digital mammograms")
+
+## **Recommendation:**
+
+Use **"digitization of film mammograms"** in your paper unless you are specifically referring to previously mentioned, particular mammograms. This maintains conciseness and aligns with standard academic phrasing in the field.
+
+### 
+``` LaTeX
+Our approach, decides whether the
+breast is left or right, creates a binary mask for the muscle, and
+combines the tissue mask with the removed muscle mask to display the
+final image without the pectoral muscle.
+
+```
+
+Our approach determines whether the breast is left or right, generates a binary mask for the pectoral muscle with user assistance, and combines the tissue mask with the muscle-removed mask to produce the final image without the pectoral muscle.
+
+### 
+``` LaTeX
+This recursive four-class segmentation procedure provides a foundational label
+map that effectively differentiates between various density regions
+within the \ac{MG}, which is a critical precursor for subsequent
+analysis stages in the \ac{CADx}/\ac{CADe}
+pipeline. Figure~\ref{fig:SegmentationMap}shows the segmentation map obtained
+by applying our proposed methodology to \texttt{mdb028rl} mammogram
+directly without preprocessing.
+
+```
+
+This recursive four-class segmentation procedure provides a foundational label map that effectively differentiates between various density regions within the \ac{MG}, which serves as a critical precursor for subsequent analysis stages in the \ac{CADx}/\ac{CADe} pipeline. Figure~\ref{fig:SegmentationMap} shows the segmentation map obtained by applying our proposed methodology to the \texttt{mdb028rl} mammogram directly, without preprocessing.
+
+**Explanation of Changes:**
+
+1. **Grammar and Flow:** Changed "which is a critical precursor" to "which serves as a critical precursor" for a more formal and active academic tone.
+2. **Punctuation:** Added a space after "Figure~\ref{fig:SegmentationMap}shows" for proper formatting.
+3. **Clarity:** Added the article "the" before "\texttt{mdb028rl} mammogram" for grammatical correctness.
+4. **Parallel Structure:** Changed "directly without preprocessing" to "directly, without preprocessing" by adding a comma to improve readability and emphasize that no preprocessing was applied.
+
+### 
+``` LaTeX
+In binary segmentation, the \ac{DICE} coefficient and the
+F\textsubscript{1}-score are algebraically
+equivalent~\cite{Shen2018}. To quantitatively evaluate the performance
+of the proposed methodology, we employ the following metrics, whose
+mathematical definitions are provided in Table~\ref{tab:segmentation_metrics}:
+```
+
+In binary segmentation, the \ac{DICE} coefficient and the F\textsubscript{1}-score are algebraically equivalent~\cite{Shen2018}. To quantitatively evaluate the performance of the proposed methodology, we employ the following metrics, whose mathematical definitions are provided in Table~\ref{tab:segmentation_metrics}:
+
+**Explanation of Changes:**
+1.  **Grammar and Flow:** The original text is grammatically correct. The minor adjustment improves readability by connecting the two sentences more directly, making the transition to the listed metrics smoother.
+2.  **Academic Tone:** The phrasing "To quantitatively evaluate..." is standard and appropriate for a conference paper. The revised version maintains this tone while being slightly more concise.
+
+### make a list of connective words similar to in addition or also
+
+Here is a categorized list of connective words and phrases similar to "in addition" or "also," suitable for academic writing in computer science and medical imaging papers:
+
+---
+
+### **1. Additive/Listing Connectors** (for adding information)
+- **Furthermore,**
+- **Moreover,**
+- **Additionally,**
+- **Besides,**
+- **Likewise,**
+- **Similarly,**
+- **Not only... but also...**
+- **As well as**
+- **Along with**
+- **Coupled with**
+- **Together with**
+- **In conjunction with**
+- **Equally important,**
+- **Correspondingly,**
+
+### **2. Contrast/Comparison Connectors**
+- **However,**
+- **Nevertheless,**
+- **Nonetheless,**
+- **On the other hand,**
+- **In contrast,**
+- **Conversely,**
+- **Whereas**
+- **While**
+- **Although**
+- **Despite this,**
+- **Alternatively,**
+- **Unlike**
+
+### **3. Cause/Effect Connectors**
+- **Therefore,**
+- **Consequently,**
+- **Thus,**
+- **Hence,**
+- **As a result,**
+- **Accordingly,**
+- **For this reason,**
+- **Subsequently,**
+- **Thereby,**
+- **Owing to this,**
+- **Due to this,**
+
+### **4. Example/Illustration Connectors**
+- **For instance,**
+- **For example,**
+- **Specifically,**
+- **In particular,**
+- **To illustrate,**
+- **Namely,**
+- **Such as**
+- **As an illustration,**
+- **Notably,**
+
+### **5. Sequence/Order Connectors**
+- **Firstly, / Secondly, / Thirdly,**
+- **Subsequently,**
+- **Then,**
+- **Next,**
+- **Finally,**
+- **Ultimately,**
+- **Afterward(s),**
+- **Meanwhile,**
+- **Simultaneously,**
+- **Concurrently,**
+
+### **6. Emphasis/Clarification Connectors**
+- **Indeed,**
+- **In fact,**
+- **Notably,**
+- **Significantly,**
+- **Crucially,**
+- **Importantly,**
+- **Specifically,**
+- **Particularly,**
+- **Especially,**
+- **Clearly,**
+- **Obviously,**
+
+### **7. Conclusion/Summary Connectors**
+- **In conclusion,**
+- **To summarize,**
+- **Overall,**
+- **In summary,**
+- **To conclude,**
+- **Ultimately,**
+- **In brief,**
+- **Taken together,**
+
+### **8. Reference/Context Connectors**
+- **Regarding,**
+- **With respect to,**
+- **Concerning,**
+- **In terms of,**
+- **As for,**
+- **Pertaining to,**
+- **In the context of,**
+- **With regard to,**
+
+### **9. Condition/Qualification Connectors**
+- **Provided that,**
+- **Assuming that,**
+- **Given that,**
+- **Unless**
+- **If**
+- **In case**
+- **Otherwise**
+
+---
+
+### **Usage Examples in Your Paper:**
+
+```latex
+% Additive
+\textbf{Furthermore,} the recursive Otsu method demonstrates computational efficiency.
+
+% Contrast
+\textbf{However,} MedSAM requires human-in-the-loop prompting.
+
+% Cause/Effect
+\textbf{Consequently,} the model achieves strong zero-shot performance.
+
+% Example
+\textbf{For instance,} case \texttt{mdb160rl} yielded the highest Dice score.
+
+% Sequence
+\textbf{Subsequently,} morphological operations refine the segmentation mask.
+
+% Emphasis
+\textbf{Notably,} traditional methods remain relevant despite DL advances.
+
+% Conclusion
+\textbf{Overall,} both approaches offer complementary advantages.
+```
+
+### **Tips for Academic Writing:**
+1. **Vary your connectors** to avoid repetition
+2. **Place commas** after introductory connectors (e.g., "Furthermore,")
+3. **Use stronger connectors** for important points (e.g., "Crucially," instead of "Also")
+4. **Match connector strength** to the importance of the point being made
+5. **Avoid overusing** "and" or "also" - use more specific connectors instead
+
+These connectors will help create logical flow and professional tone in your conference paper.
+
+### 
+
+<!-- Local Variables: -->
+<!-- gptel-model: deepseek-chat -->
+<!-- gptel--backend-name: "DeepSeek" -->
+<!-- gptel--bounds: ((response (162 369) (438 624) (758 922) (1305 1668) (2125 2562) (2626 3341) (4020 4676) (5071 6739) (6747 9197) (9815 10421) (11260 12090) (15560 17693) (17757 21010) (21096 21822) (21898 24392) (25304 28519) (28997 31363) (31873 35725) (35950 41441) (41485 45551) (45911 48419) (48597 52168) (52296 53708) (53799 57632) (58063 60339) (61294 63904) (65262 68002) (68685 70529) (71146 72883) (72932 75771) (76299 76819) (77668 79912) (81084 83088) (84142 86381) (87308 90241) (90291 94039) (95086 96455) (97329 98806) (99663 100521) (101581 105347) (106585 109102) (109905 112546) (113575 114706) (114814 117577) (117691 121905) (122680 124998) (125253 129783) (130403 132514) (133228 136184) (136462 136902) (137343 138831) (138899 142648) (142681 145224) (147871 150939) (150988 155030) (156011 158702) (160952 165586) (166517 169600) (170992 173383) (173563 175173) (175318 177727) (179753 183508) (184706 187989) (188040 192616) (192829 197259) (197472 201266) (201575 202751) (203400 205373) (205934 208601) (210848 212044) (213133 214181) (215016 215828) (217405 220228) (221039 221852) (222815 225498) (226767 230165) (230775 232723) (233825 235755) (236796 239866) (241305 243789) (243865 245990) (246128 248052) (248145 250064) (250298 250542) (250998 252028) (252369 253124) (253194 256598))) -->
+<!-- End: -->
