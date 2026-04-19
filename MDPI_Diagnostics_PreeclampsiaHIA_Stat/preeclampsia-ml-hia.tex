@@ -454,7 +454,7 @@ detection of the condition. Li et al.~\cite{LI2021102} explored
 \ac{LR}, \ac{RF}, \ac{SVM}, and XGBoost models to predict women at
 risk of preeclampsia from electronic health records collected in early
 pregnancy. The XGBoost model achieved the best performance
-($\ac{AC}=0.920$, $\mathtt{Precision}=0.447$, $\mathtt{Recall}=0.789$,
+($\ac{ACC}=0.920$, $\mathtt{Precision}=0.447$, $\mathtt{Recall}=0.789$,
 $\ac{F1}=0.571$, $\ac{AUC}=0.955$) and showed that routinely available
 structured clinical variables combining maternal factors and
 laboratory data, such as fasting plasma glucose, mean blood pressure,
@@ -1320,7 +1320,7 @@ SageMaker Canvas in~(Fig.~\ref{fig:f1-score-models-isidro-ayora-aws}).
   \label{fig:combined-model-analysis-isidro-ayora-aws}}
 \end{figure}
 
-\subsection{Logistic Regresion Model on Clinical Synthetic Generated Data}
+\subsection{Logistic Regression Model on Clinical Synthetic Generated Data}
 \label{sec:synth-data-results}
 In this case, our proposed methodology \ac{C-AutoML} achieved its best
 performance for model \ac{LR}, with a perfect score of $\ac{F1}=1.000$
@@ -1490,10 +1490,76 @@ performance analysis.
   \label{fig:lightgbm-shap-plots}}
 \end{figure}
 
-\subsection{Ensemble Model on Isidro Ayora Dataset (AWS Sage Maker)}
+% \subsection{Ensemble Model on Isidro Ayora Dataset (AWS Sage Maker)}
+% \label{sec:ensemble-model-xai}
+\subsection{SHAP Explainability of the Weighted Ensemble Model on
+  Isidro Ayora Hospital Dataset}
 \label{sec:ensemble-model-xai}
 
-\subsection{Logistic Regresion on Synthetic Data}
+Figure~\ref{fig:canvas-shap-plots} presents the \ac{SHAP} analysis
+for the \texttt{Weighted Ensemble} model trained in AWS SageMaker
+Canvas on the Isidro Ayora Hospital dataset, including a beeswarm
+summary plot (Figure~\ref{fig:canvas-beeswarm}) and a waterfall plot
+for the highest-impact instance (Figure~\ref{fig:canvas-waterfall}).
+
+The beeswarm plot reveals that \texttt{Maternal age (years)} is the
+dominant driver of model output (mean $|\text{SHAP}| = 4.046$),
+followed by \texttt{Gestational age (weeks)} (mean $|\text{SHAP}| =
+1.847$) and \texttt{Body mass index} (mean $|\text{SHAP}| = 1.335$).
+\texttt{Maternal weight} contributes with a smaller but still
+observable effect. This ranking is consistent with the feature
+importance observed in the \ac{C-AutoML} LightGBM model, confirming
+that maternal age and gestational age are the most informative
+demographic predictors in this dataset. Notably, approximately 34.9\%
+of feature contributions are positive and 65.1\% are negative across
+all feature--instance pairs, indicating that feature effects are
+bidirectional and patient-specific rather than uniformly monotonic.
+Higher values of maternal age (shown in red) are associated with
+predominantly positive \ac{SHAP} contributions, pushing predictions
+toward preeclampsia, while lower values (blue) tend to reduce
+predicted risk.
+
+The waterfall plot for the highest-impact instance (index 36,
+$f(\mathbf{x}) = -8.547$, $E[f(X)] = -0.525$) illustrates a case
+where all four features act in the same direction. \texttt{Gestational
+  age} at 10.5 weeks contributes $-3.002$ \ac{SHAP} units,
+\texttt{Maternal age} at 16 years contributes $-2.710$, \texttt{BMI}
+at 19.58~kg/m$^2$ contributes $-1.486$, and \texttt{Maternal weight}
+at 49.5~kg contributes $-0.8$, cumulatively shifting the prediction
+well below the base value. This pattern is clinically coherent: a
+very young patient at early gestational age with low \ac{BMI} and
+weight presents a low-risk demographic profile, and the model
+correctly assigns a strong negative prediction. Taken together, the
+global and local \ac{SHAP} analyses confirm that the \texttt{Weighted
+  Ensemble} model captures clinically plausible risk gradients from
+demographic variables alone, and that its decision structure is
+interpretable and consistent with the known epidemiology of
+preeclampsia.
+
+\begin{figure}[H]
+\begin{adjustwidth}{-\extralength}{0cm}
+\centering
+\subfloat[\ac{SHAP} beeswarm summary plot for the Weighted Ensemble
+  model. Each point represents a \ac{SHAP} value for a single feature
+  and instance; colour encodes feature
+  value.\label{fig:canvas-beeswarm}]{
+  \includegraphics[width=0.98\fulllength]{./figures/shap_explainability/canvas_sagemaker_model/canvas_shap_beeswarm_summary_label1.png}}\\
+\subfloat[\ac{SHAP} waterfall plot for the highest-impact instance
+  (index 36), showing how each feature shifts the prediction from the
+  base value $E{[f(X)]}=-0.525$ to the final output
+  $f(\mathbf{x})=-8.547$.\label{fig:canvas-waterfall}]{
+  \includegraphics[width=0.98\fulllength]{./figures/shap_explainability/canvas_sagemaker_model/canvas_shap_waterfall_high_impact_label1.png}}
+\end{adjustwidth}
+\caption{\ac{SHAP} explainability visualisations for the AWS SageMaker
+  Canvas Weighted Ensemble model on the Isidro Ayora Hospital dataset.
+  (\textbf{a}) Global feature importance via beeswarm plot; maternal
+  age is the dominant contributor (mean $|\text{SHAP}|=4.046$).
+  (\textbf{b}) Local instance-level explanation via waterfall plot for
+  the highest-impact predicted case.
+  \label{fig:canvas-shap-plots}}
+\end{figure}
+
+\subsection{Logistic Regression on Synthetic Data}
 \label{sec:lorg-regr-synth-xai}
 
 For the \ac{LR} model trained on the clinical synthetic
@@ -1541,7 +1607,7 @@ proposed methodology named \ac{C-AutoML}, where we compared the
 performance of up to 6 different machine learning models. Our approach
 looks for improving the performance exposing the models to different
 sets of train and validation data during each trial and also search
-for best hyperparameter alignment. The besto model found corresponded
+for best hyperparameter alignment. The best model found corresponded
 to \texttt{LightGBM}. In parallel, we trained additional
 machine learning models using AWS SageMaker Canvas, which produced as
 best model a \texttt{Weighted Ensemble Model}. Finally, for the
