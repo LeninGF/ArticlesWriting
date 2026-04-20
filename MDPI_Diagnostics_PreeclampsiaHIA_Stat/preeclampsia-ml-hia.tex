@@ -1301,16 +1301,16 @@ SageMaker Canvas in~(Fig.~\ref{fig:f1-score-models-isidro-ayora-aws}).
 \centering
 \subfloat[Normalized confusion matrix for the best Weighted Ensemble
   model (AWS SageMaker Canvas).\label{fig:confusion-matrix-bestmodel-aws}]{
-  \includegraphics[width=0.48\fulllength]{./figures/canvas_sagemaker_model_monitor/best_model_confusion_matrix_normalized.png}}
+  \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/canvas_sagemaker_model_monitor/best_model_confusion_matrix_normalized.png}}
 \subfloat[KernelSHAP feature importance values for the AWS SageMaker
   Weighted Ensemble.\label{fig:feature-importance-aws}]{
-  \includegraphics[width=0.48\fulllength]{./figures/shap_explainability/shap-values-aws-ensemble.png}}\\
+  \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/shap_explainability/canvas_sagemaker_model/canvas_global_shap_stacked_by_label.png}}\\
 \subfloat[Precision--recall curve for the AWS SageMaker Weighted
   Ensemble model.\label{fig:precision-recall-aws}]{
-  \includegraphics[width=0.48\fulllength]{./figures/canvas_sagemaker_model_monitor/best_model_precision_recall_curve.png}}
+  \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/canvas_sagemaker_model_monitor/best_model_precision_recall_curve.png}}
 \subfloat[F1-score comparison across all models trained in AWS
   SageMaker Canvas.\label{fig:f1-score-models-isidro-ayora-aws}]{
-  \includegraphics[width=0.48\fulllength]{./figures/canvas_sagemaker_model_monitor/all_models_f1_comparison.png}}
+  \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/canvas_sagemaker_model_monitor/all_models_f1_comparison.png}}
 \end{adjustwidth}
 \caption{Performance analysis of the AWS SageMaker Canvas Weighted
   Ensemble on the Isidro Ayora Hospital dataset. (\textbf{a})
@@ -1449,7 +1449,9 @@ Ayora Hospital data, (ii) evaluating built-in feature importance from
 AWS SageMaker Canvas, and (iii) applying SHAP to the best-performing
 model on synthetic clinical data.
 
-\subsubsection{LightGBM on Isidro Ayora Hospital Dataset}
+% \subsubsection{LightGBM on Isidro Ayora Hospital Dataset}
+% \label{sec:lightgbm-isidro-ayor}
+\subsubsection{SHAP Explainability of LightGBM on Isidro Ayora Hospital Dataset}
 \label{sec:lightgbm-isidro-ayor}
 Figure~\ref{fig:lightgbm-shap-plots} presents a \ac{SHAP} Beeswarm
 (Figure~\ref{fig:lightgbm-beeswarm})and a
@@ -1559,39 +1561,76 @@ preeclampsia.
   \label{fig:canvas-shap-plots}}
 \end{figure}
 
-\subsection{Logistic Regression on Synthetic Data}
-\label{sec:lorg-regr-synth-xai}
+% \subsection{Logistic Regression on Synthetic Data}
+% \label{sec:lorg-regr-synth-xai}
+\subsubsection{SHAP Explainability of Logistic Regression on Synthetic Clinical Data}
+\label{sec:lr-synthetic-xai}
 
-For the \ac{LR} model trained on the clinical synthetic
-dataset, the \ac{SHAP} summary shows a feature-importance structure that is
+Figure~\ref{fig:synthetic-shap-plots} presents the \ac{SHAP} analysis
+for the \ac{LR} model trained on the synthetic clinical dataset,
+including a beeswarm summary plot
+(Figure~\ref{fig:synthetic-beeswarm}) and a waterfall plot for the
+highest-risk instance (Figure~\ref{fig:synthetic-waterfall}).
+
+The beeswarm plot reveals a feature-importance structure that is
 highly consistent with the rule-based and prognostic variables used to
-construct the data. Diastolic blood pressure (DBP) and systolic blood
-pressure (SBP) appear among the strongest positive contributors, with
-higher values shifting the prediction toward preeclampsia.
-Proteinuria at 24 hours, AST, creatinine, and the FullPIERS risk
-percentage also display predominantly positive SHAP values at higher
-feature levels, indicating that the model assigns greater risk when
-these markers of renal, hepatic, and overall maternal severity
-increase.
+construct the data. \ac{DBP} and \ac{SBP} appear among the strongest
+positive contributors, with higher values (red) shifting the
+prediction toward preeclampsia. \texttt{Proteinuria\_24h\_mg},
+\ac{AST}, creatinine, and the FullPIERS risk percentage also display
+predominantly positive \ac{SHAP} values at higher feature levels,
+indicating that the model assigns greater risk when these markers of
+renal, hepatic, and overall maternal severity increase. In contrast,
+higher platelet counts, $\mathrm{SpO_2}$, and gestational age tend to
+move predictions toward lower risk, reflected by negative \ac{SHAP}
+contributions at higher values. Age shows a smaller but still coherent
+contribution, while chest pain has a limited overall effect due to its
+low prevalence in the dataset.
 
-In contrast, higher platelet counts, oxygen saturation
-(SpO2), and gestational age tend to move predictions toward lower
-risk, which is reflected by more negative SHAP contributions at higher
-values. Age shows a smaller but still coherent contribution, while
-chest pain has a limited overall effect because of its lower
-prevalence in the dataset. Taken together, these patterns suggest that
-the \ac{LR} model learned a clinically interpretable
-decision structure dominated by classical hemodynamic and
-organ-dysfunction indicators of preeclampsia. This interpretation is
-also reinforced by the \ac{SHAP} waterfall plot for the highest-risk
-explained synthetic sample, in which AST, 24-hour proteinuria, low
-SpO2, DBP, SBP, and the FullPIERS risk score produced the largest
-positive contributions to the final model output, whereas chest pain
-had a small negative contribution. The additive profile of this
-instance-level explanation is therefore coherent with the global SHAP
-ranking and shows that the Logistic Regression model identifies
-high-risk cases through the accumulation of clinically severe
-hemodynamic, renal, and hepatic abnormalities.
+The waterfall plot for the highest-risk instance ($f(\mathbf{x}) =
+8.976$, $E{[f(X)]} = -0.604$) confirms this interpretation at the
+local level. \ac{AST} ($= 4.518$~U/L) and
+\texttt{Proteinuria\_24h\_mg} ($= 3.275$~mg) each contribute
+$+1.56$ \ac{SHAP} units, followed by low $\mathrm{SpO_2}$ ($=
+-3.192$)\footnote{Feature values shown in the waterfall plot
+  correspond to the scaled representations used internally by the
+  \ac{LR} pipeline in \ac{C-AutoML}} at $+1.19$, \ac{DBP} ($= 2.835$) at $+1.16$, and \ac{SBP}
+($= 2.519$) at $+1.02$. The FullPIERS risk percentage and the
+FullPIERS diagnostic label add a further $+0.99$ and $+0.98$
+respectively, while chest pain makes a small negative contribution of
+$-0.05$. The additive accumulation of hemodynamic, renal, and hepatic
+abnormalities drives the final output far above the base value,
+confirming that the \ac{LR} model identifies high-risk cases through a
+clinically coherent combination of severity indicators. Taken
+together, the global and local \ac{SHAP} analyses demonstrate that
+the model learned a decision structure dominated by classical
+preeclampsia risk markers and is fully consistent with the
+rule-based labels used during synthetic data generation.
+% Sonet 4.6 Adaptive
+\begin{figure}[H]
+\begin{adjustwidth}{-\extralength}{0cm}
+\centering
+\subfloat[\ac{SHAP} beeswarm summary for the \ac{LR} model on
+  synthetic clinical data. Each point represents a \ac{SHAP} value
+  for a single feature and instance; colour encodes feature
+  value.\label{fig:synthetic-beeswarm}]{
+  \includegraphics[width=0.98\fulllength, height=.35\textheight, keepaspectratio]{./figures/shap_explainability/synthetic_fullpiers/shap_summary_beeswarm.png}}\\
+\subfloat[\ac{SHAP} waterfall plot for the highest-risk instance
+  ($f(\mathbf{x})=8.976$, $E{[f(X)]}=-0.604$), showing cumulative
+  feature contributions from the base value to the final
+  output.\label{fig:synthetic-waterfall}]{
+  \includegraphics[width=0.98\fulllength, height=.35\textheight, keepaspectratio]{./figures/shap_explainability/synthetic_fullpiers/shap_waterfall_highest_risk.png}}
+\end{adjustwidth}
+\caption{\ac{SHAP} explainability visualisations for the best \ac{LR}
+  model trained on the Synthetic Clinical dataset. (\textbf{a})
+  Global feature importance via beeswarm plot; \ac{DBP} and \ac{SBP}
+  are the dominant contributors. (\textbf{b}) Local instance-level
+  explanation via waterfall plot for the highest-risk predicted case,
+  dominated by \ac{AST}, proteinuria, and blood pressure.
+  \label{fig:synthetic-shap-plots}}
+\end{figure}
+
+\newpage
 \section{Discussion}
 \label{sec:discussion}
 
@@ -1712,166 +1751,166 @@ such places where health facilities is scarce or expensive.
 
 % The text continues here.
 
-\subsection{Figures, Tables and Schemes}
+% \subsection{Figures, Tables and Schemes}
 
-All figures and tables should be cited in the main text as Figure~\ref{fig1}, Table~\ref{tab1}, etc.
+% All figures and tables should be cited in the main text as Figure~\ref{fig1}, Table~\ref{tab1}, etc.
 
-\begin{figure}[H]
-%\isPreprints{\centering}{} % Only used for preprints
-\includegraphics[width=4.0 cm]{Definitions/logo-mdpi}
-\caption{This is a figure. Schemes follow the same formatting.\label{fig1}}
-\end{figure}   
-\unskip
+% \begin{figure}[H]
+% %\isPreprints{\centering}{} % Only used for preprints
+% \includegraphics[width=4.0 cm]{Definitions/logo-mdpi}
+% \caption{This is a figure. Schemes follow the same formatting.\label{fig1}}
+% \end{figure}   
+% \unskip
 
-\begin{table}[H] 
-%\small % Change table font size
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab1}}
-%\isPreprints{\centering}{} % Only used for preprints
-\begin{tabularx}{\textwidth}{CCC}
-\toprule
-\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
-\midrule
-Entry 1		& Data			& Data\\
-Entry 2		& Data			& Data \textsuperscript{1}\\
-\bottomrule
-\end{tabularx}
+% \begin{table}[H] 
+% %\small % Change table font size
+% \caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab1}}
+% %\isPreprints{\centering}{} % Only used for preprints
+% \begin{tabularx}{\textwidth}{CCC}
+% \toprule
+% \textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+% \midrule
+% Entry 1		& Data			& Data\\
+% Entry 2		& Data			& Data \textsuperscript{1}\\
+% \bottomrule
+% \end{tabularx}
 
-\noindent{\footnotesize{\textsuperscript{1} Tables may have a footer.}}
-\end{table}
+% \noindent{\footnotesize{\textsuperscript{1} Tables may have a footer.}}
+% \end{table}
 
-The text continues here (Figure~\ref{fig2} and Table~\ref{tab2}).
+% The text continues here (Figure~\ref{fig2} and Table~\ref{tab2}).
 
-% Example of a figure that spans the whole page width and with subfigures. The same concept works for tables, too.
-\begin{figure}[H]
-%\isPreprints{}{% This command is only used for ``preprints''.
-\begin{adjustwidth}{-\extralength}{0cm}
-\centering
-%} % If the paper is ``preprints'', please uncomment this parenthesis.
-\subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}
-%\hfill
-\subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}\\
-\subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}
-%\hfill
-\subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}
-%\isPreprints{}{% This command is only used for ``preprints''.
-\end{adjustwidth}
-%} % If the paper is ``preprints'', please uncomment this parenthesis.
-\caption{This is a wide figure. Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. (\textbf{c}) Description of what is contained in the third panel. (\textbf{d}) Description of what is contained in the fourth panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.\label{fig2}}
-\end{figure} 
+% % Example of a figure that spans the whole page width and with subfigures. The same concept works for tables, too.
+% \begin{figure}[H]
+% %\isPreprints{}{% This command is only used for ``preprints''.
+% \begin{adjustwidth}{-\extralength}{0cm}
+% \centering
+% %} % If the paper is ``preprints'', please uncomment this parenthesis.
+% \subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}
+% %\hfill
+% \subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}\\
+% \subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}
+% %\hfill
+% \subfloat[\centering]{\includegraphics[width=7.0cm]{Definitions/logo-mdpi}}
+% %\isPreprints{}{% This command is only used for ``preprints''.
+% \end{adjustwidth}
+% %} % If the paper is ``preprints'', please uncomment this parenthesis.
+% \caption{This is a wide figure. Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. (\textbf{c}) Description of what is contained in the third panel. (\textbf{d}) Description of what is contained in the fourth panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.\label{fig2}}
+% \end{figure} 
 
-\begin{table}[H]
-\caption{This is a wide table.\label{tab2}}
-%\isPreprints{\centering}{% This command is only used for ``preprints''.
-	\begin{adjustwidth}{-\extralength}{0cm}
-%} % If the paper is ``preprints'', please uncomment this parenthesis.
-%\isPreprints{\begin{tabularx}{\textwidth}{CCCC}}{% This command is only used for ``preprints''.
-		\begin{tabularx}{\fulllength}{CCCC}
-%} % If the paper is ``preprints'', please uncomment this parenthesis.
-			\toprule
-			\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}     & \textbf{Title 4}\\
-			\midrule
-\multirow[m]{3}{*}{Entry 1 *}	& Data			& Data			& Data\\
-			  	                   & Data			& Data			& Data\\
-			             	      & Data			& Data			& Data\\
-                   \midrule
-\multirow[m]{3}{*}{Entry 2}    & Data			& Data			& Data\\
-			  	                  & Data			& Data			& Data\\
-			             	     & Data			& Data			& Data\\
-			\bottomrule
-		\end{tabularx}
-%		\isPreprints{}{% This command is only used for ``preprints''.
-	\end{adjustwidth}
-%} % If the paper is ``preprints'', please uncomment this parenthesis.
-	\noindent{\footnotesize{* Tables may have a footer.}}
-\end{table}
+% \begin{table}[H]
+% \caption{This is a wide table.\label{tab2}}
+% %\isPreprints{\centering}{% This command is only used for ``preprints''.
+% 	\begin{adjustwidth}{-\extralength}{0cm}
+% %} % If the paper is ``preprints'', please uncomment this parenthesis.
+% %\isPreprints{\begin{tabularx}{\textwidth}{CCCC}}{% This command is only used for ``preprints''.
+% 		\begin{tabularx}{\fulllength}{CCCC}
+% %} % If the paper is ``preprints'', please uncomment this parenthesis.
+% 			\toprule
+% 			\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}     & \textbf{Title 4}\\
+% 			\midrule
+% \multirow[m]{3}{*}{Entry 1 *}	& Data			& Data			& Data\\
+% 			  	                   & Data			& Data			& Data\\
+% 			             	      & Data			& Data			& Data\\
+%                    \midrule
+% \multirow[m]{3}{*}{Entry 2}    & Data			& Data			& Data\\
+% 			  	                  & Data			& Data			& Data\\
+% 			             	     & Data			& Data			& Data\\
+% 			\bottomrule
+% 		\end{tabularx}
+% %		\isPreprints{}{% This command is only used for ``preprints''.
+% 	\end{adjustwidth}
+% %} % If the paper is ``preprints'', please uncomment this parenthesis.
+% 	\noindent{\footnotesize{* Tables may have a footer.}}
+% \end{table}
 
-%\begin{listing}[H]
-%\caption{Title of the listing}
-%\rule{\columnwidth}{1pt}
-%\raggedright Text of the listing. In font size footnotesize, small, or normalsize. Preferred format: left aligned and single spaced. Preferred border format: top border line and bottom border line.
-%\rule{\columnwidth}{1pt}
-%\end{listing}
+% %\begin{listing}[H]
+% %\caption{Title of the listing}
+% %\rule{\columnwidth}{1pt}
+% %\raggedright Text of the listing. In font size footnotesize, small, or normalsize. Preferred format: left aligned and single spaced. Preferred border format: top border line and bottom border line.
+% %\rule{\columnwidth}{1pt}
+% %\end{listing}
 
-Text.
+% Text.
 
-Text.
+% Text.
 
-\subsection{Formatting of Mathematical Components}
+% \subsection{Formatting of Mathematical Components}
 
-This is the example 1 of equation:
-\begin{linenomath}
-\begin{equation}
-a = 1,
-\end{equation}
-\end{linenomath}
-the text following an equation need not be a new paragraph. Please punctuate equations as regular text.
-%% If the documentclass option "submit" is chosen, please insert a blank line before and after any math environment (equation and eqnarray environments). This ensures correct linenumbering. The blank line should be removed when the documentclass option is changed to "accept" because the text following an equation should not be a new paragraph.
+% This is the example 1 of equation:
+% \begin{linenomath}
+% \begin{equation}
+% a = 1,
+% \end{equation}
+% \end{linenomath}
+% the text following an equation need not be a new paragraph. Please punctuate equations as regular text.
+% %% If the documentclass option "submit" is chosen, please insert a blank line before and after any math environment (equation and eqnarray environments). This ensures correct linenumbering. The blank line should be removed when the documentclass option is changed to "accept" because the text following an equation should not be a new paragraph.
 
-This is the example 2 of equation:
-%\isPreprints{}{% This command is only used for ``preprints''.
-\begin{adjustwidth}{-\extralength}{0cm}
-%} % If the paper is ``preprints'', please uncomment this parenthesis.
-\begin{equation}
-a = b + c + d + e + f + g + h + i + j + k + l + m + n + o + p + q + r + s + t + u + v + w + x + y + z
-\end{equation}
-%\isPreprints{}{% This command is only used for ``preprints''.
-\end{adjustwidth}
-%} % If the paper is ``preprints'', please uncomment this parenthesis.
+% This is the example 2 of equation:
+% %\isPreprints{}{% This command is only used for ``preprints''.
+% \begin{adjustwidth}{-\extralength}{0cm}
+% %} % If the paper is ``preprints'', please uncomment this parenthesis.
+% \begin{equation}
+% a = b + c + d + e + f + g + h + i + j + k + l + m + n + o + p + q + r + s + t + u + v + w + x + y + z
+% \end{equation}
+% %\isPreprints{}{% This command is only used for ``preprints''.
+% \end{adjustwidth}
+% %} % If the paper is ``preprints'', please uncomment this parenthesis.
 
-%% Example of a page in landscape format (with table and table footnote).
-%\startlandscape
-%\begin{table}[H] %% Table in wide page
-%%\isPreprints{\centering}{} % This command is only used for ``preprints''.
-%\caption{This is a very wide table.\label{tab3}}
-%	\begin{tabularx}{\textwidth}{CCCC}
-%		\toprule
-%		\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}	& \textbf{Title 4}\\
-%		\midrule
-%		Entry 1		& Data			& Data			& This cell has some longer content that runs over two lines.\\
-%		Entry 2		& Data			& Data			& Data\textsuperscript{1}\\
-%		\bottomrule
-%	\end{tabularx}
-%%\isPreprints{}{% This command is only used for ``preprints''.
-%	\begin{adjustwidth}{+\extralength}{0cm}
-%%} % If the paper is ``preprints'', please uncomment this parenthesis.
-%		\noindent\footnotesize{\textsuperscript{1} This is a table footnote.}
-%%\isPreprints{}{% This command is only used for ``preprints''.
-%	\end{adjustwidth}
-%%} % If the paper is ``preprints'', please uncomment this parenthesis.
-%\end{table}
-%\finishlandscape
+% %% Example of a page in landscape format (with table and table footnote).
+% %\startlandscape
+% %\begin{table}[H] %% Table in wide page
+% %%\isPreprints{\centering}{} % This command is only used for ``preprints''.
+% %\caption{This is a very wide table.\label{tab3}}
+% %	\begin{tabularx}{\textwidth}{CCCC}
+% %		\toprule
+% %		\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}	& \textbf{Title 4}\\
+% %		\midrule
+% %		Entry 1		& Data			& Data			& This cell has some longer content that runs over two lines.\\
+% %		Entry 2		& Data			& Data			& Data\textsuperscript{1}\\
+% %		\bottomrule
+% %	\end{tabularx}
+% %%\isPreprints{}{% This command is only used for ``preprints''.
+% %	\begin{adjustwidth}{+\extralength}{0cm}
+% %%} % If the paper is ``preprints'', please uncomment this parenthesis.
+% %		\noindent\footnotesize{\textsuperscript{1} This is a table footnote.}
+% %%\isPreprints{}{% This command is only used for ``preprints''.
+% %	\end{adjustwidth}
+% %%} % If the paper is ``preprints'', please uncomment this parenthesis.
+% %\end{table}
+% %\finishlandscape
 
-Please punctuate equations as regular text. Theorem-type environments (including propositions, lemmas, corollaries etc.) can be formatted as follows:
-%% Example of a theorem:
-\begin{Theorem}
-Example text of a theorem.
-\end{Theorem}
+% Please punctuate equations as regular text. Theorem-type environments (including propositions, lemmas, corollaries etc.) can be formatted as follows:
+% %% Example of a theorem:
+% \begin{Theorem}
+% Example text of a theorem.
+% \end{Theorem}
 
-The text continues here. Proofs must be formatted as follows:
+% The text continues here. Proofs must be formatted as follows:
 
-%% Example of a proof:
-\begin{proof}[Proof of Theorem 1]
-Text of the proof. Note that the phrase ``of Theorem 1'' is optional if it is clear which theorem is being referred to.
-\end{proof}
-The text continues here.
+% %% Example of a proof:
+% \begin{proof}[Proof of Theorem 1]
+% Text of the proof. Note that the phrase ``of Theorem 1'' is optional if it is clear which theorem is being referred to.
+% \end{proof}
+% The text continues here.
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Discussion}
+
+% Authors should discuss the results and how they can be interpreted from the perspective of previous studies and of the working hypotheses. The findings and their implications should be discussed in the broadest context possible. Future research directions may also be highlighted.
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Conclusions}
+
+% This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Patents}
+
+% This section is not mandatory, but may be added if there are patents resulting from the work reported in this manuscript.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}
-
-Authors should discuss the results and how they can be interpreted from the perspective of previous studies and of the working hypotheses. The findings and their implications should be discussed in the broadest context possible. Future research directions may also be highlighted.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusions}
-
-This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Patents}
-
-This section is not mandatory, but may be added if there are patents resulting from the work reported in this manuscript.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{6pt} 
+% \vspace{6pt} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
