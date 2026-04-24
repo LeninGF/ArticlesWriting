@@ -114,7 +114,7 @@
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
-$^{1}$ \quad Escuela Politécnica Nacional, Facultad de Ingeniería en Sistemas, 170525, Quito, Ecuador; maria.perez@epn.edu.es, lenin.falconi@epn.edu.ec, 
+$^{1}$ \quad Escuela Politécnica Nacional, Facultad de Ingeniería en Sistemas, 170525, Quito, Ecuador; maria.perez@epn.edu.ec, lenin.falconi@epn.edu.ec, 
 monserrate.intriago@epn.edu.ec, 
 juan.benavides@epn.edu.ec\\
 $^{2}$ \quad Smartwork S.A.; andres.bastidas@smartwork.com.ec}
@@ -184,7 +184,7 @@ $^{2}$ \quad Smartwork S.A.; andres.bastidas@smartwork.com.ec}
   information is often fragmented, limiting the construction of
   complete datasets for prediction modeling. This study aimed to
   develop a machine learning model to predict preeclampsia using
-  demographic data from the Isidro Ayora Hospital in Quito,
+  demographic data from the Isidro Ayora Hospital (HGIO), Quito,
   Ecuador. We proposed a custom automated machine learning (C-AutoML)
   workflow to evaluate six models (Logistic Regression, LightGBM,
   XGBoost, CatBoost, Multi-Layer Perceptron, and Random Forest) and
@@ -287,6 +287,8 @@ $^{2}$ \quad Smartwork S.A.; andres.bastidas@smartwork.com.ec}
     \acro{ULN}[ULN]{Upper Limit of Normal}
     \acro{GA}[GA]{Gestational Age}
     \acro{AST}[AST]{Aspartate Aminotransferase}
+    \acro{WHO}[WHO]{World Health Organization}
+    \acro{HGIO}[HGIO]{Isidro Ayora Gynecology and Obstetrics Hospital}
 \end{acronym}
   
   
@@ -302,7 +304,7 @@ $^{2}$ \quad Smartwork S.A.; andres.bastidas@smartwork.com.ec}
 \label{sec:introduction}
 Preeclampsia, one of the main hypertensive disorders of pregnancy, is
 a major cause of maternal and perinatal morbidity and mortality
-worldwide. The World Health Organization reports that preeclampsia
+worldwide. The ac{WHO} reports that preeclampsia
 affects approximately 2--8\% of pregnancies globally, highlighting the
 relevance of early detection and risk stratification
 strategies~\cite{who_2025_preeclampsia}.
@@ -373,14 +375,15 @@ hospitals linked to the \ac{MSP}, complementary examinations are
 recorded in separate databases or remain only in paper-based formats,
 which limits immediate construction of complete and standardized
 electronic clinical datasets for modeling. As a consequence, in this
-research, we used the provided records from the \textit{Isidro Ayora
-  Third Level Gynecology and Obstetrics Hospital}\footnote{Hospital
-  Gineco Obstétrico Isidro Ayora} in Quito, Ecuador; which contains
-demographic variables and lacks of clinical features. For this reason,
-we explored our sets of models both on the real and synthetic data to
-diagnose preeclampsia. Different to the full\ac{PIERS} standard, which
-is a prognostic model, our goal is to determine the most effective set
-of models to diagnose preeclampsia according to the Ecuadorian realm.
+research, we used the provided records from the
+\ac{HGIO}\footnote{\textit{Hospital Gineco Obstétrico Isidro Ayora}, a
+  third-level public specialty hospital in Zone~9 of the \ac{MSP},
+  Quito, Ecuador.}; which contains demographic variables and lacks of
+clinical features. For this reason, we explored our sets of models
+both on the real and synthetic data to diagnose
+preeclampsia. Different to the full\ac{PIERS} standard, which is a
+prognostic model, our goal is to determine the most effective set of
+models to diagnose preeclampsia according to the Ecuadorian realm.
 
 In this work, we propose a custom automated machine learning workflow
 that explores up to 6 classification algorithms
@@ -408,12 +411,11 @@ this is the first academic research work to address the use of machine
 learning algorithms in preeclampsia in Ecuador, (ii) we systematically
 explored different machine learning models accounting to improve
 classification performance as well as model's explainability, (iii) we
-used data provided from \textit{Isidro Ayora Third Level Gynecology
-  and Obstetrics Hospital}; which is a specialized public health
-facility in gynecology and obstetrics, (iv) we explored additional
-models on synthetic data to account for lack of clinical variables,
-(v) we deployed our model using a \ac{MLOPs} approach in a server at
-Escuela Politecnica Nacional.
+used data provided from data provided from \ac{HGIO}, a specialized
+public health facility in gynecology and obstetrics, (iv) we explored
+additional models on synthetic data to account for lack of clinical
+variables, (v) we deployed our model using a \ac{MLOPs} approach in a
+server at Escuela Politecnica Nacional.
 
 \section{Related Works}
 \label{sec:related-works}
@@ -556,8 +558,7 @@ with $\tau \in [0,1]$ being a decision threshold, typically $\tau =
 \label{sec:study-design}
 This was an observational and cross-sectional descriptive study that
 used an anonymized database of medical records from patients at the
-Isidro Ayora Third Level Gynecology and Obstetrics Hospital in Zone 9
-of the \ac{MSP} in Quito, Ecuador. Our research goal is to train a
+\ac{HGIO} in Quito, Ecuador. Our research goal is to train a
 machine learning classification model to predict preeclampsia. We
 explore 6 different classification models to improve
 performance. Explainability is addressed for each model to show the
