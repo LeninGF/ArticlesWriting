@@ -428,7 +428,7 @@ systematic reviews synthesize this landscape. Darsareh et
 al.~\cite{Darsareh2024} reviewed \ac{ML}-based prediction studies and
 reported that the best-performing approaches commonly included elastic
 net, stochastic gradient boosting, extreme gradient boosting, and
-random forest, with AUC values ranging approximately from 0.860 to
+random forest, with \ac{AUC} values ranging approximately from 0.860 to
 0.973. Similarly, Rahman et al.~\cite{Rahman2023} surveyed studies
 published between 2018 and 2022 and concluded that \ac{ML} was the
 dominant analytical paradigm in this domain, with ensemble and
@@ -2067,25 +2067,176 @@ AST & Aspartate Aminotransferase \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
-\appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+\appendixtitles{yes} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
 \appendixstart
 \appendix
-\section[\appendixname~\thesection]{}
-\subsection[\appendixname~\thesubsection]{}
-The appendix is an optional section that can contain details and data supplemental to the main text---for example, explanations of experimental details that would disrupt the flow of the main text but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data are shown in the main text can be added here if brief, or as Supplementary Data. Mathematical proofs of results not central to the paper can be added as an appendix.
+\section[\appendixname~\thesection]{Custom Automated Machine Learning
+  Workflow (C-AutoML)}
+The proposed Custom Automated Machine Learning Workflow \ac{C-AutoML}
+model selection and hyperparameter optimization algorithm, presented
+in Algorithm~\ref{alg:autopilot}, is designed to systematically
+explore multiple model families and hyperparameter configurations for
+the binary classification of \ac{PE} patients. The following sections
+describe the key components of the algorithm in detail.
 
-\begin{table}[H] 
-\caption{This is a table caption.\label{tab5}}
-%\newcolumntype{C}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{CCC}
-\toprule
-\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
-\midrule
-Entry 1		& Data			& Data\\
-Entry 2		& Data			& Data\\
-\bottomrule
-\end{tabularx}
-\end{table}
+
+\subsection[\appendixname~\thesubsection]{Input Processing and Data Preparation}
+% The appendix is an optional section that can contain details and data supplemental to the main text---for example, explanations of experimental details that would disrupt the flow of the main text but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data are shown in the main text can be added here if brief, or as Supplementary Data. Mathematical proofs of results not central to the paper can be added as an appendix.
+
+
+% \begin{table}[H] 
+% \caption{This is a table caption.\label{tab5}}
+% %\newcolumntype{C}{>{\centering\arraybackslash}X}
+% \begin{tabularx}{\textwidth}{CCC}
+% \toprule
+% \textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+% \midrule
+% Entry 1		& Data			& Data\\
+% Entry 2		& Data			& Data\\
+% \bottomrule
+% \end{tabularx}
+% \end{table}
+Given a CSV dataset $\mathcal{D}$ and a target column name $t$, the
+algorithm first resolves the exact column name through
+case-insensitive matching. A stratified train-validation split is
+performed using the \texttt{train\_test\_split} function from
+\texttt{scikit-learn}~\cite{sklearn-api}, parameterised by the test
+proportion $\tau$ and a seed-dependent random state
+$s_{\text{split}} = s_{\text{base}} + i$, where $i$ denotes the
+current search iteration.
+
+The binary target variable $\mathbf{y}$ is encoded using
+\texttt{LabelEncoder}, producing integer labels $\{0, 1\}$. A mapping
+$\mathcal{M}: \{\text{class name} \mapsto \text{integer}\}$ is
+preserved for interpretability.
+
+\subsection[\appendixname~\thesubsection]{Model Candidate
+  Construction}
+A set of model candidates $\mathcal{C} = \{c_1, c_2, \ldots, c_m\}$ is
+constructed, where each candidate $c_k$ is defined by a quadruple:
+\[
+c_k = (\text{name}_k, \mathcal{E}_k, \Theta_k, \sigma_k)
+\]
+where $\text{name}_k$ is the model identifier, $\mathcal{E}_k$ is an
+un-fitted \texttt{scikit-learn}-compatible estimator, $\Theta_k$ is a
+dictionary mapping pipeline parameter names to lists of candidate
+values, and $\sigma_k \in \{\text{True}, \text{False}\}$ indicates
+whether numeric feature standardisation is required.
+
+The default candidate set includes \ac{LR}, \ac{RF}, \ac{MLP},
+XGBoost, LightGBM, and CatBoost.
+
+\subsection[\appendixname~\thesubsection]{Preprocessing Strategy}
+A column-aware preprocessing pipeline is constructed for each trial:
+\begin{itemize}
+    \item Numeric columns $\mathcal{X}_{\text{num}}$: median imputation followed by optional \texttt{StandardScaler} when $\sigma_k = \text{True}$.
+    \item Categorical columns $\mathcal{X}_{\text{cat}}$: mode imputation followed by one-hot encoding with \texttt{handle\_unknown='ignore'}.
+\end{itemize}
+The \texttt{ColumnTransformer} is fitted exclusively on the training
+partition $\mathcal{X}_{\text{train}}$ to prevent data leakage into
+the validation set.
+
+\subsection[\appendixname~\thesubsection]{Search Procedure}
+The algorithm executes $n$ outer iterations, each using a unique
+stratified split with seed $s_{\text{base}} + i$. For each iteration
+$i$ and each model candidate $c_k$, a hyperparameter configuration
+$\theta$ is sampled from $\Theta_k$ using \texttt{ParameterSampler}
+with seed $s_{\text{base}} + i \cdot 100 + k$. A full
+\texttt{Pipeline} is constructed and fitted:
+\[
+\text{pipeline} = \text{Preprocessor} \circ \mathcal{E}_k(\theta)
+\]
+
+
+\subsection[\appendixname~\thesubsection]{Evaluation and Selection}
+For each trial, the validation set metrics $\mathcal{M}_{\text{val}}$ are computed:
+\begin{align}
+\text{Accuracy} &= \frac{TP + TN}{TP + TN + FP + FN} \\
+\text{Precision} &= \frac{TP}{TP + FP} \\
+\text{Recall} &= \frac{TP}{TP + FN} \\
+F_1 &= 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} \\
+\text{ROC-AUC} &= \int_{0}^{1} \text{TPR}(\text{FPR}^{-1}(x)) \, dx
+\end{align}
+where TPR and FPR denote true positive rate and false positive rate, respectively. The primary selection criterion is the $F_1$ score, with ROC-AUC and accuracy serving as tie-breakers in hierarchical order.
+
+\subsection[\appendixname~\thesubsection]{Feature Importance}
+After the optimal pipeline $\mathcal{P}^*$ is identified, permutation-based feature importance~\cite{breiman2001randomforest} is computed on the corresponding validation partition. For each feature $x_j$, the decrease in $F_1$ score is measured across $r = 10$ independent shuffles:
+\[
+I(x_j) = \frac{1}{r} \sum_{k=1}^{r} \left[ F_1(\mathcal{P}^*, \mathcal{X}_{\text{val}}) - F_1(\mathcal{P}^*, \mathcal{X}_{\text{val}}^{(j,k)}) \right]
+\]
+where $\mathcal{X}_{\text{val}}^{(j,k)}$ denotes the validation set with feature $j$ permuted in shuffle $k$.
+
+\subsection[\appendixname~\thesubsection]{Output Artifacts}
+The algorithm produces the following outputs in the specified directory:
+\begin{itemize}
+    \item \texttt{model\_performance.csv}: complete trial results including all metrics and hyperparameters
+    \item \texttt{best\_model.joblib}: serialised optimal pipeline
+    \item \texttt{model\_characteristics.json}: comprehensive metadata including feature importance and per-model summaries
+    \item \texttt{best\_model\_feature\_effects.csv}: permutation importance per feature
+    \item \texttt{best\_model\_confusion\_matrix.csv} and \texttt{.png}: confusion matrix in tabular and visual formats
+\end{itemize}
+
+\begin{algorithm}[h]
+\caption{C-AutoML Program}
+\label{alg:autopilot}
+\begin{algorithmic}[1]
+\Require{Data file path $p_{\text{data}}$, target column $t$, iterations $n$, random seed $s_{\text{base}}$, test proportion $\tau$}
+\Ensure{Optimal pipeline $\mathcal{P}^*$ and associated output artifacts}
+
+\State{$\mathcal{D} \gets \text{ReadCSV}(p_{\text{data}})$}
+\State{$t_{\text{exact}} \gets \text{ResolveTargetColumn}(\mathcal{D}, t)$}
+\State{$\mathbf{y}, \mathcal{M} \gets \text{EncodeBinaryTarget}(\mathcal{D}[t_{\text{exact}}])$}
+\State{$\mathcal{X} \gets \mathcal{D} \setminus \{t_{\text{exact}}\}$}
+
+\State{$C, S_{\text{skipped}} \gets \text{BuildCandidates}(s_{\text{base}})$}
+\State{$\mathcal{R} \gets \emptyset$ \Comment{Results container}}
+
+\For{$i \gets 1$ \textbf{to} $n$}
+    \State{$s_{\text{split}} \gets s_{\text{base}} + i$}
+    \State{$\mathcal{X}_{\text{train}}, \mathcal{X}_{\text{val}}, \mathbf{y}_{\text{train}}, \mathbf{y}_{\text{val}} \gets \text{TrainTestSplit}(\mathcal{X}, \mathbf{y}, \tau, s_{\text{split}})$}
+    
+    \For{$c_k \in C$}
+        \State{$s_{\theta} \gets s_{\text{base}} + i \cdot 100 + k$}
+        \State{$\theta \gets \text{SampleParameters}(\Theta_k, s_{\theta})$}
+        \State{$\Pi \gets \text{BuildPreprocessor}(\mathcal{X}_{\text{train}}, \sigma_k)$}
+        \State{$\mathcal{P} \gets \text{Pipeline}(\Pi, \mathcal{E}_k, \theta)$}
+        \State{$\mathcal{P}.\text{fit}(\mathcal{X}_{\text{train}}, \mathbf{y}_{\text{train}})$}
+        
+        \State{$\hat{\mathbf{y}} \gets \mathcal{P}.\text{predict}(\mathcal{X}_{\text{val}})$}
+        \State{$\tilde{\mathbf{y}} \gets \text{GetScoresForAUC}(\mathcal{P}, \mathcal{X}_{\text{val}})$}
+        \State{$\mathbf{m} \gets \text{ComputeMetrics}(\mathbf{y}_{\text{val}}, \hat{\mathbf{y}}, \tilde{\mathbf{y}})$}
+        
+        \State{$\mathcal{R} \gets \mathcal{R} \cup \{\mathbf{m}, \theta, c_k.\text{name}, i\}$}
+        
+        \If{$\mathbf{m} > \mathbf{m}_{\text{best}}$ \Comment{Hierarchical comparison: $F_1$, ROC-AUC, accuracy}}
+            \State{$\mathcal{P}^* \gets \mathcal{P}$}
+            \State{$\mathbf{m}_{\text{best}} \gets \mathbf{m}$}
+            \State{$\mathcal{X}_{\text{val}}^*, \mathbf{y}_{\text{val}}^* \gets \mathcal{X}_{\text{val}}, \mathbf{y}_{\text{val}}$}
+        \EndIf
+    \EndFor
+\EndFor
+
+\State{$\text{SaveArtifacts}(\mathcal{R}, \mathcal{P}^*, \mathcal{X}_{\text{val}}^*, \mathbf{y}_{\text{val}}^*, S_{\text{skipped}})$}
+
+\end{algorithmic}
+\end{algorithm}
+
+\subsection[\appendixname~\thesubsection]{Required Python Packages}
+The implementation requires the following Python packages with specified compatibility:
+\begin{itemize}
+    \item \texttt{scikit-learn} $\ge$ 1.0.0 (primary machine learning framework)
+    \item \texttt{pandas} $\ge$ 1.3.0 (data manipulation)
+    \item \texttt{numpy} $\ge$ 1.21.0 (numerical computation)
+    \item \texttt{matplotlib} $\ge$ 3.4.0 (visualisation)
+    \item \texttt{joblib} $\ge$ 1.0.0 (model serialisation)
+\end{itemize}
+Optional packages for extended model support:
+\begin{itemize}
+    \item \texttt{xgboost} $\ge$ 1.5.0 (gradient boosting)
+    \item \texttt{lightgbm} $\ge$ 3.3.0 (gradient boosting)
+    \item \texttt{catboost} $\ge$ 1.0.0 (gradient boosting)
+\end{itemize}
+
 
 \section[\appendixname~\thesection]{}
 All appendix sections must be cited in the main text. In the appendices, Figures, Tables, etc. should be labeled, starting with ``A''---e.g., Figure A1, Figure A2, etc.
