@@ -270,7 +270,7 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
     \acro{F1}[F1]{F1-score}
     \acro{MSP}[MSP]{Ministerio de Salud Pública}
     \acro{PUCE}[PUCE]{Pontifical Catholic University of Ecuador}
-    \acro{ANN}[ANN]{Artificial Neural Network}
+    %\acro{ANN}[ANN]{Artificial Neural Network} % unused in body text
     \acro{MLOPs}[MLOPs]{Machine Learning Operations}
     \acro{PIERS}[PIERS]{Preeclampsia Integrated Estimate of RiSk}
     \acro{ICD-10}[ICD-10]{International Classification of Diseases}
@@ -304,15 +304,15 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
 
 \section{Introduction}
 \label{sec:introduction}
-Preeclampsia, one of the main hypertensive disorders of pregnancy, is
+\Ac{PE}, one of the main hypertensive disorders of pregnancy, is
 a major cause of maternal and perinatal morbidity and mortality
-worldwide. The \ac{WHO} reports that preeclampsia
+worldwide. The \ac{WHO} reports that \ac{PE}
 affects approximately 2--8\% of pregnancies globally, highlighting the
 relevance of early detection and risk stratification
 strategies~\cite{who_2025_preeclampsia}.
 
 In Ecuador, the Clinical Practice Guideline from the \ac{MSP} (Ministry of Public Health) identifies
-preeclampsia and eclampsia among the principal causes of maternal
+\ac{PE} and eclampsia among the principal causes of maternal
 death. It reports that these conditions were the leading cause of
 maternal mortality, accounting for 27.53\% of maternal deaths from
 2006 to 2014~\cite{msp_ecuador_hdp_2013}. This epidemiological burden
@@ -321,7 +321,7 @@ patterns in hospital populations and can inform timely referral and
 surveillance.
 
 % improve with prism
-In recent years, \ac{ML} has been increasingly applied to preeclampsia
+In recent years, \ac{ML} has been increasingly applied to \ac{PE}
 prediction, with studies showing promising discriminatory performance
 using routinely collected variables~\cite{LI2021102,mennickent_2023}.
 These approaches identify non-linear risk patterns from maternal
@@ -337,7 +337,7 @@ The full\ac{PIERS} model uses demographic and laboratory variables
 (e.g. gestational age, creatinine, count of platelets, aspartate
 transaminase, etc.) to estimate the probabilistic risk of adverse
 maternal outcomes among women with
-preeclampsia~\cite{fullpiers_2011}. It uses the logistic regression
+\ac{PE}~\cite{fullpiers_2011}. It uses the logistic regression
 equation in~\eqref{eq:logistic-regression}; where the logit is
 calculated as linear combination of variables
 as depicted in~\eqref{eq:fullpiers-logit} and the coefficient values
@@ -378,14 +378,14 @@ recorded in separate databases or remain only in paper-based formats,
 which limits immediate construction of complete and standardized
 electronic clinical datasets for modeling. As a consequence, in this
 research, we used the provided records from the
-\ac{HGIO}\footnote{\textit{Hospital Gineco Obstétrico Isidro Ayora}, a
+\ac{HGIO}\footnote{\textit{Hospital Gineco Obstétrico Isidro Ayora (HGOIA)}, a
   third-level public specialty hospital in Zone~9 of the \ac{MSP},
   Quito, Ecuador.}; which contains demographic variables and lacks of
 clinical features. For this reason, we explored our sets of models
 both on the real and synthetic data to diagnose
-preeclampsia. Different to the full\ac{PIERS} standard, which is a
+\ac{PE}. Different to the full\ac{PIERS} standard, which is a
 prognostic model, our goal is to determine the most effective set of
-models to diagnose preeclampsia according to the Ecuadorian realm.
+models to diagnose \ac{PE} according to the Ecuadorian realm.
 
 In this work, we propose a custom automated machine learning workflow
 that explores up to 6 classification algorithms
@@ -394,7 +394,7 @@ XGBoost~\cite{chen2016xgboost},
 CatBoost~\cite{prokhorenkova2018catboost},
 \ac{MLP}\cite{rumelhart1986backprop}, and
 \ac{RF}~\cite{breiman2001randomforest}) as candidate models for
-preeclampsia diagnostic prediction. AWS Sage Maker was also used to
+\ac{PE} diagnostic prediction. AWS Sage Maker was also used to
 evaluate the prediction power of the demographic variables of the
 dataset of patients at Isidro Ayora Hospital and to train a reference
 classifier. To improve classification, given the imbalanced data, we
@@ -410,7 +410,7 @@ models with a synthetic dataset of our own.
 
 The contributions of our work are: (i) to the best of our knowledge,
 this is the first academic research work to address the use of machine
-learning algorithms in preeclampsia in Ecuador, (ii) we systematically
+learning algorithms in \ac{PE} in Ecuador, (ii) we systematically
 explored different machine learning models accounting to improve
 classification performance as well as model's explainability, (iii) we
 used data provided from data provided from \ac{HGIO}, a specialized
@@ -422,7 +422,7 @@ server at Escuela Politecnica Nacional.
 \section{Related Works}
 \label{sec:related-works}
 Recent literature shows sustained interest in using \ac{ML} for
-preeclampsia prediction, but also highlights important differences in
+\ac{PE} prediction, but also highlights important differences in
 study design, data sources, and intended clinical use. Two recent
 systematic reviews synthesize this landscape. Darsareh et
 al.~\cite{Darsareh2024} reviewed \ac{ML}-based prediction studies and
@@ -447,26 +447,26 @@ in false positives. Hence, we consider the ranking should be on the
 false negatives.
 
 Beyond systematic reviews, several primary studies illustrate the
-diversity of preeclampsia prediction strategies. Marin et
+diversity of \ac{PE} prediction strategies. Marin et
 al.\cite{marin2019} used the Viterbi algorithm to determine the
-presence of preeclampsia based on features such as the weight, age,
+presence of \ac{PE} based on features such as the weight, age,
 and blood-pressure measurements. Their approach was integrated with a
 smart bracelet and a mobile application to monitor the evolution of
 the physiological parameters. This showed potential to be used in
 hospitals as well as in remote monitoring of patients for early
 detection of the condition. Li et al.~\cite{LI2021102} explored
 \ac{LR}, \ac{RF}, \ac{SVM}, and XGBoost models to predict women at
-risk of preeclampsia from electronic health records collected in early
+risk of \ac{PE} from electronic health records collected in early
 pregnancy. The XGBoost model achieved the best performance
-($\ac{ACC}=0.920$, $\mathtt{Precision}=0.447$, $\mathtt{Recall}=0.789$,
+($\mathtt{\ac{ACC}}=0.920$, $\mathtt{Precision}=0.447$, $\mathtt{Recall}=0.789$,
 $\ac{F1}=0.571$, $\ac{AUC}=0.955$) and showed that routinely available
 structured clinical variables combining maternal factors and
 laboratory data, such as fasting plasma glucose, mean blood pressure,
-and \ac{BMI}, can provide useful discriminative power for preeclampsia
+and \ac{BMI}, can provide useful discriminative power for \ac{PE}
 risk prediction. Mari{'c} et al.~\cite{mari__2022} used \ac{EN} with
 stacked multiomics integration on longitudinal data from a small
 prospective pregnancy cohort and achieved early prediction of
-preeclampsia ($\ac{AUC}=0.83$) using a 9‑metabolite urine model, with
+\ac{PE} ($\ac{AUC}=0.83$) using a 9‑metabolite urine model, with
 performance improving to $\ac{AUC}=0.94$ when integrating multiple
 omics modalities, demonstrating that molecular features are strong
 contributors to predictive performance because they capture
@@ -476,7 +476,7 @@ but secondary and complementary, providing less information than
 omics‑derived biomarkers.
 
 Taken together, prior work suggests three major trends. First,
-preeclampsia prediction models tend to perform best when they combine
+\ac{PE} prediction models tend to perform best when they combine
 multiple domains of information, including maternal history,
 hemodynamic measurements, laboratory values, and sometimes ultrasound
 or omics data~\cite{Darsareh2024,Rahman2023,mennickent_2023}. Second,
@@ -500,7 +500,7 @@ standardized clinical prediction dataset, we include a synthetic-data
 track for controlled methodological exploration. This makes our work
 complementary to prior studies by focusing not only on predictive
 performance, but also on the practical transition path toward local,
-interpretable preeclampsia modeling in a real public-hospital
+interpretable \ac{PE} modeling in a real public-hospital
 environment.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -523,18 +523,18 @@ environment.
 \section{Materials and Methods}
 \label{sec:materials-methods}
 In this section, we describe our methodological approach to diagnose
-preeclampsia in women at Isidro Ayora Hospital. We restricted our
+\ac{PE} in women at Isidro Ayora Hospital. We restricted our
 prediction to diagnosis due to the limitations of the provided
 data. Our research problem is stated in
 \eqref{eq:preeclampsiaClassification}, where given a feature vector
 $\mathbf{x} \in \mathbb{R}^d$ representing  attributes of a
-pregnant woman, the probability that a patient has preeclampsia is modeled
+pregnant woman, the probability that a patient has \ac{PE} is modeled
 as:
 
 \begin{linenomath}
 \begin{equation}
   \label{eq:preeclampsiaClassification}
-  P(\text{Preeclampsia} = 1 \mid \mathbf{x}) = f(\mathbf{x}; \boldsymbol{\theta})
+  P(\mathrm{PE} = 1 \mid \mathbf{x}) = f(\mathbf{x}; \boldsymbol{\theta})
 \end{equation}
 \end{linenomath}
 
@@ -546,7 +546,7 @@ final prediction $\hat{y}$ is:
 \begin{equation}
   \hat{y} =
   \begin{cases}
-    1 & \text{if } P(\text{Preeclampsia} = 1 \mid \mathbf{x}) \geq \tau \\
+    1 & \text{if } P(\mathrm{PE} = 1 \mid \mathbf{x}) \geq \tau \\
     0 & \text{otherwise}
   \end{cases}
   \label{eq:preeclampsia_decision}
@@ -561,7 +561,7 @@ with $\tau \in [0,1]$ being a decision threshold, typically $\tau =
 This was an observational and cross-sectional descriptive study that
 used an anonymized database of medical records from patients at the
 \ac{HGIO} in Quito, Ecuador. Our research goal is to train a
-machine learning classification model to predict preeclampsia. We
+machine learning classification model to predict \ac{PE}. We
 explore 6 different classification models to improve
 performance. Explainability is addressed for each model to show the
 influence of a given feature $x_i$ in the diagnostic prediction. 
@@ -573,7 +573,7 @@ descriptive variables (features) from year 2021 to 2025. However, the
 dataset contains information about all the different diseases treated
 at the hospital according to \ac{ICD-10}. All records were anonymized
 in compliance with ethical requirements approved by the
-\textit{Pontificia Universidad Católica del Ecuador} Research Ethics
+\ac{PUCE} Research Ethics
 Committee for Human Subjects (CEISH-PUCE, approval code: EO-086-2024,
 version~4)..
 
@@ -581,7 +581,7 @@ version~4)..
 \label{sec:data-preprocessing}
 
 Data preprocessing was designed to construct a reliable binary
-classification dataset for preeclampsia prediction from routine
+classification dataset for \ac{PE} prediction from routine
 hospital records. Figure~\ref{fig:preprocessing-pipeline} summarizes
 the complete workflow.
 
@@ -590,7 +590,7 @@ the complete workflow.
   hypertensive disorders in pregnancy using \ac{MSP} guidance and
   \ac{ICD-10} codes O11, O13, O14, O15, and O16. From
   \numprint{174753} records, \numprint{674} were identified as
-  preeclampsia-related cases. Table~\ref{tab:cie10-icd10-mapping}
+  \ac{PE}-related cases. Table~\ref{tab:cie10-icd10-mapping}
   describes the codes selected.
 
 \item \textbf{Control identification:} We selected normal pregnancy
@@ -602,7 +602,7 @@ the complete workflow.
   removed from the normal-pregnancy subset to avoid label leakage,
   reducing the control group to \numprint{3571} records.
 
-\item \textbf{Dataset assembly:} The preeclampsia and normal-pregnancy
+\item \textbf{Dataset assembly:} The \ac{PE} and normal-pregnancy
   subsets were merged into a single dataset with \numprint{4245}
   records.
 
@@ -614,7 +614,7 @@ the complete workflow.
   by assigning a value of 1 to records with \ac{ICD-10} codes
   beginning with \texttt{O} and 0 to records with codes beginning with
   \texttt{Z}. This resulted in a total of \numprint{3571} normal
-  pregnancies and \numprint{674} preeclampsia cases, as summarized in
+  pregnancies and \numprint{674} \ac{PE} cases, as summarized in
   Table~\ref{tab:cie10-icd10-mapping}.
 
 \item \textbf{Data quality profiling in AWS SageMaker Canvas:} We used
@@ -680,9 +680,9 @@ preeclampsia classification dataset.\label{fig:preprocessing-pipeline}}
   \small % change table font size
   % \centering
   \caption{ICD-10 codes used to define the binary target variable for
-    preeclampsia classification. The positive class (Preeclampsia = 1)
+    \ac{PE} classification. The positive class (\ac{PE} = 1)
     indicates the presence of the disorder, while the negative class
-    (Preeclampsia = 0) corresponds to normal pregnancy supervision
+    (\ac{PE} = 0) corresponds to normal pregnancy supervision
     codes.}
   %%\isPreprints{\centering}{} % Only used for preprints
 \label{tab:cie10-icd10-mapping}
@@ -743,18 +743,18 @@ Unknown type features & 0 \\
 
 \subsection{Statistical Characteristics of Collected Data}
 \label{sec:stat-char-data}
-We have analyzed the prevalence of preeclampsia among the population
+We have analyzed the prevalence of \ac{PE} among the population
 of pregnancies at the dataset provided by Isidro Ayora Hospital. Some
-of the important insights are that preeclampsia prevalence rises
+of the important insights are that \ac{PE} prevalence rises
 strongly with the patient's age: 85.13\%. The mean of women diagnosed
-with preeclampsia present a mean \ac{BMI} of 33. Normal pregnancies
+with \ac{PE} present a mean \ac{BMI} of 33. Normal pregnancies
 lie in 25.71. These results are summarized in
 Figure~\ref{fig:statistics}. Table~\ref{tab:desc_stats} presents
 statistical characteristics of demographic variables in the dataset
 whereas Table~\ref{tab:variable_distribution} shows the distribution
 of those variables organized in quartiles (data is split into 4
 quantile groupes) \ac{w.r.t.} the
-prevalence of preeclampsia in pregnancies at Isidro Ayora Hospital.
+prevalence of \ac{PE} in pregnancies at Isidro Ayora Hospital.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-\extralength}{0cm}
@@ -762,8 +762,8 @@ prevalence of preeclampsia in pregnancies at Isidro Ayora Hospital.
     \includegraphics[width=\textwidth]{./figures/dataset-statistics-HIA.png}
   \end{adjustwidth}
   \caption{\label{fig:statistics}Statistical analysis of prevalence of
-    preeclampsia in the population of pregnant women at Isidro Ayora
-    Hospital. Preeclampsia is more frequent in women of 36 to 49 years
+    \ac{PE} in the population of pregnant women at Isidro Ayora
+    Hospital. \Ac{PE} is more frequent in women of 36 to 49 years
   old and with a mean BMI of 33.}
 \end{figure}
 
@@ -771,7 +771,7 @@ prevalence of preeclampsia in pregnancies at Isidro Ayora Hospital.
   \small
   \centering
   \caption{Descriptive statistics of demographic variables by
-  preeclampsia diganosis in pregnant women at Isidro Ayora Hospital
+  \ac{PE} diagnosis in pregnant women at Isidro Ayora Hospital
   from years 2022 to 2025.}
 \begin{tabularx}{\textwidth}{lp{2.cm}XXXX}
 \toprule
@@ -838,7 +838,7 @@ WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% \\
 To complement the real-world demographic dataset and compensate for
 limited availability of structured clinical variables, we generated a
 synthetic dataset designed to simulate clinical data profiles for
-pregnant patients with and without preeclampsia. The generation process was
+pregnant patients with and without \ac{PE}. The generation process was
 implemented in Python using \texttt{NumPy} and \texttt{pandas}, with a
 fixed random seed for reproducibility.
 
@@ -859,7 +859,9 @@ by clipping.
 
 After feature generation, a binary diagnostic label
 ($\mathrm{PE}$) is assigned using a simplified rule based on the
-Ecuadorian \ac{MSP} clinical guideline for \ac{HDP}~\cite{msp_ecuador_hdp_2013}.
+Ecuadorian \ac{MSP} clinical guideline for \ac{HDP}~\cite{msp_ecuador_hdp_2013},
+where \ac{HTN} denotes hypertension and \ac{ULN} denotes the upper limit of
+normal for laboratory values.
 Let \(\mathrm{HTN}=(\mathrm{SBP}\geq 140)\lor(\mathrm{DBP}\geq 90)\),
 \(\mathrm{Prot}=(\mathrm{Prot_{24h}}\geq 300\,\mathrm{mg})\),
 \(\mathrm{TCP}=(\mathrm{Plt}<100\times10^{9}\,\mathrm{L}^{-1})\),
@@ -918,9 +920,9 @@ Chest pain & $\text{Bernoulli}(0.03)$ & $\text{Bernoulli}(0.35)$ & binary \\
 
 \subsection{Machine Learning Models and Training}
 \label{sec:mach-learn-models}
-This research aims to diagnose Preeclampsia with the provided data
+This research aims to diagnose \ac{PE} with the provided data
 from Isidro Ayora Hospital. In Section~\ref{sec:materials-methods}, we
-defined the preeclampsia diagnose problem as a binary
+defined the \ac{PE} diagnose problem as a binary
 classification. Consequently, this study used two complementary
 training tracks: (i) a cloud-managed workflow in AWS SageMaker Canvas
 for rapid no-code benchmarking, and (ii) \ac{C-AutoML} for controlled
@@ -1069,8 +1071,8 @@ classified cases among all evaluated pregnancies:
 \end{linenomath}
 
 Discrimination across thresholds was quantified with \ac{AUC}, where
-higher values indicate better separation between preeclampsia and
-non-preeclampsia classes~\cite{fawcett2006roc}.
+higher values indicate better separation between \ac{PE} and
+non-\ac{PE} classes~\cite{fawcett2006roc}.
 
 Finally, the confusion matrix (\(TP, TN, FP, FN\)) was analyzed to
 characterize the clinical error profile of each candidate model,
@@ -1465,7 +1467,7 @@ show the feature importance \ac{w.r.t.} to the model output. For
 LightGBM, it is noticeable that variable \texttt{Age} was the most
 influential variable, with higher age values producing predominantly
 positive \ac{SHAP} contributions and thus increasing the predicted
-probability of preeclampsia. \texttt{Gestational Age} also showed a
+probability of \ac{PE}. \texttt{Gestational Age} also showed a
 strong contribution, with higher values generally associated with
 positive model output, whereas lower gestational ages tended to reduce
 predicted risk. In contrast, \texttt{BMI} and \texttt{weight} had more
@@ -1523,7 +1525,7 @@ all feature--instance pairs, indicating that feature effects are
 bidirectional and patient-specific rather than uniformly monotonic.
 Higher values of maternal age (shown in red) are associated with
 predominantly positive \ac{SHAP} contributions, pushing predictions
-toward preeclampsia, while lower values (blue) tend to reduce
+toward \ac{PE}, while lower values (blue) tend to reduce
 predicted risk.
 
 The waterfall plot for the highest-impact instance (index 36,
@@ -1541,7 +1543,7 @@ global and local \ac{SHAP} analyses confirm that the \texttt{Weighted
   Ensemble} model captures clinically plausible risk gradients from
 demographic variables alone, and that its decision structure is
 interpretable and consistent with the known epidemiology of
-preeclampsia.
+\ac{PE}.
 
 \begin{figure}[H]
 \begin{adjustwidth}{-\extralength}{0cm}
@@ -1581,7 +1583,7 @@ The beeswarm plot reveals a feature-importance structure that is
 highly consistent with the rule-based and prognostic variables used to
 construct the data. \ac{DBP} and \ac{SBP} appear among the strongest
 positive contributors, with higher values (red) shifting the
-prediction toward preeclampsia. \texttt{Proteinuria\_24h\_mg},
+prediction toward \ac{PE}. \texttt{Proteinuria\_24h\_mg},
 \ac{AST}, creatinine, and the FullPIERS risk percentage also display
 predominantly positive \ac{SHAP} values at higher feature levels,
 indicating that the model assigns greater risk when these markers of
@@ -1609,7 +1611,7 @@ confirming that the \ac{LR} model identifies high-risk cases through a
 clinically coherent combination of severity indicators. Taken
 together, the global and local \ac{SHAP} analyses demonstrate that
 the model learned a decision structure dominated by classical
-preeclampsia risk markers and is fully consistent with the
+\ac{PE} risk markers and is fully consistent with the
 rule-based labels used during synthetic data generation.
 % Sonet 4.6 Adaptive
 \begin{figure}[H]
@@ -1640,7 +1642,7 @@ rule-based labels used during synthetic data generation.
 \label{sec:discussion}
 
 In this study we explored different models and approaches to train a
-robust model for the prediction of preeclampsia. For that matter, we
+robust model for the prediction of \ac{PE}. For that matter, we
 used the data provided by Isidro Ayora Third Level Gynecology and
 Obstetrics Hospital. However, the digital records are most
 demographic. Because of that, we generated a synthetic dataset using
@@ -1663,11 +1665,11 @@ the best performance for the Isidro Ayora Hospital dataset because it
 has the highest recall ($\mathtt{Recall}=0.844$), compared to that of
 \texttt{LightGBM} ($\mathtt{Recall}=0.768$). This is important,
 because the recall (sensitivity) performance metric measures how many
-of the actual population of women with preeclampsia, the model
+of the actual population of women with \ac{PE}, the model
 found. For a medical setting, it is necessary that the model has a
 high recall because that lowers the false negatives. As a matter of
 fact, the \texttt{Weighted Ensemble Model} loses 1 in 6 cases of
-preeclampsia. On the other hand, the \texttt{LightGBM} trained with
+\ac{PE}. On the other hand, the \texttt{LightGBM} trained with
 our proposed \ac{C-AutoML} approach has a higher precision
 ($\mathtt{Precision}=0.837$) compared to the \texttt{Weighted Ensemble
   model} ($\mathtt{Precision}=0.770$). This result is positive because
@@ -1689,7 +1691,7 @@ proteinuria lead the impact on model's prediction.
 \section{Conclusion}
 \label{sec:conclusion}
 This study explored the performance of different machine learning
-models towards the prediction of preeclampsia in the population of
+models towards the prediction of \ac{PE} in the population of
 women at Isidro Ayora Hospital. AWS SageMaker Canva's was pivotal in
 assessing the prediction power of each of the features from the
 provided dataset. Selecting features with a high prediction power
@@ -1703,23 +1705,23 @@ Our proposed training methodology improved the hyperparamter settings
 of different models targeting the \ac{F1} metric, which balances
 precision and recall, where the latter is of most importance for a
 medical application because it measures the proportion of true
-preeclampsia cases correctly identified by the model, whereas the
+\ac{PE} cases correctly identified by the model, whereas the
 former accounts for the cost of false alarms. We aim towards recall
 because it emphasizes minimizing missed diagnoses.
 
 \texttt{LightGBM} achieved the best performance \ac{w.r.t.} the
 \ac{F1} metric using our proposed \ac{C-AutoML} workflow, with a
 $\ac{F1}=0.802$, $\mathtt{Recall}=0.768$, and
-$\mathtt{Precision}=0.837$. This means that 77\% of true preeclampsia
+$\mathtt{Precision}=0.837$. This means that 77\% of true \ac{PE}
 cases were correctly detected by the model. Consequently, this model
-misses 1 out of 4 true preeclampsia cases. On the other hand, the
+misses 1 out of 4 true \ac{PE} cases. On the other hand, the
 \texttt{Weighted Ensemble} model trained in AWS SageMaker achieved an
 $\ac{F1}=0.805$, $\mathtt{Precision}=0.770$, and
-$\mathtt{Recall}=0.844$. Therefore, 84\% of true preeclampsia cases
+$\mathtt{Recall}=0.844$. Therefore, 84\% of true \ac{PE} cases
 were correctly detected by the ensemble model and misses 1 out of 6
-true preeclampsia cases. This improvement over our single model is due
+true \ac{PE} cases. This improvement over our single model is due
 to the ensemble model. We suggest a combination of both models models
-to aid the physicians in their decision when diagnosing preeclampsia
+to aid the physicians in their decision when diagnosing \ac{PE}
 given the fact that the \texttt{Weighted Ensemble} model provides a
 recall greater than 0.80, which can be considered clinically
 reasonable if used alongside with clinical judgment and that
@@ -2041,7 +2043,7 @@ AUC & Area Under the Receiver Operating Characteristic Curve \\
 F1 & F1-score \\
 MSP & Ministerio de Salud Pública \\
 PUCE & Pontifical Catholic University of Ecuador \\
-ANN & Artificial Neural Network \\
+%ANN & Artificial Neural Network \\
 MLOPs & Machine Learning Operations \\
 PIERS & Preeclampsia Integrated Estimate of RiSk \\
 ICD-10 & International Classification of Diseases \\
