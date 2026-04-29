@@ -291,6 +291,8 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
     \acro{AST}[AST]{Aspartate Aminotransferase}
     \acro{WHO}[WHO]{World Health Organization}
     \acro{HGIO}[HGIO]{Isidro Ayora Gynecology and Obstetrics Hospital}
+    \acro{EPN}[EPN]{Escuela Politécnica Nacional}
+    \acro{API}[API]{Application Programming Interface}
 \end{acronym}
   
   
@@ -417,7 +419,8 @@ used data provided from data provided from \ac{HGIO}, a specialized
 public health facility in gynecology and obstetrics, (iv) we explored
 additional models on synthetic data to account for lack of clinical
 variables, (v) we deployed our model using a \ac{MLOPs} approach in a
-server at Escuela Politecnica Nacional.
+server at \ac{EPN}, including a web-based inference interface (see
+Appendix~\ref{app:mlops-interface}).
 
 \section{Related Works}
 \label{sec:related-works}
@@ -926,7 +929,8 @@ defined the \ac{PE} diagnose problem as a binary
 classification. Consequently, this study used two complementary
 training tracks: (i) a cloud-managed workflow in AWS SageMaker Canvas
 for rapid no-code benchmarking, and (ii) \ac{C-AutoML} for controlled
-experimentation and methodological traceability. 
+experimentation and methodological traceability (see
+Appendix~\ref{app:c-automl}). 
 
 \subsubsection{Model Families}
 \label{sec:model-families}
@@ -1947,7 +1951,16 @@ such places where health facilities is scarce or expensive.
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
+% \authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
+
+\authorcontributions{Conceptualization, M.P.; methodology, M.P. and
+  L.G.F.; software, L.G.F. and J.B.; formal analysis, M.P. and L.G.F.;
+  investigation, M.I.-P., A.B.-F. and J.B.; resources, J.B. and
+  R.A.F.-A.; data curation, J.B.; writing-original draft, M.P. and
+  L.G.F.; writing-review \& editing, all authors; visualization,
+  J.B.; supervision, M.P.; project administration, M.P.; validation,
+  R.A.F.-A. All authors have read and agreed to the published version
+  of the manuscript.}
 
 % \funding{Please add: ``This research received no external funding'' or ``This research was funded by NAME OF FUNDER grant number XXX.'' and  and ``The APC was funded by XXX''. Check carefully that the details given are accurate and use the standard spelling of funding agency names at \url{https://search.crossref.org/funding}, any errors may affect your future funding.}
 
@@ -1993,7 +2006,7 @@ such places where health facilities is scarce or expensive.
   institutional data governance restrictions. The code for the
   \ac{C-AutoML} pipeline, trained model artefacts, and supplementary
   figures are available in the project repository at
-  \url{https://github.com/LeninGF/ArticlesWriting} and will be made
+  \url{https://github.com/LeninGF/preeclampsiaML} and will be made
   publicly accessible upon publication of this article.}
 
 
@@ -2074,6 +2087,7 @@ AST & Aspartate Aminotransferase \\
 \appendix
 \section[\appendixname~\thesection]{Custom Automated Machine Learning
   Workflow (C-AutoML)}
+\label{app:c-automl}
 The proposed Custom Automated Machine Learning Workflow \ac{C-AutoML}
 model selection and hyperparameter optimization algorithm, presented
 in Algorithm~\ref{alg:autopilot}, is designed to systematically
@@ -2224,24 +2238,118 @@ The algorithm produces the following outputs in the specified directory:
 \end{algorithm}
 
 \subsection[\appendixname~\thesubsection]{Required Python Packages}
-The implementation requires the following Python packages with specified compatibility:
+The implementation was developed in Python~3.9 and executed on Ubuntu~24.04.4~LTS.
+Dependencies were managed via Miniforge~\cite{miniforge2021}, a lightweight
+conda-forge-based distribution of Anaconda~\cite{anaconda2020}, with additional
+packages installed through \texttt{pip}~\cite{pip_pypa} where conda-forge
+packages were unavailable. The following core packages are required:
 \begin{itemize}
-    \item \texttt{scikit-learn} $\ge$ 1.0.0 (primary machine learning framework)
-    \item \texttt{pandas} $\ge$ 1.3.0 (data manipulation)
-    \item \texttt{numpy} $\ge$ 1.21.0 (numerical computation)
-    \item \texttt{matplotlib} $\ge$ 3.4.0 (visualisation)
-    \item \texttt{joblib} $\ge$ 1.0.0 (model serialisation)
+    \item \texttt{scikit-learn} $\ge$ 1.6.1 — primary \ac{ML} framework providing preprocessing transformers, supervised estimators, cross-validation utilities, and evaluation metrics~\cite{sklearn-api}.
+    \item \texttt{pandas} $\ge$ 2.3.1 — tabular data ingestion, transformation, and feature engineering.
+    \item \texttt{numpy} $\ge$ 2.0.2 — numerical array operations and statistical computations.
+    \item \texttt{matplotlib} $\ge$ 3.9.4 — visualisation of training curves, confusion matrices, and \ac{SHAP} summary plots.
+    \item \texttt{joblib} $\ge$ 1.0.0 — model serialisation (\texttt{.pkl} artefacts) and parallelised cross-validation loops.
 \end{itemize}
-Optional packages for extended model support:
+Optional packages enable extended gradient-boosting model support:
 \begin{itemize}
-    \item \texttt{xgboost} $\ge$ 1.5.0 (gradient boosting)
-    \item \texttt{lightgbm} $\ge$ 3.3.0 (gradient boosting)
-    \item \texttt{catboost} $\ge$ 1.0.0 (gradient boosting)
+    \item \texttt{xgboost} $\ge$ 2.1.4 — scalable gradient-boosted trees~\cite{chen2016xgboost}.
+    \item \texttt{lightgbm} $\ge$ 4.6.0 — histogram-based gradient boosting with reduced memory footprint~\cite{ke2017lightgbm}.
+    \item \texttt{catboost} $\ge$ 1.2.8 — gradient boosting with native handling of categorical features~\cite{prokhorenkova2018catboost}.
 \end{itemize}
 
 
-\section[\appendixname~\thesection]{}
-All appendix sections must be cited in the main text. In the appendices, Figures, Tables, etc. should be labeled, starting with ``A''---e.g., Figure A1, Figure A2, etc.
+% \section[\appendixname~\thesection]{}
+% All appendix sections must be cited in the main text. In the appendices, Figures, Tables, etc. should be labeled, starting with ``A''---e.g., Figure A1, Figure A2, etc.
+
+\section[\appendixname~\thesection]{Preeclampsia Risk Prediction Web Interface and MLOps
+  Deployment}
+\label{app:mlops-interface}
+
+As a complementary contribution to the \ac{C-AutoML} pipeline
+presented in this work, we developed a web-based inference interface
+and an \ac{MLOPs} deployment framework to operationalize the trained
+models within the computing infrastructure of the \ac{EPN}. The system is currently accessible within the \ac{EPN} campus network and exposes the best-performing models produced by the \ac{C-AutoML} workflow and AWS Sage Maker Canvas procedure as a prediction service.
+
+\subsection[\appendixname~\thesubsection]{MLOps Cycle and Experiment Tracking}
+
+\ac{MLOPs} refers to a set of practices that bring together machine
+learning development and software operations with the goal of
+deploying and maintaining models in production reliably and
+efficiently~\cite{mlflow_2018}. In this context, the \ac{MLOPs}
+cycle consists of four stages that repeat as new data becomes
+available: (i)~training, where the \ac{C-AutoML} workflow evaluates
+multiple model families and hyperparameter configurations;
+(ii)~evaluation, where each trial is assessed using F1-score,
+accuracy, precision, recall, and \ac{AUC}; (iii)~registration, where
+MLflow stores the hyperparameter configuration, evaluation metrics,
+and serialised model artefact for every trial; and (iv)~deployment,
+where the best-performing registered model is made available through
+the inference \ac{API} consumed by the web interface.
+
+MLflow acts as the tracking and model registry layer throughout this
+cycle. It records every \ac{C-AutoML} trial as a named run under the
+experiment \texttt{preeclampsia\_severity}, preserving a complete
+history of all model versions alongside their evaluation metrics.
+When a new training cycle produces a model that outperforms the
+currently deployed version, MLflow promotes that model to the serving
+stage. This promotion updates only the registry pointer that the
+inference \ac{API} consults when loading the model at startup; the
+web interface and \ac{API} code remain unchanged. The practical
+consequence is that the model serving the predictions can be improved
+or retrained as new data becomes available without any modification
+to the front-end application or the deployment infrastructure.
+
+The model deployed in the current version of the system corresponds
+to the LightGBM model trained on the four demographic variables
+available from \ac{HGIO}, representing version~1 of the prediction
+service. This initial version is expected to evolve as the system
+collects or receives additional clinical data. When a richer dataset
+becomes available, the \ac{C-AutoML} pipeline can be re-executed
+over the extended feature set, MLflow will register the new set of
+trials, and the best new model will automatically become the active
+version served to the interface. The current model therefore serves
+as the baseline deployment, and the architecture is designed to
+accommodate successive model generations without disruption to the
+clinical workflow.
+
+\subsection[\appendixname~\thesubsection]{Data Capture Interface}
+
+The web interface, titled \textit{Verificador de Preeclampsia}
+(Preeclampsia Risk Checker), allows a clinician to select a trained
+model and enter patient data through a structured form organized in
+clearly labelled sections. The input variables presented in the
+interface were designed to accommodate a broader set of clinical
+indicators than those available in the current study, in anticipation
+of richer data collection in future collaborations with health
+facilities. The active variable set used for inference is
+progressively adapted to the data effectively collected and provided
+by the participating institutions, so that the interface grows in
+clinical scope as the underlying dataset expands.
+Figures~\ref{fig:mlops-interface-a}, \ref{fig:mlops-interface-b},
+and~\ref{fig:mlops-interface-c} illustrate the three scrollable
+sections of the interface.
+
+\begin{figure}[H]
+\begin{adjustwidth}{-\extralength}{0cm}
+\centering
+\subfloat[Model selection and demographic characteristics
+  section.\label{fig:mlops-interface-a}]{
+  \includegraphics[width=0.48\fulllength]{./figures/mlops/mlops_interface_demographic.png}}
+\subfloat[Gynaeco-obstetric history, medical history, and symptoms
+  section.\label{fig:mlops-interface-b}]{
+  \includegraphics[width=0.48\fulllength]{./figures/mlops/mlops_interface_clinical_history.png}}\\
+\subfloat[Cardiorespiratory signs, haematological tests, submission
+  button, and prediction output
+  panel.\label{fig:mlops-interface-c}]{
+  \includegraphics[width=0.48\fulllength]{./figures/mlops/mlops_interface_signs_submit.png}}
+\end{adjustwidth}
+\caption{Web interface of the \textit{Verificador de Preeclampsia}
+  system deployed at the Escuela Politécnica Nacional. (\textbf{a})
+  Model selector and demographic input fields. (\textbf{b}) Clinical
+  history and symptom input fields. (\textbf{c}) Cardiorespiratory
+  and haematological input fields with the prediction results panel.
+  \label{fig:mlops-interface}}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\isPreprints{}{% This command is only used for ``preprints''.
