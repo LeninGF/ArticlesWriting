@@ -181,32 +181,63 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
 %   integration of clinical data expected to enhance predictive power
 %   for risk assessment.}
 
-\abstract{Preeclampsia is a major contributor to maternal and
-  perinatal morbidity. In Ecuadorian public hospitals, clinical
-  information is often fragmented, limiting the construction of
-  complete datasets for prediction modeling. This study aimed to
-  develop a machine learning model to predict preeclampsia using
-  demographic data from the Isidro Ayora Hospital (HGIO), Quito,
-  Ecuador. We proposed a custom automated machine learning (C-AutoML)
-  workflow to evaluate six models (Logistic Regression, \texttt{LightGBM},
-  \texttt{XGBoost}, \texttt{CatBoost}, Multi-Layer Perceptron, and Random Forest) and
-  compared its performance to a weighted ensemble built using AWS
-  SageMaker Canvas, optimizing for the F1-score in both cases. Model
-  interpretability was analyzed using \ac{SHAP}. Due to the scarcity
-  of clinical variables, a synthetic dataset based on FullPIERS
-  predictors was also generated and modeled. On the hospital dataset,
-  the SageMaker ensemble achieved an F1-score of 0.805, accuracy of
-  0.934, and AUC of 0.956, while the C-AutoML's best single model
-  (\texttt{LightGBM}) achieved comparable results (F1-score: 0.802, accuracy:
-  0.938, AUC: 0.944). \ac{SHAP} analysis identified patient age as the
-  most influential feature. On the synthetic dataset, Logistic
-  Regression achieved perfect performance (F1-score: 1.0). As a
-  result, the proposed C-AutoML workflow matched the performance of a
-  the weighted ensemble tool using a single, interpretable
-  model. Despite the current reliance on demographic data, the
-  methodology shows promise for aiding preeclampsia diagnosis in
-  resource-limited settings, with future integration of clinical data
-  expected to enhance predictive power for risk assessment.}
+% \abstract{Preeclampsia is a major contributor to maternal and
+%   perinatal morbidity. In Ecuadorian public hospitals, clinical
+%   information is often fragmented, limiting the construction of
+%   complete datasets for prediction modeling. This study aimed to
+%   develop a machine learning model to predict preeclampsia using
+%   demographic data from the Isidro Ayora Hospital (HGIO), Quito,
+%   Ecuador. We proposed a custom automated machine learning (C-AutoML)
+%   workflow to evaluate six models (Logistic Regression, \texttt{LightGBM},
+%   \texttt{XGBoost}, \texttt{CatBoost}, Multi-Layer Perceptron, and Random Forest) and
+%   compared its performance to a weighted ensemble built using AWS
+%   SageMaker Canvas, optimizing for the F1-score in both cases. Model
+%   interpretability was analyzed using \ac{SHAP}. Due to the scarcity
+%   of clinical variables, a synthetic dataset based on FullPIERS
+%   predictors was also generated and modeled. On the hospital dataset,
+%   the SageMaker ensemble achieved an F1-score of 0.805, accuracy of
+%   0.934, and AUC of 0.956, while the C-AutoML's best single model
+%   (\texttt{LightGBM}) achieved comparable results (F1-score: 0.802, accuracy:
+%   0.938, AUC: 0.944). \ac{SHAP} analysis identified patient age as the
+%   most influential feature. On the synthetic dataset, Logistic
+%   Regression achieved perfect performance (F1-score: 1.0). As a
+%   result, the proposed C-AutoML workflow matched the performance of a
+%   the weighted ensemble tool using a single, interpretable
+%   model. Despite the current reliance on demographic data, the
+%   methodology shows promise for aiding preeclampsia diagnosis in
+%   resource-limited settings, with future integration of clinical data
+%   expected to enhance predictive power for risk assessment.}
+
+\abstract{\textbf{Background:} Preeclampsia (PE) is a leading cause
+  of maternal and perinatal morbidity, affecting 2--8\% of pregnancies
+  worldwide. In Ecuadorian public hospitals, clinical data are often
+  fragmented, limiting the construction of complete datasets for
+  prediction modelling. This study aimed to develop a machine learning
+  (ML) framework to predict PE using demographic data from the Isidro
+  Ayora Hospital (HGIO), Quito, Ecuador.
+  \textbf{Methods:} We proposed a custom automated machine learning
+  (C-AutoML) workflow to evaluate six models (\texttt{Logistic Regression},
+  \texttt{LightGBM}, \texttt{XGBoost}, \texttt{CatBoost}, \texttt{Multi-Layer
+  Perceptron}, and \texttt{Random Forest}) and compared its performance against
+  a weighted ensemble built with AWS SageMaker Canvas, optimizing for
+  the F1-score. Model interpretability was analyzed using Shapley
+  Additive Explanations (SHAP). Due to the scarcity of clinical
+  variables at HGIO, a synthetic dataset based on FullPIERS predictors
+  was also generated and modeled.
+  \textbf{Results:} On the hospital dataset, the SageMaker ensemble
+  achieved an F1-score of 0.805, accuracy of 0.934, and AUC of 0.956,
+  while the C-AutoML best single model (\texttt{LightGBM}) yielded
+  comparable results (F1-score: 0.802, accuracy: 0.938, AUC: 0.944).
+  SHAP analysis identified patient age as the most influential
+  feature. On the synthetic dataset, Logistic Regression achieved
+  perfect classification (F1-score: 1.0).
+  \textbf{Conclusions:} The proposed C-AutoML workflow matched the
+  performance of the SageMaker weighted ensemble while relying on a
+  single, interpretable model. Despite the current dependence on
+  demographic data, the methodology shows promise for supporting PE
+  diagnosis in resource-limited settings; future integration of
+  clinical variables is expected to further enhance predictive power
+  for risk stratification.}
 
 % Keywords 3 to 10
 \keyword{machine learning; explainable artificial intelligence;
@@ -314,7 +345,7 @@ affects approximately 2--8\% of pregnancies globally, highlighting the
 relevance of early detection and risk stratification
 strategies~\cite{who_2025_preeclampsia}.
 
-In Ecuador, the Clinical Practice Guideline from the \ac{MSP} (Ministry of Public Health) identifies
+In Ecuador, the Clinical Practice Guideline from the \ac{MSP}\footnote{ Ministry of Public Health} identifies
 \ac{PE} and eclampsia among the principal causes of maternal
 death. It reports that these conditions were the leading cause of
 maternal mortality, accounting for 27.53\% of maternal deaths from
@@ -385,7 +416,7 @@ research, we used the provided records from the
   third-level public specialty hospital in Zone~9 of the \ac{MSP},
   Quito, Ecuador.}; which contains demographic variables and lacks of
 clinical features. For this reason, we explored our sets of models
-both on the real and synthetic data to diagnose
+both on the \ac{HGIO} and synthetic datasets to diagnose
 \ac{PE}. Different to the full\ac{PIERS} standard, which is a
 prognostic model, our goal is to determine the most effective set of
 models to diagnose \ac{PE} according to the Ecuadorian realm.
@@ -496,14 +527,14 @@ hospital settings.
 Our study is positioned within this literature but addresses a
 different operational context. Instead of assuming a mature,
 fully-integrated electronic clinical infrastructure, we combine: (i)
-a descriptive analysis of real hospital data from \ac{HGIO}, (ii) a cloud-managed benchmarking workflow, and (iii) a
+a descriptive analysis of retrospective patient records from \ac{HGIO}, (ii) a cloud-managed benchmarking workflow, and (iii) a
 custom automated \ac{ML} pipeline with explainability analysis. In
 addition, because fragmented records currently limit access to a fully
 standardized clinical prediction dataset, we include a synthetic-data
 track for controlled methodological exploration. This makes our work
 complementary to prior studies by focusing not only on predictive
 performance, but also on the practical transition path toward local,
-interpretable \ac{PE} modeling in a real public-hospital
+interpretable \ac{PE} modeling in an operational public-hospital
 environment.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -573,11 +604,7 @@ influence of a given feature $x_i$ in the diagnostic prediction.
 The records provided by \ac{HGIO} contain a total of \numprint{174753} records 49
 descriptive variables (features) from year 2021 to 2025. However, the
 dataset contains information about all the different diseases treated
-at the hospital according to \ac{ICD-10}. All records were anonymized
-in compliance with ethical requirements approved by the
-\ac{PUCE} Research Ethics
-Committee for Human Subjects (CEISH-PUCE, approval code: EO-086-2024,
-version~4)..
+at the hospital according to \ac{ICD-10}.
 
 \subsection{Data Preprocessing}
 \label{sec:data-preprocessing}
@@ -673,7 +700,7 @@ the complete workflow.
 \draw[arrow] (profile) -- (final);
 \end{tikzpicture}%
 \end{adjustwidth}
-\caption{Preprocessing workflow used to construct the real-data
+\caption{Preprocessing workflow used to construct the \ac{HGIO}
 preeclampsia classification dataset.\label{fig:preprocessing-pipeline}}
 \end{figure}
 \unskip % parece que tiene referencia a poner espacio entre imagen y tabla
@@ -836,7 +863,7 @@ WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% \\
 \subsection{Synthetic Data Generation}
 \label{sec:synth-data-gener}
 
-To complement the real-world demographic dataset and compensate for
+To complement the retrospective demographic dataset from \ac{HGIO} and compensate for
 limited availability of structured clinical variables, we generated a
 synthetic dataset designed to simulate clinical data profiles for
 pregnant patients with and without \ac{PE}. The generation process was
@@ -1354,7 +1381,7 @@ the selected \ac{LR} model; which is coherent with the
 clinical rule used to generate the synthetic labels. Therefore, the
 perfect performance should be interpreted as an expected consequence
 of the controlled synthetic data-generation process rather than as
-evidence of equivalent performance in real clinical deployment.
+evidence of equivalent performance in prospective clinical deployment.
 
 {\small
 \begin{longtable}{>{\centering\arraybackslash}p{0.5cm}
@@ -1964,13 +1991,21 @@ such places where health facilities is scarce or expensive.
 
 % \institutionalreview{In this section, you should add the Institutional Review Board Statement and approval number, if relevant to your study. You might choose to exclude this statement if the study did not require ethical approval. Please note that the Editorial Office might ask you for further information. Please add “The study was conducted in accordance with the Declaration of Helsinki, and approved by the Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies involving humans. OR “The animal study protocol was approved by the Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies involving animals. OR “Ethical review and approval were waived for this study due to REASON (please provide a detailed justification).” OR “Not applicable” for studies not involving humans or animals.}
 
-\institutionalreview{The study protocol was approved by the Research
-  Ethics Committee for Human Subjects of the \textit{Pontificia
-    Universidad Católica del Ecuador} (CEISH-PUCE) under approval code
-  EO-086-2024 (version~4).  This study was designed as a
-  retrospective, descriptive, cross-sectional observational study
-  based exclusively on anonymized medical records provided by Hospital
-  Isidro Ayora.}
+% \institutionalreview{The study protocol was approved by the Research
+%   Ethics Committee for Human Subjects of the \textit{Pontificia
+%     Universidad Católica del Ecuador} (CEISH-PUCE) under approval code
+%   EO-086-2024 (version~4).  This study was designed as a
+%   retrospective, descriptive, cross-sectional observational study
+%   based exclusively on anonymized medical records provided by Hospital
+%   Isidro Ayora.}
+
+\institutionalreview{The study was conducted in accordance with the
+  Declaration of Helsinki, and approved by the Research Ethics
+  Committee for Human Subjects of the \textit{Pontificia Universidad
+    Católica del Ecuador} (CEISH-PUCE) under protocol code
+  EO-086-2024 (version~4). This study was designed as a retrospective,
+  descriptive, cross-sectional observational study based exclusively on
+  anonymized medical records provided by Isidro Ayora Hospital.}
 
 % \informedconsent{Any research article describing a study involving humans should contain this statement. Please add ``Informed consent was obtained from all subjects involved in the study.'' OR ``Patient consent was waived due to REASON (please provide a detailed justification).'' OR ``Not applicable'' for studies not involving humans. You might also choose to exclude this statement if the study did not involve humans.
 
@@ -2019,16 +2054,33 @@ such places where health facilities is scarce or expensive.
 
 % \acknowledgments{In this section you can acknowledge any support given which is not covered by the author contribution or funding sections. This may include administrative and technical support, or donations in kind (e.g., materials used for experiments). Where GenAI has been used for purposes such as generating text, data, or graphics, or for study design, data collection, analysis, or interpretation of data, please add “During the preparation of this manuscript/study, the author(s) used [tool name, version information] for the purposes of [description of use]. The authors have reviewed and edited the output and take full responsibility for the content of this publication.”}
 
+% \acknowledgments{The authors gratefully acknowledge the financial
+%   support provided by the \textit{Escuela Politécnica Nacional} (EPN)
+%   through project PTT-22-03. We extend our sincere gratitude to
+%   Dr. Jenniffer Andrea Calvopiña Medina and Dr. Ramiro Felipe Ortiz
+%   Timbi, Zonal Health Coordinators of Zone 9, for their support and collaboration in facilitating
+%   access to clinical data. Furthermore, we acknowledge the hospitals within Zone 9 for
+%   their interest in this project, as evidenced by their letters of
+%   support. In particular, we thank Isidro Ayora Hospital, especially
+%   its Statistics Unit, for providing access to the anonymized database
+%   of digital medical records.}
+
 \acknowledgments{The authors gratefully acknowledge the financial
-  support provided by the \textit{Escuela Politécnica Nacional}
+  support provided by the \textit{Escuela Politécnica Nacional} (EPN)
   through project PTT-22-03. We extend our sincere gratitude to
-  Dr. Jenniffer Andrea Calvopiña Medina and Dr. Ramiro Felipe Ortiz
-  Timbi, Zonal Health Coordinators of Zone 9 of the Ministerio de Salud Pública (MSP), for their support and collaboration in facilitating
-  access to clinical data. Furthermore, we acknowledge the hospitals within Zone 9 for
-  their interest in this project, as evidenced by their letters of
-  support. In particular, we thank Hospital Isidro Ayora, especially
-  its Statistics Unit, for providing access to the anonymized database
-  of digital medical records.}
+  Dr.~Jenniffer Andrea Calvopiña Medina and Dr.~Ramiro Felipe Ortiz
+  Timbi, Zonal Health Coordinators of Zone~9 of the
+  \textit{Ministerio de Salud Pública} (MSP), for their support in
+  coordinating the necessary institutional approvals and data access
+  for this study. Furthermore, we acknowledge the hospitals within
+  Zone~9 for their interest in this project, as evidenced by their
+  letters of support. In particular, we thank the \textit{Hospital
+    Gineco Obstétrico Isidro Ayora} and its Director,
+  Dra.~Teresa Natalia Aumala Viscarra, as well as
+  Dr.~Santiago Vasco-Morales and the hospital's teaching unit and
+  statistics unit, for providing access to the anonymized database of
+  digital medical records and for their administrative and technical
+  support throughout this study.}
 
 % \conflictsofinterest{Declare conflicts of interest or state ``The authors declare no conflicts of interest.'' Authors must identify and declare any personal circumstances or interest that may be perceived as inappropriately influencing the representation or interpretation of reported research results. Any role of the funders in the design of the study; in the collection, analyses or interpretation of data; in the writing of the manuscript; or in the decision to publish the results must be declared in this section. If there is no role, please state ``The funders had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript; or in the decision to publish the results''.} 
 
