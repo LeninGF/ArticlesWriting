@@ -87,8 +87,9 @@
 
 %=================================================================
 % Full title of the paper (Capitalized)
-\Title{Preeclampsia Prediction at Isidro Ayora Hospital (ECU) using
-  Machine Learning}
+\Title{A Machine Learning Framework for Preeclampsia Prediction at
+  Isidro Ayora Hospital, Ecuador}
+% Previous title: Preeclampsia Prediction at Isidro Ayora Hospital (ECU) using Machine Learning
 
 % Author Orchid ID: enter ID or remove command
 % \newcommand{\orcidauthorA}{0000-0000-0000-000X} % Add \orcidA{}
@@ -105,7 +106,7 @@
 
 % Authors, for the paper (add full first names)
 \Author{Maria Perez $^{1,}$*\orcidA{}, Lenin G. Falconi $^{1}$\orcidB{},
-  Monserrate Intriago-Pazmiño $^{1}$\orcidC{}, Andrés Bastidas-Fuertes $^{2}$\orcidD{}, Juan Benavidez $^{1}$\orcidE{}, and Raysa A. Fuertes-Arévalo $^{3}$\orcidF{}}
+  Monserrate Intriago-Pazmiño $^{1}$\orcidC{}, Andrés Bastidas-Fuertes $^{2}$\orcidD{}, Juan Benavidez $^{1}$\orcidE{}, Raysa A. Fuertes-Arévalo $^{3}$\orcidF{}}
 
 \longauthorlist{yes}
 
@@ -231,7 +232,7 @@ $^{3}$ \quad Ministerio de Salud Pública, Quito, Ecuador; raysafuertesa@gmail.c
   SHAP analysis identified patient age as the most influential
   feature. On the synthetic dataset, Logistic Regression achieved
   perfect classification (F1-score: 1.0).
-  \textbf{Conclusions:} The proposed C-AutoML workflow matched the
+  \textbf{Conclusions:} The proposed C-AutoML framework matched the
   performance of the SageMaker weighted ensemble while relying on a
   single, interpretable model. Despite the current dependence on
   demographic data, the methodology shows promise for supporting PE
@@ -1760,6 +1761,15 @@ can support health facilities in Ecuador. It should be noted that our
 models trained on the dataset from \ac{HGOIA} use a few
 demographic variables. This could support preventive diagnosis in
 settings where health facilities are scarce or expensive.
+
+The proposed methodology can be considered an initial framework
+adaptable to other health problems in the Ecuadorian clinical reality
+with minimal reconfiguration. It addresses class imbalance, which is
+a common challenge in medical datasets, and incorporates
+\ac{SHAP}-based model interpretability to support physician
+decision-making. Additionally, model benchmarking and the integration
+of \ac{MLOps} practices provide an active machine learning cycle,
+enabling continuous improvement as new data become available.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Results}
 
@@ -2064,22 +2074,22 @@ settings where health facilities are scarce or expensive.
 %   its Statistics Unit, for providing access to the anonymized database
 %   of digital medical records.}
 
-\acknowledgments{The authors gratefully acknowledge the financial
-  support provided by the \textit{Escuela Politécnica Nacional} (EPN)
-  through project PTT-22-03. We extend our sincere gratitude to
-  Dr.~Jenniffer Andrea Calvopiña Medina and Dr.~Ramiro Felipe Ortiz
-  Timbi, Zonal Health Coordinators of Zone~9 of the
-  \textit{Ministerio de Salud Pública} (MSP), for their support in
-  coordinating the necessary institutional approvals and data access
-  for this study. Furthermore, we acknowledge the hospitals within
-  Zone~9 for their interest in this project, as evidenced by their
-  letters of support. In particular, we thank the \textit{Hospital
-    Gineco Obstétrico Isidro Ayora} and its Director,
-  Dra.~Teresa Natalia Aumala Viscarra, as well as
-  Dr.~Santiago Vasco-Morales and the hospital's teaching unit and
-  statistics unit, for providing access to the anonymized database of
-  digital medical records and for their administrative and technical
-  support throughout this study.}
+\acknowledgments{The authors gratefully acknowledge the support
+  provided by the \textit{Escuela Politécnica Nacional} (EPN) through
+  project PTT-22-03. We extend our sincere gratitude to Dr.~Jenniffer
+  Andrea Calvopiña Medina and Dr.~Ramiro Felipe Ortiz Timbi, Zonal
+  Health Coordinators of Zone~9 of the \textit{Ministerio de Salud
+    Pública} (MSP), for their assistance in coordinating the necessary
+  institutional approvals and facilitating data access for this
+  study. We also acknowledge the hospitals within Zone~9 for their
+  interest in this project, as evidenced by their letters of
+  support. In particular, we thank the \textit{Hospital Gineco
+    Obstétrico Isidro Ayora} and its Manager, Dra.~Teresa Natalia
+  Aumala Viscarra, as well as Dr.~Santiago Vasco-Morales, Head of the
+  hospital's teaching unit, and the staff of the Statistics Unit, for
+  granting access to the anonymized database of digital medical
+  records and for their administrative and technical support
+  throughout this study.}
 
 % \conflictsofinterest{Declare conflicts of interest or state ``The authors declare no conflicts of interest.'' Authors must identify and declare any personal circumstances or interest that may be perceived as inappropriately influencing the representation or interpretation of reported research results. Any role of the funders in the design of the study; in the collection, analyses or interpretation of data; in the writing of the manuscript; or in the decision to publish the results must be declared in this section. If there is no role, please state ``The funders had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript; or in the decision to publish the results''.} 
 
@@ -2476,3 +2486,8 @@ sections of the interface.
 %} % If the paper is ``preprints'', please uncomment this parenthesis.
 \end{document}
 
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: t
+%%% End:
