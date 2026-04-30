@@ -212,10 +212,10 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
   of maternal and perinatal morbidity, affecting 2--8\% of pregnancies
   worldwide. In Ecuadorian public hospitals, clinical data are often
   fragmented, limiting the construction of complete datasets for
-  prediction modelling. This study aimed to develop a machine learning
+  prediction modeling. This study aimed to develop a machine learning
   (ML) framework to predict PE using demographic data from the Isidro
   Ayora Gynecology and Obstetrics Hospital (HGOIA), Quito, Ecuador.
-  \textbf{Methods:} We proposed a custom automated machine learning
+  \textbf{Methods:} We proposed a Custom Automated Machine Learning
   (C-AutoML) workflow to evaluate six models (\texttt{Logistic Regression},
   \texttt{LightGBM}, \texttt{XGBoost}, \texttt{CatBoost}, \texttt{Multi-Layer
   Perceptron}, and \texttt{Random Forest}) and compared its performance against
@@ -241,7 +241,7 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
 
 % Keywords 3 to 10
 \keyword{machine learning; explainable artificial intelligence;
-  preeclampsia; prediction; lightgbm; ensemble models } 
+  preeclampsia; prediction; LightGBM; ensemble models } 
 
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
 %\PACS{J0101}
@@ -368,12 +368,12 @@ healthcare resources, particularly in high-volume settings with
 heterogeneous data quality.
 
 The full\ac{PIERS} model uses demographic and laboratory variables
-(e.g. gestational age, creatinine, count of platelets, aspartate
+(e.g., gestational age, creatinine, platelet count, aspartate
 transaminase, etc.) to estimate the probabilistic risk of adverse
 maternal outcomes among women with
 \ac{PE}~\cite{fullpiers_2011}. It uses the logistic regression
-equation in~\eqref{eq:logistic-regression}; where the logit is
-calculated as linear combination of variables
+equation in~\eqref{eq:logistic-regression}, where the logit is
+calculated as a linear combination of variables
 as depicted in~\eqref{eq:fullpiers-logit} and the coefficient values
 are those proposed in~\cite{fullpiers_2011}. 
 
@@ -414,10 +414,10 @@ electronic clinical datasets for modeling. As a consequence, in this
 research, we used the provided records from the
 \ac{HGOIA}\footnote{\textit{Hospital Gineco Obstétrico Isidro Ayora (HGOIA)}, a
   third-level public specialty hospital in Zone~9 of the \ac{MSP},
-  Quito, Ecuador.}; which contains demographic variables and lacks of
+  Quito, Ecuador.}, which contains demographic variables and lacks
 clinical features. For this reason, we explored our sets of models
 both on the \ac{HGOIA} and synthetic datasets to diagnose
-\ac{PE}. Different to the full\ac{PIERS} standard, which is a
+\ac{PE}. Unlike the full\ac{PIERS} standard, which is a
 prognostic model, our goal is to determine the most effective set of
 models to diagnose \ac{PE} according to the Ecuadorian realm.
 
@@ -428,8 +428,8 @@ that explores up to 6 classification algorithms
 \texttt{CatBoost}~\cite{prokhorenkova2018catboost},
 \ac{MLP}\cite{rumelhart1986backprop}, and
 \ac{RF}~\cite{breiman2001randomforest}) as candidate models for
-\ac{PE} diagnostic prediction. AWS Sage Maker was also used to
-evaluate the prediction power of the demographic variables of the
+\ac{PE} diagnostic prediction. AWS SageMaker was also used to
+evaluate the predictive power of the demographic variables of the
 dataset of patients at \ac{HGOIA} and to train a reference
 classifier. To improve classification, given the imbalanced data, we
 target the \ac{F1} metric to balance sensitivity and precision. Our
@@ -443,14 +443,14 @@ to account for the lack of clinical data records, we explored the same
 models with a synthetic dataset of our own.
 
 The contributions of our work are: (i) to the best of our knowledge,
-this is the first academic research work to address the use of machine
+this is the first study to address the use of machine
 learning algorithms in \ac{PE} in Ecuador, (ii) we systematically
-explored different machine learning models accounting to improve
+explored different machine learning models aiming to improve
 classification performance as well as model's explainability, (iii) we
-used data provided from data provided from \ac{HGOIA}, a specialized
+used data provided from \ac{HGOIA}, a specialized
 public health facility in gynecology and obstetrics, (iv) we explored
 additional models on synthetic data to account for lack of clinical
-variables, (v) we deployed our model using a \ac{MLOPs} approach in a
+variables, (v) we deployed our model using an \ac{MLOPs} approach in a
 server at \ac{EPN}, including a web-based inference interface (see
 Appendix~\ref{app:mlops-interface}).
 
@@ -483,7 +483,7 @@ false negatives.
 
 Beyond systematic reviews, several primary studies illustrate the
 diversity of \ac{PE} prediction strategies. Marin et
-al.\cite{marin2019} used the Viterbi algorithm to determine the
+al.~\cite{marin2019} used the Viterbi algorithm to determine the
 presence of \ac{PE} based on features such as the weight, age,
 and blood-pressure measurements. Their approach was integrated with a
 smart bracelet and a mobile application to monitor the evolution of
@@ -493,16 +493,16 @@ detection of the condition. Li et al.~\cite{LI2021102} explored
 \ac{LR}, \ac{RF}, \ac{SVM}, and \texttt{XGBoost} models to predict women at
 risk of \ac{PE} from electronic health records collected in early
 pregnancy. The \texttt{XGBoost} model achieved the best performance
-($\mathtt{\ac{ACC}}=0.920$, $\mathtt{Precision}=0.447$, $\mathtt{Recall}=0.789$,
-$\ac{F1}=0.571$, $\ac{AUC}=0.955$) and showed that routinely available
+($\mathrm{ACC}=0.920$, $\mathrm{Precision}=0.447$, $\mathrm{Recall}=0.789$,
+$\mathrm{F1}=0.571$, $\mathrm{AUC}=0.955$) and showed that routinely available
 structured clinical variables combining maternal factors and
 laboratory data, such as fasting plasma glucose, mean blood pressure,
 and \ac{BMI}, can provide useful discriminative power for \ac{PE}
-risk prediction. Mari{'c} et al.~\cite{mari__2022} used \ac{EN} with
+risk prediction. Mari\'{c} et al.~\cite{mari__2022} used \ac{EN} with
 stacked multiomics integration on longitudinal data from a small
 prospective pregnancy cohort and achieved early prediction of
-\ac{PE} ($\ac{AUC}=0.83$) using a 9‑metabolite urine model, with
-performance improving to $\ac{AUC}=0.94$ when integrating multiple
+\ac{PE} ($\mathrm{AUC}=0.83$) using a 9‑metabolite urine model, with
+performance improving to $\mathrm{AUC}=0.94$ when integrating multiple
 omics modalities, demonstrating that molecular features are strong
 contributors to predictive performance because they capture
 pathophysiological processes before symptom onset and change earlier
@@ -519,8 +519,8 @@ tree-based ensembles and boosting algorithms are frequently reported
 as top performers, although simpler models such as logistic
 regression or elastic net can remain competitive when predictors are
 well structured and clinically meaningful~\cite{Darsareh2024,LI2021102,mari__2020}.
-Third, despite strong reported predictive metrics, many studies are
-developed in data-rich environments and depend on comprehensive
+Third, despite strong reported predictive metrics, many studies
+were developed in data-rich environments and depend on comprehensive
 electronic records that may not be available in middle-income public
 hospital settings.
 
@@ -593,16 +593,16 @@ with $\tau \in [0,1]$ being a decision threshold, typically $\tau =
 
 \subsection{Study Design}
 \label{sec:study-design}
-This was an observational and cross-sectional descriptive study that
-used an anonymized database of medical records from patients at the
-\ac{HGOIA} in Quito, Ecuador. Our research goal is to train a
-machine learning classification model to predict \ac{PE}. We
+This was a retrospective, descriptive, cross-sectional observational
+study that used an anonymized database of medical records from
+patients at the \ac{HGOIA} in Quito, Ecuador. Our research goal is to
+train a machine learning classification model to predict \ac{PE}. We
 explore 6 different classification models to improve
 performance. Explainability is addressed for each model to show the
-influence of a given feature $x_i$ in the diagnostic prediction. 
+influence of a given feature $x_i$ in the diagnostic prediction.
 \subsection{Data Collection}
 \label{sec:data-collection}
-The records provided by \ac{HGOIA} contain a total of \numprint{174753} records 49
+The records provided by \ac{HGOIA} contain a total of \numprint{174753} records and 49
 descriptive variables (features) from year 2021 to 2025. However, the
 dataset contains information about all the different diseases treated
 at the hospital according to \ac{ICD-10}.
@@ -765,25 +765,24 @@ Unknown type features & 0 \\
     \centering
     \includegraphics[width=\textwidth, height=.4\textheight]{figures/Aws-Wrangler-Operations.png}
   \end{adjustwidth}
-  \caption{\label{fig:aws-wrangler}Data Wrangler is used to asses the
+  \caption{\label{fig:aws-wrangler}Data Wrangler is used to assess the
     quality of data before training the machine learning model. Low
     predictive power columns and duplicated records were
-    removed. Resulting data is shuffle to prevent data leakage}
+    removed. Resulting data is shuffled to prevent data leakage}
 \end{figure}
 
 \subsection{Statistical Characteristics of Collected Data}
 \label{sec:stat-char-data}
-We have analyzed the prevalence of \ac{PE} among the population
+We analyzed the prevalence of \ac{PE} among the population
 of pregnancies at the dataset provided by \ac{HGOIA}. Some
 of the important insights are that \ac{PE} prevalence rises
-strongly with the patient's age: 85.13\%. The mean of women diagnosed
-with \ac{PE} present a mean \ac{BMI} of 33. Normal pregnancies
-lie in 25.71. These results are summarized in
+strongly with the patient's age: 85.13\%. Women diagnosed
+with \ac{PE} have a mean \ac{BMI} of 33. Normal pregnancies
+have a mean \ac{BMI} of 25.71. These results are summarized in
 Figure~\ref{fig:statistics}. Table~\ref{tab:desc_stats} presents
-statistical characteristics of demographic variables in the dataset
+statistical characteristics of demographic variables in the dataset,
 whereas Table~\ref{tab:variable_distribution} shows the distribution
-of those variables organized in quartiles (data is split into 4
-quantile groupes) \ac{w.r.t.} the
+of those variables organized in quartiles \ac{w.r.t.} the
 prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
 
 \begin{figure}[H]
@@ -827,7 +826,7 @@ WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 \\
 \centering
 \caption{Distribution of pregnancies and preeclampsia prevalence
   across demographic concentration quartiles in women at \ac{HGOIA}
-  from years 2022 to 20225.}
+  from years 2022 to 2025.}
 \begin{tabularx}{\textwidth}{llXXp{2.cm}X}
 \toprule
 Variable & Bin (range) & Total pregnancies & Normal pregnancies & Preeclampsia pregnancies & Preeclampsia prevalence (\%) \\
@@ -951,7 +950,7 @@ Chest pain & $\text{Bernoulli}(0.03)$ & $\text{Bernoulli}(0.35)$ & binary \\
 \label{sec:mach-learn-models}
 This research aims to diagnose \ac{PE} with the provided data
 from \ac{HGOIA}. In Section~\ref{sec:materials-methods}, we
-defined the \ac{PE} diagnose problem as a binary
+defined the \ac{PE} diagnostic problem as a binary
 classification. Consequently, this study used two complementary
 training tracks: (i) a cloud-managed workflow in AWS SageMaker Canvas
 for rapid no-code benchmarking, and (ii) \ac{C-AutoML} for controlled
@@ -1114,16 +1113,15 @@ alerts~\cite{sokolova2009systematic,powers2011evaluation}.
 Our results will address the performance of the models (i) with the
 provided data from the Isidro Ayora Gynecology and Obstetrics Hospital
 \ac{HGOIA} and (ii) with the synthetic
-clinical data that we produced. For the former, we trained our models using AWS Sage
-Maker Canvas and our proposed methodology \ac{C-AutoML}. For the
+clinical data that we produced. For the former, we trained our models using AWS SageMaker Canvas and our proposed methodology \ac{C-AutoML}. For the
 latter, we only used \ac{C-AutoML}.
 \subsection{Performance of C-AutoML on \ac{HGOIA} Data}
 \label{sec:performance-c-automl}
 
 Our proposed methodology \ac{C-AutoML} achieved its best performance
-on model \texttt{LightGBM}, with an $\ac{F1}=0.802$,
-$\mathtt{Precision}=0.837$, $\mathtt{Recall}=0.768$, and
-$\ac{AUC}=0.944$, on Trial\#23,
+on model \texttt{LightGBM}, with an $\mathrm{F1}=0.802$,
+$\mathrm{Precision}=0.837$, $\mathrm{Recall}=0.768$, and
+$\mathrm{AUC}=0.944$, on Trial\#23,
 iteration\#4. Table~\ref{tab:cautoml-performance} presents the
 complete performance of the different trials for each of the proposed
 models. Each iteration uses a different train and validation split and
@@ -1268,18 +1266,18 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 
 Table~\ref{tab:canvas-model-performance} summarizes the performance of
 the different models evaluated in AWS SageMaker Canvas. The best
-performance was achieved by the a \texttt{Weighted Ensemble Model},
-formed by \texttt{LightGBM}, \ac{MLP}, and \ac{RF} with an $\ac{F1}=0.805$,
-$\mathtt{Precision}=0.770$, $\mathtt{Recall}=0.844$, and
-$\ac{AUC}=0.956$. Compared to the \texttt{LightGBM} model trained with
+performance was achieved by the \texttt{Weighted Ensemble Model},
+formed by \texttt{LightGBM}, \ac{MLP}, and \ac{RF} with an $\mathrm{F1}=0.805$,
+$\mathrm{Precision}=0.770$, $\mathrm{Recall}=0.844$, and
+$\mathrm{AUC}=0.956$. Compared to the \texttt{LightGBM} model trained with
 our proposed \ac{C-AutoML}, the AWS model improves on the recall
 performance metric, reducing the number of false negatives. However,
-the precision of \texttt{LightGBM} model implies a smaller false
-positive rate; which is translated in less exams.
+the precision of the \texttt{LightGBM} model implies a smaller
+false-positive rate, which translates into fewer examinations.
 
 Figure~\ref{fig:combined-model-analysis-isidro-ayora-aws} presents
 the normalized confusion
-matrix~(Fig.~\ref{fig:confusion-matrix-bestmodel-aws}), the kernelshap values
+matrix~(Fig.~\ref{fig:confusion-matrix-bestmodel-aws}), the KernelSHAP values
 for model interpretability~(Fig.~\ref{fig:feature-importance-aws}), the
 precision-recall curve performance~(Fig.~\ref{fig:precision-recall-aws}), and
 a comparison \ac{w.r.t.} the \ac{F1} of the trained models in AWS
@@ -1360,11 +1358,11 @@ SageMaker Canvas in~(Fig.~\ref{fig:f1-score-models-isidro-ayora-aws}).
 \subsection{Logistic Regression Model on Clinical Synthetic Generated Data}
 \label{sec:synth-data-results}
 In this case, our proposed methodology \ac{C-AutoML} achieved its best
-performance for model \ac{LR}, with a perfect score of $\ac{F1}=1.000$
+performance for model \ac{LR}, with a perfect score of $\mathrm{F1}=1.000$
 on Trial\#1,
 iteration\#1. Table~\ref{tab:cautoml-synthetic-performance} presents
 the complete performance of the different trials for each of the
-proposed models and iterations. It must be noticed that more than one
+proposed models and iterations. It should be noted that more than one
 model achieves a similar performance score as \ac{LR} for the
 synthetic data.
 
@@ -1491,9 +1489,9 @@ model on synthetic clinical data.
 \subsubsection{SHAP Explainability of LightGBM on \ac{HGOIA} Dataset}
 \label{sec:lightgbm-isidro-ayor}
 Figure~\ref{fig:lightgbm-shap-plots} presents a \ac{SHAP} Beeswarm
-(Figure~\ref{fig:lightgbm-beeswarm})and a
-\ac{SHAP}(Figure~\ref{fig:lightgbm-waterfall}) Waterfall plots, that
-show the feature importance \ac{w.r.t.} to the model output. For
+(Figure~\ref{fig:lightgbm-beeswarm}) and a
+\ac{SHAP} (Figure~\ref{fig:lightgbm-waterfall}) Waterfall plots, that
+show the feature importance \ac{w.r.t.} the model output. For
 LightGBM, it is noticeable that variable \texttt{Age} was the most
 influential variable, with higher age values producing predominantly
 positive \ac{SHAP} contributions and thus increasing the predicted
@@ -1504,7 +1502,7 @@ predicted risk. In contrast, \texttt{BMI} and \texttt{weight} had more
 moderate effects centered closer to zero, suggesting that they refined
 the prediction but contributed less than age and gestational age to
 the final classification. Overall, the explainability analysis
-supports that the LightGBM model captured demographic plausible risk
+supports that the LightGBM model captured demographically plausible risk
 gradients while remaining consistent with the ranking observed in the
 performance analysis.
 
@@ -1579,7 +1577,7 @@ interpretable and consistent with the known epidemiology of
 \centering
 \subfloat[\ac{SHAP} beeswarm summary plot for the Weighted Ensemble
   model. Each point represents a \ac{SHAP} value for a single feature
-  and instance; colour encodes feature
+  and instance; color encodes feature
   value.\label{fig:canvas-beeswarm}]{
   \includegraphics[width=0.98\fulllength]{./figures/shap_explainability/canvas_sagemaker_model/canvas_shap_beeswarm_summary_label1.png}}\\
 \subfloat[\ac{SHAP} waterfall plot for the highest-impact instance
@@ -1588,7 +1586,7 @@ interpretable and consistent with the known epidemiology of
   $f(\mathbf{x})=-8.547$.\label{fig:canvas-waterfall}]{
   \includegraphics[width=0.98\fulllength]{./figures/shap_explainability/canvas_sagemaker_model/canvas_shap_waterfall_high_impact_label1.png}}
 \end{adjustwidth}
-\caption{\ac{SHAP} explainability visualisations for the AWS SageMaker
+\caption{\ac{SHAP} explainability visualizations for the AWS SageMaker
   Canvas Weighted Ensemble model on the \ac{HGOIA} dataset.
   (\textbf{a}) Global feature importance via beeswarm plot; maternal
   age is the dominant contributor (mean $|\text{SHAP}|=4.046$).
@@ -1648,7 +1646,7 @@ rule-based labels used during synthetic data generation.
 \centering
 \subfloat[\ac{SHAP} beeswarm summary for the \ac{LR} model on
   synthetic clinical data. Each point represents a \ac{SHAP} value
-  for a single feature and instance; colour encodes feature
+  for a single feature and instance; color encodes feature
   value.\label{fig:synthetic-beeswarm}]{
   \includegraphics[width=0.98\fulllength, height=.35\textheight, keepaspectratio]{./figures/shap_explainability/synthetic_fullpiers/shap_summary_beeswarm.png}}\\
 \subfloat[\ac{SHAP} waterfall plot for the highest-risk instance
@@ -1657,7 +1655,7 @@ rule-based labels used during synthetic data generation.
   output.\label{fig:synthetic-waterfall}]{
   \includegraphics[width=0.98\fulllength, height=.35\textheight, keepaspectratio]{./figures/shap_explainability/synthetic_fullpiers/shap_waterfall_highest_risk.png}}
 \end{adjustwidth}
-\caption{\ac{SHAP} explainability visualisations for the best \ac{LR}
+\caption{\ac{SHAP} explainability visualizations for the best \ac{LR}
   model trained on the Synthetic Clinical dataset. (\textbf{a})
   Global feature importance via beeswarm plot; \ac{DBP} and \ac{SBP}
   are the dominant contributors. (\textbf{b}) Local instance-level
@@ -1670,19 +1668,19 @@ rule-based labels used during synthetic data generation.
 \section{Discussion}
 \label{sec:discussion}
 
-In this study we explored different models and approaches to train a
-robust model for the prediction of \ac{PE}. For that matter, we
+In this study, we explored different models and approaches to train a
+robust model for the prediction of \ac{PE}. To this end, we
 used the data provided by the Isidro Ayora Gynecology and Obstetrics
-Hospital \ac{HGOIA}. However, the digital records are most
-demographic. Because of that, we generated a synthetic dataset using
+Hospital \ac{HGOIA}. However, the digital records are predominantly
+demographic. For this reason, we generated a synthetic dataset using
 variables commonly found in \ac{PIERS}.
 
 For the \ac{HGOIA} dataset we trained models with our
 proposed methodology named \ac{C-AutoML}, where we compared the
 performance of up to 6 different machine learning models. Our approach
-looks for improving the performance exposing the models to different
-sets of train and validation data during each trial and also search
-for best hyperparameter alignment. The best model found corresponded
+aims to improve performance by exposing the models to different
+training and validation splits during each trial and also searches
+for the best hyperparameter configuration. The best model found corresponded
 to \texttt{LightGBM}. In parallel, we trained additional
 machine learning models using AWS SageMaker Canvas, which produced as
 best model a \texttt{Weighted Ensemble Model}. Finally, for the
@@ -1691,27 +1689,25 @@ ideal performance.
 
 Our results show that the \texttt{Weighted Ensemble Model} achieved
 the best performance for the \ac{HGOIA} dataset because it
-has the highest recall ($\mathtt{Recall}=0.844$), compared to that of
-\texttt{LightGBM} ($\mathtt{Recall}=0.768$). This is important,
-because the recall (sensitivity) performance metric measures how many
-of the actual population of women with \ac{PE}, the model
-found. For a medical setting, it is necessary that the model has a
+has the highest recall ($\mathrm{Recall}=0.844$), compared to that of
+\texttt{LightGBM} ($\mathrm{Recall}=0.768$). This is important,
+because recall (sensitivity) measures the proportion of women with
+\ac{PE} that the model correctly identified. For a medical setting, it is necessary that the model has a
 high recall because that lowers the false negatives. As a matter of
 fact, the \texttt{Weighted Ensemble Model} loses 1 in 6 cases of
 \ac{PE}. On the other hand, the \texttt{LightGBM} trained with
 our proposed \ac{C-AutoML} approach has a higher precision
-($\mathtt{Precision}=0.837$) compared to the \texttt{Weighted Ensemble
-  model} ($\mathtt{Precision}=0.770$). This result is positive because
-the higher the precision, the less false alarms. Consequently, it is
+($\mathrm{Precision}=0.837$) compared to the \texttt{Weighted Ensemble
+  model} ($\mathrm{Precision}=0.770$). This result is advantageous
+because higher precision implies fewer false alarms. Consequently, it is
 recommended to combine both of these models for prediction at the
 health facility.
 
 For the synthetic dataset, our results show an ideal performance due
-to the controlled synthetic data generation. Whatsoever, the results
-point \ac{LR} as a good fit for a \ac{PIERS} application.
+to the controlled synthetic data generation. Nevertheless, the results identify \ac{LR} as a suitable model for a \ac{PIERS} application.
 
-The interpretability analysis, shows the feature importance of the
-variables of each dataset towards prediction. For the \ac{HGOIA} dataset, the most important features are: patient's age,
+The interpretability analysis shows the feature importance of
+the variables of each dataset for prediction. For the \ac{HGOIA} dataset, the most important features are: patient's age,
 gestational age, and \ac{BMI}. On the other hand, for the generated
 synthetic data, systolic blood pressure, platelet count and 24-hour
 proteinuria lead the impact on model's prediction.
@@ -1722,48 +1718,48 @@ This study explored the performance of different machine learning
 models towards the prediction of \ac{PE} in the population of
 women at the Isidro Ayora Gynecology and Obstetrics Hospital \ac{HGOIA}.
 AWS SageMaker Canvas was pivotal in
-assessing the prediction power of each of the features from the
-provided dataset. Selecting features with a high prediction power
-prevented our models to overfit, improving training. To the best of our
-knowledge, this is the first work combining datasets of patients in
-Ecuador and machine learning. Our results show that a combination of
+assessing the predictive power of each of the features from the
+provided dataset. Selecting features with high predictive power
+prevented our models from overfitting, improving training. To the best of our
+knowledge, this is the first study combining patient datasets from
+Ecuador with machine learning. Our results show that a combination of
 our proposed methodology with the trained model from Canvas can lead
 to effective predictions at the health facility.
 
-Our proposed training methodology improved the hyperparamter settings
+Our proposed training methodology improved the hyperparameter settings
 of different models targeting the \ac{F1} metric, which balances
 precision and recall, where the latter is of most importance for a
 medical application because it measures the proportion of true
 \ac{PE} cases correctly identified by the model, whereas the
-former accounts for the cost of false alarms. We aim towards recall
+former accounts for the cost of false alarms. We prioritize recall
 because it emphasizes minimizing missed diagnoses.
 
 \texttt{LightGBM} achieved the best performance \ac{w.r.t.} the
 \ac{F1} metric using our proposed \ac{C-AutoML} workflow, with a
-$\ac{F1}=0.802$, $\mathtt{Recall}=0.768$, and
-$\mathtt{Precision}=0.837$. This means that 77\% of true \ac{PE}
+$\mathrm{F1}=0.802$, $\mathrm{Recall}=0.768$, and
+$\mathrm{Precision}=0.837$. This means that 77\% of true \ac{PE}
 cases were correctly detected by the model. Consequently, this model
 misses 1 out of 4 true \ac{PE} cases. On the other hand, the
 \texttt{Weighted Ensemble} model trained in AWS SageMaker achieved an
-$\ac{F1}=0.805$, $\mathtt{Precision}=0.770$, and
-$\mathtt{Recall}=0.844$. Therefore, 84\% of true \ac{PE} cases
+$\mathrm{F1}=0.805$, $\mathrm{Precision}=0.770$, and
+$\mathrm{Recall}=0.844$. Therefore, 84\% of true \ac{PE} cases
 were correctly detected by the ensemble model and misses 1 out of 6
 true \ac{PE} cases. This improvement over our single model is due
-to the ensemble model. We suggest a combination of both models models
-to aid the physicians in their decision when diagnosing \ac{PE}
-given the fact that the \texttt{Weighted Ensemble} model provides a
+to the ensemble model. We suggest a combination of both models
+to aid physicians in their decision-making when diagnosing \ac{PE},
+given that the \texttt{Weighted Ensemble} model provides a
 recall greater than 0.80, which can be considered clinically
-reasonable if used alongside with clinical judgment and that
+reasonable if used alongside clinical judgment, and that
 \texttt{LightGBM} achieves an improved precision that can reduce false
-positives and improve resources administration. 
+positives and improve resource utilization. 
 
-We look forward to improve our results in the near future, if
+We look forward to improving our results in the near future, if
 additional data is provided with more clinical information. Hence,
 this initial work can be extended to obtain a \ac{PIERS} model that
-can help at health facilities in Ecuador. It must be noticed that our
+can support health facilities in Ecuador. It should be noted that our
 models trained on the dataset from \ac{HGOIA} use a few
-demographic variables. This could help in a preventive diagnose in
-such places where health facilities is scarce or expensive.
+demographic variables. This could support preventive diagnosis in
+settings where health facilities are scarce or expensive.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Results}
 
@@ -1951,12 +1947,12 @@ such places where health facilities is scarce or expensive.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
 %\supplementary{The following supporting information can be downloaded at:  \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.}
-
+\supplementary{Not applicable.}
 % Only for journal Methods and Protocols:
 % If you wish to submit a video article, please do so with any other supplementary material.
 % \supplementary{The following supporting information can be downloaded at: \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title. A supporting video article is available at doi: link.}
 
-% Only used for preprtints:
+% Only used for preprints:
 % \supplementary{The following supporting information can be downloaded at the website of this paper posted on \href{https://www.preprints.org/}{Preprints.org}.}
 
 % Only for journal Hardware:
@@ -1981,9 +1977,9 @@ such places where health facilities is scarce or expensive.
 \authorcontributions{Conceptualization, M.P.; methodology, M.P. and
   L.G.F.; software, L.G.F. and J.B.; formal analysis, M.P. and L.G.F.;
   investigation, M.I.-P., A.B.-F. and J.B.; resources, J.B. and
-  R.A.F.-A.; data curation, J.B.; writing-original draft, M.P. and
-  L.G.F.; writing-review \& editing, all authors; visualization,
-  J.B.; supervision, M.P.; project administration, M.P.; validation,
+  R.A.F.-A.; data curation, J.B.; writing---original draft, M.P. and
+  L.G.F.; writing---review \& editing, all authors; visualization,
+  L.G.F.; supervision, M.P.; project administration, M.P.; validation,
   R.A.F.-A. All authors have read and agreed to the published version
   of the manuscript.}
 
@@ -2171,7 +2167,7 @@ Given a CSV dataset $\mathcal{D}$ and a target column name $t$, the
 algorithm first resolves the exact column name through
 case-insensitive matching. A stratified train-validation split is
 performed using the \texttt{train\_test\_split} function from
-\texttt{scikit-learn}~\cite{sklearn-api}, parameterised by the test
+\texttt{scikit-learn}~\cite{sklearn-api}, parameterized by the test
 proportion $\tau$ and a seed-dependent random state
 $s_{\text{split}} = s_{\text{base}} + i$, where $i$ denotes the
 current search iteration.
@@ -2192,7 +2188,7 @@ where $\text{name}_k$ is the model identifier, $\mathcal{E}_k$ is an
 un-fitted \texttt{scikit-learn}-compatible estimator, $\Theta_k$ is a
 dictionary mapping pipeline parameter names to lists of candidate
 values, and $\sigma_k \in \{\text{True}, \text{False}\}$ indicates
-whether numeric feature standardisation is required.
+whether numeric feature standardization is required.
 
 The default candidate set includes \ac{LR}, \ac{RF}, \ac{MLP},
 XGBoost, LightGBM, and CatBoost.
@@ -2241,7 +2237,7 @@ where $\mathcal{X}_{\text{val}}^{(j,k)}$ denotes the validation set with feature
 The algorithm produces the following outputs in the specified directory:
 \begin{itemize}
     \item \texttt{model\_performance.csv}: complete trial results including all metrics and hyperparameters
-    \item \texttt{best\_model.joblib}: serialised optimal pipeline
+    \item \texttt{best\_model.joblib}: serialized optimal pipeline
     \item \texttt{model\_characteristics.json}: comprehensive metadata including feature importance and per-model summaries
     \item \texttt{best\_model\_feature\_effects.csv}: permutation importance per feature
     \item \texttt{best\_model\_confusion\_matrix.csv} and \texttt{.png}: confusion matrix in tabular and visual formats
@@ -2302,8 +2298,8 @@ packages were unavailable. The following core packages are required:
     \item \texttt{scikit-learn} $\ge$ 1.6.1 — primary \ac{ML} framework providing preprocessing transformers, supervised estimators, cross-validation utilities, and evaluation metrics~\cite{sklearn-api}.
     \item \texttt{pandas} $\ge$ 2.3.1 — tabular data ingestion, transformation, and feature engineering.
     \item \texttt{numpy} $\ge$ 2.0.2 — numerical array operations and statistical computations.
-    \item \texttt{matplotlib} $\ge$ 3.9.4 — visualisation of training curves, confusion matrices, and \ac{SHAP} summary plots.
-    \item \texttt{joblib} $\ge$ 1.0.0 — model serialisation (\texttt{.pkl} artefacts) and parallelised cross-validation loops.
+    \item \texttt{matplotlib} $\ge$ 3.9.4 — visualization of training curves, confusion matrices, and \ac{SHAP} summary plots.
+    \item \texttt{joblib} $\ge$ 1.0.0 — model serialization (\texttt{.pkl} artefacts) and parallelized cross-validation loops.
 \end{itemize}
 Optional packages enable extended gradient-boosting model support:
 \begin{itemize}
@@ -2316,7 +2312,7 @@ Optional packages enable extended gradient-boosting model support:
 % \section[\appendixname~\thesection]{}
 % All appendix sections must be cited in the main text. In the appendices, Figures, Tables, etc. should be labeled, starting with ``A''---e.g., Figure A1, Figure A2, etc.
 
-\section[\appendixname~\thesection]{Preeclampsia Risk Prediction Web Interface and MLOps
+\section[\appendixname~\thesection]{Preeclampsia Risk Prediction Web Interface and MLOPs
   Deployment}
 \label{app:mlops-interface}
 
@@ -2324,9 +2320,9 @@ Optional packages enable extended gradient-boosting model support:
 As a complementary contribution to the \ac{C-AutoML} pipeline
 presented in this work, we developed a web-based inference interface
 and an \ac{MLOPs} deployment framework to operationalize the trained
-models within the computing infrastructure of the \ac{EPN}. The system is currently accessible within the \ac{EPN} campus network and exposes the best-performing models produced by the \ac{C-AutoML} workflow and AWS Sage Maker Canvas procedure as a prediction service.
+models within the computing infrastructure of the \ac{EPN}. The system is currently accessible within the \ac{EPN} campus network and exposes the best-performing models produced by the \ac{C-AutoML} workflow and AWS SageMaker Canvas procedure as a prediction service.
 
-\subsection[\appendixname~\thesubsection]{MLOps Cycle and Experiment Tracking}
+\subsection[\appendixname~\thesubsection]{MLOPs Cycle and Experiment Tracking}
 
 \ac{MLOPs} refers to a set of practices that bring together machine
 learning development and software operations with the goal of
@@ -2338,7 +2334,7 @@ multiple model families and hyperparameter configurations;
 (ii)~evaluation, where each trial is assessed using F1-score,
 accuracy, precision, recall, and \ac{AUC}; (iii)~registration, where
 MLflow stores the hyperparameter configuration, evaluation metrics,
-and serialised model artefact for every trial; and (iv)~deployment,
+and serialized model artefact for every trial; and (iv)~deployment,
 where the best-performing registered model is made available through
 the inference \ac{API} consumed by the web interface.
 
@@ -2373,7 +2369,7 @@ clinical workflow.
 The web interface, titled \textit{Verificador de Preeclampsia}
 (Preeclampsia Risk Checker), allows a clinician to select a trained
 model and enter patient data through a structured form organized in
-clearly labelled sections. The input variables presented in the
+clearly labeled sections. The input variables presented in the
 interface were designed to accommodate a broader set of clinical
 indicators than those available in the current study, in anticipation
 of richer data collection in future collaborations with health
@@ -2391,7 +2387,7 @@ sections of the interface.
 \subfloat[Model selection and demographic characteristics
   section.\label{fig:mlops-interface-a}]{
   \includegraphics[width=0.48\fulllength]{./figures/mlops/mlops_interface_demographic.png}}
-\subfloat[Gynaeco-obstetric history, medical history, and symptoms
+\subfloat[Gyneco-obstetric history, medical history, and symptoms
   section.\label{fig:mlops-interface-b}]{
   \includegraphics[width=0.48\fulllength]{./figures/mlops/mlops_interface_clinical_history.png}}\\
 \subfloat[Cardiorespiratory signs, haematological tests, submission
