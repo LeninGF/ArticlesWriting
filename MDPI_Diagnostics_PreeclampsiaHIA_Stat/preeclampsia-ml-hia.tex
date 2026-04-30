@@ -219,7 +219,7 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
   (C-AutoML) workflow to evaluate six models (\texttt{Logistic Regression},
   \texttt{LightGBM}, \texttt{XGBoost}, \texttt{CatBoost}, \texttt{Multi-Layer
   Perceptron}, and \texttt{Random Forest}) and compared its performance against
-  a weighted ensemble built with AWS SageMaker Canvas, optimizing for
+  a weighted ensemble built with Amazon SageMaker Canvas, optimizing for
   the F1-score. Model interpretability was analyzed using Shapley
   Additive Explanations (SHAP). Due to the scarcity of clinical
   variables at HGOIA, a synthetic dataset based on FullPIERS predictors
@@ -324,7 +324,7 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
     \acro{HGOIA}[HGOIA]{Isidro Ayora Gynecology and Obstetrics Hospital}
     \acro{EPN}[EPN]{Escuela Politécnica Nacional}
     \acro{API}[API]{Application Programming Interface}
-    \acro{EHR}[EHR]{Electronic Health Record}
+    \acro{EHR}[EHR]{Electronic Health Records}
 \end{acronym}
   
   
@@ -428,7 +428,7 @@ that explores up to 6 classification algorithms
 \texttt{CatBoost}~\cite{prokhorenkova2018catboost},
 \ac{MLP}\cite{rumelhart1986backprop}, and
 \ac{RF}~\cite{breiman2001randomforest}) as candidate models for
-\ac{PE} diagnostic prediction. AWS SageMaker was also used to
+\ac{PE} diagnostic prediction. Amazon SageMaker was also used to
 evaluate the predictive power of the demographic variables of the
 dataset of patients at \ac{HGOIA} and to train a reference
 classifier. To improve classification, given the imbalanced data, we
@@ -647,15 +647,15 @@ the complete workflow.
   pregnancies and \numprint{674} \ac{PE} cases, as summarized in
   Table~\ref{tab:cie10-icd10-mapping}.
 
-\item \textbf{Data quality profiling in AWS SageMaker Canvas:} We used
-  Data Wrangler in SageMaker AI to assess data quality. The profiling
+\item \textbf{Data quality profiling in Amazon SageMaker Canvas:} We used
+  Data Wrangler in Amazon SageMaker AI to assess data quality. The profiling
   report identified duplicated records and performed a univariate
   predictive evaluation of each feature. A duplicate rate of 1.84\%
   was detected and manually confirmed. We then removed predictors with
   zero predictive power, according to the profiling report.
   Figure~\ref{fig:aws-wrangler} shows the quality operations performed
   in Data Wrangler. Table~\ref{tab:aws-report} summarizes the main
-  dataset-quality outputs reported by SageMaker Canvas.
+  dataset-quality outputs reported by Amazon SageMaker Canvas.
 
 \item \textbf{Final dataset:} After duplicate removal, feature
   filtering, and shuffling, the final dataset contained
@@ -686,7 +686,7 @@ the complete workflow.
       \node[box, below=of clean] (target) {Create binary
         target:\texttt{ICD-10 O***} $\rightarrow$ 1, \texttt{ICD-10
           Z***}$\rightarrow$ 0};
-      \node[box, below=of target] (profile) {AWS SageMaker Canvas Data
+      \node[box, below=of target] (profile) {Amazon SageMaker Canvas Data
   Quality Profile:\\ Remove (duplicates,low  predictive-power
   features)};
 
@@ -737,7 +737,7 @@ preeclampsia classification dataset.\label{fig:preprocessing-pipeline}}
 \begin{table}[H]
   \small
 % \centering
-\caption{Summary of AWS SageMaker Canvas data-quality report before
+\caption{Summary of Amazon SageMaker Canvas data-quality report before
 final filtering.}
 \label{tab:aws-report}
 \begin{tabularx}{\textwidth}{CC} %ll
@@ -952,7 +952,7 @@ This research aims to diagnose \ac{PE} with the provided data
 from \ac{HGOIA}. In Section~\ref{sec:materials-methods}, we
 defined the \ac{PE} diagnostic problem as a binary
 classification. Consequently, this study used two complementary
-training tracks: (i) a cloud-managed workflow in AWS SageMaker Canvas
+training tracks: (i) a cloud-managed workflow in Amazon SageMaker Canvas
 for rapid no-code benchmarking, and (ii) \ac{C-AutoML} for controlled
 experimentation and methodological traceability (see
 Appendix~\ref{app:c-automl}). 
@@ -1005,7 +1005,7 @@ parallel cloud-managed and script-based workflows.
         thick}]
       \node[box] (data) {Curated training dataset};
       \node[box, below left=12mm and 2mm of data] (cloud)
-      {Cloud-managed workflow\\AWS SageMaker Canvas};
+      {Cloud-managed workflow\\Amazon SageMaker Canvas};
       \node[box, below right=12mm and 2mm of data] (script) {Custom
         automated ML pipeline\\\texttt{autopilot\_train.py}};
       \node[smallbox, below=of cloud] (cloudprep) {Profiling, feature
@@ -1045,8 +1045,8 @@ for model development, selection, performance evaluation, and
 SHAP-based explainability.\label{fig:training-framework}}
 \end{figure}
 
-\textbf{Cloud-managed training (AWS SageMaker Canvas).}
-AWS SageMaker Canvas is a managed visual machine-learning service that
+\textbf{Cloud-managed training (Amazon SageMaker Canvas).}
+Amazon SageMaker Canvas is a managed visual machine-learning service that
 supports data ingestion, preprocessing, model training, and model
 evaluation through a no-code interface~\cite{aws_sagemaker_canvas_docs}.
 In our workflow, Canvas was used for quality profiling,
@@ -1076,7 +1076,7 @@ artifacts, including confusion matrices and performance logs.
 \label{sec:evaluation-metrics}
 Performance was evaluated with four complementary metrics: \ac{F1},
 overall \ac{ACC}, \ac{AUC}, and confusion matrix analysis. In the
-cloud-managed workflow (AWS SageMaker Canvas), the target
+cloud-managed workflow (Amazon SageMaker Canvas), the target
 optimization metric was \ac{F1}. For our proposed \ac{C-AutoML} pipeline,
 \ac{F1} was also the primary model-selection criterion because it
 balances precision and recall under class imbalance; ties in \ac{F1}
@@ -1113,7 +1113,7 @@ alerts~\cite{sokolova2009systematic,powers2011evaluation}.
 Our results will address the performance of the models (i) with the
 provided data from the Isidro Ayora Gynecology and Obstetrics Hospital
 \ac{HGOIA} and (ii) with the synthetic
-clinical data that we produced. For the former, we trained our models using AWS SageMaker Canvas and our proposed methodology \ac{C-AutoML}. For the
+clinical data that we produced. For the former, we trained our models using Amazon SageMaker Canvas and our proposed methodology \ac{C-AutoML}. For the
 latter, we only used \ac{C-AutoML}.
 \subsection{Performance of C-AutoML on \ac{HGOIA} Data}
 \label{sec:performance-c-automl}
@@ -1265,7 +1265,7 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 \label{sec:performance-aws-sage-maker-canvas}
 
 Table~\ref{tab:canvas-model-performance} summarizes the performance of
-the different models evaluated in AWS SageMaker Canvas. The best
+the different models evaluated in Amazon SageMaker Canvas. The best
 performance was achieved by the \texttt{Weighted Ensemble Model},
 formed by \texttt{LightGBM}, \ac{MLP}, and \ac{RF} with an $\mathrm{F1}=0.805$,
 $\mathrm{Precision}=0.770$, $\mathrm{Recall}=0.844$, and
@@ -1290,7 +1290,7 @@ SageMaker Canvas in~(Fig.~\ref{fig:f1-score-models-isidro-ayora-aws}).
 %%%%%%%%%%%%%%%%%%%% wide table %%%%%%%%%%%%%%%%%%%%
 
 \begin{table}[H]
-\caption{Performance of models evaluated in AWS SageMaker Canvas.
+\caption{Performance of models evaluated in Amazon SageMaker Canvas.
   \textbf{Bold} row indicates the default (best) model selected by
   Canvas.\label{tab:canvas-model-performance}}
 \begin{adjustwidth}{-\extralength}{0cm}
@@ -1335,19 +1335,19 @@ SageMaker Canvas in~(Fig.~\ref{fig:f1-score-models-isidro-ayora-aws}).
 \begin{adjustwidth}{-\extralength}{0cm}
 \centering
 \subfloat[Normalized confusion matrix for the best Weighted Ensemble
-  model (AWS SageMaker Canvas).\label{fig:confusion-matrix-bestmodel-aws}]{
+  model (Amazon SageMaker Canvas).\label{fig:confusion-matrix-bestmodel-aws}]{
   \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/canvas_sagemaker_model_monitor/best_model_confusion_matrix_normalized.png}}
-\subfloat[KernelSHAP feature importance values for the AWS SageMaker
+\subfloat[KernelSHAP feature importance values for the Amazon SageMaker
   Weighted Ensemble.\label{fig:feature-importance-aws}]{
   \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/shap_explainability/canvas_sagemaker_model/canvas_global_shap_stacked_by_label.png}}\\
-\subfloat[Precision--recall curve for the AWS SageMaker Weighted
+\subfloat[Precision--recall curve for the Amazon SageMaker Weighted
   Ensemble model.\label{fig:precision-recall-aws}]{
   \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/canvas_sagemaker_model_monitor/best_model_precision_recall_curve.png}}
-\subfloat[F1-score comparison across all models trained in AWS
+\subfloat[F1-score comparison across all models trained in Amazon
   SageMaker Canvas.\label{fig:f1-score-models-isidro-ayora-aws}]{
   \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/canvas_sagemaker_model_monitor/all_models_f1_comparison.png}}
 \end{adjustwidth}
-\caption{Performance analysis of the AWS SageMaker Canvas Weighted
+\caption{Performance analysis of the Amazon SageMaker Canvas Weighted
   Ensemble on the \ac{HGOIA} dataset. (\textbf{a})
   Normalized confusion matrix. (\textbf{b}) KernelSHAP feature
   importance. (\textbf{c}) Precision--recall curve. (\textbf{d})
@@ -1481,7 +1481,7 @@ values to attribute feature importance for individual predictions. In
 this section, we present feature importance results from three
 analyses: (i) applying SHAP to the LightGBM model trained on \ac{HGOIA}
 data, (ii) evaluating built-in feature importance from
-AWS SageMaker Canvas, and (iii) applying SHAP to the best-performing
+Amazon SageMaker Canvas, and (iii) applying SHAP to the best-performing
 model on synthetic clinical data.
 
 % \subsubsection{LightGBM on Isidro Ayora Hospital Dataset}
@@ -1533,7 +1533,7 @@ performance analysis.
 \label{sec:ensemble-model-xai}
 
 Figure~\ref{fig:canvas-shap-plots} presents the \ac{SHAP} analysis
-for the \texttt{Weighted Ensemble} model trained in AWS SageMaker
+for the \texttt{Weighted Ensemble} model trained in Amazon SageMaker
 Canvas on the \ac{HGOIA} dataset, including a beeswarm
 summary plot (Figure~\ref{fig:canvas-beeswarm}) and a waterfall plot
 for the highest-impact instance (Figure~\ref{fig:canvas-waterfall}).
@@ -1586,7 +1586,7 @@ interpretable and consistent with the known epidemiology of
   $f(\mathbf{x})=-8.547$.\label{fig:canvas-waterfall}]{
   \includegraphics[width=0.98\fulllength]{./figures/shap_explainability/canvas_sagemaker_model/canvas_shap_waterfall_high_impact_label1.png}}
 \end{adjustwidth}
-\caption{\ac{SHAP} explainability visualizations for the AWS SageMaker
+\caption{\ac{SHAP} explainability visualizations for the Amazon SageMaker
   Canvas Weighted Ensemble model on the \ac{HGOIA} dataset.
   (\textbf{a}) Global feature importance via beeswarm plot; maternal
   age is the dominant contributor (mean $|\text{SHAP}|=4.046$).
@@ -1682,7 +1682,7 @@ aims to improve performance by exposing the models to different
 training and validation splits during each trial and also searches
 for the best hyperparameter configuration. The best model found corresponded
 to \texttt{LightGBM}. In parallel, we trained additional
-machine learning models using AWS SageMaker Canvas, which produced as
+machine learning models using Amazon SageMaker Canvas, which produced as
 best model a \texttt{Weighted Ensemble Model}. Finally, for the
 clinical synthetic dataset, \ac{LR}, among other models, achieved
 ideal performance.
@@ -1717,7 +1717,7 @@ proteinuria lead the impact on model's prediction.
 This study explored the performance of different machine learning
 models towards the prediction of \ac{PE} in the population of
 women at the Isidro Ayora Gynecology and Obstetrics Hospital \ac{HGOIA}.
-AWS SageMaker Canvas was pivotal in
+Amazon SageMaker Canvas was pivotal in
 assessing the predictive power of each of the features from the
 provided dataset. Selecting features with high predictive power
 prevented our models from overfitting, improving training. To the best of our
@@ -1740,7 +1740,7 @@ $\mathrm{F1}=0.802$, $\mathrm{Recall}=0.768$, and
 $\mathrm{Precision}=0.837$. This means that 77\% of true \ac{PE}
 cases were correctly detected by the model. Consequently, this model
 misses 1 out of 4 true \ac{PE} cases. On the other hand, the
-\texttt{Weighted Ensemble} model trained in AWS SageMaker achieved an
+\texttt{Weighted Ensemble} model trained in Amazon SageMaker Canvas achieved an
 $\mathrm{F1}=0.805$, $\mathrm{Precision}=0.770$, and
 $\mathrm{Recall}=0.844$. Therefore, 84\% of true \ac{PE} cases
 were correctly detected by the ensemble model and misses 1 out of 6
@@ -2320,7 +2320,7 @@ Optional packages enable extended gradient-boosting model support:
 As a complementary contribution to the \ac{C-AutoML} pipeline
 presented in this work, we developed a web-based inference interface
 and an \ac{MLOPs} deployment framework to operationalize the trained
-models within the computing infrastructure of the \ac{EPN}. The system is currently accessible within the \ac{EPN} campus network and exposes the best-performing models produced by the \ac{C-AutoML} workflow and AWS SageMaker Canvas procedure as a prediction service.
+models within the computing infrastructure of the \ac{EPN}. The system is currently accessible within the \ac{EPN} campus network and exposes the best-performing models produced by the \ac{C-AutoML} workflow and Amazon SageMaker Canvas procedure as a prediction service.
 
 \subsection[\appendixname~\thesubsection]{MLOPs Cycle and Experiment Tracking}
 
