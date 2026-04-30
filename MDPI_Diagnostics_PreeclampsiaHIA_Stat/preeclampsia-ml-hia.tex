@@ -88,7 +88,7 @@
 %=================================================================
 % Full title of the paper (Capitalized)
 \Title{Preeclampsia Prediction at Isidro Ayora Hospital (ECU) using
-  Machine-Learning}
+  Machine Learning}
 
 % Author Orchid ID: enter ID or remove command
 % \newcommand{\orcidauthorA}{0000-0000-0000-000X} % Add \orcidA{}
@@ -214,7 +214,7 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
   fragmented, limiting the construction of complete datasets for
   prediction modelling. This study aimed to develop a machine learning
   (ML) framework to predict PE using demographic data from the Isidro
-  Ayora Hospital (HGIO), Quito, Ecuador.
+  Ayora Gynecology and Obstetrics Hospital (HGOIA), Quito, Ecuador.
   \textbf{Methods:} We proposed a custom automated machine learning
   (C-AutoML) workflow to evaluate six models (\texttt{Logistic Regression},
   \texttt{LightGBM}, \texttt{XGBoost}, \texttt{CatBoost}, \texttt{Multi-Layer
@@ -222,7 +222,7 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
   a weighted ensemble built with AWS SageMaker Canvas, optimizing for
   the F1-score. Model interpretability was analyzed using Shapley
   Additive Explanations (SHAP). Due to the scarcity of clinical
-  variables at HGIO, a synthetic dataset based on FullPIERS predictors
+  variables at HGOIA, a synthetic dataset based on FullPIERS predictors
   was also generated and modeled.
   \textbf{Results:} On the hospital dataset, the SageMaker ensemble
   achieved an F1-score of 0.805, accuracy of 0.934, and AUC of 0.956,
@@ -321,7 +321,7 @@ $^{3}$ \quad Ministerio de Salud Pública (MSP), Quito, Ecuador; raysafuertesa@g
     \acro{GA}[GA]{Gestational Age}
     \acro{AST}[AST]{Aspartate Aminotransferase}
     \acro{WHO}[WHO]{World Health Organization}
-    \acro{HGIO}[HGIO]{Isidro Ayora Gynecology and Obstetrics Hospital}
+    \acro{HGOIA}[HGOIA]{Isidro Ayora Gynecology and Obstetrics Hospital}
     \acro{EPN}[EPN]{Escuela Politécnica Nacional}
     \acro{API}[API]{Application Programming Interface}
     \acro{EHR}[EHR]{Electronic Health Record}
@@ -412,11 +412,11 @@ recorded in separate databases or remain only in paper-based formats,
 which limits immediate construction of complete and standardized
 electronic clinical datasets for modeling. As a consequence, in this
 research, we used the provided records from the
-\ac{HGIO}\footnote{\textit{Hospital Gineco Obstétrico Isidro Ayora (HGOIA)}, a
+\ac{HGOIA}\footnote{\textit{Hospital Gineco Obstétrico Isidro Ayora (HGOIA)}, a
   third-level public specialty hospital in Zone~9 of the \ac{MSP},
   Quito, Ecuador.}; which contains demographic variables and lacks of
 clinical features. For this reason, we explored our sets of models
-both on the \ac{HGIO} and synthetic datasets to diagnose
+both on the \ac{HGOIA} and synthetic datasets to diagnose
 \ac{PE}. Different to the full\ac{PIERS} standard, which is a
 prognostic model, our goal is to determine the most effective set of
 models to diagnose \ac{PE} according to the Ecuadorian realm.
@@ -430,7 +430,7 @@ that explores up to 6 classification algorithms
 \ac{RF}~\cite{breiman2001randomforest}) as candidate models for
 \ac{PE} diagnostic prediction. AWS Sage Maker was also used to
 evaluate the prediction power of the demographic variables of the
-dataset of patients at \ac{HGIO} and to train a reference
+dataset of patients at \ac{HGOIA} and to train a reference
 classifier. To improve classification, given the imbalanced data, we
 target the \ac{F1} metric to balance sensitivity and precision. Our
 results show that an ensemble model formed by \texttt{LightGBM}, \ac{RF} and
@@ -447,7 +447,7 @@ this is the first academic research work to address the use of machine
 learning algorithms in \ac{PE} in Ecuador, (ii) we systematically
 explored different machine learning models accounting to improve
 classification performance as well as model's explainability, (iii) we
-used data provided from data provided from \ac{HGIO}, a specialized
+used data provided from data provided from \ac{HGOIA}, a specialized
 public health facility in gynecology and obstetrics, (iv) we explored
 additional models on synthetic data to account for lack of clinical
 variables, (v) we deployed our model using a \ac{MLOPs} approach in a
@@ -473,7 +473,7 @@ used much more frequently than laboratory variables among the sampled
 papers, with demographic features representing 53\% of the reviewed
 inputs versus only 15\% for laboratory data~\cite{Rahman2023}. This
 observation is relevant in our context, given the type of variables
-gathered from \ac{HGIO} for our study. However, we
+gathered from \ac{HGOIA} for our study. However, we
 disagree with their model ranking, which primarily emphasizes
 accuracy, because from a clinical point of view, overlooking high-risk
 pregnancies is more consequential than accepting a moderate increase
@@ -527,7 +527,7 @@ hospital settings.
 Our study is positioned within this literature but addresses a
 different operational context. Instead of assuming a mature,
 fully-integrated electronic clinical infrastructure, we combine: (i)
-a descriptive analysis of retrospective patient records from \ac{HGIO}, (ii) a cloud-managed benchmarking workflow, and (iii) a
+a descriptive analysis of retrospective patient records from \ac{HGOIA}, (ii) a cloud-managed benchmarking workflow, and (iii) a
 custom automated \ac{ML} pipeline with explainability analysis. In
 addition, because fragmented records currently limit access to a fully
 standardized clinical prediction dataset, we include a synthetic-data
@@ -557,7 +557,8 @@ environment.
 \section{Materials and Methods}
 \label{sec:materials-methods}
 In this section, we describe our methodological approach to diagnose
-\ac{PE} in women at Isidro Ayora Hospital (HGIO). We restricted our
+\ac{PE} in women at the Isidro Ayora Gynecology and Obstetrics
+  Hospital \ac{HGOIA}. We restricted our
 prediction to diagnosis due to the limitations of the provided
 data. Our research problem is stated in
 \eqref{eq:preeclampsiaClassification}, where given a feature vector
@@ -594,14 +595,14 @@ with $\tau \in [0,1]$ being a decision threshold, typically $\tau =
 \label{sec:study-design}
 This was an observational and cross-sectional descriptive study that
 used an anonymized database of medical records from patients at the
-\ac{HGIO} in Quito, Ecuador. Our research goal is to train a
+\ac{HGOIA} in Quito, Ecuador. Our research goal is to train a
 machine learning classification model to predict \ac{PE}. We
 explore 6 different classification models to improve
 performance. Explainability is addressed for each model to show the
 influence of a given feature $x_i$ in the diagnostic prediction. 
 \subsection{Data Collection}
 \label{sec:data-collection}
-The records provided by \ac{HGIO} contain a total of \numprint{174753} records 49
+The records provided by \ac{HGOIA} contain a total of \numprint{174753} records 49
 descriptive variables (features) from year 2021 to 2025. However, the
 dataset contains information about all the different diseases treated
 at the hospital according to \ac{ICD-10}.
@@ -700,7 +701,7 @@ the complete workflow.
 \draw[arrow] (profile) -- (final);
 \end{tikzpicture}%
 \end{adjustwidth}
-\caption{Preprocessing workflow used to construct the \ac{HGIO}
+\caption{Preprocessing workflow used to construct the \ac{HGOIA}
 preeclampsia classification dataset.\label{fig:preprocessing-pipeline}}
 \end{figure}
 \unskip % parece que tiene referencia a poner espacio entre imagen y tabla
@@ -773,7 +774,7 @@ Unknown type features & 0 \\
 \subsection{Statistical Characteristics of Collected Data}
 \label{sec:stat-char-data}
 We have analyzed the prevalence of \ac{PE} among the population
-of pregnancies at the dataset provided by \ac{HGIO}. Some
+of pregnancies at the dataset provided by \ac{HGOIA}. Some
 of the important insights are that \ac{PE} prevalence rises
 strongly with the patient's age: 85.13\%. The mean of women diagnosed
 with \ac{PE} present a mean \ac{BMI} of 33. Normal pregnancies
@@ -783,7 +784,7 @@ statistical characteristics of demographic variables in the dataset
 whereas Table~\ref{tab:variable_distribution} shows the distribution
 of those variables organized in quartiles (data is split into 4
 quantile groupes) \ac{w.r.t.} the
-prevalence of \ac{PE} in pregnancies at \ac{HGIO}.
+prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-\extralength}{0cm}
@@ -791,7 +792,7 @@ prevalence of \ac{PE} in pregnancies at \ac{HGIO}.
     \includegraphics[width=\textwidth]{./figures/dataset-statistics-HIA.png}
   \end{adjustwidth}
   \caption{\label{fig:statistics}Statistical analysis of prevalence of
-    preeclampsia in the population of pregnant women at \ac{HGIO}. Preeclampsia is more frequent in women of 36 to 49 years
+    preeclampsia in the population of pregnant women at \ac{HGOIA}. Preeclampsia is more frequent in women of 36 to 49 years
   old and with a mean BMI of 33.}
 \end{figure}
 
@@ -799,7 +800,7 @@ prevalence of \ac{PE} in pregnancies at \ac{HGIO}.
   \small
   \centering
   \caption{Descriptive statistics of demographic variables by
-  preeclampsia diagnosis in pregnant women at \ac{HGIO}
+  preeclampsia diagnosis in pregnant women at \ac{HGOIA}
   from years 2022 to 2025.}
 \begin{tabularx}{\textwidth}{lp{2.cm}XXXX}
 \toprule
@@ -825,7 +826,7 @@ WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 \\
   \small
 \centering
 \caption{Distribution of pregnancies and preeclampsia prevalence
-  across demographic concentration quartiles in women at \ac{HGIO}
+  across demographic concentration quartiles in women at \ac{HGOIA}
   from years 2022 to 20225.}
 \begin{tabularx}{\textwidth}{llXXp{2.cm}X}
 \toprule
@@ -863,14 +864,14 @@ WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% \\
 \subsection{Synthetic Data Generation}
 \label{sec:synth-data-gener}
 
-To complement the retrospective demographic dataset from \ac{HGIO} and compensate for
+To complement the retrospective demographic dataset from \ac{HGOIA} and compensate for
 limited availability of structured clinical variables, we generated a
 synthetic dataset designed to simulate clinical data profiles for
 pregnant patients with and without \ac{PE}. The generation process was
 implemented in Python using \texttt{NumPy} and \texttt{pandas}, with a
 fixed random seed for reproducibility.
 
-The algorithm generates $n$ samples (default: $n=1000$) and first
+The algorithm generates $n=\numprint{2000}$ samples (default: $n=1000$) and first
 assigns each sample to one of two latent groups: \textit{Control}
 (80\%) or \textit{Risk} (20\%). For each group, feature values are
 sampled from predefined distributions chosen to reflect expected
@@ -949,7 +950,7 @@ Chest pain & $\text{Bernoulli}(0.03)$ & $\text{Bernoulli}(0.35)$ & binary \\
 \subsection{Machine Learning Models and Training}
 \label{sec:mach-learn-models}
 This research aims to diagnose \ac{PE} with the provided data
-from \ac{HGIO}. In Section~\ref{sec:materials-methods}, we
+from \ac{HGOIA}. In Section~\ref{sec:materials-methods}, we
 defined the \ac{PE} diagnose problem as a binary
 classification. Consequently, this study used two complementary
 training tracks: (i) a cloud-managed workflow in AWS SageMaker Canvas
@@ -1111,11 +1112,12 @@ alerts~\cite{sokolova2009systematic,powers2011evaluation}.
 \section{Results}
 \label{sec:results}
 Our results will address the performance of the models (i) with the
-provided data from Isidro Ayora Hospital (HGIO) and (ii) with the synthetic
+provided data from the Isidro Ayora Gynecology and Obstetrics Hospital
+\ac{HGOIA} and (ii) with the synthetic
 clinical data that we produced. For the former, we trained our models using AWS Sage
 Maker Canvas and our proposed methodology \ac{C-AutoML}. For the
 latter, we only used \ac{C-AutoML}.
-\subsection{Performance of C-AutoML on Isidro Ayora Hospital Data}
+\subsection{Performance of C-AutoML on \ac{HGOIA} Data}
 \label{sec:performance-c-automl}
 
 Our proposed methodology \ac{C-AutoML} achieved its best performance
@@ -1149,7 +1151,7 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 
 % \caption{Custom Automated Machine Learning Workflow Model's performance across trials and iterations on Isidro Ayora Hospital Dataset. Each model is trained and evaluated in  different train and validation splits with a different set of hyperparameters.\label{tab:cautoml-performance}} \\
 \caption{C-AutoML performance across trials and iterations on the
-  \ac{HGIO} dataset. Each trial uses a different
+  \ac{HGOIA} dataset. Each trial uses a different
   train/validation split and hyperparameter
   configuration.\label{tab:cautoml-performance}} \\
 \toprule
@@ -1158,7 +1160,7 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 \midrule
 \endfirsthead
 
-\caption[]{C-AutoML performance on \ac{HGIO} data (continued).} \\
+\caption[]{C-AutoML performance on \ac{HGOIA} data (continued).} \\
 \toprule
 \textbf{Trial} & \textbf{Iter} & \textbf{Model} &
 \textbf{F1} & \textbf{Acc} & \textbf{Prec} & \textbf{Rec} & \textbf{AUC} \\
@@ -1254,15 +1256,14 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
   \includegraphics[width=0.48\fulllength]{./figures/isidroayora_models_best_f1.png}}
 \end{adjustwidth}
 \caption{Performance analysis of the best C-AutoML model (\texttt{LightGBM},
-  Trial~23) on the \ac{HGIO} dataset. (\textbf{a})
+  Trial~23) on the \ac{HGOIA} dataset. (\textbf{a})
   Normalized confusion matrix. (\textbf{b}) Feature importance (mean
   $\pm$ std). (\textbf{c}) Precision--recall curve. (\textbf{d})
   F1-score comparison across model families.
   \label{fig:combined-model-analysis-isidro-ayora}}
 \end{figure}
 
-\subsection{Performance of Weighted Ensemble Model on Isidro Ayora
-  Hospital Data}
+\subsection{Performance of Weighted Ensemble Model on \ac{HGOIA} Data}
 \label{sec:performance-aws-sage-maker-canvas}
 
 Table~\ref{tab:canvas-model-performance} summarizes the performance of
@@ -1349,7 +1350,7 @@ SageMaker Canvas in~(Fig.~\ref{fig:f1-score-models-isidro-ayora-aws}).
   \includegraphics[width=0.48\fulllength, height=0.35\textheight, keepaspectratio]{./figures/canvas_sagemaker_model_monitor/all_models_f1_comparison.png}}
 \end{adjustwidth}
 \caption{Performance analysis of the AWS SageMaker Canvas Weighted
-  Ensemble on the \ac{HGIO} dataset. (\textbf{a})
+  Ensemble on the \ac{HGOIA} dataset. (\textbf{a})
   Normalized confusion matrix. (\textbf{b}) KernelSHAP feature
   importance. (\textbf{c}) Precision--recall curve. (\textbf{d})
   F1-score comparison across all candidate models.
@@ -1480,14 +1481,14 @@ evidence of equivalent performance in prospective clinical deployment.
 \Ac{SHAP}, introduced in \cite{lundberg2017shap}, computes Shapley
 values to attribute feature importance for individual predictions. In
 this section, we present feature importance results from three
-analyses: (i) applying SHAP to the LightGBM model trained on \ac{HGIO}
+analyses: (i) applying SHAP to the LightGBM model trained on \ac{HGOIA}
 data, (ii) evaluating built-in feature importance from
 AWS SageMaker Canvas, and (iii) applying SHAP to the best-performing
 model on synthetic clinical data.
 
 % \subsubsection{LightGBM on Isidro Ayora Hospital Dataset}
 % \label{sec:lightgbm-isidro-ayor}
-\subsubsection{SHAP Explainability of LightGBM on Isidro Ayora Hospital Dataset}
+\subsubsection{SHAP Explainability of LightGBM on \ac{HGOIA} Dataset}
 \label{sec:lightgbm-isidro-ayor}
 Figure~\ref{fig:lightgbm-shap-plots} presents a \ac{SHAP} Beeswarm
 (Figure~\ref{fig:lightgbm-beeswarm})and a
@@ -1521,7 +1522,7 @@ performance analysis.
   \includegraphics[width=0.98\fulllength]{./figures/shap_explainability/isidroayora/shap_waterfall_highest_risk.png}}
 \end{adjustwidth}
 \caption{SHAP explainability visualizations for the best LightGBM
-  model trained on the \ac{HGIO} dataset. (\textbf{a})
+  model trained on the \ac{HGOIA} dataset. (\textbf{a})
   Global feature importance via beeswarm plot. (\textbf{b}) Local
   instance-level explanation via waterfall plot for the highest-risk
   predicted case.
@@ -1530,13 +1531,12 @@ performance analysis.
 
 % \subsection{Ensemble Model on Isidro Ayora Dataset (AWS Sage Maker)}
 % \label{sec:ensemble-model-xai}
-\subsection{SHAP Explainability of the Weighted Ensemble Model on
-  Isidro Ayora Hospital Dataset}
+\subsection{SHAP Explainability of the Weighted Ensemble Model on \ac{HGOIA} Dataset}
 \label{sec:ensemble-model-xai}
 
 Figure~\ref{fig:canvas-shap-plots} presents the \ac{SHAP} analysis
 for the \texttt{Weighted Ensemble} model trained in AWS SageMaker
-Canvas on the \ac{HGIO} dataset, including a beeswarm
+Canvas on the \ac{HGOIA} dataset, including a beeswarm
 summary plot (Figure~\ref{fig:canvas-beeswarm}) and a waterfall plot
 for the highest-impact instance (Figure~\ref{fig:canvas-waterfall}).
 
@@ -1589,7 +1589,7 @@ interpretable and consistent with the known epidemiology of
   \includegraphics[width=0.98\fulllength]{./figures/shap_explainability/canvas_sagemaker_model/canvas_shap_waterfall_high_impact_label1.png}}
 \end{adjustwidth}
 \caption{\ac{SHAP} explainability visualisations for the AWS SageMaker
-  Canvas Weighted Ensemble model on the \ac{HGIO} dataset.
+  Canvas Weighted Ensemble model on the \ac{HGOIA} dataset.
   (\textbf{a}) Global feature importance via beeswarm plot; maternal
   age is the dominant contributor (mean $|\text{SHAP}|=4.046$).
   (\textbf{b}) Local instance-level explanation via waterfall plot for
@@ -1672,11 +1672,12 @@ rule-based labels used during synthetic data generation.
 
 In this study we explored different models and approaches to train a
 robust model for the prediction of \ac{PE}. For that matter, we
-used the data provided by Isidro Ayora Hospital (HGIO). However, the digital records are most
+used the data provided by the Isidro Ayora Gynecology and Obstetrics
+Hospital \ac{HGOIA}. However, the digital records are most
 demographic. Because of that, we generated a synthetic dataset using
 variables commonly found in \ac{PIERS}.
 
-For the \ac{HGIO} dataset we trained models with our
+For the \ac{HGOIA} dataset we trained models with our
 proposed methodology named \ac{C-AutoML}, where we compared the
 performance of up to 6 different machine learning models. Our approach
 looks for improving the performance exposing the models to different
@@ -1689,7 +1690,7 @@ clinical synthetic dataset, \ac{LR}, among other models, achieved
 ideal performance.
 
 Our results show that the \texttt{Weighted Ensemble Model} achieved
-the best performance for the \ac{HGIO} dataset because it
+the best performance for the \ac{HGOIA} dataset because it
 has the highest recall ($\mathtt{Recall}=0.844$), compared to that of
 \texttt{LightGBM} ($\mathtt{Recall}=0.768$). This is important,
 because the recall (sensitivity) performance metric measures how many
@@ -1710,7 +1711,7 @@ to the controlled synthetic data generation. Whatsoever, the results
 point \ac{LR} as a good fit for a \ac{PIERS} application.
 
 The interpretability analysis, shows the feature importance of the
-variables of each dataset towards prediction. For the \ac{HGIO} dataset, the most important features are: patient's age,
+variables of each dataset towards prediction. For the \ac{HGOIA} dataset, the most important features are: patient's age,
 gestational age, and \ac{BMI}. On the other hand, for the generated
 synthetic data, systolic blood pressure, platelet count and 24-hour
 proteinuria lead the impact on model's prediction.
@@ -1719,7 +1720,8 @@ proteinuria lead the impact on model's prediction.
 \label{sec:conclusion}
 This study explored the performance of different machine learning
 models towards the prediction of \ac{PE} in the population of
-women at Isidro Ayora Hospital (HGIO). AWS SageMaker Canva's was pivotal in
+women at the Isidro Ayora Gynecology and Obstetrics Hospital \ac{HGOIA}.
+AWS SageMaker Canvas was pivotal in
 assessing the prediction power of each of the features from the
 provided dataset. Selecting features with a high prediction power
 prevented our models to overfit, improving training. To the best of our
@@ -1759,7 +1761,7 @@ We look forward to improve our results in the near future, if
 additional data is provided with more clinical information. Hence,
 this initial work can be extended to obtain a \ac{PIERS} model that
 can help at health facilities in Ecuador. It must be noticed that our
-models trained on the dataset from \ac{HGIO} use a few
+models trained on the dataset from \ac{HGOIA} use a few
 demographic variables. This could help in a preventive diagnose in
 such places where health facilities is scarce or expensive.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2005,7 +2007,8 @@ such places where health facilities is scarce or expensive.
     Católica del Ecuador} (CEISH-PUCE) under protocol code
   EO-086-2024 (version~4). This study was designed as a retrospective,
   descriptive, cross-sectional observational study based exclusively on
-  anonymized medical records provided by Isidro Ayora Hospital.}
+  anonymized medical records provided by the Isidro Ayora Gynecology
+  and Obstetrics Hospital \ac{HGOIA}.}
 
 % \informedconsent{Any research article describing a study involving humans should contain this statement. Please add ``Informed consent was obtained from all subjects involved in the study.'' OR ``Patient consent was waived due to REASON (please provide a detailed justification).'' OR ``Not applicable'' for studies not involving humans. You might also choose to exclude this statement if the study did not involve humans.
 
@@ -2032,8 +2035,8 @@ such places where health facilities is scarce or expensive.
 % are available in section ``MDPI Research Data Policies'' at
 % \url{https://www.mdpi.com/ethics}.}
 
-\dataavailability{The anonymized patient dataset from Hospital
-  Isidro Ayora used in this study is not publicly available due to
+\dataavailability{The anonymized patient dataset from the Isidro Ayora
+  Gynecology and Obstetrics Hospital \ac{HGOIA} used in this study is not publicly available due to
   institutional data governance restrictions. The code for the
   \ac{C-AutoML} pipeline, trained model artefacts, and supplementary
   figures are available in the project repository at
@@ -2110,7 +2113,7 @@ EPN     & Escuela Politécnica Nacional \\
 F1      & F1-score \\
 GA      & Gestational Age \\
 HDP     & Hypertensive Disorders of Pregnancy \\
-HGIO    & Isidro Ayora Gynecology and Obstetrics Hospital \\
+HGOIA   & Isidro Ayora Gynecology and Obstetrics Hospital \\
 HTN     & Hypertension \\
 ICD-10  & International Classification of Diseases \\
 LR      & Logistic Regression \\
@@ -2354,7 +2357,7 @@ to the front-end application or the deployment infrastructure.
 
 The model deployed in the current version of the system corresponds
 to the LightGBM model trained on the four demographic variables
-available from \ac{HGIO}, representing version~1 of the prediction
+available from \ac{HGOIA}, representing version~1 of the prediction
 service. This initial version is expected to evolve as the system
 collects or receives additional clinical data. When a richer dataset
 becomes available, the \ac{C-AutoML} pipeline can be re-executed
