@@ -51,7 +51,7 @@ Summary of all tasks required to address reviewer feedback before resubmission.
 - [ ] Provide inter-group comparisons for all variables included in the models
 - [ ] Consider excluding patients with pre-existing chronic hypertension (different physiopathology)
 - [ ] Remove or justify non-PE-specific variables (SpO2, chest pain)
-- [ ] Regenerate Figure 2 at ≥300 dpi without horizontal stretching
+- [ ] Regenerate Figure 2 at $\geq$300 dpi without horizontal stretching
 - [ ] Add p-values to Table 4
 - [ ] Add footer note explaining Us and Ns in Table 5
 *** TODO Results
@@ -304,7 +304,7 @@ The clinical management of PE differs substantially by subtype. A model
 that predicts "PE vs. no PE" is less actionable than one that also
 identifies high-risk subtypes. The reviewer asks us to stratify
 analyses by:
-- *Early-onset PE* (< 34 weeks) vs. *late-onset PE* (≥ 34 weeks) — they
+- *Early-onset PE* (< 34 weeks) vs. *late-onset PE* ($\geq$ 34 weeks) — they
   have different pathophysiology and outcomes.
 - *Moderate PE* vs. *severe PE* (or severe features) — severity guides
   treatment urgency.
