@@ -1,0 +1,331 @@
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:t todo:t |:t
+#+title: Reviewers ToDo
+#+date: 2026-05-18
+#+author: Lenin G. Falconí
+#+email: lenin.falconi@epn.edu.ec
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.3 (Org mode 9.6.15)
+#+cite_export:
+
+* Goals
+This is a summary .org document to account for the changes asked by
+the reviewers of our current paper.
+
+* Action Plan [0%]
+:PROPERTIES:
+:COOKIE_DATA: todo recursive
+:END:
+Summary of all tasks required to address reviewer feedback before resubmission.
+
+** TODO Reviewer 1 [0%]
+*** TODO Introduction
+- [ ] Strengthen background and add missing relevant references
+*** TODO Materials and Methods
+- [ ] Add table with dataset characteristics: number of patients, class distribution, missing data rate and handling
+- [ ] Add flowchart showing preprocessing, feature selection, model selection, and hyperparameter optimization steps for C-AutoML
+- [ ] Include sufficient explanations about hyperparameter optimization
+- [ ] Explain Canvas model run settings and details of the weighted ensemble structure
+- [ ] Add details on synthetic dataset production methodology
+*** TODO Results
+- [ ] Clarify the FullPIERS-based method and explain why LR achieves ~100% performance (discuss overfitting risk)
+*** TODO Discussion
+- [ ] Expand discussion on use of demographic-only dataset, single-center study design, and synthetic data limitations
+
+** TODO Reviewer 2 [0%]
+*** TODO Manuscript-wide
+- [ ] Uniformize text fonts throughout the entire manuscript (Abstract, body, tables); reviewer flagged these terms appearing in a different font in the Abstract: /Logistic Regression/, /LightGBM/, /XGBoost/, /CatBoost/, /Multi-Layer Perceptron/, /Random Forest/
+*** TODO Introduction
+- [ ] Add references aligned with PE prediction/diagnosis guidelines
+*** TODO Materials and Methods
+- [ ] Provide software versions and city of manufacturer for all tools used
+- [ ] Indicate PE incidence in the dataset and discuss its implications on model performance
+- [ ] Discuss the unusually high PE prevalence in the cohort
+- [ ] Clarify at which gestational age (1st/2nd/3rd trimester) each feature was recorded
+- [ ] Specify whether lab variables (platelets, creatinine, proteinuria/24 h) are single or repeated measurements, and when
+- [ ] Provide inter-group comparisons for all variables included in the models
+- [ ] Consider excluding patients with pre-existing chronic hypertension (different physiopathology)
+- [ ] Remove or justify non-PE-specific variables (SpO2, chest pain)
+- [ ] Regenerate Figure 2 at ≥300 dpi without horizontal stretching
+- [ ] Add p-values to Table 4
+- [ ] Add footer note explaining Us and Ns in Table 5
+*** TODO Results
+- [ ] Clarify the FullPIERS-based method and explain why LR achieves ~100% performance (discuss overfitting risk)
+- [ ] Apply models to PE sub-categories: early vs. late PE, moderate vs. severe PE
+*** TODO Discussion
+- [ ] After model revision, re-expand the discussion section
+- [ ] Compare results only with studies using similar frameworks and variables
+- [ ] State explicitly the strengths and limitations of the study
+
+* Reviewer 1
+** what can be improved?
+
+#+caption: Review Report Form – Reviewer 1
+| Criterion                                                                    | Yes | Can be improved | Must be improved | Not applicable |
+|------------------------------------------------------------------------------+-----+-----------------+------------------+----------------|
+| Quality of English Language: The English could be improved                   |     |                 |                  |                |
+| Quality of English Language: The English is fine and does not require change | (x) |                 |                  |                |
+|------------------------------------------------------------------------------+-----+-----------------+------------------+----------------|
+| Does the introduction provide sufficient background and include all refs?    |     | (x)             |                  |                |
+| Is the research design appropriate?                                          | (x) |                 |                  |                |
+| Are the methods adequately described?                                        |     | (x)             |                  |                |
+| Are the results clearly presented?                                           |     | (x)             |                  |                |
+| Are the conclusions supported by the results?                                |     |                 | (x)              |                |
+| Are all figures and tables clear and well-presented?                         |     | (x)             |                  |                |
+
+** Comments and Suggestions for Authors
+This study presents an ML framework developed using limited clinical
+data for PE prediction. The aim is to produce solutions especially for
+low-resource healthcare systems and it has been studied with real
+hospital data. It was evaluated that the main motivation in the study
+made a significant contribution to the literature. Additionally, the
+practical value of the study is increased by comparing the C-AutoML
+approach with Amazon SageMaker Canvas, a commercial solution. It can
+be said that the performance of the proposed model is
+balanced. Utilizing SHAP in interpretability analysis increased the
+effectiveness. Apart from its academic strengths, I can say that the
+article is generally well organized and structured. Although the
+article is at a publishable level, it is thought that a few minor
+corrections will improve the quality of the article.
+
+- The data set should be presented more clearly in tabular form in
+  terms of its characteristics such as the number of patients and
+  class distribution. The rate of missing data and how it was handled
+  should be described.
+
+- The C-AutoML approach should be expressed more clearly through a
+  flowchart. Preprocessing, feature and model selection steps should
+  be shown schematically. Additionally, sufficient explanations about
+  hyperparameter optimization should be included.
+
+- When comparing Amazon SageMaker, it should be explained with which
+  settings the Canvas model is run. Mention the details of the
+  weighted ensemble structure.
+
+- Details about synthetic dataset production should be included. More
+  detailed explanations should be added.
+
+The FullPIERS based method should be clarified. It seems doubtful that
+Logistic Regression can achieve 100% performance. Explanations should
+be made about this situation.
+
+- Finally, the discussion should be expanded regarding the use of a
+  demographic data set, the fact that it is a single-center study, and
+  the limitations of synthetic data.
+* Reviewer 2
+** what can be improved?
+
+#+caption: Review Report Form – Reviewer 2
+| Criterion                                                                    | Yes | Can be improved | Must be improved | Not applicable |
+|------------------------------------------------------------------------------+-----+-----------------+------------------+----------------|
+| Quality of English Language: The English could be improved                   |     |                 |                  |                |
+| Quality of English Language: The English is fine and does not require change | (x) |                 |                  |                |
+|------------------------------------------------------------------------------+-----+-----------------+------------------+----------------|
+| Does the introduction provide sufficient background and include all refs?    |     |                 | (x)              |                |
+| Is the research design appropriate?                                          |     |                 | (x)              |                |
+| Are the methods adequately described?                                        |     |                 | (x)              |                |
+| Are the results clearly presented?                                           |     |                 | (x)              |                |
+| Are the conclusions supported by the results?                                |     |                 | (x)              |                |
+| Are all figures and tables clear and well-presented?                         |     |                 | (x)              |                |
+
+** Comments and Suggestions for Authors
+Although it is clear for me that you have ML modeling skills, the
+clinical relevance of your study is very reduced mainly because of a
+lack of clinical perspective over the topic. You should collaborate
+with clinicians that would help you to better understand the
+topic. Otherwise, is just a soup of variables included in prediction
+models which achieved very high performances and very limited
+application. The following issues must be addressed before considering
+this manuscript for further evaluation:
+
+ 
+
+*** Abstract section:
+Please uniformize the text font. Logistic
+Regression, LightGBM, XGBoost, CatBoost, Multi-Layer Perceptron, and
+Random Forest appear in another font. The same uniformization of fonts
+should be applied for the entire manuscript.
+
+*** Materials and methods:
+
+- Please provide the version of the software and city of the manufacturer.
+- Please indicate the incidence of PE in the dataset and
+discuss its implications on your performance results.  
+- Figure 2 should have at least 300 dpi and should not be widened.  Please introduce the
+p values in table 4.  
+- Table 5: you should state in the table footer
+the meaning of Us and Ns.  
+- please discuss the prevalence of preeclampsia. it is very high and
+  should be explained.
+
+*** Results
+
+Although the performance is very high for PE prediction using only
+demographic and clinical data, please clarify the following:
+
+- at which gestational age were these characteristics recorded (first,
+second and third trimester)?
+- where variables such as platelets, creatinine, proteinuria/24 hours recorded at a specific moment (and then specify when) or were multiple determinations of laboratory variables in your dataset (if yes, please specify when)?
+
+- In my opinion variables such as SpO2 and chest pain are not specific
+  for PE, therefore they should be removed. Please refer to specific
+  PE diagnosis, otherwise we can include in these models anything we
+  want, but the comparisons are very difficult to made with other
+  studies that respected the methodology of PE diagnosis and
+  screening.
+
+-  Please specify inter-goup comparisons of all variables included in
+  the models. Otherwise it is not transparent.
+- The perfect performance of LR for PE prediction could be explained
+  by your perspective to include all those variables which induce
+  overfitting very easily. Please make a plan and read the guidelines
+  on PE prediction and diagnosis (in each form). I may suggest to
+  exclude patients with pre-existing chronic hypertension which has a
+  different physiopathological background. Statistically, you
+  reporting is excellent, but clinically is useless. Please ask a
+  clinician to help you with the methodology.
+- Also, you should consider applying these models to various PE
+  categories: early versus late PE, moderate versus severe PE, etc.
+
+*** Discussion section
+
+- After you will recreate the models with relevant variables, you should expand the discussion section.
+- In the discussion section your results should be compared with other
+  studies that used similar frameworks and variables, thus be very
+  careful when choosing them. Less is more. Your results reflect the
+  input, but it does not mean that your input is correct or relevant.
+- Please state the strengths and limitations of your study. Good luck!
+
+* Reviewer 2 — Plain-Language Explanations
+This section unpacks each of Reviewer 2's demands so the required
+action is clear.
+
+** Font uniformization (Abstract and full manuscript)
+The reviewer noticed that algorithm names (Logistic Regression,
+LightGBM, XGBoost, etc.) are rendered in a different typeface than the
+surrounding text — likely because they were pasted from code or another
+source and retained a monospace or sans-serif font. The fix is to
+select those terms in the LaTeX source and ensure they use the same
+font command as the rest of the text (i.e., remove any =\texttt{}=,
+=\textsf{}=, or similar wrappers that differ from the body font).
+
+** Software versions and manufacturer city
+Standard clinical/medical journal practice requires that every software
+tool cited (Python, scikit-learn, SHAP, AWS SageMaker Canvas, etc.) be
+referenced with its exact version number and the city where the
+developer or vendor is headquartered (e.g., "scikit-learn v1.3,
+Paris, France"). This allows readers to reproduce the work and
+understand the regulatory/commercial context.
+
+** PE incidence vs. prevalence in the dataset
+- *Incidence* here means: out of all pregnancies in the dataset, what
+  fraction developed PE? The reviewer wants this number reported
+  explicitly (e.g., "X out of Y patients had PE, representing Z%").
+- *Implications on performance*: if PE cases are rare (low incidence),
+  a model can achieve high accuracy by simply predicting "no PE" for
+  everyone — this is known as the accuracy paradox. Conversely, if PE
+  cases are over-represented, performance metrics may be inflated.
+  Either way, the reviewer wants us to discuss whether the class
+  balance (or imbalance) affects the reliability of the reported
+  metrics.
+- *High prevalence concern*: the reviewer flags that the PE rate in our
+  cohort appears unusually high compared to the general population
+  (~3–5%). We must explain why (e.g., referral-center bias, inclusion
+  criteria, case enrichment) so that readers understand the external
+  validity of the model.
+
+** Gestational age at which features were recorded
+PE can manifest differently in the first, second, and third trimester.
+A model trained on third-trimester variables cannot be used for
+early-pregnancy screening. The reviewer wants a clear statement of
+*when* (in gestational weeks or trimester) each feature in the dataset
+was collected, so the clinical applicability of the model is
+unambiguous.
+
+** Single vs. repeated laboratory measurements
+For variables like platelets, creatinine, and proteinuria/24 h, the
+reviewer asks whether each patient has *one* value (taken at a
+specific, defined moment) or *multiple longitudinal values* (repeated
+over time). This matters because:
+- If a single measurement, we must state exactly when it was taken
+  (e.g., at admission, at diagnosis).
+- If multiple measurements, including all of them as features can
+  introduce data leakage (using post-diagnosis lab values to predict
+  diagnosis) and artificially boost performance.
+
+** Inter-group comparisons of all variables
+This means adding a table (usually "Table X: Baseline characteristics")
+that compares the PE group versus the non-PE group for every feature
+used in the models, with appropriate statistical tests (t-test or
+Mann–Whitney U for continuous variables; chi-squared for categorical)
+and the resulting p-values. Without this, the reader cannot judge
+whether the variables actually differ between groups, making the
+model's predictive power opaque.
+
+** Non-PE-specific variables (SpO2, chest pain)
+SpO2 (oxygen saturation) and chest pain can be low/present in many
+conditions (pulmonary embolism, cardiac disease, anaemia, etc.) and are
+not part of the standard diagnostic criteria for PE. Including them
+risks training a model that is actually detecting general illness
+severity rather than PE specifically. The reviewer asks us to either
+remove them or provide a strong clinical justification backed by PE
+guidelines for keeping them.
+
+** Chronic hypertension exclusion
+Chronic (pre-existing) hypertension and PE share overlapping features
+(high blood pressure, proteinuria) but have different causes and
+treatment implications. Including chronic hypertension patients can
+make PE diagnosis look artificially easy because those patients already
+have elevated BP readings. The reviewer suggests excluding them (or
+analyzing them separately) to avoid confounding the PE signal.
+
+** Perfect Logistic Regression performance / overfitting
+A Logistic Regression model achieving 100% (or near-100%) on any
+metric is almost always a sign of *data leakage* or *overfitting*:
+- *Leakage*: a feature that is recorded *as a result of* PE diagnosis
+  (e.g., a treatment variable, a lab value taken after diagnosis) was
+  included as a predictor. The model learns the outcome, not the
+  clinical signal.
+- *Overfitting to the feature set*: too many correlated or
+  post-diagnostic variables make a simple linear model perfectly
+  separate the classes on the training/test data, but the model would
+  fail on truly prospective data.
+  We must audit the feature list against PE diagnosis timelines and
+  guidelines, and report learning curves or cross-validation results
+  that demonstrate generalizability.
+
+** PE sub-categories: early vs. late, moderate vs. severe
+The clinical management of PE differs substantially by subtype. A model
+that predicts "PE vs. no PE" is less actionable than one that also
+identifies high-risk subtypes. The reviewer asks us to stratify
+analyses by:
+- *Early-onset PE* (< 34 weeks) vs. *late-onset PE* (≥ 34 weeks) — they
+  have different pathophysiology and outcomes.
+- *Moderate PE* vs. *severe PE* (or severe features) — severity guides
+  treatment urgency.
+If our dataset is too small for sub-group modeling, we should
+acknowledge this as a limitation.
+
+** Discussion: comparison with similar studies
+The reviewer warns against cherry-picking comparison studies. We should
+only compare our results with papers that used (a) similar input
+variables, (b) similar preprocessing and modeling approaches, and (c)
+similar patient populations. Comparing with studies that used different
+variable sets or different PE definitions would be misleading. "Less is
+more" here means: a few well-chosen, directly comparable references are
+better than a long list of loosely related ones.
+
+** Strengths and limitations paragraph
+Every clinical ML paper is expected to explicitly list what the study
+does well (e.g., real-world hospital data, use of explainability via
+SHAP, comparison with commercial AutoML) and what it cannot claim
+(e.g., single center, retrospective design, synthetic data augmentation,
+small sample size, no external validation cohort). This paragraph is
+standard practice and helps editors and readers calibrate the
+contribution.
+
