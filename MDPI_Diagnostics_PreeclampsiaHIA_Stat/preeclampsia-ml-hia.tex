@@ -81,6 +81,12 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+% Track changes for reviewer revisions (remove before final submission)
+% Usage: \added[id=R1]{new text}  \deleted[id=R2]{old text}  \replaced[id=R1]{new}{old}
+% To produce final clean copy: \usepackage[final]{changes}
+\usepackage[markup=underlined,addedmarkup=colored,deletedmarkup=sout]{changes}
+\definechangesauthor[name={Reviewer~1},color=blue]{R1}
+\definechangesauthor[name={Reviewer~2},color=teal]{R2}
 %=================================================================
 % Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
