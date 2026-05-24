@@ -110,9 +110,9 @@ corrections will improve the quality of the article.
 - Details about synthetic dataset production should be included. More
   detailed explanations should be added.
 
-The FullPIERS based method should be clarified. It seems doubtful that
-Logistic Regression can achieve 100% performance. Explanations should
-be made about this situation.
+- The FullPIERS based method should be clarified. It seems doubtful
+  that Logistic Regression can achieve 100% performance. Explanations
+  should  be made about this situation.
 
 - Finally, the discussion should be expanded regarding the use of a
   demographic data set, the fact that it is a single-center study, and
