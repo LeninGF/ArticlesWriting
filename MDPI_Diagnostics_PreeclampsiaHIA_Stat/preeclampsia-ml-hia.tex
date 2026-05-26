@@ -1112,33 +1112,125 @@ for model development, selection, performance evaluation, and
 SHAP-based explainability.\label{fig:training-framework}}
 \end{figure}
 
-\textbf{Cloud-managed training (Amazon SageMaker Canvas).}
-Amazon SageMaker Canvas is a managed visual machine-learning service that
+\textbf{Cloud-managed training (Amazon SageMaker Canvas).}  Amazon
+SageMaker Canvas is a managed no-code machine-learning service that
 supports data ingestion, preprocessing, model training, and model
-evaluation through a no-code interface~\cite{aws_sagemaker_canvas_docs}.
-In our workflow, Canvas was used for quality profiling,
-feature screening support, and comparative model development under a
-standardized cloud environment.
+evaluation~\cite{aws_sagemaker_canvas_docs}.
+\added[id=R1]{Internally, Canvas relies on
+  AutoGluon~\cite{agtabular2020} to manage the complete training
+  pipeline automatically. For our binary classification task, Canvas
+  was configured to maximize \ac{F1} and evaluated ten bagged base
+  model variants (Layer~1): LightGBM, LightGBM Extra Trees, XGBoost,
+  CatBoost, Random Forest (Gini), Random Forest (Entropy), Extra Trees
+  (Gini), Extra Trees (Entropy), FastAI neural network, and PyTorch
+  neural network, each trained on $k$-fold bagged splits of the
+  training data. The final predictor is a two-layer weighted ensemble
+  (Layer~2) built using AutoGluon's greedy forward ensemble selection
+  algorithm~\cite{caruana2004ensemble}: starting from an empty
+  ensemble, models are added one at a time (with replacement) if each
+  addition improves the validation \ac{F1}. The weight assigned to
+  each model $k$ equals its selection count $n_k$ divided by the total
+  ensemble size~$S$:}
+\begin{linenomath}
+\begin{equation}
+  \hat{p}_{\mathrm{ens}}(\mathbf{x}) = \sum_{k=1}^{K} w_k\,\hat{p}_k(\mathbf{x}),
+  \quad w_k = \frac{n_k}{S},
+  \label{eq:ensemble-prediction}
+\end{equation}
+\end{linenomath}
+\added[id=R1]{where $\hat{p}_k(\mathbf{x})$ is the bag-averaged predicted
+  probability from base model $k$, and the final binary decision applies
+  threshold $\tau$ from Equation~\eqref{eq:preeclampsia_decision}.}  In our
+workflow, Canvas was also used for quality profiling and feature
+screening support, as described in
+Section~\ref{sec:data-preprocessing}.
 
-\textbf{Custom Automatic Machine Learning Workflow (C-AutoML)} We
-proposed an iterative training methodology where different stratified
-train/validation split are tested on every model candidate. The
-training core executes an inner loop that iterates through various
-algorithm families. For every model candidate within a specific
-family, a \ac{HPO} configuration is stochastically sampled from
-a predefined search space at each iteration. The proposed methodology
-fits full sklearn pipelines with model-aware preprocessing (scaling
-enabled for \ac{LR} and \ac{MLP}) and handles missing values using
-imputation. Model selection is obtained by ranking the performance of
-each classifier \ac{w.r.t.} \ac{F1}, primarily to account for
-potential class imbalances, followed by \ac{AUC} and overall \ac{ACC},
-which are the secondary and tertiary tie-breaking metrics,
-respectively. Upon identifying the optimal pipeline, the system
-performs a permutation-based feature importance analysis to enhance
-model interpretability and provides comprehensive diagnostic
-artifacts, including confusion matrices and performance logs.
+\textbf{Custom Automatic Machine Learning Workflow (C-AutoML).}
+We proposed an iterative training methodology where different stratified
+80/20 train/validation splits are tested on every model candidate
+across $N = 10$ outer iterations, yielding 60 total trials
+(10 iterations $\times$ 6 model families). The training core executes
+an inner loop that iterates through six algorithm families: \ac{LR},
+\ac{RF}, \ac{MLP}, XGBoost, LightGBM, and CatBoost.
+
+\added[id=R1]{For \ac{HPO}, C-AutoML adopts a \textit{random search}
+strategy~\cite{bergstra2012random}: at each trial, exactly one
+hyperparameter configuration is drawn uniformly at random from a
+predefined discrete candidate set using scikit-learn's
+\texttt{ParameterSampler}~\cite{sklearn-api} (seed $= 42 + 100i + m$,
+where $i$ is the outer-loop iteration and $m$ is the model-family
+index). Random search is preferred over grid search because it
+explores the hyperparameter space more efficiently at a fixed
+computational budget~\cite{bergstra2012random}. The complete search
+spaces are listed in Table~\ref{tab:hpo-search-spaces}.}
+
+The proposed methodology fits full \texttt{scikit-learn} pipelines with
+model-aware preprocessing (StandardScaler enabled for \ac{LR} and
+\ac{MLP}; disabled for tree-based models) and handles missing values
+using median imputation for numeric features and mode imputation for
+categorical features. Model selection is obtained by ranking all
+60 trials \ac{w.r.t.} \ac{F1} (primary metric, selected to account
+for class imbalance), followed by \ac{AUC} and overall \ac{ACC} as
+tie-breaking metrics. Upon identifying the optimal pipeline, the
+system performs permutation-based feature importance analysis
+($n_{\mathrm{repeats}} = 10$, \ac{F1} scoring on the validation
+partition) to enhance model interpretability.
 \added[id=R1]{Figure~\ref{fig:c-automl-flowchart} provides a flowchart
   overview of the complete \ac{C-AutoML} pipeline.}
+
+% R1.5 BEGIN -------------------------------------------------------
+\begin{table}[htbp]
+\caption{\added[id=R1]{C-AutoML hyperparameter search spaces.
+    At each trial one configuration is drawn uniformly at random
+    (\texttt{ParameterSampler}) from the Cartesian product of the listed
+    candidate values.  Tree-based models omit StandardScaler;
+    \ac{LR} and \ac{MLP} apply it.}}
+\label{tab:hpo-search-spaces}
+\small
+\begin{tabularx}{\linewidth}{llX}
+\toprule
+\textbf{Model family} & \textbf{Hyperparameter} & \textbf{Candidate values} \\
+\midrule
+\multirow{3}{*}{Logistic Regression}
+  & Regularization $C$          & \{0.01, 0.1, 1, 5, 10\} \\
+  & Solver                      & \{\texttt{liblinear}, \texttt{lbfgs}\} \\
+  & Class weight                & \{none, balanced\} \\
+\midrule
+\multirow{5}{*}{Random Forest}
+  & No.\ of estimators          & \{200, 400, 600\} \\
+  & Maximum depth               & \{none, 5, 10, 20\} \\
+  & Min.\ samples per split     & \{2, 5, 10\} \\
+  & Min.\ samples per leaf      & \{1, 2, 4\} \\
+  & Class weight                & \{none, balanced, balanced\_subsample\} \\
+\midrule
+\multirow{3}{*}{MLP Neural Network}
+  & Hidden-layer sizes          & \{(64), (128), (64,\,32), (128,\,64)\} \\
+  & L2 penalty $\alpha$         & \{0.0001, 0.001, 0.01\} \\
+  & Initial learning rate       & \{0.0005, 0.001, 0.005\} \\
+\midrule
+\multirow{5}{*}{XGBoost}
+  & Maximum tree depth          & \{3, 4, 6, 8\} \\
+  & Learning rate               & \{0.01, 0.05, 0.1, 0.2\} \\
+  & Subsample ratio             & \{0.70, 0.85, 1.0\} \\
+  & Column sample by tree       & \{0.70, 0.85, 1.0\} \\
+  & L2 regularization $\lambda$ & \{1, 2, 5\} \\
+\midrule
+\multirow{5}{*}{LightGBM}
+  & Maximum leaf count          & \{15, 31, 63\} \\
+  & Learning rate               & \{0.01, 0.05, 0.1\} \\
+  & Subsample ratio             & \{0.70, 0.85, 1.0\} \\
+  & Column sample by tree       & \{0.70, 0.85, 1.0\} \\
+  & L2 regularization $\lambda$ & \{0, 1, 5\} \\
+\midrule
+\multirow{4}{*}{CatBoost}
+  & Tree depth                  & \{4, 6, 8\} \\
+  & Learning rate               & \{0.01, 0.05, 0.1\} \\
+  & Number of boosting rounds   & \{200, 400, 600\} \\
+  & L2 leaf regularization      & \{1, 3, 5\} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+% R1.5 END ---------------------------------------------------------
 
 % R1.4 BEGIN -------------------------------------------------------
 \begin{figure}[H]
@@ -1475,9 +1567,14 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 
 Table~\ref{tab:canvas-model-performance} summarizes the performance of
 the different models evaluated in Amazon SageMaker Canvas. The best
-performance was achieved by the \texttt{Weighted Ensemble Model},
-formed by \texttt{LightGBM}, \ac{MLP}, and \ac{RF} with an $\mathrm{F1}=0.805$,
-$\mathrm{Precision}=0.770$, $\mathrm{Recall}=0.844$, and
+performance was achieved by the \texttt{Weighted Ensemble Model}.
+\added[id=R1]{Inspection of the downloaded model artifact confirmed
+  that the ensemble comprised three base models selected with equal
+  weights ($w_k = \tfrac{1}{3}$, Equation~\eqref{eq:ensemble-prediction}):
+  LightGBM, Random Forest (Entropy), and NeuralNetFastAI; the
+  remaining seven Layer~1 candidates did not improve validation
+  \ac{F1} and were excluded.} The ensemble achieved
+$\mathrm{F1}=0.805$, $\mathrm{Precision}=0.770$, $\mathrm{Recall}=0.844$, and
 $\mathrm{AUC}=0.956$. Compared to the \texttt{LightGBM} model trained with
 our proposed \ac{C-AutoML}, the AWS model improves on the recall
 performance metric, reducing the number of false negatives. However,
