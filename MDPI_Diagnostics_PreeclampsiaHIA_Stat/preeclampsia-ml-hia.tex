@@ -80,7 +80,7 @@
 % for drawing with tikz
 \usepackage{tikz}
 \usetikzlibrary{calc}
-\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,backgrounds}
 % Track changes for reviewer revisions (remove before final submission)
 % Usage: \added[id=R1]{new text}  \deleted[id=R2]{old text}  \replaced[id=R1]{new}{old}
 % To produce final clean copy: \usepackage[final]{changes}
@@ -301,6 +301,7 @@ $^{3}$ \quad Ministerio de Salud Pública, Quito, Ecuador; raysafuertesa@gmail.c
 \begin{acronym}
     \acro{PE}[PE]{Preeclampsia}
     \acro{HDP}[HDP]{Hypertensive Disorders of Pregnancy}
+    \acro{HPO}[HPO]{Hyperparameter Optimization}
     \acro{ML}[ML]{Machine Learning}
     \acro{SHAP}[SHAP]{SHapley Additive exPlanations}
     \acro{BMI}[BMI]{Body Mass Index}
@@ -784,6 +785,49 @@ Unknown type features & 0 \\
     removed. Resulting data is shuffled to prevent data leakage}
 \end{figure}
 
+% R1.1 BEGIN: New table — dataset characteristics across preprocessing stages.
+% Added per Reviewer 1 comment (Materials and Methods): "Add table with dataset
+% characteristics: number of patients, class distribution, missing data rate
+% and handling."  All figures verified against code/verify_patient_split.py.
+\added[id=R1]{Table~\ref{tab:dataset-characteristics} presents a summary of
+  the \ac{HGOIA} dataset characteristics at each stage of the preprocessing
+  pipeline.}
+
+\begin{table}[H]
+  \small
+  \centering
+  \caption{\added[id=R1]{[New]} Summary of dataset characteristics for the
+    \ac{HGOIA} preeclampsia classification dataset. Each record corresponds
+    to a prenatal clinical visit; a single patient may contribute multiple
+    records across visits.\label{tab:dataset-characteristics}}
+  \begin{adjustwidth}{-\extralength}{0cm}
+  \begin{tabularx}{\linewidth}{p{0.62\linewidth}X}
+    \toprule
+    \textbf{Characteristic} & \textbf{Value} \\
+    \midrule
+    Data collection period & 2022--2025 \\
+    Total records after ICD-10 filter and overlap removal & \numprint{4245} \\
+    Unique patients (source dataset) & \numprint{2344} \\
+    Average records per patient & 1.81 (range: 1--13) \\
+    Duplicate / low-signal records removed (Canvas) & 80 (1.88\%) \\
+    \midrule
+    \textbf{Final \ac{ML} dataset --- total records} & \textbf{\numprint{4165}} \\
+    No preeclampsia --- class~0 & \numprint{3494} (83.89\%) \\
+    Preeclampsia --- class~1 & 671 (16.11\%) \\
+    Class imbalance ratio (class~0 : class~1) & 5.2 : 1 \\
+    \midrule
+    Initial column-level missingness (pre-cleaning) & 12.9\% \\
+    Missing data handling & Columns with high missingness removed; no imputation applied \\
+    Missing values in final dataset & 0 \\
+    \midrule
+    Predictor features & 4 (\textit{age, weight, \ac{BMI}, gestational weeks}) \\
+    Train / validation split (\ac{C-AutoML}) & 80\% / 20\%, record-level, stratified by class \\
+    \bottomrule
+  \end{tabularx}
+  \end{adjustwidth}
+\end{table}
+% R1.1 END
+
 \subsection{Statistical Characteristics of Collected Data}
 \label{sec:stat-char-data}
 We analyzed the prevalence of \ac{PE} among the population
@@ -805,7 +849,9 @@ prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
   \end{adjustwidth}
   \caption{\label{fig:statistics}Statistical analysis of prevalence of
     preeclampsia in the population of pregnant women at \ac{HGOIA}. Preeclampsia is more frequent in women of 36 to 49 years
-  old and with a mean BMI of 33.}
+  old and with a mean BMI of 33. Analysis based on the pre-deduplication
+  cohort (4,245 records: 3,571 normal, 674 preeclampsia; see also
+  Table~\ref{tab:dataset-characteristics}).}
 \end{figure}
 
 \begin{table}[H]
@@ -813,8 +859,15 @@ prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
   \centering
   \caption{Descriptive statistics of demographic variables by
   preeclampsia diagnosis in pregnant women at \ac{HGOIA}
-  from years 2022 to 2025.}
+  from years 2022 to 2025. Statistics are computed on the
+  pre-deduplication cohort (4,245 records: 3,571 normal, 674 
+  preeclampsia); the final ML dataset after Canvas processing
+  contains 4,165 records (see Table~\ref{tab:dataset-characteristics}).}
 \begin{tabularx}{\textwidth}{lp{2.cm}XXXX}
+% R1.2 BEGIN: Sample sizes and statistics are from the pre-deduplication cohort
+% (dataset_preeclampsia_cleaned.csv, 4245 records: 3571 normal / 674 PE).
+% This is what 02-explore-cleaned-data.ipynb computes. Caption updated to
+% clarify the cohort; tab:dataset-characteristics shows the final ML counts.
 \toprule
 Variable & Preeclampsia & Sample Size & Mean & Median & Std. Dev. \\
 \midrule
@@ -833,6 +886,7 @@ WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 \\
 \end{tabularx}
 \label{tab:desc_stats}
 \end{table}
+% R1.2 END
 
 \begin{table}[H]
   \small
@@ -1071,7 +1125,7 @@ proposed an iterative training methodology where different stratified
 train/validation split are tested on every model candidate. The
 training core executes an inner loop that iterates through various
 algorithm families. For every model candidate within a specific
-family, a hyperparameter configuration is stochastically sampled from
+family, a \ac{HPO} configuration is stochastically sampled from
 a predefined search space at each iteration. The proposed methodology
 fits full sklearn pipelines with model-aware preprocessing (scaling
 enabled for \ac{LR} and \ac{MLP}) and handles missing values using
@@ -1083,7 +1137,149 @@ respectively. Upon identifying the optimal pipeline, the system
 performs a permutation-based feature importance analysis to enhance
 model interpretability and provides comprehensive diagnostic
 artifacts, including confusion matrices and performance logs.
+\added[id=R1]{Figure~\ref{fig:c-automl-flowchart} provides a flowchart
+  overview of the complete \ac{C-AutoML} pipeline.}
 
+% R1.4 BEGIN -------------------------------------------------------
+\begin{figure}[H]
+\centering
+\begin{adjustwidth}{-\extralength}{0cm}
+\begin{tikzpicture}[
+    node distance=0.5cm,
+    every node/.style={font=\small},
+    TermNode/.style={
+        rectangle, rounded corners=5pt,
+        draw=black!80, fill=gray!20, text centered,
+        text width=9cm, minimum height=0.8cm, inner sep=4pt},
+    ProcNode/.style={
+        rectangle, draw=black!80, fill=white, text centered,
+        text width=9cm, minimum height=0.8cm, inner sep=4pt},
+    arr/.style={-Stealth, thick}
+]
+%% ---------- nodes ----------
+\node (Ninput) [TermNode] {%
+    \textbf{Input:} ML dataset (4{,}165 records, 4 features) ---
+    feature set pre-selected by SageMaker Canvas};
+
+\node (Ninit) [ProcNode, below=of Ninput] {%
+    Initialize 6 model families:
+    \ac{LR}, \ac{RF}, \ac{MLP}, XGBoost, LightGBM, CatBoost};
+
+%% outer loop top (extra gap for outer-loop label)
+\node (Nsplit) [ProcNode, below=1.5cm of Ninit] {%
+    Stratified 80/20 train\,/\,val split\\[-2pt]
+    {\footnotesize (seed\;$= 42 + i$)}};
+
+%% inner loop top (extra gap for inner-loop label)
+\node (Nhpo) [ProcNode, below=1.2cm of Nsplit] {%
+    Sample one \ac{HPO} configuration per model candidate\\[-2pt]
+    {\footnotesize (ParameterSampler;\; seed $= 42 + 100i + m$)}};
+
+\node (Npreproc) [ProcNode, below=of Nhpo] {%
+    Build model-aware \texttt{sklearn} preprocessing pipeline\\[-2pt]
+    {\footnotesize Numeric: median imputation
+      [+\,StandardScaler if \ac{LR}/\ac{MLP}];\;
+      Categorical: mode imputation + OHE}};
+
+\node (Nfit) [ProcNode, below=of Npreproc] {%
+    Fit \texttt{Pipeline}(preprocessor, model$_m$) on $X_{\!\mathrm{train}}$};
+
+\node (Neval) [ProcNode, below=of Nfit] {%
+    Evaluate on $X_{\!\mathrm{val}}$:\;
+    F1, \ac{AUC}, \ac{ACC}, Precision, Recall};
+
+\node (Nupdate) [ProcNode, below=of Neval] {%
+    Update best trial record if F1 $>$ best$_{\mathrm{F1}}$};
+
+%% post-loop
+\node (Nselect) [ProcNode, below=1.2cm of Nupdate] {%
+    Select best pipeline \quad (rank:\; F1 $\to$ \ac{AUC} $\to$ \ac{ACC})};
+
+\node (Nperm) [ProcNode, below=of Nselect] {%
+    Permutation importance analysis\\[-2pt]
+    {\footnotesize ($n_{\mathrm{repeats}} = 10$,\;
+      scoring: F1,\; applied on validation partition)}};
+
+\node (Noutput) [TermNode, below=of Nperm] {%
+    \textbf{Outputs:}\;
+    serialized model\,$\cdot$\,
+    metrics log\,$\cdot$\,
+    confusion matrix\,$\cdot$\,
+    feature importance ranking};
+
+%% ---------- straight-down arrows ----------
+\draw[arr] (Ninput)   -- (Ninit);
+\draw[arr] (Ninit)    -- (Nsplit);
+\draw[arr] (Nsplit)   -- (Nhpo);
+\draw[arr] (Nhpo)     -- (Npreproc);
+\draw[arr] (Npreproc) -- (Nfit);
+\draw[arr] (Nfit)     -- (Neval);
+\draw[arr] (Neval)    -- (Nupdate);
+\draw[arr] (Nupdate)  --
+    node[right, font=\scriptsize\itshape, fill=white, inner sep=1pt, pos=0.5]{all 60 trials complete}
+    (Nselect);
+\draw[arr] (Nselect)  -- (Nperm);
+\draw[arr] (Nperm)    -- (Noutput);
+
+%% ---------- loop-back arrows ----------
+%% inner loop (right side): update -> right -> up -> hpo
+\coordinate (ILmid) at ([xshift=1.8cm]Nupdate.east);
+\draw[dashed, thick]
+    (Nupdate.east) -- node[above, font=\scriptsize\itshape, fill=white, inner sep=1pt]{next model} (ILmid);
+\draw[arr, dashed, thick] (ILmid) |- (Nhpo.east);
+
+%% outer loop (left side): update -> left -> up -> split
+\coordinate (OLmid) at ([xshift=-3.0cm]Nupdate.west);
+\draw[dashed, thick]
+    (Nupdate.west)
+    -- node[above, font=\scriptsize\itshape, fill=white, inner sep=1pt]{next iteration}
+    (OLmid);
+\draw[arr, dashed, thick] (OLmid) |- (Nsplit.west);
+
+%% ---------- background loop regions ----------
+\begin{pgfonlayer}{background}
+    %% outer box drawn first so inner orange sits visually on top
+    \node[draw=blue!60!black, dashed, rounded corners=8pt,
+          fill=blue!4, inner sep=16pt,
+          fit=(Nsplit)(Nhpo)(Npreproc)(Nfit)(Neval)(Nupdate)
+    ] (outer_box) {};
+    %% inner box drawn second = on top of outer fill
+    \node[draw=orange!80!black, dashed, rounded corners=5pt,
+          fill=orange!8, inner sep=8pt,
+          fit=(Nhpo)(Npreproc)(Nfit)(Neval)(Nupdate)
+    ] (inner_box) {};
+\end{pgfonlayer}
+
+%% loop labels in the main layer so they render above all background fills
+\node[font=\scriptsize\itshape, text=blue!70!black, fill=white,
+      inner sep=1pt, anchor=south west]
+     at (outer_box.north west)
+     {outer loop ($N\!=\!10$ iterations,\;$i = 1\ldots10$,\;60 total trials)};
+\node[font=\scriptsize\itshape, text=orange!80!black, fill=white,
+      inner sep=1pt, anchor=south west]
+     at (inner_box.north west)
+     {inner loop (6 model families,\;$m = 1\ldots6$)};
+
+\end{tikzpicture}
+\end{adjustwidth}
+\caption{\added[id=R1]{Flowchart of the \ac{C-AutoML} training
+    pipeline. The outer loop runs $N = 10$ iterations
+    ($i = 1\ldots10$), each drawing a fresh stratified 80/20
+    train/validation split, for a total of 60 trials
+    (10 iterations $\times$ 6 model families). Within each trial, one
+    \acf{HPO} configuration is stochastically sampled from a
+    predefined search space (ParameterSampler) and a model-aware
+    \texttt{sklearn} pipeline is fitted on the training partition
+    (median imputation; StandardScaler for \ac{LR}/\ac{MLP};
+    OneHotEncoder for categorical variables). Candidates are ranked by
+    F1-score (primary), \ac{AUC} (secondary), and \ac{ACC} (tertiary)
+    across all 60 trials; the best pipeline is then selected and
+    subjected to permutation importance analysis
+    ($n_{\mathrm{repeats}} = 10$, F1 scoring) to rank feature
+    contributions.}}
+\label{fig:c-automl-flowchart}
+\end{figure}
+% R1.4 END ---------------------------------------------------------
 
 \subsubsection{Evaluation Metrics}
 \label{sec:evaluation-metrics}
@@ -1725,6 +1921,34 @@ gestational age, and \ac{BMI}. On the other hand, for the generated
 synthetic data, systolic blood pressure, platelet count and 24-hour
 proteinuria lead the impact on model's prediction.
 
+% R1.3 BEGIN: Limitations paragraph added per Reviewer 1 (Discussion: "Expand
+% discussion on use of demographic-only dataset, single-center study design,
+% and synthetic data limitations") and Reviewer 2 (Discussion: "State
+% explicitly the strengths and limitations of the study").
+% The record-level split statistics are documented in code/patient_split_report.csv.
+\added[id=R1]{\textbf{Limitations.}
+Several limitations of this study should be considered.
+First, the \ac{HGOIA} dataset contains only demographic variables (age, weight,
+\ac{BMI}, and gestational age in weeks); the absence of laboratory and clinical
+measurements restricts predictive granularity and precludes direct comparison
+with clinically richer models such as full\ac{PIERS}.
+Second, this is a single-center, retrospective study conducted at a single
+public hospital; generalizability to other institutions or geographic contexts
+remains to be evaluated.
+Third, the train--validation split in \ac{C-AutoML} was performed at the record
+level rather than the patient level: because the source dataset contains on
+average 1.81 records per patient (range 1--13), approximately 61\% of
+validation records originate from patients also present in the training set;
+as the demographic features are correlated within a patient, the reported
+validation metrics may be modestly optimistic and patient-level
+cross-validation is recommended for future work.
+Finally, the synthetic dataset, while useful for assessing the feasibility of
+\ac{PIERS}-style prediction, does not constitute external clinical validation;
+the ideal performance of \ac{LR} on that dataset reflects the mathematical
+separability imposed by the parametric generation distributions, not
+necessarily clinical utility in a real population.}
+% R1.3 END
+
 \section{Conclusion}
 \label{sec:conclusion}
 This study explored the performance of different machine learning
@@ -2133,6 +2357,7 @@ F1      & F1-score \\
 GA      & Gestational Age \\
 HDP     & Hypertensive Disorders of Pregnancy \\
 HGOIA   & Isidro Ayora Gynecology and Obstetrics Hospital \\
+HPO     & Hyperparameter Optimization \\
 HTN     & Hypertension \\
 ICD-10  & International Classification of Diseases \\
 LR      & Logistic Regression \\

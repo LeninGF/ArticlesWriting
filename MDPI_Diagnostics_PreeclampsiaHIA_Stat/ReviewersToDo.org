@@ -27,8 +27,8 @@ Summary of all tasks required to address reviewer feedback before resubmission.
 *** TODO Introduction
 - [ ] Strengthen background and add missing relevant references
 *** TODO Materials and Methods
-- [ ] Add table with dataset characteristics: number of patients, class distribution, missing data rate and handling
-- [ ] Add flowchart showing preprocessing, feature selection, model selection, and hyperparameter optimization steps for C-AutoML
+- [X] Add table with dataset characteristics: number of patients, class distribution, missing data rate and handling
+- [X] Add flowchart showing preprocessing, feature selection, model selection, and hyperparameter optimization steps for C-AutoML
 - [ ] Include sufficient explanations about hyperparameter optimization
 - [ ] Explain Canvas model run settings and details of the weighted ensemble structure
 - [ ] Add details on synthetic dataset production methodology
