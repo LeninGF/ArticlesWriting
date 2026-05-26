@@ -375,7 +375,16 @@ high-risk pregnancies, and more efficient allocation of limited
 healthcare resources, particularly in high-volume settings with
 heterogeneous data quality.
 
-The full\ac{PIERS} model uses demographic and laboratory variables
+\replaced[id=R2]{The full\ac{PIERS} model estimates the probabilistic
+risk of adverse maternal outcomes in women with \ac{PE} using
+gestational age, chest pain or dyspnoea, oxygen saturation
+(SpO$_2$), creatinine, platelet count, and aspartate transaminase
+(\ac{AST}), including quadratic and interaction terms, as
+predictors~\cite{fullpiers_2011}. It uses the logistic regression
+equation in~\eqref{eq:logistic-regression}, where the logit is
+calculated as a linear combination of these variables as depicted
+in~\eqref{eq:fullpiers-logit} and the coefficient values are those
+proposed in~\cite{fullpiers_2011}.}{The full\ac{PIERS} model uses demographic and laboratory variables
 (e.g., gestational age, creatinine, platelet count, aspartate
 transaminase, etc.) to estimate the probabilistic risk of adverse
 maternal outcomes among women with
@@ -383,7 +392,7 @@ maternal outcomes among women with
 equation in~\eqref{eq:logistic-regression}, where the logit is
 calculated as a linear combination of variables
 as depicted in~\eqref{eq:fullpiers-logit} and the coefficient values
-are those proposed in~\cite{fullpiers_2011}. 
+are those proposed in~\cite{fullpiers_2011}.} 
 
 \begin{linenomath}
 \begin{equation}
@@ -425,7 +434,12 @@ research, we used the provided records from the
   Quito, Ecuador.}, which contains demographic variables and lacks
 clinical features. For this reason, we explored our sets of models
 both on the \ac{HGOIA} and synthetic datasets to diagnose
-\ac{PE}. Unlike the full\ac{PIERS} standard, which is a
+\ac{PE}. \added[id=R1]{The synthetic dataset was constructed using
+the full\ac{PIERS} equation~\eqref{eq:fullpiers-logit} as the
+reference framework: feature distributions were defined according to
+the clinical variables in that model, and outcome labels were derived
+from the FullPIERS predicted risk scores
+(Section~\ref{sec:synth-data-gener}).} Unlike the full\ac{PIERS} standard, which is a
 prognostic model, our goal is to determine the most effective set of
 models to diagnose \ac{PE} according to the Ecuadorian realm.
 
