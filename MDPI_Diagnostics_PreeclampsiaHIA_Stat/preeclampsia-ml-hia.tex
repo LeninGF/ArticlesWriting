@@ -989,6 +989,40 @@ risk estimate ($\mathrm{PE_{FullPIERS}}$ [\%]), enabling exploratory
 modeling and explainability analyses under clinically informed
 constraints.
 
+\added[id=R1]{The FullPIERS prognostic score was converted to a binary label
+($\mathrm{Preeclampsia\_FullPIERS\_Label}$) using a risk threshold of
+10\% rather than the logistic default of 50\%. In clinical screening
+and triage contexts the adverse-outcome event is relatively uncommon;
+consequently, few patients reach a 50\% predicted probability on the
+FullPIERS scale, which would result in very low sensitivity if the default
+threshold were applied~\cite{fullpiers_2011}. A 10\% threshold captures
+substantially more true high-risk pregnancies while accepting a higher
+false-positive rate, consistent with the screening objective of this
+component of the study. Empirical validation studies have reported
+optimal thresholds ranging from approximately 2\% to 6\% in different
+populations~\cite{long2025fullpiers,teichmann2025fullpiers,elongi2025fullpiers},
+further supporting the use of a sub-10\% cut-off for screening purposes.
+The primary classification target used for model training and evaluation
+is the rule-based label $\mathrm{Preeclampsia\_MSP}$
+(Equation~\eqref{eq:preeclampsia-msp-rule}); the FullPIERS-derived
+binary label serves as a secondary prognostic reference for exploratory
+analyses. The random seed was fixed at $\mathtt{42}$ to ensure full
+reproducibility of the generation procedure.}
+
+\added[id=R2]{The features in this synthetic dataset are algorithmically
+generated from the parametric distributions specified in
+Table~\ref{tab:distributions} and were not measured in clinical
+practice; they do not form part of the \ac{HGOIA} retrospective records,
+which contain only demographic variables (age, weight, \ac{BMI}, and
+gestational age in weeks). The inclusion of SpO$_2$ and chest pain
+reflects their standing as validated independent predictors of adverse
+maternal outcomes in preeclampsia: SpO$_2$ values at or below 93\%
+carry an 18-fold increase in risk of severe complications within 48\,h
+of hospital admission~\cite{millman2011spo2}, a finding confirmed in
+recent independent cohorts~\cite{elongi2025fullpiers}, and both
+variables are explicit components of the FullPIERS prognostic equation
+(Equation~\eqref{eq:fullpiers-logit}; \cite{fullpiers_2011}).}
+
 \begin{table}[H]
   \small
   \centering
@@ -1688,6 +1722,23 @@ perfect performance should be interpreted as an expected consequence
 of the controlled synthetic data-generation process rather than as
 evidence of equivalent performance in prospective clinical deployment.
 
+\added[id=R1]{Inspection of Table~\ref{tab:cautoml-synthetic-performance}
+reveals that this behavior is not exclusive to \ac{LR}: \emph{all} six
+model families achieve $\mathrm{F1}=1.000$ in iterations 1--3, and all
+obtain scores of at least $\mathrm{F1}=0.988$ across the five iterations.
+This is structurally expected. The diagnostic label
+$\mathrm{Preeclampsia\_MSP}$ is assigned by the deterministic threshold
+rule in Equation~\eqref{eq:preeclampsia-msp-rule}, which applies linear
+inequality conditions to the same features used as model inputs. Such
+threshold conditions produce linearly separable class boundaries in the
+feature space, which even the simplest linear classifier (\ac{LR}) can
+recover exactly on data drawn from the same generating distributions.
+This result therefore does not indicate overfitting; rather, it is a
+built-in sanity check: the consistently near-perfect scores confirm that
+the parametric distributions in Table~\ref{tab:distributions} are
+sufficiently separated with respect to the \ac{MSP} rule, validating
+the generation process itself.}
+
 {\small
 \begin{longtable}{>{\centering\arraybackslash}p{0.5cm}
   >{\centering\arraybackslash}p{0.5cm}
@@ -2009,8 +2060,25 @@ because higher precision implies fewer false alarms. Consequently, it is
 recommended to combine both of these models for prediction at the
 health facility.
 
-For the synthetic dataset, our results show an ideal performance due
-to the controlled synthetic data generation. Nevertheless, the results identify \ac{LR} as a suitable model for a \ac{PIERS} application.
+\replaced[id=R1]{For the synthetic dataset, all six evaluated model
+families achieve near-perfect performance ($\mathrm{F1}\geq 0.988$),
+with \ac{LR}, \ac{RF}, \ac{MLP}, \texttt{XGBoost}, \texttt{LightGBM},
+and \texttt{CatBoost} all reaching $\mathrm{F1}=1.000$ in the first
+three iterations. This universally high performance is a deliberate
+design consequence: diagnostic labels are assigned by a deterministic
+rule (Equation~\eqref{eq:preeclampsia-msp-rule}) applied to the same
+features used as model inputs, creating linearly separable class
+boundaries that any of the evaluated classifiers can recover. The
+synthetic track serves as a controlled feasibility experiment that
+confirms the \ac{C-AutoML} pipeline operates correctly on data with a
+known ground truth; it does not constitute a clinical performance claim. Notably, the inclusion of SpO$_2$, chest pain,
+platelet count, creatinine, and \ac{AST} in the synthetic track is
+grounded in the published FullPIERS equation
+(Equation~\eqref{eq:fullpiers-logit}), which uses precisely these
+variables as predictors~\cite{fullpiers_2011}.}{For the synthetic
+dataset, our results show an ideal performance due to the controlled
+synthetic data generation. Nevertheless, the results identify \ac{LR}
+as a suitable model for a \ac{PIERS} application.}
 
 The interpretability analysis shows the feature importance of
 the variables of each dataset for prediction. For the \ac{HGOIA} dataset, the most important features are: patient's age,
