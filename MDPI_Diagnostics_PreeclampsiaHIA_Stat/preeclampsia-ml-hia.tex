@@ -69,6 +69,7 @@
 \usepackage{numprint}       % For number formatting (as specified)
 \usepackage{subcaption}     % For subfigures (as specified)
 \usepackage{longtable}      % For multi-page tables
+\usepackage{multirow}       % For cells spanning multiple rows
 % \usepackage{ltablex}
 % \keepXColumns
 \usepackage{algorithm}      % For algorithm environments
@@ -910,27 +911,29 @@ prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
   pre-deduplication cohort (4,245 records: 3,571 normal, 674 
   preeclampsia); the final ML dataset after Canvas processing
   contains 4,165 records (see Table~\ref{tab:dataset-characteristics}).}
-\begin{tabularx}{\textwidth}{lp{2.cm}XXXX}
+\begin{tabularx}{\textwidth}{lp{2.cm}XXXXr}
 % R1.2 BEGIN: Sample sizes and statistics are from the pre-deduplication cohort
 % (dataset_preeclampsia_cleaned.csv, 4245 records: 3571 normal / 674 PE).
 % This is what 02-explore-cleaned-data.ipynb computes. Caption updated to
 % clarify the cohort; tab:dataset-characteristics shows the final ML counts.
+% R2: p-value column added (Mann-Whitney U, two-sided; 05-statistical-tests-p-values.ipynb)
 \toprule
-Variable & Preeclampsia & Sample Size & Mean & Median & Std. Dev. \\
+Variable & Preeclampsia & Sample Size & Mean & Median & Std.\ Dev. & \added[id=R2]{$p$-value\textsuperscript{a}} \\
 \midrule
-AGE (YEARS) & No & 3571 & 18.71 & 18.00 & 4.13 \\
-          & Yes & 674  & 29.72 & 30.00 & 7.17 \\
+AGE (YEARS) & No & 3571 & 18.71 & 18.00 & 4.13 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
+          & Yes & 674  & 29.72 & 30.00 & 7.17 &  \\
 \midrule
-BMI       & No & 3571 & 25.71 & 25.19 & 4.39 \\
-          & Yes & 674  & 33.00 & 32.63 & 6.02 \\
+BMI       & No & 3571 & 25.71 & 25.19 & 4.39 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
+          & Yes & 674  & 33.00 & 32.63 & 6.02 &  \\
 \midrule
-GESTATIONAL  & No & 3571 & 27.55 & 27.70 & 7.76 \\
-WEEKS                   & Yes & 674  & 33.80 & 35.40 & 4.42 \\
+GESTATIONAL  & No & 3571 & 27.55 & 27.70 & 7.76 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
+WEEKS                   & Yes & 674  & 33.80 & 35.40 & 4.42 &  \\
 \midrule
-WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 \\
-          & Yes & 674  & 80.51 & 78.75 & 16.17 \\
+WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
+          & Yes & 674  & 80.51 & 78.75 & 16.17 &  \\
 \bottomrule
 \end{tabularx}
+\added[id=R2]{\noindent\footnotesize{\textsuperscript{a}Mann-Whitney $U$ test, two-sided; compares each variable between the preeclampsia and normal groups (computed from \texttt{05-statistical-tests-p-values.ipynb}).}}
 \label{tab:desc_stats}
 \end{table}
 % R1.2 END
@@ -941,36 +944,38 @@ WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 \\
 \caption{Distribution of pregnancies and preeclampsia prevalence
   across demographic concentration quartiles in women at \ac{HGOIA}
   from years 2022 to 2025.}
-\begin{tabularx}{\textwidth}{llXXp{2.cm}X}
+\begin{tabularx}{\textwidth}{llXXp{2.cm}Xr}
+% R2: p-value column added (Pearson chi-squared; 05-statistical-tests-p-values.ipynb)
 \toprule
-Variable & Bin (range) & Total pregnancies & Normal pregnancies & Preeclampsia pregnancies & Preeclampsia prevalence (\%) \\
+Variable & Bin (range) & Total pregnancies & Normal pregnancies & Preeclampsia pregnancies & Preeclampsia prevalence (\%) & \added[id=R2]{$p$-value\textsuperscript{b}} \\
 \midrule
-AGE         & (12.999, 17.0] & 1745 & 1704 & 41 & 2.35\% \\
-(YEARS)     & (17.0, 18.0]   & 690  & 670  & 20  & 2.90\% \\
-            & (18.0, 22.0]   & 797  & 735  & 62  & 7.78\% \\
-            & (22.0, 48.0]   & 1013 & 462  & 551 & 54.39\% \\
+AGE         & (12.999, 17.0] & 1745 & 1704 & 41 & 2.35\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
+(YEARS)     & (17.0, 18.0]   & 690  & 670  & 20  & 2.90\% &  \\
+            & (18.0, 22.0]   & 797  & 735  & 62  & 7.78\% &  \\
+            & (22.0, 48.0]   & 1013 & 462  & 551 & 54.39\% &  \\
 \midrule
-AGE GROUP   & 10–14 years    & 73   & 66   & 7   & 9.59\% \\
-            & 15–19 years    & 2877 & 2813 & 64  & 2.22\% \\
-            & 20–35 years    & 1100 & 663  & 437 & 39.73\% \\
-            & 36–49 years    & 195  & 29   & 166 & 85.13\% \\
+AGE GROUP   & 10–14 years    & 73   & 66   & 7   & 9.59\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
+            & 15–19 years    & 2877 & 2813 & 64  & 2.22\% &  \\
+            & 20–35 years    & 1100 & 663  & 437 & 39.73\% &  \\
+            & 36–49 years    & 195  & 29   & 166 & 85.13\% &  \\
 \midrule
-BMI         & (15.329, 23.18] & 1063 & 1041 & 22  & 2.07\% \\
-            & (23.18, 25.93]  & 1064 & 1014 & 50  & 4.70\% \\
-            & (25.93, 29.42]  & 1058 & 935  & 123 & 11.63\% \\
-            & (29.42, 73.46]  & 1060 & 581  & 479 & 45.19\% \\
+BMI         & (15.329, 23.18] & 1063 & 1041 & 22  & 2.07\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
+            & (23.18, 25.93]  & 1064 & 1014 & 50  & 4.70\% &  \\
+            & (25.93, 29.42]  & 1058 & 935  & 123 & 11.63\% &  \\
+            & (29.42, 73.46]  & 1060 & 581  & 479 & 45.19\% &  \\
 \midrule
-GESTATIONAL & (3.399, 26.0]   & 1066 & 1055 & 11  & 1.03\% \\
-WEEKS       & (26.0, 27.696]  & 1229 & 1062 & 167 & 13.59\% \\
-            & (27.696, 35.2]  & 904  & 760  & 144 & 15.93\% \\
-            & (35.2, 41.5]    & 1046 & 694  & 352 & 33.65\% \\
+GESTATIONAL & (3.399, 26.0]   & 1066 & 1055 & 11  & 1.03\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
+WEEKS       & (26.0, 27.696]  & 1229 & 1062 & 167 & 13.59\% &  \\
+            & (27.696, 35.2]  & 904  & 760  & 144 & 15.93\% &  \\
+            & (35.2, 41.5]    & 1046 & 694  & 352 & 33.65\% &  \\
 \midrule
-WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% \\
-            & (54.0, 61.5]    & 1043 & 1002 & 41  & 3.93\% \\
-            & (61.5, 71.5]    & 1064 & 937  & 127 & 11.94\% \\
-            & (71.5, 157.2]   & 1052 & 567  & 485 & 46.10\% \\
+WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
+            & (54.0, 61.5]    & 1043 & 1002 & 41  & 3.93\% &  \\
+            & (61.5, 71.5]    & 1064 & 937  & 127 & 11.94\% &  \\
+            & (71.5, 157.2]   & 1052 & 567  & 485 & 46.10\% &  \\
 \bottomrule
 \end{tabularx}
+\added[id=R2]{\noindent\footnotesize{\textsuperscript{b}Pearson chi-squared test of independence between variable bin and preeclampsia status (computed from \texttt{05-statistical-tests-p-values.ipynb}).}}
 \label{tab:variable_distribution}
 \end{table}
 
