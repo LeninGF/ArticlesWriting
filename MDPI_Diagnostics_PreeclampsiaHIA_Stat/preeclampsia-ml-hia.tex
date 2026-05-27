@@ -981,8 +981,8 @@ To complement the retrospective demographic dataset from \ac{HGOIA} and compensa
 limited availability of structured clinical variables, we generated a
 synthetic dataset designed to simulate clinical data profiles for
 pregnant patients with and without \ac{PE}. The generation process was
-implemented in Python using \texttt{NumPy} and \texttt{pandas}, with a
-fixed random seed for reproducibility.
+implemented in Python using \texttt{NumPy}~($\ge$~2.0.2) and
+\texttt{pandas}~($\ge$~2.3.1), with a fixed random seed for reproducibility.
 
 The algorithm generates $n=\numprint{2000}$ samples (default: $n=1000$) and first
 assigns each sample to one of two latent groups: \textit{Control}
@@ -1194,8 +1194,9 @@ SHAP-based explainability.\label{fig:training-framework}}
 \end{figure}
 
 \textbf{Cloud-managed training (Amazon SageMaker Canvas).}  Amazon
-SageMaker Canvas is a managed no-code machine-learning service that
-supports data ingestion, preprocessing, model training, and model
+SageMaker Canvas (Amazon Web Services, Inc., Seattle, WA, USA) is a
+managed no-code machine-learning service that supports data ingestion,
+preprocessing, model training, and model
 evaluation~\cite{aws_sagemaker_canvas_docs}.
 \added[id=R1]{Internally, Canvas relies on
   AutoGluon~\cite{agtabular2020} to manage the complete training
@@ -1245,7 +1246,8 @@ explores the hyperparameter space more efficiently at a fixed
 computational budget~\cite{bergstra2012random}. The complete search
 spaces are listed in Table~\ref{tab:hpo-search-spaces}.}
 
-The proposed methodology fits full \texttt{scikit-learn} pipelines with
+The proposed methodology fits full
+\texttt{scikit-learn}~($\ge$~1.6.1)~\cite{sklearn-api} pipelines with
 model-aware preprocessing (StandardScaler enabled for \ac{LR} and
 \ac{MLP}; disabled for tree-based models) and handles missing values
 using median imputation for numeric features and mode imputation for
@@ -2766,6 +2768,7 @@ Optional packages enable extended gradient-boosting model support:
     \item \texttt{xgboost} $\ge$ 2.1.4 — scalable gradient-boosted trees~\cite{chen2016xgboost}.
     \item \texttt{lightgbm} $\ge$ 4.6.0 — histogram-based gradient boosting with reduced memory footprint~\cite{ke2017lightgbm}.
     \item \texttt{catboost} $\ge$ 1.2.8 — gradient boosting with native handling of categorical features~\cite{prokhorenkova2018catboost}.
+    \item \texttt{shap} $\ge$ 0.49.0 — model-agnostic explainability via SHapley Additive exPlanations~\cite{lundberg2017shap}.
 \end{itemize}
 
 
@@ -2787,7 +2790,7 @@ models within the computing infrastructure of the \ac{EPN}. The system is curren
 \ac{MLOPs} refers to a set of practices that bring together machine
 learning development and software operations with the goal of
 deploying and maintaining models in production reliably and
-efficiently~\cite{mlflow_2018}. In this context, the \ac{MLOPs}
+efficiently using MLflow~\cite{mlflow_2018} ($\ge$~2.14.0). In this context, the \ac{MLOPs}
 cycle consists of four stages that repeat as new data becomes
 available: (i)~training, where the \ac{C-AutoML} workflow evaluates
 multiple model families and hyperparameter configurations;
