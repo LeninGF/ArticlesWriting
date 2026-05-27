@@ -890,6 +890,20 @@ whereas Table~\ref{tab:variable_distribution} shows the distribution
 of those variables organized in quartiles \ac{w.r.t.} the
 prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
 
+\added[id=R2]{The record-level \ac{PE} prevalence in the final \ac{ML} dataset
+is 16.11\% (671 of 4,165 records); at the patient level, 588 of the 2,344 unique
+patients (25.1\%) received a \ac{PE} diagnosis. Both figures substantially exceed
+the global pooled estimate of approximately 4.43\%~\cite{vera2025preeclampsia},
+reflecting that \ac{HGOIA} is a public hospital specialised in gynaecology and
+obstetrics in Quito and that Ecuador's public health system directs high-risk
+pregnancies toward specialised facilities under a tiered zonification model
+coordinated by the \ac{MSP}. This elevated base rate directly affects the reported
+performance metrics: precision and \ac{F1} are calibrated to the cohort prevalence
+and would be expected to decrease in lower-prevalence settings.
+Table~\ref{tab:desc_stats} and Table~\ref{tab:variable_distribution} provide
+inter-group comparisons of all model input variables between \ac{PE}-positive
+and \ac{PE}-negative groups, with statistical significance tests.}
+
 \begin{figure}[H]
   \begin{adjustwidth}{-\extralength}{0cm}
     \centering
@@ -933,7 +947,7 @@ WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 & \added[id=R2]{\multirow{2}{*}{$<
           & Yes & 674  & 80.51 & 78.75 & 16.17 &  \\
 \bottomrule
 \end{tabularx}
-\added[id=R2]{\noindent\footnotesize{\textsuperscript{a}Mann-Whitney $U$ test, two-sided; compares each variable between the preeclampsia and normal groups (computed from \texttt{05-statistical-tests-p-values.ipynb}).}}
+\added[id=R2]{\noindent\footnotesize{\textsuperscript{a}Mann-Whitney $U$ test, two-sided; compares each variable between the preeclampsia and normal groups.}}
 \label{tab:desc_stats}
 \end{table}
 % R1.2 END
@@ -975,7 +989,7 @@ WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% & \added[id=R2]{\mult
             & (71.5, 157.2]   & 1052 & 567  & 485 & 46.10\% &  \\
 \bottomrule
 \end{tabularx}
-\added[id=R2]{\noindent\footnotesize{\textsuperscript{b}Pearson chi-squared test of independence between variable bin and preeclampsia status (computed from \texttt{05-statistical-tests-p-values.ipynb}).}}
+\added[id=R2]{\noindent\footnotesize{\textsuperscript{b}Pearson chi-squared test of independence between variable bin and preeclampsia status.}}
 \label{tab:variable_distribution}
 \end{table}
 
@@ -2175,6 +2189,23 @@ the ideal performance of \ac{LR} on that dataset reflects the mathematical
 separability imposed by the parametric generation distributions, not
 necessarily clinical utility in a real population.}
 % R1.3 END
+
+% R2 BEGIN: chronic HTN selection + PE sub-categories
+\added[id=R2]{Regarding patient selection, the positive class was constructed
+exclusively from records matching ICD-10 codes O11, O13, O14, O15, and O16,
+as documented in Table~\ref{tab:cie10-icd10-mapping}. Patients with pre-existing
+chronic hypertension without superimposed preeclampsia (ICD-10 O10) were absent
+from both classes by design: the negative class consists solely of normal
+pregnancy supervision records (ICD-10 Z340, Z348, Z349). However, cases of
+superimposed preeclampsia on chronic hypertension (ICD-10 O11) are present in
+the positive class and represent a subgroup with a physiopathological background
+that partially differs from de~novo gestational preeclampsia; separate analysis
+of O11 cases is recommended as future work. Additionally, stratified analysis by
+\ac{PE} sub-category (early vs.\ late onset; moderate vs.\ severe) was not
+feasible with the available data, which records binary \ac{PE} diagnosis without
+severity grade or gestational age at onset; subgroup analysis constitutes a
+direction for future research.}
+% R2 END
 
 \section{Conclusion}
 \label{sec:conclusion}
