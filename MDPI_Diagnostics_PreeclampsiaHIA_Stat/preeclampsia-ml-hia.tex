@@ -195,8 +195,8 @@ $^{3}$ \quad Ministerio de Salud Pública, Quito, Ecuador; raysafuertesa@gmail.c
 %   develop a machine learning model to predict preeclampsia using
 %   demographic data from the Isidro Ayora Hospital (HGIO), Quito,
 %   Ecuador. We proposed a custom automated machine learning (C-AutoML)
-%   workflow to evaluate six models (Logistic Regression, \texttt{LightGBM},
-%   \texttt{XGBoost}, \texttt{CatBoost}, Multi-Layer Perceptron, and Random Forest) and
+%   workflow to evaluate six models (Logistic Regression, LightGBM,
+%   XGBoost, CatBoost, Multi-Layer Perceptron, and Random Forest) and
 %   compared its performance to a weighted ensemble built using AWS
 %   SageMaker Canvas, optimizing for the F1-score in both cases. Model
 %   interpretability was analyzed using \ac{SHAP}. Due to the scarcity
@@ -204,7 +204,7 @@ $^{3}$ \quad Ministerio de Salud Pública, Quito, Ecuador; raysafuertesa@gmail.c
 %   predictors was also generated and modeled. On the hospital dataset,
 %   the SageMaker ensemble achieved an F1-score of 0.805, accuracy of
 %   0.934, and AUC of 0.956, while the C-AutoML's best single model
-%   (\texttt{LightGBM}) achieved comparable results (F1-score: 0.802, accuracy:
+%   (LightGBM) achieved comparable results (F1-score: 0.802, accuracy:
 %   0.938, AUC: 0.944). \ac{SHAP} analysis identified patient age as the
 %   most influential feature. On the synthetic dataset, Logistic
 %   Regression achieved perfect performance (F1-score: 1.0). As a
@@ -223,9 +223,9 @@ $^{3}$ \quad Ministerio de Salud Pública, Quito, Ecuador; raysafuertesa@gmail.c
   (ML) framework to predict PE using demographic data from the Isidro
   Ayora Gynecology and Obstetrics Hospital (HGOIA), Quito, Ecuador.
   \textbf{Methods:} We proposed a Custom Automated Machine Learning
-  (C-AutoML) workflow to evaluate six models (\texttt{Logistic Regression},
-  \texttt{LightGBM}, \texttt{XGBoost}, \texttt{CatBoost}, \texttt{Multi-Layer
-  Perceptron}, and \texttt{Random Forest}) and compared its performance against
+  (C-AutoML) workflow to evaluate six models (Logistic Regression,
+  LightGBM, XGBoost, CatBoost, Multi-Layer
+  Perceptron, and Random Forest) and compared its performance against
   a weighted ensemble built with Amazon SageMaker Canvas, optimizing for
   the F1-score. Model interpretability was analyzed using Shapley
   Additive Explanations (SHAP). Due to the scarcity of clinical
@@ -233,7 +233,7 @@ $^{3}$ \quad Ministerio de Salud Pública, Quito, Ecuador; raysafuertesa@gmail.c
   was also generated and modeled.
   \textbf{Results:} On the hospital dataset, the SageMaker ensemble
   achieved an F1-score of 0.805, accuracy of 0.934, and AUC of 0.956,
-  while the C-AutoML best single model (\texttt{LightGBM}) yielded
+  while the C-AutoML best single model (LightGBM) yielded
   comparable results (F1-score: 0.802, accuracy: 0.938, AUC: 0.944).
   SHAP analysis identified patient age as the most influential
   feature. On the synthetic dataset, Logistic Regression achieved
@@ -478,9 +478,9 @@ models to diagnose \ac{PE} according to the Ecuadorian realm.
 
 In this work, we propose a custom automated machine learning workflow
 that explores up to 6 classification algorithms
-(\ac{LR}~\cite{cox1958logistic}, \texttt{LightGBM}~\cite{ke2017lightgbm},
-\texttt{XGBoost}~\cite{chen2016xgboost},
-\texttt{CatBoost}~\cite{prokhorenkova2018catboost},
+(\ac{LR}~\cite{cox1958logistic}, LightGBM~\cite{ke2017lightgbm},
+XGBoost~\cite{chen2016xgboost},
+CatBoost~\cite{prokhorenkova2018catboost},
 \ac{MLP}\cite{rumelhart1986backprop}, and
 \ac{RF}~\cite{breiman2001randomforest}) as candidate models for
 \ac{PE} diagnostic prediction. Amazon SageMaker was also used to
@@ -488,7 +488,7 @@ evaluate the predictive power of the demographic variables of the
 dataset of patients at \ac{HGOIA} and to train a reference
 classifier. To improve classification, given the imbalanced data, we
 target the \ac{F1} metric to balance sensitivity and precision. Our
-results show that an ensemble model formed by \texttt{LightGBM}, \ac{RF} and
+results show that an ensemble model formed by LightGBM, \ac{RF} and
 \ac{MLP} achieves \ac{F1} of 0.805, outperforming single-models. To
 provide interpretability for our model and avoid its use as a
 black-box, we employed \ac{SHAP} to quantify the contribution of each
@@ -545,9 +545,9 @@ smart bracelet and a mobile application to monitor the evolution of
 the physiological parameters. This showed potential to be used in
 hospitals as well as in remote monitoring of patients for early
 detection of the condition. Li et al.~\cite{LI2021102} explored
-\ac{LR}, \ac{RF}, \ac{SVM}, and \texttt{XGBoost} models to predict women at
+\ac{LR}, \ac{RF}, \ac{SVM}, and XGBoost models to predict women at
 risk of \ac{PE} from electronic health records collected in early
-pregnancy. The \texttt{XGBoost} model achieved the best performance
+pregnancy. The XGBoost model achieved the best performance
 ($\mathrm{ACC}=0.920$, $\mathrm{Precision}=0.447$, $\mathrm{Recall}=0.789$,
 $\mathrm{F1}=0.571$, $\mathrm{AUC}=0.955$) and showed that routinely available
 structured clinical variables combining maternal factors and
@@ -1109,8 +1109,8 @@ Appendix~\ref{app:c-automl}).
 \label{sec:model-families}
 
 We evaluated six supervised model families commonly used in binary
-classification, including Gradient Boosted Decision Trees (\texttt{XGBoost},
-\texttt{LightGBM}, and \texttt{CatBoost}), \ac{RF}, \ac{MLP}, and regularized
+classification, including Gradient Boosted Decision Trees (XGBoost,
+LightGBM, and CatBoost), \ac{RF}, \ac{MLP}, and regularized
 \ac{LR}.
 
 \begin{itemize}
@@ -1123,13 +1123,13 @@ classification, including Gradient Boosted Decision Trees (\texttt{XGBoost},
 \item \textbf{Multi-Layer Perceptrons (MLP):} a feed-forward
   model able to represent higher-order non-linear
   relationships~\cite{rumelhart1986backprop}.
-\item \textbf{\texttt{XGBoost}:} gradient-boosted decision trees with
+\item \textbf{XGBoost:} gradient-boosted decision trees with
   regularization and optimized implementation for strong predictive
   performance on structured data~\cite{chen2016xgboost}.
-\item \textbf{\texttt{LightGBM}:} a histogram-based gradient boosting framework
+\item \textbf{LightGBM:} a histogram-based gradient boosting framework
   designed for computational efficiency and scalability on large
   tabular datasets~\cite{ke2017lightgbm}.
-\item \textbf{\texttt{CatBoost}:} an ordered boosting method with native support
+\item \textbf{CatBoost:} an ordered boosting method with native support
   for categorical variables and reduced prediction
   shift~\cite{prokhorenkova2018catboost}.
 \end{itemize}
@@ -1501,7 +1501,7 @@ latter, we only used \ac{C-AutoML}.
 \label{sec:performance-c-automl}
 
 Our proposed methodology \ac{C-AutoML} achieved its best performance
-on model \texttt{LightGBM}, with an $\mathrm{F1}=0.802$,
+on model LightGBM, with an $\mathrm{F1}=0.802$,
 $\mathrm{Precision}=0.837$, $\mathrm{Recall}=0.768$, and
 $\mathrm{AUC}=0.944$, on Trial\#23,
 iteration\#4. Table~\ref{tab:cautoml-performance} presents the
@@ -1622,20 +1622,20 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 \begin{figure}[H]
 \begin{adjustwidth}{-\extralength}{0cm}
 \centering
-\subfloat[Normalized confusion matrix for the best \texttt{LightGBM} model
+\subfloat[Normalized confusion matrix for the best LightGBM model
   (C-AutoML).\label{fig:confusion-matrix-bestmodel-cautoml}]{
   \includegraphics[width=0.48\fulllength]{./figures/isidroayora_lightgbm_normalized_confusion_matrix.png}}
 \subfloat[Mean and standard deviation of feature importance in the
-  \texttt{LightGBM} prediction.\label{fig:feature-importance-lightgbm}]{
+  LightGBM prediction.\label{fig:feature-importance-lightgbm}]{
   \includegraphics[width=0.48\fulllength]{./figures/isidroayora_best_model_feature_effects_mean_std.png}}\\
-\subfloat[Precision--recall curve for the best \texttt{LightGBM}
+\subfloat[Precision--recall curve for the best LightGBM
   model.\label{fig:precision-recall-lightgbm}]{
   \includegraphics[width=0.48\fulllength]{./figures/isidroayora_lightgbm_precision_recall_curve.png}}
 \subfloat[F1-score comparison across best model per
   family.\label{fig:f1-score-models-isidro-ayora}]{
   \includegraphics[width=0.48\fulllength]{./figures/isidroayora_models_best_f1.png}}
 \end{adjustwidth}
-\caption{Performance analysis of the best C-AutoML model (\texttt{LightGBM},
+\caption{Performance analysis of the best C-AutoML model (LightGBM,
   Trial~23) on the \ac{HGOIA} dataset. (\textbf{a})
   Normalized confusion matrix. (\textbf{b}) Feature importance (mean
   $\pm$ std). (\textbf{c}) Precision--recall curve. (\textbf{d})
@@ -1648,7 +1648,7 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 
 Table~\ref{tab:canvas-model-performance} summarizes the performance of
 the different models evaluated in Amazon SageMaker Canvas. The best
-performance was achieved by the \texttt{Weighted Ensemble Model}.
+performance was achieved by the Weighted Ensemble Model.
 \added[id=R1]{Inspection of the downloaded model artifact confirmed
   that the ensemble comprised three base models selected with equal
   weights ($w_k = \tfrac{1}{3}$, Equation~\eqref{eq:ensemble-prediction}):
@@ -1656,10 +1656,10 @@ performance was achieved by the \texttt{Weighted Ensemble Model}.
   remaining seven Layer~1 candidates did not improve validation
   \ac{F1} and were excluded.} The ensemble achieved
 $\mathrm{F1}=0.805$, $\mathrm{Precision}=0.770$, $\mathrm{Recall}=0.844$, and
-$\mathrm{AUC}=0.956$. Compared to the \texttt{LightGBM} model trained with
+$\mathrm{AUC}=0.956$. Compared to the LightGBM model trained with
 our proposed \ac{C-AutoML}, the AWS model improves on the recall
 performance metric, reducing the number of false negatives. However,
-the precision of the \texttt{LightGBM} model implies a smaller
+the precision of the LightGBM model implies a smaller
 false-positive rate, which translates into fewer examinations.
 
 Figure~\ref{fig:combined-model-analysis-isidro-ayora-aws} presents
@@ -1937,7 +1937,7 @@ performance analysis.
 \label{sec:ensemble-model-xai}
 
 Figure~\ref{fig:canvas-shap-plots} presents the \ac{SHAP} analysis
-for the \texttt{Weighted Ensemble} model trained in Amazon SageMaker
+for the Weighted Ensemble model trained in Amazon SageMaker
 Canvas on the \ac{HGOIA} dataset, including a beeswarm
 summary plot (Figure~\ref{fig:canvas-beeswarm}) and a waterfall plot
 for the highest-impact instance (Figure~\ref{fig:canvas-waterfall}).
@@ -2085,32 +2085,32 @@ performance of up to 6 different machine learning models. Our approach
 aims to improve performance by exposing the models to different
 training and validation splits during each trial and also searches
 for the best hyperparameter configuration. The best model found corresponded
-to \texttt{LightGBM}. In parallel, we trained additional
+to LightGBM. In parallel, we trained additional
 machine learning models using Amazon SageMaker Canvas, which produced as
-best model a \texttt{Weighted Ensemble Model}. Finally, for the
+best model a Weighted Ensemble Model. Finally, for the
 clinical synthetic dataset, \ac{LR}, among other models, achieved
 ideal performance.
 
-Our results show that the \texttt{Weighted Ensemble Model} achieved
+Our results show that the Weighted Ensemble Model achieved
 the best performance for the \ac{HGOIA} dataset because it
 has the highest recall ($\mathrm{Recall}=0.844$), compared to that of
-\texttt{LightGBM} ($\mathrm{Recall}=0.768$). This is important,
+LightGBM ($\mathrm{Recall}=0.768$). This is important,
 because recall (sensitivity) measures the proportion of women with
 \ac{PE} that the model correctly identified. For a medical setting, it is necessary that the model has a
 high recall because that lowers the false negatives. As a matter of
-fact, the \texttt{Weighted Ensemble Model} loses 1 in 6 cases of
-\ac{PE}. On the other hand, the \texttt{LightGBM} trained with
+fact, the Weighted Ensemble Model loses 1 in 6 cases of
+\ac{PE}. On the other hand, the LightGBM trained with
 our proposed \ac{C-AutoML} approach has a higher precision
-($\mathrm{Precision}=0.837$) compared to the \texttt{Weighted Ensemble
-  model} ($\mathrm{Precision}=0.770$). This result is advantageous
+($\mathrm{Precision}=0.837$) compared to the Weighted Ensemble
+  model ($\mathrm{Precision}=0.770$). This result is advantageous
 because higher precision implies fewer false alarms. Consequently, it is
 recommended to combine both of these models for prediction at the
 health facility.
 
 \replaced[id=R1]{For the synthetic dataset, all six evaluated model
 families achieve near-perfect performance ($\mathrm{F1}\geq 0.988$),
-with \ac{LR}, \ac{RF}, \ac{MLP}, \texttt{XGBoost}, \texttt{LightGBM},
-and \texttt{CatBoost} all reaching $\mathrm{F1}=1.000$ in the first
+with \ac{LR}, \ac{RF}, \ac{MLP}, XGBoost, LightGBM,
+and CatBoost all reaching $\mathrm{F1}=1.000$ in the first
 three iterations. This universally high performance is a deliberate
 design consequence: diagnostic labels are assigned by a deterministic
 rule (Equation~\eqref{eq:preeclampsia-msp-rule}) applied to the same
@@ -2183,23 +2183,23 @@ medical application because it measures the proportion of true
 former accounts for the cost of false alarms. We prioritize recall
 because it emphasizes minimizing missed diagnoses.
 
-\texttt{LightGBM} achieved the best performance \ac{w.r.t.} the
+LightGBM achieved the best performance \ac{w.r.t.} the
 \ac{F1} metric using our proposed \ac{C-AutoML} workflow, with a
 $\mathrm{F1}=0.802$, $\mathrm{Recall}=0.768$, and
 $\mathrm{Precision}=0.837$. This means that 77\% of true \ac{PE}
 cases were correctly detected by the model. Consequently, this model
 misses 1 out of 4 true \ac{PE} cases. On the other hand, the
-\texttt{Weighted Ensemble} model trained in Amazon SageMaker Canvas achieved an
+Weighted Ensemble model trained in Amazon SageMaker Canvas achieved an
 $\mathrm{F1}=0.805$, $\mathrm{Precision}=0.770$, and
 $\mathrm{Recall}=0.844$. Therefore, 84\% of true \ac{PE} cases
 were correctly detected by the ensemble model and misses 1 out of 6
 true \ac{PE} cases. This improvement over our single model is due
 to the ensemble model. We suggest a combination of both models
 to aid physicians in their decision-making when diagnosing \ac{PE},
-given that the \texttt{Weighted Ensemble} model provides a
+given that the Weighted Ensemble model provides a
 recall greater than 0.80, which can be considered clinically
 reasonable if used alongside clinical judgment, and that
-\texttt{LightGBM} achieves an improved precision that can reduce false
+LightGBM achieves an improved precision that can reduce false
 positives and improve resource utilization. 
 
 We look forward to improving our results in the near future, if
