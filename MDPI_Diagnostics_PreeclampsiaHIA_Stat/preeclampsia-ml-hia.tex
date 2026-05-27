@@ -593,6 +593,19 @@ performance, but also on the practical transition path toward local,
 interpretable \ac{PE} modeling in an operational public-hospital
 environment.
 
+\added[id=R2]{Several recent studies have further narrowed the
+comparison to tree-based ensembles operating on demographic and
+routinely collected clinical variables, reporting AUC values in the
+0.80--0.96 range depending on predictor
+availability~\cite{liu_pregnancy_trajectories_2022,zeng_preeclampsia_ml_china_2024,advancing_ml_preeclampsia_2025,bias_free_severe_pe_2024}.
+A 2026 systematic review confirms that performance heterogeneity
+across studies is largely driven by differences in predictor sets
+and population characteristics, supporting comparisons restricted
+to works with broadly similar frameworks and variable
+types~\cite{jmijr_ml_pe_review_2026}.
+Table~\ref{tab:ml_pe_comparison} in the Discussion provides a
+structured comparison of our results against these studies.}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Materials and Methods}
 
@@ -821,11 +834,12 @@ Unknown type features & 0 \\
 \end{tabularx}
 \end{table}
 
+
 \begin{figure}[H]
   % \centering
   \begin{adjustwidth}{-\extralength}{0cm}
     \centering
-    \includegraphics[width=\textwidth, height=.4\textheight]{figures/Aws-Wrangler-Operations.png}
+    \includegraphics[width=\textwidth, height=.4\textheight]{./figures/Aws-Wrangler-Operations.png}    %  figures/AWS-WRANGLER-OPS-600-DPI.png
   \end{adjustwidth}
   \caption{\label{fig:aws-wrangler}Data Wrangler is used to assess the
     quality of data before training the machine learning model. Low
@@ -2161,6 +2175,62 @@ the variables of each dataset for prediction. For the \ac{HGOIA} dataset, the mo
 gestational age, and \ac{BMI}. On the other hand, for the generated
 synthetic data, systolic blood pressure, platelet count and 24-hour
 proteinuria lead the impact on model's prediction.
+
+% R2 BEGIN: comparison with similar-framework studies
+\added[id=R2]{\textbf{Comparison with similar frameworks.}
+Table~\ref{tab:ml_pe_comparison} situates our results among studies
+that employ comparable model families and predictor types.
+Despite using only four demographic variables, our best models achieve
+discrimination metrics (AUC~0.944--0.956, F1~0.802--0.805) that fall
+within the range reported for tree-based ensembles operating on richer
+predictor sets~\cite{LI2021102,liu_pregnancy_trajectories_2022,zeng_preeclampsia_ml_china_2024,advancing_ml_preeclampsia_2025}.
+Direct numerical ranking across studies is discouraged by the
+substantial heterogeneity in populations, predictor availability, and
+outcome definitions documented in recent systematic
+reviews~\cite{Darsareh2024,Rahman2023,jmijr_ml_pe_review_2026};
+the comparison in Table~\ref{tab:ml_pe_comparison} is therefore
+intended to contextualise rather than rank performance.}
+
+\begin{table}[H]
+  \small
+  \centering
+  \caption{\added[id=R2]{Comparison of selected machine learning
+    studies for preeclampsia prediction using tabular demographic
+    and clinical data.}\label{tab:ml_pe_comparison}}
+  \begin{adjustwidth}{-\extralength}{0cm}
+  \begin{tabularx}{\fulllength}{p{2.5cm}p{3.5cm}p{3.8cm}p{3.2cm}}
+    \toprule
+    \textbf{Study} & \textbf{Population / data source} & \textbf{Main predictors} & \textbf{Best model and performance} \\
+    \midrule
+    Li et al.\ (2021)~\cite{LI2021102} &
+    3,759 pregnancies, EHR from a tertiary hospital in China &
+    38 routine clinical parameters at early second trimester (incl.\ fasting plasma glucose, mean blood pressure, BMI) &
+    XGBoost; AUC~0.955, accuracy~0.920 (F1~0.571) \\
+    \addlinespace
+    Liu et al.\ (2022)~\cite{liu_pregnancy_trajectories_2022} &
+    EMR-based cohort with longitudinal pregnancy data &
+    Repeated measures of vital signs and laboratory values across gestation &
+    Ensemble ML on trajectories; AUC ${>}\,0.90$ for late-gestation PE \\
+    \addlinespace
+    Zeng et al.\ (2024)~\cite{zeng_preeclampsia_ml_china_2024} &
+    Population-based Chinese cohort &
+    Maternal characteristics and first-trimester biomarkers (e.g., PLGF, PAPP-A) &
+    Ensemble ML; AUC~0.80--0.86 \\
+    \addlinespace
+    Advancing ML tools (2025)~\cite{advancing_ml_preeclampsia_2025} &
+    Hospital-based cohort &
+    Demographic and clinical variables (incl.\ blood pressure and laboratory markers) &
+    CatBoost, LightGBM, XGBoost, RF; accuracy~0.90, AUC ${>}\,0.90$ \\
+    \addlinespace
+    \textbf{This study (HGOIA)} &
+    \textbf{4,165 pregnancies, public hospital in Ecuador} &
+    \textbf{Four demographic variables (age, gestational age, BMI, weight)} &
+    \textbf{LightGBM (C-AutoML): F1~0.802, AUC~0.944; Weighted Ensemble (Canvas): F1~0.805, AUC~0.956} \\
+    \bottomrule
+  \end{tabularx}
+  \end{adjustwidth}
+\end{table}
+% R2 END
 
 % R1.3 BEGIN: Limitations paragraph added per Reviewer 1 (Discussion: "Expand
 % discussion on use of demographic-only dataset, single-center study design,
