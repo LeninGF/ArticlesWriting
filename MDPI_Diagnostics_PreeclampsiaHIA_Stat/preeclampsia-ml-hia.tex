@@ -2178,18 +2178,19 @@ proteinuria lead the impact on model's prediction.
 
 % R2 BEGIN: comparison with similar-framework studies
 \added[id=R2]{\textbf{Comparison with similar frameworks.}
-Table~\ref{tab:ml_pe_comparison} situates our results among studies
-that employ comparable model families and predictor types.
-Despite using only four demographic variables, our best models achieve
-discrimination metrics (AUC~0.944--0.956, F1~0.802--0.805) that fall
-within the range reported for tree-based ensembles operating on richer
-predictor sets~\cite{LI2021102,liu_pregnancy_trajectories_2022,zeng_preeclampsia_ml_china_2024,advancing_ml_preeclampsia_2025}.
-Direct numerical ranking across studies is discouraged by the
-substantial heterogeneity in populations, predictor availability, and
-outcome definitions documented in recent systematic
-reviews~\cite{Darsareh2024,Rahman2023,jmijr_ml_pe_review_2026};
-the comparison in Table~\ref{tab:ml_pe_comparison} is therefore
-intended to contextualise rather than rank performance.}
+  Table~\ref{tab:ml_pe_comparison} situates our results among studies
+  that employ comparable model families and predictor types.  Despite
+  using only four demographic variables, our best models achieve
+  discrimination metrics (AUC~0.944--0.956, F1~0.802--0.805) that fall
+  within the range reported for tree-based ensembles operating on
+  richer predictor
+  sets~\cite{LI2021102,liu_pregnancy_trajectories_2022,zeng_preeclampsia_ml_china_2024,advancing_ml_preeclampsia_2025}.
+  Direct numerical ranking across studies is discouraged by the
+  substantial heterogeneity in populations, predictor availability,
+  and outcome definitions documented in recent systematic
+  reviews~\cite{Darsareh2024,Rahman2023,jmijr_ml_pe_review_2026}. Consequently,
+  the comparison in Table~\ref{tab:ml_pe_comparison} is intended to
+  contextualise rather than rank performance.}
 
 \begin{table}[H]
   \small
@@ -2198,7 +2199,7 @@ intended to contextualise rather than rank performance.}
     studies for preeclampsia prediction using tabular demographic
     and clinical data.}\label{tab:ml_pe_comparison}}
   \begin{adjustwidth}{-\extralength}{0cm}
-  \begin{tabularx}{\fulllength}{p{2.5cm}p{3.5cm}p{3.8cm}p{3.2cm}}
+  \begin{tabularx}{\fulllength}{p{2.5cm}p{3.5cm}p{4.0cm}X} %p{3.8cm}p{3.2cm}
     \toprule
     \textbf{Study} & \textbf{Population / data source} & \textbf{Main predictors} & \textbf{Best model and performance} \\
     \midrule
