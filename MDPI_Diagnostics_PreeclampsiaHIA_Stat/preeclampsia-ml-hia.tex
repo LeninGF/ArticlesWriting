@@ -88,6 +88,7 @@
 \usepackage[markup=underlined,addedmarkup=colored,deletedmarkup=sout]{changes}
 \definechangesauthor[name={Reviewer~1},color=blue]{R1}
 \definechangesauthor[name={Reviewer~2},color=teal]{R2}
+\definechangesauthor[name={Reviewers~1\&2},color=violet]{R12}
 %=================================================================
 % Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
@@ -468,12 +469,11 @@ research, we used the provided records from the
   Quito, Ecuador.}, which contains demographic variables and lacks
 clinical features. For this reason, we explored our sets of models
 both on the \ac{HGOIA} and synthetic datasets to diagnose
-\ac{PE}. \added[id=R1]{The synthetic dataset was constructed using
-the full\ac{PIERS} equation~\eqref{eq:fullpiers-logit} as the
-reference framework: feature distributions were defined according to
-the clinical variables in that model, and outcome labels were derived
-from the FullPIERS predicted risk scores
-(Section~\ref{sec:synth-data-gener}).} Unlike the full\ac{PIERS} standard, which is a
+\ac{PE}. \added[id=R1]{The synthetic dataset was constructed using the
+full\ac{PIERS} equation~\eqref{eq:fullpiers-logit} as the
+reference framework for feature distributions and the
+\ac{MSP} clinical guideline~\cite{msp_ecuador_hdp_2013} for
+the diagnostic label (Section~\ref{sec:synth-data-gener}).} Unlike the full\ac{PIERS} standard, which is a
 prognostic model, our goal is to determine the most effective set of
 models to diagnose \ac{PE} according to the Ecuadorian realm.
 
@@ -593,19 +593,6 @@ performance, but also on the practical transition path toward local,
 interpretable \ac{PE} modeling in an operational public-hospital
 environment.
 
-\added[id=R2]{Several recent studies have further narrowed the
-comparison to tree-based ensembles operating on demographic and
-routinely collected clinical variables, reporting AUC values in the
-0.80--0.96 range depending on predictor
-availability~\cite{liu_pregnancy_trajectories_2022,zeng_preeclampsia_ml_china_2024,advancing_ml_preeclampsia_2025,bias_free_severe_pe_2024}.
-A 2026 systematic review confirms that performance heterogeneity
-across studies is largely driven by differences in predictor sets
-and population characteristics, supporting comparisons restricted
-to works with broadly similar frameworks and variable
-types~\cite{jmijr_ml_pe_review_2026}.
-Table~\ref{tab:ml_pe_comparison} in the Discussion provides a
-structured comparison of our results against these studies.}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Materials and Methods}
 
@@ -630,7 +617,7 @@ In this section, we describe our methodological approach to diagnose
   Hospital \ac{HGOIA}. We restricted our
 prediction to diagnosis due to the limitations of the provided
 data. Our research problem is stated in
-\eqref{eq:preeclampsiaClassification}, where given a feature vector
+Equation~\eqref{eq:preeclampsiaClassification}, where given a feature vector
 $\mathbf{x} \in \mathbb{R}^d$ representing  attributes of a
 pregnant woman, the probability that a patient has \ac{PE} is modeled
 as:
@@ -717,7 +704,7 @@ the complete workflow.
 
 \item \textbf{Target encoding:} A binary outcome variable was created
   by assigning a value of 1 to records with \ac{ICD-10} codes
-  beginning with \texttt{O} and 0 to records with codes beginning with
+  beginning with O and 0 to records with codes beginning with
   \texttt{Z}. This resulted in a total of \numprint{3571} normal
   pregnancies and \numprint{674} \ac{PE} cases, as summarized in
   Table~\ref{tab:cie10-icd10-mapping}.
@@ -737,7 +724,9 @@ the complete workflow.
   \numprint{4165} records and 5 variables (including the target,
   \texttt{PREECLAMPSIA}). These variables are: maternal age (years),
   gestational age (weeks), \ac{BMI} ($\text{kg}/\text{m}^2$), and
-  weight (kg).
+  weight (kg). \added[id=R1]{Table~\ref{tab:dataset-characteristics}
+    presents a summary of the \ac{HGOIA} dataset characteristics at
+    each stage of the preprocessing pipeline.}
 \end{itemize}
 
 \begin{figure}[H]
@@ -851,9 +840,6 @@ Unknown type features & 0 \\
 % Added per Reviewer 1 comment (Materials and Methods): "Add table with dataset
 % characteristics: number of patients, class distribution, missing data rate
 % and handling."  All figures verified against code/verify_patient_split.py.
-\added[id=R1]{Table~\ref{tab:dataset-characteristics} presents a summary of
-  the \ac{HGOIA} dataset characteristics at each stage of the preprocessing
-  pipeline.}
 
 \begin{table}[H]
   \small
@@ -894,8 +880,9 @@ Unknown type features & 0 \\
 \label{sec:stat-char-data}
 We analyzed the prevalence of \ac{PE} among the population
 of pregnancies at the dataset provided by \ac{HGOIA}. Some
-of the important insights are that \ac{PE} prevalence rises
-strongly with the patient's age: 85.13\%. Women diagnosed
+of the important insights are that \ac{PE} prevalence rises strongly
+with age, reaching 85.13\% in the 36--49 year group
+(Table~\ref{tab:variable_distribution}). Women diagnosed
 with \ac{PE} have a mean \ac{BMI} of 33. Normal pregnancies
 have a mean \ac{BMI} of 25.71. These results are summarized in
 Figure~\ref{fig:statistics}. Table~\ref{tab:desc_stats} presents
@@ -904,19 +891,36 @@ whereas Table~\ref{tab:variable_distribution} shows the distribution
 of those variables organized in quartiles \ac{w.r.t.} the
 prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
 
-\added[id=R2]{The record-level \ac{PE} prevalence in the final \ac{ML} dataset
-is 16.11\% (671 of 4,165 records); at the patient level, 588 of the 2,344 unique
-patients (25.1\%) received a \ac{PE} diagnosis. Both figures substantially exceed
-the global pooled estimate of approximately 4.43\%~\cite{vera2025preeclampsia},
-reflecting that \ac{HGOIA} is a public hospital specialised in gynaecology and
-obstetrics in Quito and that Ecuador's public health system directs high-risk
-pregnancies toward specialised facilities under a tiered zonification model
-coordinated by the \ac{MSP}. This elevated base rate directly affects the reported
-performance metrics: precision and \ac{F1} are calibrated to the cohort prevalence
-and would be expected to decrease in lower-prevalence settings.
-Table~\ref{tab:desc_stats} and Table~\ref{tab:variable_distribution} provide
-inter-group comparisons of all model input variables between \ac{PE}-positive
-and \ac{PE}-negative groups, with statistical significance tests.}
+% \added[id=R2]{The record-level \ac{PE} prevalence in the final \ac{ML} dataset
+% is 16.11\% (671 of 4,165 records); at the patient level, 588 of the 2,344 unique
+% patients (25.1\%) received a \ac{PE} diagnosis. Both figures substantially exceed
+% the global pooled estimate of approximately 4.43\%~\cite{vera2025preeclampsia},
+% reflecting that \ac{HGOIA} is a public hospital specialised in gynaecology and
+% obstetrics in Quito and that Ecuador's public health system directs high-risk
+% pregnancies toward specialised facilities under a tiered zonification model
+% coordinated by the \ac{MSP}. This elevated base rate directly affects the reported
+% performance metrics: precision and \ac{F1} are calibrated to the cohort prevalence
+% and would be expected to decrease in lower-prevalence settings.
+% Table~\ref{tab:desc_stats} and Table~\ref{tab:variable_distribution} provide
+% inter-group comparisons of all model input variables between \ac{PE}-positive
+% and \ac{PE}-negative groups, with statistical significance tests.}
+\added[id=R2]{The record-level prevalence of \ac{PE} in the final
+  dataset is 16.11\% (671 of 4,165 records), exceeding the global
+  pooled estimate of 4.43\%~\cite{vera2025preeclampsia}. This
+  reflects two factors: the dataset was constructed from a
+  case-enriched selection of \ac{ICD-10} codes
+  (Section~\ref{sec:data-preprocessing}) rather than the full
+  obstetric population, and \ac{HGOIA} is a specialized referral
+  centre that receives high-risk pregnancies directed by the
+  \ac{MSP}. As a result, the reported precision and \ac{F1} are
+  calibrated to this cohort prevalence and would decrease in
+  lower-prevalence settings. Table~\ref{tab:desc_stats} and
+  Table~\ref{tab:variable_distribution} provide inter-group
+  comparisons of all model input variables between \ac{PE}-positive
+  and \ac{PE}-negative groups; all four predictors show highly
+  significant differences (Mann-Whitney $U$ and Pearson
+  $\chi^2$, $p < 0.001$ for all variables), confirming their
+  discriminative value within this cohort.}
 
 \begin{figure}[H]
   \begin{adjustwidth}{-\extralength}{0cm}
@@ -1047,7 +1051,7 @@ Let \(\mathrm{HTN}=(\mathrm{SBP}\geq 140)\lor(\mathrm{DBP}\geq 90)\),
 
 \begin{linenomath}
 \begin{equation}
-\mathrm{PE}=1
+\mathrm{PE}_{\mathrm{MSP}}=1
 \iff
 (\mathrm{GA_{wk}}\geq 20)\land \mathrm{HTN}
 \land (\mathrm{Prot}\lor \mathrm{TCP}\lor \mathrm{Renal}\lor \mathrm{Hep}).
@@ -1063,45 +1067,59 @@ $\mathrm{Plt}$, \ac{AST}, $\mathrm{Cr}$, and their interaction terms,
 and then transforms it into a probability according
 to~\eqref{eq:logistic-regression} and~\eqref{eq:fullpiers-logit}.
 The final synthetic dataset therefore contains both a rule-based
-diagnostic outcome ($\mathrm{PE}$, defined in
+diagnostic outcome ($\mathrm{PE}_{\mathrm{MSP}}$, defined in
 Equation~\eqref{eq:preeclampsia-msp-rule}) and a continuous prognostic
-risk estimate ($\mathrm{PE_{FullPIERS}}$ [\%]), enabling exploratory
+risk estimate ($\mathrm{PE}_{\mathrm{FullPIERS}}$ [\%]), enabling exploratory
 modeling and explainability analyses under clinically informed
 constraints.
 
-\added[id=R1]{The FullPIERS prognostic score was converted to a binary label
-($\mathrm{Preeclampsia\_FullPIERS\_Label}$) using a risk threshold of
-10\% rather than the logistic default of 50\%. In clinical screening
-and triage contexts the adverse-outcome event is relatively uncommon;
-consequently, few patients reach a 50\% predicted probability on the
-FullPIERS scale, which would result in very low sensitivity if the default
-threshold were applied~\cite{fullpiers_2011}. A 10\% threshold captures
-substantially more true high-risk pregnancies while accepting a higher
-false-positive rate, consistent with the screening objective of this
-component of the study. Empirical validation studies have reported
-optimal thresholds ranging from approximately 2\% to 6\% in different
-populations~\cite{long2025fullpiers,teichmann2025fullpiers,elongi2025fullpiers},
-further supporting the use of a sub-10\% cut-off for screening purposes.
-The primary classification target used for model training and evaluation
-is the rule-based label $\mathrm{Preeclampsia\_MSP}$
-(Equation~\eqref{eq:preeclampsia-msp-rule}); the FullPIERS-derived
-binary label serves as a secondary prognostic reference for exploratory
-analyses. The random seed was fixed at $\mathtt{42}$ to ensure full
-reproducibility of the generation procedure.}
+\added[id=R12]{Although the $\mathrm{PE}_{\mathrm{FullPIERS}}$ score was used to
+obtain an exploratory binary label with a threshold of $10\%$, empirical
+validation studies have reported optimal cut-offs between $2\%\text{–}6\%$
+in different populations~\cite{long2025fullpiers,teichmann2025fullpiers,elongi2025fullpiers}.
+For the diagnostic task on the synthetic dataset, however, the primary
+classification target for model training and evaluation is the rule-based
+label $\mathrm{PE}_{\mathrm{MSP}}$ defined in~\eqref{eq:preeclampsia-msp-rule},
+which does not depend on SpO$_2$ or chest pain. Both variables are
+nonetheless retained in the synthetic dataset because they are validated
+independent predictors of adverse maternal outcomes in women with
+established preeclampsia~\cite{millman2011spo2,elongi2025fullpiers}.}
 
-\added[id=R2]{The features in this synthetic dataset are algorithmically
-generated from the parametric distributions specified in
-Table~\ref{tab:distributions} and were not measured in clinical
-practice; they do not form part of the \ac{HGOIA} retrospective records,
-which contain only demographic variables (age, weight, \ac{BMI}, and
-gestational age in weeks). The inclusion of SpO$_2$ and chest pain
-reflects their standing as validated independent predictors of adverse
-maternal outcomes in preeclampsia: SpO$_2$ values at or below 93\%
-carry an 18-fold increase in risk of severe complications within 48\,h
-of hospital admission~\cite{millman2011spo2}, a finding confirmed in
-recent independent cohorts~\cite{elongi2025fullpiers}, and both
-variables are explicit components of the FullPIERS prognostic equation
-(Equation~\eqref{eq:fullpiers-logit}; \cite{fullpiers_2011}).}
+% \added[id=R1]{The FullPIERS prognostic score was converted to a binary
+%   label using a risk threshold of 10\% rather than the logistic
+%   default of 50\%. In clinical screening and triage contexts the
+%   adverse-outcome event is relatively uncommon. Consequently, few
+%   patients reach a 50\% predicted probability on the FullPIERS scale,
+%   which would result in very low sensitivity if the default threshold
+%   were applied~\cite{fullpiers_2011}. A 10\% threshold captures
+%   substantially more true high-risk pregnancies while accepting a
+%   higher false-positive rate, consistent with the screening objective
+%   of this component of the study. Empirical validation studies have
+%   reported optimal thresholds ranging from approximately 2\% to 6\% in
+%   different
+%   populations~\cite{long2025fullpiers,teichmann2025fullpiers,elongi2025fullpiers},
+%   further supporting the use of a sub-10\% cut-off for screening
+%   purposes.  The primary classification target used for model training
+%   and evaluation is the rule-based label $\mathrm{Preeclampsia\_MSP}$
+%   (Equation~\eqref{eq:preeclampsia-msp-rule}); the FullPIERS-derived
+%   binary label serves as a secondary prognostic reference for
+%   exploratory analyses. The random seed was fixed at $\mathtt{42}$ to
+%   ensure full reproducibility of the generation procedure.}
+
+% \added[id=R2]{The features in this synthetic dataset are algorithmically
+% generated from the parametric distributions specified in
+% Table~\ref{tab:distributions} and were not measured in clinical
+% practice; they do not form part of the \ac{HGOIA} retrospective records,
+% which contain only demographic variables (age, weight, \ac{BMI}, and
+% gestational age in weeks). The inclusion of SpO$_2$ and chest pain
+% reflects their standing as validated independent predictors of adverse
+% maternal outcomes in preeclampsia: SpO$_2$ values at or below 93\%
+% carry an 18-fold increase in risk of severe complications within 48\,h
+% of hospital admission~\cite{millman2011spo2}, a finding confirmed in
+% recent independent cohorts~\cite{elongi2025fullpiers}, and both
+% variables are explicit components of the FullPIERS prognostic equation
+% (Equation~\eqref{eq:fullpiers-logit}; \cite{fullpiers_2011}).}
+
 
 \begin{table}[H]
   \small
@@ -1794,7 +1812,15 @@ iteration\#1. Table~\ref{tab:cautoml-synthetic-performance} presents
 the complete performance of the different trials for each of the
 proposed models and iterations. It should be noted that more than one
 model achieves a similar performance score as \ac{LR} for the
-synthetic data.
+synthetic data. \added[id=R1]{This is structurally expected: the diagnostic
+label $\mathrm{PE}_{\mathrm{MSP}}$ is assigned by the deterministic
+threshold rule in Equation~\eqref{eq:preeclampsia-msp-rule}, which
+applies linear inequality conditions to the same features used as model
+inputs, producing linearly separable class boundaries that any of the
+evaluated classifiers can recover. The consistently near-perfect
+scores therefore confirm that the parametric distributions in
+Table~\ref{tab:distributions} are sufficiently separated with respect to
+the \ac{MSP} rule, validating the generation process itself.}
 
 Figure~\ref{fig:combined-model-analysis-synthetic} presents the
 performance of the \ac{LR} model according with the normalized
@@ -1806,28 +1832,8 @@ of the \ac{F1} among the trained
 models(Fig.~\ref{fig:f1-score-models-lr-synthetic}). The
 feature-effects plot indicates that systolic blood pressure, platelet
 count, 24-hour proteinuria, and AST were the dominant contributors in
-the selected \ac{LR} model; which is coherent with the
-clinical rule used to generate the synthetic labels. Therefore, the
-perfect performance should be interpreted as an expected consequence
-of the controlled synthetic data-generation process rather than as
-evidence of equivalent performance in prospective clinical deployment.
-
-\added[id=R1]{Inspection of Table~\ref{tab:cautoml-synthetic-performance}
-reveals that this behavior is not exclusive to \ac{LR}: \emph{all} six
-model families achieve $\mathrm{F1}=1.000$ in iterations 1--3, and all
-obtain scores of at least $\mathrm{F1}=0.988$ across the five iterations.
-This is structurally expected. The diagnostic label
-$\mathrm{Preeclampsia\_MSP}$ is assigned by the deterministic threshold
-rule in Equation~\eqref{eq:preeclampsia-msp-rule}, which applies linear
-inequality conditions to the same features used as model inputs. Such
-threshold conditions produce linearly separable class boundaries in the
-feature space, which even the simplest linear classifier (\ac{LR}) can
-recover exactly on data drawn from the same generating distributions.
-This result therefore does not indicate overfitting; rather, it is a
-built-in sanity check: the consistently near-perfect scores confirm that
-the parametric distributions in Table~\ref{tab:distributions} are
-sufficiently separated with respect to the \ac{MSP} rule, validating
-the generation process itself.}
+the selected \ac{LR} model, which is coherent with the
+clinical rule used to generate the synthetic labels.
 
 {\small
 \begin{longtable}{>{\centering\arraybackslash}p{0.5cm}
@@ -2118,7 +2124,7 @@ rule-based labels used during synthetic data generation.
 In this study, we explored different models and approaches to train a
 robust model for the prediction of \ac{PE}. To this end, we
 used the data provided by the Isidro Ayora Gynecology and Obstetrics
-Hospital \ac{HGOIA}. However, the digital records are predominantly
+Hospital (\ac{HGOIA}). However, the digital records are predominantly
 demographic. For this reason, we generated a synthetic dataset using
 variables commonly found in \ac{PIERS}.
 
@@ -2151,24 +2157,27 @@ recommended to combine both of these models for prediction at the
 health facility.
 
 \replaced[id=R1]{For the synthetic dataset, all six evaluated model
-families achieve near-perfect performance ($\mathrm{F1}\geq 0.988$),
-with \ac{LR}, \ac{RF}, \ac{MLP}, XGBoost, LightGBM,
-and CatBoost all reaching $\mathrm{F1}=1.000$ in the first
-three iterations. This universally high performance is a deliberate
-design consequence: diagnostic labels are assigned by a deterministic
-rule (Equation~\eqref{eq:preeclampsia-msp-rule}) applied to the same
-features used as model inputs, creating linearly separable class
-boundaries that any of the evaluated classifiers can recover. The
-synthetic track serves as a controlled feasibility experiment that
-confirms the \ac{C-AutoML} pipeline operates correctly on data with a
-known ground truth; it does not constitute a clinical performance claim. Notably, the inclusion of SpO$_2$, chest pain,
-platelet count, creatinine, and \ac{AST} in the synthetic track is
-grounded in the published FullPIERS equation
-(Equation~\eqref{eq:fullpiers-logit}), which uses precisely these
-variables as predictors~\cite{fullpiers_2011}.}{For the synthetic
-dataset, our results show an ideal performance due to the controlled
-synthetic data generation. Nevertheless, the results identify \ac{LR}
-as a suitable model for a \ac{PIERS} application.}
+  families achieve near-perfect performance ($\mathrm{F1}\geq 0.988$),
+  with \ac{LR}, \ac{RF}, \ac{MLP}, XGBoost, LightGBM, and CatBoost all
+  reaching $\mathrm{F1}=1.000$ in the first three iterations. This
+  high performance is a design consequence: diagnostic labels are
+  assigned by a deterministic rule
+  (Equation~\eqref{eq:preeclampsia-msp-rule}) applied to the same
+  features used as model inputs, creating linearly separable class
+  boundaries. The synthetic track serves as a controlled feasibility
+  experiment that confirms the \ac{C-AutoML} pipeline operates
+  correctly on data with a known ground truth to predict \ac{PE}; it
+  does not constitute a clinical performance claim. Notably, the
+  inclusion of SpO$_2$, chest pain, platelet count, creatinine, and
+  \ac{AST} in the synthetic track is grounded in the published
+  FullPIERS equation (Equation~\eqref{eq:fullpiers-logit}), which uses
+  precisely these variables as
+  predictors~\cite{fullpiers_2011}. However, it must be noticed that
+  the purpose of ~\eqref{eq:fullpiers-logit} is to predict adverse
+  outcomes of \ac{PE}, which differs from our main purpose.}{For
+  the synthetic dataset, our results show an ideal performance due to
+  the controlled synthetic data generation. Nevertheless, the results
+  identify \ac{LR} as a suitable model for a \ac{PIERS} application.}
 
 The interpretability analysis shows the feature importance of
 the variables of each dataset for prediction. For the \ac{HGOIA} dataset, the most important features are: patient's age,
@@ -2243,22 +2252,39 @@ Several limitations of this study should be considered.
 First, the \ac{HGOIA} dataset contains only demographic variables (age, weight,
 \ac{BMI}, and gestational age in weeks); the absence of laboratory and clinical
 measurements restricts predictive granularity and precludes direct comparison
-with clinically richer models such as full\ac{PIERS}.
+with clinically richer models.
 Second, this is a single-center, retrospective study conducted at a single
 public hospital; generalizability to other institutions or geographic contexts
 remains to be evaluated.
 Third, the train--validation split in \ac{C-AutoML} was performed at the record
-level rather than the patient level: because the source dataset contains on
-average 1.81 records per patient (range 1--13), approximately 61\% of
-validation records originate from patients also present in the training set;
-as the demographic features are correlated within a patient, the reported
+level rather than the patient level. Given that the source dataset contains on
+average 1.81 records per patient (range 1--13), the reported
 validation metrics may be modestly optimistic and patient-level
 cross-validation is recommended for future work.
-Finally, the synthetic dataset, while useful for assessing the feasibility of
-\ac{PIERS}-style prediction, does not constitute external clinical validation;
-the ideal performance of \ac{LR} on that dataset reflects the mathematical
-separability imposed by the parametric generation distributions, not
-necessarily clinical utility in a real population.}
+Finally, the synthetic dataset, while useful for assessing the
+feasibility of our proposed framework, does not constitute external clinical validation.}
+
+% \added[id=R1]{\textbf{Limitations.}
+% Several limitations of this study should be considered.
+% First, the \ac{HGOIA} dataset contains only demographic variables (age, weight,
+% \ac{BMI}, and gestational age in weeks); the absence of laboratory and clinical
+% measurements restricts predictive granularity and precludes direct comparison
+% with clinically richer models.
+% Second, this is a single-center, retrospective study conducted at a single
+% public hospital; generalizability to other institutions or geographic contexts
+% remains to be evaluated.
+% Third, the train--validation split in \ac{C-AutoML} was performed at the record
+% level rather than the patient level: because the source dataset contains on
+% average 1.81 records per patient (range 1--13), approximately 61\% of
+% validation records originate from patients also present in the training set;
+% as the demographic features are correlated within a patient, the reported
+% validation metrics may be modestly optimistic and patient-level
+% cross-validation is recommended for future work.
+% Finally, the synthetic dataset, while useful for assessing the feasibility of
+% \ac{PIERS}-style prediction, does not constitute external clinical validation;
+% the ideal performance of \ac{LR} on that dataset reflects the mathematical
+% separability imposed by the parametric generation distributions, not
+% necessarily clinical utility in a real population.}
 % R1.3 END
 
 % R2 BEGIN: chronic HTN selection + PE sub-categories
