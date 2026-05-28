@@ -23,44 +23,54 @@ the reviewers of our current paper.
 :END:
 Summary of all tasks required to address reviewer feedback before resubmission.
 
-** TODO Reviewer 1 [0%]
-*** TODO Introduction
-- [ ] Strengthen background and add missing relevant references
-*** TODO Materials and Methods
+** TODO Reviewer 1 
+*** TODO Introduction [100%]
+- [X] Strengthen background and add missing relevant references
+*** TODO Materials and Methods [100%]
 - [X] Add table with dataset characteristics: number of patients, class distribution, missing data rate and handling
 - [X] Add flowchart showing preprocessing, feature selection, model selection, and hyperparameter optimization steps for C-AutoML
-- [ ] Include sufficient explanations about hyperparameter optimization
-- [ ] Explain Canvas model run settings and details of the weighted ensemble structure
-- [ ] Add details on synthetic dataset production methodology
-*** TODO Results
-- [ ] Clarify the FullPIERS-based method and explain why LR achieves ~100% performance (discuss overfitting risk)
-*** TODO Discussion
-- [ ] Expand discussion on use of demographic-only dataset, single-center study design, and synthetic data limitations
+- [X] Include sufficient explanations about hyperparameter optimization
+- [X] Explain Canvas model run settings and details of the weighted ensemble structure
+- [X] Add details on synthetic dataset production methodology
+*** TODO Results [100%]
+- [X] Clarify the FullPIERS-based method and explain why LR achieves ~100% performance (discuss overfitting risk)
+*** TODO Discussion [100%]
+- [X] Expand discussion on use of demographic-only dataset, single-center study design, and synthetic data limitations
 
-** TODO Reviewer 2 [0%]
-*** TODO Manuscript-wide
-- [ ] Uniformize text fonts throughout the entire manuscript (Abstract, body, tables); reviewer flagged these terms appearing in a different font in the Abstract: /Logistic Regression/, /LightGBM/, /XGBoost/, /CatBoost/, /Multi-Layer Perceptron/, /Random Forest/
-*** TODO Introduction
-- [ ] Add references aligned with PE prediction/diagnosis guidelines
-*** TODO Materials and Methods
-- [ ] Provide software versions and city of manufacturer for all tools used
-- [ ] Indicate PE incidence in the dataset and discuss its implications on model performance
-- [ ] Discuss the unusually high PE prevalence in the cohort
-- [ ] Clarify at which gestational age (1st/2nd/3rd trimester) each feature was recorded
-- [ ] Specify whether lab variables (platelets, creatinine, proteinuria/24 h) are single or repeated measurements, and when
-- [ ] Provide inter-group comparisons for all variables included in the models
-- [ ] Consider excluding patients with pre-existing chronic hypertension (different physiopathology)
-- [ ] Remove or justify non-PE-specific variables (SpO2, chest pain)
-- [ ] Regenerate Figure 2 at $\geq$300 dpi without horizontal stretching
-- [ ] Add p-values to Table 4
-- [ ] Add footer note explaining Us and Ns in Table 5
-*** TODO Results
-- [ ] Clarify the FullPIERS-based method and explain why LR achieves ~100% performance (discuss overfitting risk)
-- [ ] Apply models to PE sub-categories: early vs. late PE, moderate vs. severe PE
-*** TODO Discussion
-- [ ] After model revision, re-expand the discussion section
-- [ ] Compare results only with studies using similar frameworks and variables
-- [ ] State explicitly the strengths and limitations of the study
+** TODO Reviewer 2 
+*** TODO Manuscript-wide [100%]
+- [X] Uniformize text fonts throughout the entire manuscript (Abstract, body, tables); reviewer flagged these terms appearing in a different font in the Abstract: /Logistic Regression/, /LightGBM/, /XGBoost/, /CatBoost/, /Multi-Layer Perceptron/, /Random Forest/ [done: commit 3f763eb]
+*** TODO Introduction [100%]
+- [X] Add references aligned with PE prediction/diagnosis guidelines
+*** TODO Materials and Methods [100%]
+- [X] Provide software versions and city of manufacturer for all tools used [done: commits 7e24bbe, d1593cb]
+- [X] Indicate PE incidence in the dataset and discuss its implications on model performance
+- [X] Discuss the unusually high PE prevalence in the cohort
+- [X] Clarify at which gestational age (1st/2nd/3rd trimester) each feature was recorded [N/A — lab vars are synthetic only; paper text added + cover letter draft in session-progress-2026-05-25.md]
+- [X] Specify whether lab variables (platelets, creatinine, proteinuria/24 h) are single or repeated measurements, and when [N/A — same reason]
+- [X] Provide inter-group comparisons for all variables included in the models
+- [X] Consider excluding patients with pre-existing chronic hypertension (different physiopathology)
+- [X] Remove or justify non-PE-specific variables (SpO2, chest pain) [justified via FullPIERS citations + millman2011spo2 + elongi2025fullpiers in paper]
+- [X] Regenerate Figure 2 at $\geq$300 dpi without horizontal
+  stretching fig:aws-wrangler
+- [X] Add p-values to Table 4 [done: commit 46d90ca — Mann-Whitney U for tab:desc_stats, Pearson chi-squared for tab:variable_distribution; all p<0.001]
+- [X] Add footer note explaining Us and Ns in Table 5 [done: commit f7c0d1d]
+*** TODO Results [100%]
+- [X] Clarify the FullPIERS-based method and explain why LR achieves ~100% performance (discuss overfitting risk)
+- [X] Apply models to PE sub-categories: early vs. late PE, moderate vs. severe PE
+*** TODO Discussion [100%]
+- [X] After model revision, re-expand the discussion section
+- [X] Compare results only with studies using similar frameworks and variables
+- [X] State explicitly the strengths and limitations of the study
+** Author TODOs
+*** TODO [85%] 
+- [X] Check bibliography is on Google Scholar
+- [X] Check bibliography has correct DoIs
+- [X] Check uniformity of text and style
+- [X] Check writing
+- [ ] Write the response to editors
+- [X] Obtain the final draft with final format
+- [X] Obtain a draft with the changes shown to facilitate reviewers
 
 * Reviewer 1
 ** what can be improved?
