@@ -83,15 +83,13 @@
 \usetikzlibrary{calc}
 \usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,backgrounds}
 % Track changes for reviewer revisions (remove before final submission)
-% Usage: new text  
-%% [DELETED R2]: old text  new
-%% [OLD R1]: old
-% To produce final clean copy: % \usepackage[final]{changes}  % stripped by make-final.py
-% \usepackage[final]{changes}  % stripped by make-final.py
-% % stripped by make-final.py % uncomment to show marks for reviewers
-% \definechangesauthor[name={Reviewer~1},color=blue]{R1}
-% \definechangesauthor[name={Reviewer~2},color=teal]{R2}
-% \definechangesauthor[name={Reviewers~1\&2},color=violet]{R12}
+% Usage: \added[id=R1]{new text}  \deleted[id=R2]{old text}  \replaced[id=R1]{new}{old}
+% To produce final clean copy: use make-final.py (see preeclampsia-ml-hia.tex)
+% \usepackage[final]{changes}
+\usepackage[markup=underlined,addedmarkup=colored,deletedmarkup=sout]{changes}
+\definechangesauthor[name={Reviewer~1},color=blue]{R1}
+\definechangesauthor[name={Reviewer~2},color=teal]{R2}
+\definechangesauthor[name={Reviewers~1\&2},color=violet]{R12}
 %=================================================================
 % Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
@@ -353,15 +351,15 @@ $^{3}$ \quad Ministerio de Salud Pública, Quito, Ecuador; raysafuertesa@gmail.c
 \label{sec:introduction}
 \Ac{PE}, a leading hypertensive disorder of pregnancy, is
 a major cause of maternal and perinatal morbidity and mortality
-worldwide, being associated with more than \numprint{70000}
+worldwide\added[id=R2]{, being associated with more than \numprint{70000}
 maternal deaths and over \numprint{500000} fetal and neonatal deaths
-annually~\cite{vera2025preeclampsia}. The \ac{WHO} reports that \ac{PE}
-affects approximately 2--8\% of pregnancies globally, with
-a pooled global prevalence estimated at 4.43\%~\cite{vera2025preeclampsia},
+annually~\cite{vera2025preeclampsia}}. The \ac{WHO} reports that \ac{PE}
+affects approximately 2--8\% of pregnancies globally\added[id=R2]{, with
+a pooled global prevalence estimated at 4.43\%~\cite{vera2025preeclampsia}},
 highlighting the relevance of early detection and risk stratification
 strategies~\cite{who_2025_preeclampsia,vera2025preeclampsia}.
 
-Clinically, \ac{PE} is a complex multisystem disorder
+\added[id=R2]{Clinically, \ac{PE} is a complex multisystem disorder
 defined as new-onset hypertension (\ac{SBP} $\geq$140~mmHg or
 \ac{DBP} $\geq$90~mmHg) after 20 weeks of gestation in previously
 normotensive women, accompanied by at least one of: proteinuria,
@@ -389,7 +387,7 @@ characterised as having severe features, requiring urgent
 management~\cite{brown2018isshp}. Collectively, these features underscore
 the clinical complexity of \ac{PE} and the need for robust,
 population-adapted analytic strategies to support timely identification
-of at-risk pregnancies~\cite{vera2025preeclampsia}.
+of at-risk pregnancies~\cite{vera2025preeclampsia}.}
 
 In Ecuador, the Clinical Practice Guideline from the \ac{MSP}\footnote{ Ministry of Public Health} identifies
 \ac{PE} and eclampsia among the principal causes of maternal
@@ -413,7 +411,7 @@ high-risk pregnancies, and more efficient allocation of limited
 healthcare resources, particularly in high-volume settings with
 heterogeneous data quality.
 
-The full\ac{PIERS} model estimates the probabilistic
+\replaced[id=R2]{The full\ac{PIERS} model estimates the probabilistic
 risk of adverse maternal outcomes in women with \ac{PE} using
 gestational age, chest pain or dyspnoea, oxygen saturation
 (SpO$_2$), creatinine, platelet count, and aspartate transaminase
@@ -422,16 +420,15 @@ predictors~\cite{fullpiers_2011}. It uses the logistic regression
 equation in~\eqref{eq:logistic-regression}, where the logit is
 calculated as a linear combination of these variables as depicted
 in~\eqref{eq:fullpiers-logit} and the coefficient values are those
-proposed in~\cite{fullpiers_2011}.
-%% [OLD R2]: The full\ac{PIERS} model uses demographic and laboratory variables
-%% (e.g., gestational age, creatinine, platelet count, aspartate
-%% transaminase, etc.) to estimate the probabilistic risk of adverse
-%% maternal outcomes among women with
-%% \ac{PE}~\cite{fullpiers_2011}. It uses the logistic regression
-%% equation in~\eqref{eq:logistic-regression}, where the logit is
-%% calculated as a linear combination of variables
-%% as depicted in~\eqref{eq:fullpiers-logit} and the coefficient values
-%% are those proposed in~\cite{fullpiers_2011}. 
+proposed in~\cite{fullpiers_2011}.}{The full\ac{PIERS} model uses demographic and laboratory variables
+(e.g., gestational age, creatinine, platelet count, aspartate
+transaminase, etc.) to estimate the probabilistic risk of adverse
+maternal outcomes among women with
+\ac{PE}~\cite{fullpiers_2011}. It uses the logistic regression
+equation in~\eqref{eq:logistic-regression}, where the logit is
+calculated as a linear combination of variables
+as depicted in~\eqref{eq:fullpiers-logit} and the coefficient values
+are those proposed in~\cite{fullpiers_2011}.} 
 
 \begin{linenomath}
 \begin{equation}
@@ -473,11 +470,11 @@ research, we used the provided records from the
   Quito, Ecuador.}, which contains demographic variables and lacks
 clinical features. For this reason, we explored our sets of models
 both on the \ac{HGOIA} and synthetic datasets to diagnose
-\ac{PE}. The synthetic dataset was constructed using the
+\ac{PE}. \added[id=R1]{The synthetic dataset was constructed using the
 full\ac{PIERS} equation~\eqref{eq:fullpiers-logit} as the
 reference framework for feature distributions and the
 \ac{MSP} clinical guideline~\cite{msp_ecuador_hdp_2013} for
-the diagnostic label (Section~\ref{sec:synth-data-gener}). Unlike the full\ac{PIERS} standard, which is a
+the diagnostic label (Section~\ref{sec:synth-data-gener}).} Unlike the full\ac{PIERS} standard, which is a
 prognostic model, our goal is to determine the most effective set of
 models to diagnose \ac{PE} according to the Ecuadorian realm.
 
@@ -728,9 +725,9 @@ the complete workflow.
   \numprint{4165} records and 5 variables (including the target,
   \texttt{PREECLAMPSIA}). These variables are: maternal age (years),
   gestational age (weeks), \ac{BMI} ($\text{kg}/\text{m}^2$), and
-  weight (kg). Table~\ref{tab:dataset-characteristics}
+  weight (kg). \added[id=R1]{Table~\ref{tab:dataset-characteristics}
     presents a summary of the \ac{HGOIA} dataset characteristics at
-    each stage of the preprocessing pipeline.
+    each stage of the preprocessing pipeline.}
 \end{itemize}
 
 \begin{figure}[H]
@@ -848,7 +845,7 @@ Unknown type features & 0 \\
 \begin{table}[H]
   \small
   \centering
-  \caption{Summary of dataset characteristics for the
+  \caption{\added[id=R1]{[New]} Summary of dataset characteristics for the
     \ac{HGOIA} preeclampsia classification dataset. Each record corresponds
     to a prenatal clinical visit; a single patient may contribute multiple
     records across visits.\label{tab:dataset-characteristics}}
@@ -895,7 +892,7 @@ whereas Table~\ref{tab:variable_distribution} shows the distribution
 of those variables organized in quartiles \ac{w.r.t.} the
 prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
 
-% The record-level \ac{PE} prevalence in the final \ac{ML} dataset
+% \added[id=R2]{The record-level \ac{PE} prevalence in the final \ac{ML} dataset
 % is 16.11\% (671 of 4,165 records); at the patient level, 588 of the 2,344 unique
 % patients (25.1\%) received a \ac{PE} diagnosis. Both figures substantially exceed
 % the global pooled estimate of approximately 4.43\%~\cite{vera2025preeclampsia},
@@ -907,8 +904,8 @@ prevalence of \ac{PE} in pregnancies at \ac{HGOIA}.
 % and would be expected to decrease in lower-prevalence settings.
 % Table~\ref{tab:desc_stats} and Table~\ref{tab:variable_distribution} provide
 % inter-group comparisons of all model input variables between \ac{PE}-positive
-% and \ac{PE}-negative groups, with statistical significance tests.
-The record-level prevalence of \ac{PE} in the final
+% and \ac{PE}-negative groups, with statistical significance tests.}
+\added[id=R2]{The record-level prevalence of \ac{PE} in the final
   dataset is 16.11\% (671 of 4,165 records), exceeding the global
   pooled estimate of 4.43\%~\cite{vera2025preeclampsia}. This
   reflects two factors: the dataset was constructed from a
@@ -924,7 +921,7 @@ The record-level prevalence of \ac{PE} in the final
   and \ac{PE}-negative groups; all four predictors show highly
   significant differences (Mann-Whitney $U$ and Pearson
   $\chi^2$, $p < 0.001$ for all variables), confirming their
-  discriminative value within this cohort.
+  discriminative value within this cohort.}
 
 \begin{figure}[H]
   \begin{adjustwidth}{-\extralength}{0cm}
@@ -954,22 +951,22 @@ The record-level prevalence of \ac{PE} in the final
 % clarify the cohort; tab:dataset-characteristics shows the final ML counts.
 % R2: p-value column added (Mann-Whitney U, two-sided; 05-statistical-tests-p-values.ipynb)
 \toprule
-Variable & Preeclampsia & Sample Size & Mean & Median & Std.\ Dev. & $p$-value\textsuperscript{a} \\
+Variable & Preeclampsia & Sample Size & Mean & Median & Std.\ Dev. & \added[id=R2]{$p$-value\textsuperscript{a}} \\
 \midrule
-AGE (YEARS) & No & 3571 & 18.71 & 18.00 & 4.13 & \multirow{2}{*}{$<$0.001} \\
+AGE (YEARS) & No & 3571 & 18.71 & 18.00 & 4.13 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
           & Yes & 674  & 29.72 & 30.00 & 7.17 &  \\
 \midrule
-BMI       & No & 3571 & 25.71 & 25.19 & 4.39 & \multirow{2}{*}{$<$0.001} \\
+BMI       & No & 3571 & 25.71 & 25.19 & 4.39 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
           & Yes & 674  & 33.00 & 32.63 & 6.02 &  \\
 \midrule
-GESTATIONAL  & No & 3571 & 27.55 & 27.70 & 7.76 & \multirow{2}{*}{$<$0.001} \\
+GESTATIONAL  & No & 3571 & 27.55 & 27.70 & 7.76 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
 WEEKS                   & Yes & 674  & 33.80 & 35.40 & 4.42 &  \\
 \midrule
-WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 & \multirow{2}{*}{$<$0.001} \\
+WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 & \added[id=R2]{\multirow{2}{*}{$<$0.001}} \\
           & Yes & 674  & 80.51 & 78.75 & 16.17 &  \\
 \bottomrule
 \end{tabularx}
-\noindent\footnotesize{\textsuperscript{a}Mann-Whitney $U$ test, two-sided; compares each variable between the preeclampsia and normal groups.}
+\added[id=R2]{\noindent\footnotesize{\textsuperscript{a}Mann-Whitney $U$ test, two-sided; compares each variable between the preeclampsia and normal groups.}}
 \label{tab:desc_stats}
 \end{table}
 % R1.2 END
@@ -983,35 +980,35 @@ WEIGHT    & No & 3571 & 61.20 & 59.50 & 11.67 & \multirow{2}{*}{$<$0.001} \\
 \begin{tabularx}{\textwidth}{llXXp{2.cm}Xr}
 % R2: p-value column added (Pearson chi-squared; 05-statistical-tests-p-values.ipynb)
 \toprule
-Variable & Bin (range) & Total pregnancies & Normal pregnancies & Preeclampsia pregnancies & Preeclampsia prevalence (\%) & $p$-value\textsuperscript{b} \\
+Variable & Bin (range) & Total pregnancies & Normal pregnancies & Preeclampsia pregnancies & Preeclampsia prevalence (\%) & \added[id=R2]{$p$-value\textsuperscript{b}} \\
 \midrule
-AGE         & (12.999, 17.0] & 1745 & 1704 & 41 & 2.35\% & \multirow{4}{*}{$<$0.001} \\
+AGE         & (12.999, 17.0] & 1745 & 1704 & 41 & 2.35\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
 (YEARS)     & (17.0, 18.0]   & 690  & 670  & 20  & 2.90\% &  \\
             & (18.0, 22.0]   & 797  & 735  & 62  & 7.78\% &  \\
             & (22.0, 48.0]   & 1013 & 462  & 551 & 54.39\% &  \\
 \midrule
-AGE GROUP   & 10–14 years    & 73   & 66   & 7   & 9.59\% & \multirow{4}{*}{$<$0.001} \\
+AGE GROUP   & 10–14 years    & 73   & 66   & 7   & 9.59\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
             & 15–19 years    & 2877 & 2813 & 64  & 2.22\% &  \\
             & 20–35 years    & 1100 & 663  & 437 & 39.73\% &  \\
             & 36–49 years    & 195  & 29   & 166 & 85.13\% &  \\
 \midrule
-BMI         & (15.329, 23.18] & 1063 & 1041 & 22  & 2.07\% & \multirow{4}{*}{$<$0.001} \\
+BMI         & (15.329, 23.18] & 1063 & 1041 & 22  & 2.07\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
             & (23.18, 25.93]  & 1064 & 1014 & 50  & 4.70\% &  \\
             & (25.93, 29.42]  & 1058 & 935  & 123 & 11.63\% &  \\
             & (29.42, 73.46]  & 1060 & 581  & 479 & 45.19\% &  \\
 \midrule
-GESTATIONAL & (3.399, 26.0]   & 1066 & 1055 & 11  & 1.03\% & \multirow{4}{*}{$<$0.001} \\
+GESTATIONAL & (3.399, 26.0]   & 1066 & 1055 & 11  & 1.03\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
 WEEKS       & (26.0, 27.696]  & 1229 & 1062 & 167 & 13.59\% &  \\
             & (27.696, 35.2]  & 904  & 760  & 144 & 15.93\% &  \\
             & (35.2, 41.5]    & 1046 & 694  & 352 & 33.65\% &  \\
 \midrule
-WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% & \multirow{4}{*}{$<$0.001} \\
+WEIGHT      & (19.799, 54.0]  & 1086 & 1065 & 21  & 1.93\% & \added[id=R2]{\multirow{4}{*}{$<$0.001}} \\
             & (54.0, 61.5]    & 1043 & 1002 & 41  & 3.93\% &  \\
             & (61.5, 71.5]    & 1064 & 937  & 127 & 11.94\% &  \\
             & (71.5, 157.2]   & 1052 & 567  & 485 & 46.10\% &  \\
 \bottomrule
 \end{tabularx}
-\noindent\footnotesize{\textsuperscript{b}Pearson chi-squared test of independence between variable bin and preeclampsia status.}
+\added[id=R2]{\noindent\footnotesize{\textsuperscript{b}Pearson chi-squared test of independence between variable bin and preeclampsia status.}}
 \label{tab:variable_distribution}
 \end{table}
 
@@ -1077,7 +1074,7 @@ risk estimate ($\mathrm{PE}_{\mathrm{FullPIERS}}$ [\%]), enabling exploratory
 modeling and explainability analyses under clinically informed
 constraints.
 
-Although the $\mathrm{PE}_{\mathrm{FullPIERS}}$ score was used to
+\added[id=R12]{Although the $\mathrm{PE}_{\mathrm{FullPIERS}}$ score was used to
 obtain an exploratory binary label with a threshold of $10\%$, empirical
 validation studies have reported optimal cut-offs between $2\%\text{–}6\%$
 in different populations~\cite{long2025fullpiers,teichmann2025fullpiers,elongi2025fullpiers}.
@@ -1087,9 +1084,9 @@ label $\mathrm{PE}_{\mathrm{MSP}}$ defined in~\eqref{eq:preeclampsia-msp-rule},
 which does not depend on SpO$_2$ or chest pain. Both variables are
 nonetheless retained in the synthetic dataset because they are validated
 independent predictors of adverse maternal outcomes in women with
-established preeclampsia~\cite{millman2011spo2,elongi2025fullpiers}.
+established preeclampsia~\cite{millman2011spo2,elongi2025fullpiers}.}
 
-% The FullPIERS prognostic score was converted to a binary
+% \added[id=R1]{The FullPIERS prognostic score was converted to a binary
 %   label using a risk threshold of 10\% rather than the logistic
 %   default of 50\%. In clinical screening and triage contexts the
 %   adverse-outcome event is relatively uncommon. Consequently, few
@@ -1108,9 +1105,9 @@ established preeclampsia~\cite{millman2011spo2,elongi2025fullpiers}.
 %   (Equation~\eqref{eq:preeclampsia-msp-rule}); the FullPIERS-derived
 %   binary label serves as a secondary prognostic reference for
 %   exploratory analyses. The random seed was fixed at $\mathtt{42}$ to
-%   ensure full reproducibility of the generation procedure.
+%   ensure full reproducibility of the generation procedure.}
 
-% The features in this synthetic dataset are algorithmically
+% \added[id=R2]{The features in this synthetic dataset are algorithmically
 % generated from the parametric distributions specified in
 % Table~\ref{tab:distributions} and were not measured in clinical
 % practice; they do not form part of the \ac{HGOIA} retrospective records,
@@ -1122,7 +1119,7 @@ established preeclampsia~\cite{millman2011spo2,elongi2025fullpiers}.
 % of hospital admission~\cite{millman2011spo2}, a finding confirmed in
 % recent independent cohorts~\cite{elongi2025fullpiers}, and both
 % variables are explicit components of the FullPIERS prognostic equation
-% (Equation~\eqref{eq:fullpiers-logit}; \cite{fullpiers_2011}).
+% (Equation~\eqref{eq:fullpiers-logit}; \cite{fullpiers_2011}).}
 
 
 \begin{table}[H]
@@ -1146,14 +1143,14 @@ AST & $\mathcal{N}(25, 6)$ & $\mathcal{N}(90, 50)$ & U/L \\
 Chest pain & $\text{Bernoulli}(0.03)$ & $\text{Bernoulli}(0.35)$ & binary \\
 \bottomrule
 \end{tabularx}
-\noindent\footnotesize\textit{Notes:}
+\added[id=R2]{\noindent\footnotesize\textit{Notes:}
 $\mathcal{N}(\mu,\,\sigma)$: Normal distribution with mean $\mu$ and standard
 deviation $\sigma$;
 $\mathcal{U}(a,\,b)$: Uniform distribution over the interval $[a,\,b]$;
 $\mathrm{Gamma}(k,\,\theta)$: Gamma distribution with shape parameter $k$ and
 scale parameter $\theta$;
 $\mathrm{Bernoulli}(p)$: Bernoulli variable with success probability $p$ (binary
-outcome: 0 = absent, 1 = present).
+outcome: 0 = absent, 1 = present).}
 % \end{adjustwidth}
 \end{table}
 
@@ -1261,7 +1258,7 @@ SageMaker Canvas (Amazon Web Services, Inc., Seattle, WA, USA) is a
 managed no-code machine-learning service that supports data ingestion,
 preprocessing, model training, and model
 evaluation~\cite{aws_sagemaker_canvas_docs}.
-Internally, Canvas relies on
+\added[id=R1]{Internally, Canvas relies on
   AutoGluon~\cite{agtabular2020} to manage the complete training
   pipeline automatically. For our binary classification task, Canvas
   was configured to maximize \ac{F1} and evaluated ten bagged base
@@ -1275,7 +1272,7 @@ Internally, Canvas relies on
   ensemble, models are added one at a time (with replacement) if each
   addition improves the validation \ac{F1}. The weight assigned to
   each model $k$ equals its selection count $n_k$ divided by the total
-  ensemble size~$S$:
+  ensemble size~$S$:}
 \begin{linenomath}
 \begin{equation}
   \hat{p}_{\mathrm{ens}}(\mathbf{x}) = \sum_{k=1}^{K} w_k\,\hat{p}_k(\mathbf{x}),
@@ -1283,9 +1280,9 @@ Internally, Canvas relies on
   \label{eq:ensemble-prediction}
 \end{equation}
 \end{linenomath}
-where $\hat{p}_k(\mathbf{x})$ is the bag-averaged predicted
+\added[id=R1]{where $\hat{p}_k(\mathbf{x})$ is the bag-averaged predicted
   probability from base model $k$, and the final binary decision applies
-  threshold $\tau$ from Equation~\eqref{eq:preeclampsia_decision}.  In our
+  threshold $\tau$ from Equation~\eqref{eq:preeclampsia_decision}.}  In our
 workflow, Canvas was also used for quality profiling and feature
 screening support, as described in
 Section~\ref{sec:data-preprocessing}.
@@ -1298,7 +1295,7 @@ across $N = 10$ outer iterations, yielding 60 total trials
 an inner loop that iterates through six algorithm families: \ac{LR},
 \ac{RF}, \ac{MLP}, XGBoost, LightGBM, and CatBoost.
 
-For \ac{HPO}, C-AutoML adopts a \textit{random search}
+\added[id=R1]{For \ac{HPO}, C-AutoML adopts a \textit{random search}
 strategy~\cite{bergstra2012random}: at each trial, exactly one
 hyperparameter configuration is drawn uniformly at random from a
 predefined discrete candidate set using scikit-learn's
@@ -1307,7 +1304,7 @@ where $i$ is the outer-loop iteration and $m$ is the model-family
 index). Random search is preferred over grid search because it
 explores the hyperparameter space more efficiently at a fixed
 computational budget~\cite{bergstra2012random}. The complete search
-spaces are listed in Table~\ref{tab:hpo-search-spaces}.
+spaces are listed in Table~\ref{tab:hpo-search-spaces}.}
 
 The proposed methodology fits full
 \texttt{scikit-learn}~($\ge$~1.6.1)~\cite{sklearn-api} pipelines with
@@ -1321,16 +1318,16 @@ tie-breaking metrics. Upon identifying the optimal pipeline, the
 system performs permutation-based feature importance analysis
 ($n_{\mathrm{repeats}} = 10$, \ac{F1} scoring on the validation
 partition) to enhance model interpretability.
-Figure~\ref{fig:c-automl-flowchart} provides a flowchart
-  overview of the complete \ac{C-AutoML} pipeline.
+\added[id=R1]{Figure~\ref{fig:c-automl-flowchart} provides a flowchart
+  overview of the complete \ac{C-AutoML} pipeline.}
 
 % R1.5 BEGIN -------------------------------------------------------
 \begin{table}[htbp]
-\caption{C-AutoML hyperparameter search spaces.
+\caption{\added[id=R1]{C-AutoML hyperparameter search spaces.
     At each trial one configuration is drawn uniformly at random
     (\texttt{ParameterSampler}) from the Cartesian product of the listed
     candidate values.  Tree-based models omit StandardScaler;
-    \ac{LR} and \ac{MLP} apply it.}
+    \ac{LR} and \ac{MLP} apply it.}}
 \label{tab:hpo-search-spaces}
 \small
 \begin{tabularx}{\linewidth}{llX}
@@ -1500,7 +1497,7 @@ Figure~\ref{fig:c-automl-flowchart} provides a flowchart
 
 \end{tikzpicture}
 \end{adjustwidth}
-\caption{Flowchart of the \ac{C-AutoML} training
+\caption{\added[id=R1]{Flowchart of the \ac{C-AutoML} training
     pipeline. The outer loop runs $N = 10$ iterations
     ($i = 1\ldots10$), each drawing a fresh stratified 80/20
     train/validation split, for a total of 60 trials
@@ -1514,7 +1511,7 @@ Figure~\ref{fig:c-automl-flowchart} provides a flowchart
     across all 60 trials; the best pipeline is then selected and
     subjected to permutation importance analysis
     ($n_{\mathrm{repeats}} = 10$, F1 scoring) to rank feature
-    contributions.}
+    contributions.}}
 \label{fig:c-automl-flowchart}
 \end{figure}
 % R1.4 END ---------------------------------------------------------
@@ -1714,12 +1711,12 @@ in Fig.~\ref{fig:f1-score-models-isidro-ayora}.
 Table~\ref{tab:canvas-model-performance} summarizes the performance of
 the different models evaluated in Amazon SageMaker Canvas. The best
 performance was achieved by the Weighted Ensemble Model.
-Inspection of the downloaded model artifact confirmed
+\added[id=R1]{Inspection of the downloaded model artifact confirmed
   that the ensemble comprised three base models selected with equal
   weights ($w_k = \tfrac{1}{3}$, Equation~\eqref{eq:ensemble-prediction}):
   LightGBM, Random Forest (Entropy), and NeuralNetFastAI; the
   remaining seven Layer~1 candidates did not improve validation
-  \ac{F1} and were excluded. The ensemble achieved
+  \ac{F1} and were excluded.} The ensemble achieved
 $\mathrm{F1}=0.805$, $\mathrm{Precision}=0.770$, $\mathrm{Recall}=0.844$, and
 $\mathrm{AUC}=0.956$. Compared to the LightGBM model trained with
 our proposed \ac{C-AutoML}, the AWS model improves on the recall
@@ -1816,7 +1813,7 @@ iteration\#1. Table~\ref{tab:cautoml-synthetic-performance} presents
 the complete performance of the different trials for each of the
 proposed models and iterations. It should be noted that more than one
 model achieves a similar performance score as \ac{LR} for the
-synthetic data. This is structurally expected: the diagnostic
+synthetic data. \added[id=R1]{This is structurally expected: the diagnostic
 label $\mathrm{PE}_{\mathrm{MSP}}$ is assigned by the deterministic
 threshold rule in Equation~\eqref{eq:preeclampsia-msp-rule}, which
 applies linear inequality conditions to the same features used as model
@@ -1824,7 +1821,7 @@ inputs, producing linearly separable class boundaries that any of the
 evaluated classifiers can recover. The consistently near-perfect
 scores therefore confirm that the parametric distributions in
 Table~\ref{tab:distributions} are sufficiently separated with respect to
-the \ac{MSP} rule, validating the generation process itself.
+the \ac{MSP} rule, validating the generation process itself.}
 
 Figure~\ref{fig:combined-model-analysis-synthetic} presents the
 performance of the \ac{LR} model according with the normalized
@@ -2160,7 +2157,7 @@ because higher precision implies fewer false alarms. Consequently, it is
 recommended to combine both of these models for prediction at the
 health facility.
 
-For the synthetic dataset, all six evaluated model
+\replaced[id=R1]{For the synthetic dataset, all six evaluated model
   families achieve near-perfect performance ($\mathrm{F1}\geq 0.988$),
   with \ac{LR}, \ac{RF}, \ac{MLP}, XGBoost, LightGBM, and CatBoost all
   reaching $\mathrm{F1}=1.000$ in the first three iterations. This
@@ -2178,11 +2175,10 @@ For the synthetic dataset, all six evaluated model
   precisely these variables as
   predictors~\cite{fullpiers_2011}. However, it must be noticed that
   the purpose of ~\eqref{eq:fullpiers-logit} is to predict adverse
-  outcomes of \ac{PE}, which differs from our main purpose.
-%% [OLD R1]: For
-%%   the synthetic dataset, our results show an ideal performance due to
-%%   the controlled synthetic data generation. Nevertheless, the results
-%%   identify \ac{LR} as a suitable model for a \ac{PIERS} application.
+  outcomes of \ac{PE}, which differs from our main purpose.}{For
+  the synthetic dataset, our results show an ideal performance due to
+  the controlled synthetic data generation. Nevertheless, the results
+  identify \ac{LR} as a suitable model for a \ac{PIERS} application.}
 
 The interpretability analysis shows the feature importance of
 the variables of each dataset for prediction. For the \ac{HGOIA} dataset, the most important features are: patient's age,
@@ -2191,7 +2187,7 @@ synthetic data, systolic blood pressure, platelet count and 24-hour
 proteinuria lead the impact on model's prediction.
 
 % R2 BEGIN: comparison with similar-framework studies
-\textbf{Comparison with similar frameworks.}
+\added[id=R2]{\textbf{Comparison with similar frameworks.}
   Table~\ref{tab:ml_pe_comparison} situates our results among studies
   that employ comparable model families and predictor types.  Despite
   using only four demographic variables, our best models achieve
@@ -2204,14 +2200,14 @@ proteinuria lead the impact on model's prediction.
   and outcome definitions documented in recent systematic
   reviews~\cite{Darsareh2024,Rahman2023,jmijr_ml_pe_review_2026}. Consequently,
   the comparison in Table~\ref{tab:ml_pe_comparison} is intended to
-  contextualise rather than rank performance.
+  contextualise rather than rank performance.}
 
 \begin{table}[H]
   \small
   \centering
-  \caption{Comparison of selected machine learning
+  \caption{\added[id=R2]{Comparison of selected machine learning
     studies for preeclampsia prediction using tabular demographic
-    and clinical data.\label{tab:ml_pe_comparison}}
+    and clinical data.}\label{tab:ml_pe_comparison}}
   \begin{adjustwidth}{-\extralength}{0cm}
   \begin{tabularx}{\fulllength}{p{2.5cm}p{3.5cm}p{4.0cm}X} %p{3.8cm}p{3.2cm}
     \toprule
@@ -2252,7 +2248,7 @@ proteinuria lead the impact on model's prediction.
 % and synthetic data limitations") and Reviewer 2 (Discussion: "State
 % explicitly the strengths and limitations of the study").
 % The record-level split statistics are documented in code/patient_split_report.csv.
-\textbf{Limitations.}
+\added[id=R1]{\textbf{Limitations.}
 Several limitations of this study should be considered.
 First, the \ac{HGOIA} dataset contains only demographic variables (age, weight,
 \ac{BMI}, and gestational age in weeks); the absence of laboratory and clinical
@@ -2267,9 +2263,9 @@ average 1.81 records per patient (range 1--13), the reported
 validation metrics may be modestly optimistic and patient-level
 cross-validation is recommended for future work.
 Finally, the synthetic dataset, while useful for assessing the
-feasibility of our proposed framework, does not constitute external clinical validation.
+feasibility of our proposed framework, does not constitute external clinical validation.}
 
-% \textbf{Limitations.}
+% \added[id=R1]{\textbf{Limitations.}
 % Several limitations of this study should be considered.
 % First, the \ac{HGOIA} dataset contains only demographic variables (age, weight,
 % \ac{BMI}, and gestational age in weeks); the absence of laboratory and clinical
@@ -2289,11 +2285,11 @@ feasibility of our proposed framework, does not constitute external clinical val
 % \ac{PIERS}-style prediction, does not constitute external clinical validation;
 % the ideal performance of \ac{LR} on that dataset reflects the mathematical
 % separability imposed by the parametric generation distributions, not
-% necessarily clinical utility in a real population.
+% necessarily clinical utility in a real population.}
 % R1.3 END
 
 % R2 BEGIN: chronic HTN selection + PE sub-categories
-Regarding patient selection, the positive class was constructed
+\added[id=R2]{Regarding patient selection, the positive class was constructed
 exclusively from records matching ICD-10 codes O11, O13, O14, O15, and O16,
 as documented in Table~\ref{tab:cie10-icd10-mapping}. Patients with pre-existing
 chronic hypertension without superimposed preeclampsia (ICD-10 O10) were absent
@@ -2306,12 +2302,12 @@ of O11 cases is recommended as future work. Additionally, stratified analysis by
 \ac{PE} sub-category (early vs.\ late onset; moderate vs.\ severe) was not
 feasible with the available data, which records binary \ac{PE} diagnosis without
 severity grade or gestational age at onset; subgroup analysis constitutes a
-direction for future research.
+direction for future research.}
 
-Notwithstanding these limitations, the study benefits from
+\added[id=R2]{Notwithstanding these limitations, the study benefits from
 a real-world hospital dataset, a reproducible C-AutoML pipeline with full
 artifact tracking via MLflow, SHAP-based interpretability, and benchmarking
-against a commercial AutoML platform (Amazon SageMaker Canvas).
+against a commercial AutoML platform (Amazon SageMaker Canvas).}
 % R2 END
 
 \section{Conclusion}
