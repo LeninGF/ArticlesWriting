@@ -2,6 +2,16 @@ page 2 paragraph 4 Traditional approaches face limitations IN pectoral
 page 16 acknowledgements change code of project to PTT-22-03 instead
 of PTT-03-02
 
+
+#@inproceedings{cao2022swinunet,
+#	title        = {Swin-unet: Unet-like pure transformer for medical image segmentation},
+#	author       = {Cao, Hu and Wang, Yueyue and Chen, Joy and Jiang, Dongsheng and Zhang, Xiaopen#g and Tian, Qi and Wang, Manning},
+#	year         = 2022,
+#	booktitle    = {European Conference on Computer Vision},
+#	pages        = {205--218},
+#	organization = {Springer}
+#}
+
 @InProceedings{cao2022swinunet,
 author="Cao, Hu
 and Wang, Yueyue
@@ -25,6 +35,14 @@ doi="10.1007/978-3-031-25066-8_9"
 }
 
 https://doi.org/10.1007/978-3-031-25066-8_9
+
+
+# @misc{MammoBench2023,
+#  author       = {Mammography AI Consortium},
+#  title        = {MAMMO-Bench: A Multi-Center Benchmark for Mammography AI},
+#  year         = {2023},
+#  note         = {Proprietary dataset}
+# }
 
 @InProceedings{MammoBench2023,
 author="Bhole, Gaurav
@@ -54,6 +72,17 @@ doi="10.1007/978-3-032-02489-3_11"
 https://doi.org/10.1007/978-3-032-02489-3_11
 
 
+# @article{Nguyen2022,
+#  author  = {Nguyen, H.T. and Nguyen, H.Q. and Pham, H.H. and Lam, K. and Le, L.T. and Dao, M. and Vu, V.},
+#  title   = {VinDr-Mammo: A Large-Scale Benchmark Dataset for Computer-Aided Diagnosis in Full-Field Digital Mammography},
+#  journal = {Scientific Data},
+#  year    = {2022},
+#  volume  = {9},
+#  number  = {1},
+#  pages   = {305}
+#}
+
+
 ﻿@Article{Nguyen2022,
 author={Nguyen, Hieu T.
 and Nguyen, Ha Q.
@@ -76,6 +105,14 @@ doi={10.1038/s41597-023-02100-7},
 url={https://doi.org/10.1038/s41597-023-02100-7}
 }
 
+
+# @article{SawyerLee2016,
+#   author  = {Sawyer-Lee, R. and Gimenez, F. and Hoogi, A. and Rubin, D.},
+#   title   = {Curated Breast Imaging Subset of DDSM},
+#   journal = {The Cancer Imaging Archive},
+#   year    = {2016}
+# }
+
 @misc{SawyerLee2016,
   author       = {Sawyer-Lee, R. and Gimenez, F. and Hoogi, A. and Rubin, D.},
   title        = {Curated Breast Imaging Subset of Digital Database for Screening Mammography (CBIS-DDSM)},
@@ -85,6 +122,14 @@ url={https://doi.org/10.1038/s41597-023-02100-7}
   doi          = {10.7937/K9/TCIA.2016.7O02S9CY},
   url          = {https://doi.org/10.7937/K9/TCIA.2016.7O02S9CY}
 }
+
+# @article{vaswani2017attention,
+# 	title        = {Attention is all you need},
+# 	author       = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, {\L}ukasz and Polosukhin, Illia},
+# 	year         = 2017,
+# 	journal      = {Advances in neural information processing systems},
+# 	volume       = 30
+# }
 
 @inproceedings{vaswani2017attention,
  author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, \L ukasz and Polosukhin, Illia},
@@ -97,6 +142,16 @@ url={https://doi.org/10.1038/s41597-023-02100-7}
  volume = {30},
  year = {2017}
 }
+
+# @inproceedings{zhou2018unetplusplus,
+# 	title        = {Unet++: A nested u-net architecture for medical image segmentation},
+# 	author       = {Zhou, Zongwei and Siddiquee, Md Mahfuzur Rahman and Tajbakhsh, Nima and Liang, Jianming},
+# 	year         = 2018,
+# 	booktitle    = {Deep Learning in Medical Image Analysis and Multimodal Learning for Clinical Decision Support},
+# 	pages        = {3--11},
+# 	organization = {Springer}
+# }
+
 
 @InProceedings{zhou2018unetplusplus,
 author="Zhou, Zongwei
@@ -130,3 +185,25 @@ isbn="978-3-030-00889-5",
 doi="10.1007/978-3-030-00889-5_1"
 }
 https://doi.org/10.1007/978-3-030-00889-5_1
+
+
+# @article{chen2021transunet,
+# 	title        = {Transunet: Transformers make strong encoders for medical image segmentation},
+# 	author       = {Chen, Jieneng and Lu, Yongyi and Yu, Qihang and Luo, Xiangde and Adeli, Ehsan and Wang, Yan and Lu, Le and Yuille, Alan L and Zhou, Yuyin},
+# 	year         = 2021,
+# 	journal      = {arXiv preprint arXiv:2102.04306}
+# }
+
+@article{chen2021transunet,
+	title        = {TransUNet: Transformers Make Strong Encoders for Medical Image Segmentation},
+	author       = {Jieneng Chen and Yongyi Lu and Qihang Yu and Xiangde Luo and Ehsan Adeli and Yan Wang and Le Lu and Alan L. Yuille and Yuyin Zhou},
+	year         = 2021,
+	journal      = {CoRR},
+	volume       = {abs/2102.04306},
+	url          = {https://arxiv.org/abs/2102.04306},
+	eprinttype   = {arXiv},
+	eprint       = {2102.04306},
+	timestamp    = {Mon, 12 Apr 2021 14:40:33 +0200},
+	biburl       = {https://dblp.org/rec/journals/corr/abs-2102-04306.bib},
+	bibsource    = {dblp computer science bibliography, https://dblp.org}
+}

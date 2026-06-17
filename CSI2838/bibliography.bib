@@ -50,28 +50,47 @@ vvv
 % ======= mammography datasets ===========
 %%%%%%% MUST BE REVIEWED %%%%%%%
 
-@article{SawyerLee2016,
-  author  = {Sawyer-Lee, R. and Gimenez, F. and Hoogi, A. and Rubin, D.},
-  title   = {Curated Breast Imaging Subset of DDSM},
-  journal = {The Cancer Imaging Archive},
-  year    = {2016}
+
+@misc{SawyerLee2016,
+	title        = {Curated Breast Imaging Subset of Digital Database for Screening Mammography (CBIS-DDSM)},
+	author       = {Sawyer-Lee, R. and Gimenez, F. and Hoogi, A. and Rubin, D.},
+	year         = 2016,
+	publisher    = {The Cancer Imaging Archive},
+	doi          = {10.7937/K9/TCIA.2016.7O02S9CY},
+	url          = {https://doi.org/10.7937/K9/TCIA.2016.7O02S9CY},
+	howpublished = {Data set}
 }
 
-@misc{MammoBench2023,
-  author       = {Mammography AI Consortium},
-  title        = {MAMMO-Bench: A Multi-Center Benchmark for Mammography AI},
-  year         = {2023},
-  note         = {Proprietary dataset}
+
+@inproceedings{MammoBench2023,
+	title        = {Mammo-Bench: A Large-Scale Benchmark Dataset of Mammography Images},
+	author       = {Bhole, Gaurav and Suba, S. and Parekh, Nita},
+	year         = 2026,
+	booktitle    = {Computational Advances in Bio and Medical Sciences},
+	publisher    = {Springer Nature Switzerland},
+	address      = {Cham},
+	pages        = {144--156},
+	doi          = {10.1007/978-3-032-02489-3_11},
+	isbn         = {978-3-032-02489-3},
+	editor       = {Alser, Mohammed and Bansal, Mukul S. and Khudyakov, Yury and Mangul, Serghei and Mandoiu, Ion I. and Moussa, Marmar R. and Patterson, Murray and Rajasekaran, Sanguthevar and Skums, Pavel and Yooseph, Shibu and Zelikovsky, Alexander},
+	abstract     = {Breast cancer remains a significant global health concern, and machine learning algorithms and computer-aided detection systems have shown great promise in enhancing the accuracy and efficiency of mammography image analysis. However, there is a critical need for large, benchmark datasets for training deep learning models for breast cancer detection. In this work we developed Mammo-Bench, a large-scale benchmark dataset of mammography images, by collating data from seven well-curated resources, viz., DDSM, INbreast, KAU-BCMD, CMMD, CDD-CESM, DMID, and RSNA Screening Dataset. To ensure consistency across images from diverse sources while preserving clinically relevant features, a preprocessing pipeline that includes breast segmentation, pectoral muscle removal, and intelligent cropping is proposed. The dataset consists of 74,436 high-quality mammographic images from 26,500 patients across 7 countries and is one of the largest open-source mammography databases to the best of our knowledge. To show the efficacy of training on the large dataset, performance of ResNet101 architecture was evaluated on Mammo-Bench and the results compared by training independently on a few member datasets and an external dataset, VinDr-Mammo. An accuracy of 78.8{\%} (with data augmentation of the minority classes) and 77.8{\%} (without data augmentation) was achieved on the proposed benchmark dataset, compared to the other datasets for which accuracy varied from 25 -- 69{\%}. Noticeably, improved prediction of the minority classes is observed with the Mammo-Bench dataset. These results establish baseline performance and demonstrate Mammo-Bench's utility as a comprehensive resource for developing and evaluating mammography analysis systems.}
 }
+
 
 @article{Nguyen2022,
-  author  = {Nguyen, H.T. and Nguyen, H.Q. and Pham, H.H. and Lam, K. and Le, L.T. and Dao, M. and Vu, V.},
-  title   = {VinDr-Mammo: A Large-Scale Benchmark Dataset for Computer-Aided Diagnosis in Full-Field Digital Mammography},
-  journal = {Scientific Data},
-  year    = {2022},
-  volume  = {9},
-  number  = {1},
-  pages   = {305}
+	title        = {VinDr-Mammo: A large-scale benchmark dataset for computer-aided diagnosis in full-field digital mammography},
+	author       = {Nguyen, Hieu T. and Nguyen, Ha Q. and Pham, Hieu H. and Lam, Khanh and Le, Linh T. and Dao, Minh and Vu, Van},
+	year         = 2023,
+	month        = {May},
+	day          = 12,
+	journal      = {Scientific Data},
+	volume       = 10,
+	number       = 1,
+	pages        = 277,
+	doi          = {10.1038/s41597-023-02100-7},
+	issn         = {2052-4463},
+	url          = {https://doi.org/10.1038/s41597-023-02100-7},
+	abstract     = {Mammography, or breast X-ray imaging, is the most widely used imaging modality to detect cancer and other breast diseases. Recent studies have shown that deep learning-based computer-assisted detection and diagnosis (CADe/x) tools have been developed to support physicians and improve the accuracy of interpreting mammography. A number of large-scale mammography datasets from different populations with various associated annotations and clinical data have been introduced to study the potential of learning-based methods in the field of breast radiology. With the aim to develop more robust and more interpretable support systems in breast imaging, we introduce VinDr-Mammo, a Vietnamese dataset of digital mammography with breast-level assessment and extensive lesion-level annotations, enhancing the diversity of the publicly available mammography data. The dataset consists of 5,000 mammography exams, each of which has four standard views and is double read with disagreement (if any) being resolved by arbitration. The purpose of this dataset is to assess Breast Imaging Reporting and Data System (BI-RADS) and breast density at the individual breast level. In addition, the dataset also provides the category, location, and BI-RADS assessment of non-benign findings. We make VinDr-Mammo publicly available as a new imaging resource to promote advances in developing CADe/x tools for mammography interpretation.}
 }
 
 @misc{OCCICAM2021,
@@ -327,39 +346,61 @@ vvv
 }
 
 
+
 @inproceedings{zhou2018unetplusplus,
-	title        = {Unet++: A nested u-net architecture for medical image segmentation},
-	author       = {Zhou, Zongwei and Siddiquee, Md Mahfuzur Rahman and Tajbakhsh, Nima and Liang, Jianming},
+	title        = {UNet++: A Nested U-Net Architecture for Medical Image Segmentation},
+	author       = {Zhou, Zongwei and Rahman Siddiquee, Md Mahfuzur and Tajbakhsh, Nima and Liang, Jianming},
 	year         = 2018,
 	booktitle    = {Deep Learning in Medical Image Analysis and Multimodal Learning for Clinical Decision Support},
+	publisher    = {Springer International Publishing},
+	address      = {Cham},
 	pages        = {3--11},
-	organization = {Springer}
+	doi          = {10.1007/978-3-030-00889-5_1},
+	isbn         = {978-3-030-00889-5},
+	editor       = {Stoyanov, Danail and Taylor, Zeike and Carneiro, Gustavo and Syeda-Mahmood, Tanveer and Martel, Anne and Maier-Hein, Lena and Tavares, Jo{\~a}o Manuel R.S. and Bradley, Andrew and Papa, Jo{\~a}o Paulo and Belagiannis, Vasileios and Nascimento, Jacinto C. and Lu, Zhi and Conjeti, Sailesh and Moradi, Mehdi and Greenspan, Hayit and Madabhushi, Anant},
+	abstract     = {In this paper, we present UNet++, a new, more powerful architecture for medical image segmentation. Our architecture is essentially a deeply-supervised encoder-decoder network where the encoder and decoder sub-networks are connected through a series of nested, dense skip pathways. The re-designed skip pathways aim at reducing the semantic gap between the feature maps of the encoder and decoder sub-networks. We argue that the optimizer would deal with an easier learning task when the feature maps from the decoder and encoder networks are semantically similar. We have evaluated UNet++ in comparison with U-Net and wide U-Net architectures across multiple medical image segmentation tasks: nodule segmentation in the low-dose CT scans of chest, nuclei segmentation in the microscopy images, liver segmentation in abdominal CT scans, and polyp segmentation in colonoscopy videos. Our experiments demonstrate that UNet++ with deep supervision achieves an average IoU gain of 3.9 and 3.4 points over U-Net and wide U-Net, respectively.}
 }
-@article{vaswani2017attention,
-	title        = {Attention is all you need},
-	author       = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, {\L}ukasz and Polosukhin, Illia},
+
+@inproceedings{vaswani2017attention,
+	title        = {Attention is All you Need},
+	author       = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, \L ukasz and Polosukhin, Illia},
 	year         = 2017,
-	journal      = {Advances in neural information processing systems},
-	volume       = 30
+	booktitle    = {Advances in Neural Information Processing Systems},
+	publisher    = {Curran Associates, Inc.},
+	volume       = 30,
+	pages        = {},
+	url          = {https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf},
+	editor       = {I. Guyon and U. Von Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett}
 }
+
+
 @article{chen2021transunet,
-	title        = {Transunet: Transformers make strong encoders for medical image segmentation},
-	author       = {Chen, Jieneng and Lu, Yongyi and Yu, Qihang and Luo, Xiangde and Adeli, Ehsan and Wang, Yan and Lu, Le and Yuille, Alan L and Zhou, Yuyin},
+	title        = {TransUNet: Transformers Make Strong Encoders for Medical Image Segmentation},
+	author       = {Jieneng Chen and Yongyi Lu and Qihang Yu and Xiangde Luo and Ehsan Adeli and Yan Wang and Le Lu and Alan L. Yuille and Yuyin Zhou},
 	year         = 2021,
-	journal      = {arXiv preprint arXiv:2102.04306}
+	journal      = {CoRR},
+	volume       = {abs/2102.04306},
+	url          = {https://arxiv.org/abs/2102.04306},
+	eprinttype   = {arXiv},
+	eprint       = {2102.04306},
+	timestamp    = {Mon, 12 Apr 2021 14:40:33 +0200},
+	biburl       = {https://dblp.org/rec/journals/corr/abs-2102-04306.bib},
+	bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
-@inproceedings{cao2022swinunet,
-	title        = {Swin-unet: Unet-like pure transformer for medical image segmentation},
-	author       = {Cao, Hu and Wang, Yueyue and Chen, Joy and Jiang, Dongsheng and Zhang, Xiaopeng and Tian, Qi and Wang, Manning},
-	year         = 2022,
-	booktitle    = {European Conference on Computer Vision},
-	pages        = {205--218},
-	organization = {Springer}
+
+@InProceedings{cao2022swinunet,
+author={Cao, Hu and Wang, Yueyue and Chen, Joy and Jiang, Dongsheng and Zhang, Xiaopeng and Tian, Qi and Wang, Manning},
+editor={Karlinsky, Leonid and Michaeli, Tomer and Nishino, Ko},
+title={Swin-Unet: Unet-Like Pure Transformer for Medical Image Segmentation},
+booktitle={Computer Vision -- ECCV 2022 Workshops},
+year={2023},
+publisher={Springer Nature Switzerland},
+address={Cham},
+pages={205--218},
+abstract={In the past few years, convolutional neural networks (CNNs) have achieved milestones in medical image analysis. In particular, deep neural networks based on U-shaped architecture and skip-connections have been widely applied in various medical image tasks. However, although CNN has achieved excellent performance, it cannot learn global semantic information interaction well due to the locality of convolution operation. In this paper, we propose Swin-Unet, which is an Unet-like pure Transformer for medical image segmentation. The tokenized image patches are fed into the Transformer-based U-shaped Encoder-Decoder architecture with skip-connections for local-global semantic feature learning. Specifically, we use a hierarchical Swin Transformer with shifted windows as the encoder to extract context features. And a symmetric Swin Transformer-based decoder with a patch expanding layer is designed to perform the up-sampling operation to restore the spatial resolution of the feature maps. Under the direct down-sampling and up-sampling of the inputs and outputs by {\$}{\$}4{\{}{\backslash}times {\}}{\$}{\$}4{\texttimes}, experiments on multi-organ and cardiac segmentation tasks demonstrate that the pure Transformer-based U-shaped Encoder-Decoder network outperforms those methods with full-convolution or the combination of transformer and convolution. The codes have been publicly available at the link (https://github.com/HuCaoFighting/Swin-Unet).},
+isbn={978-3-031-25066-8},
+doi={10.1007/978-3-031-25066-8_9}
 }
-
-
-
-
 
 
 @article{Sharif_2024,

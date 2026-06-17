@@ -446,8 +446,8 @@ MAMMO-Bench~\cite{MammoBench2023} & Private & ~10,000 images & Multi-center data
 \hline
 VinDr-Mammo~\cite{Nguyen2022} & Public & 20,000 exams & Large-scale dataset from Vietnam with bounding boxes for various abnormalities and BI-RADS assessments. \\
 \hline
-OCCICAM~\cite{OCCICAM2021} & Private & ~50,000 images & Proprietary screening dataset with longitudinal follow-up, biopsy results, and cancer registry linkage for predictive modeling. \\
-\hline
+% OCCICAM~\cite{OCCICAM2021} & Private & ~50,000 images & Proprietary screening dataset with longitudinal follow-up, biopsy results, and cancer registry linkage for predictive modeling. \\
+% \hlineo
 DMID~\cite{oza_figshare,oza2024dmiddataset} & Public & Several hundred (exact not specified, focused on injuries) & Detailed for segmentation and CAD; includes comprehensive clinical metadata. In format DCM, TIFF, XML/CSV  . \\
 \hline
 \end{tabularx}
@@ -881,9 +881,10 @@ performance of \ac{MedSAM} in pectoral muscle segmentation task.
     \end{tabular}
  \end{table}
 
+ 
  \begin{figure}[ht]
    \centering
-   \includegraphics[width=\textwidth]{./images/SegmentationComparisonExamples_withLegend.png} %./presentation/figures_ppt/SegmentationComparisonExamples_withLegend.png
+   \includegraphics[width=\textwidth]{./images/SegmentationComparisonExamples_withLegend_vertical.png} %./presentation/figures_ppt/SegmentationComparisonExamples_withLegend.png
    \caption{Representative segmentation results of MedSAM showing
      worst (Image 43, \texttt{mdb068rl}), median (Image 138,
      \texttt{mdb247ll}), and best (Image 111, \texttt{mdb160rl}) cases
